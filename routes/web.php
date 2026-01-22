@@ -97,13 +97,16 @@ Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('ex
 // icons
 Route::get('/icons/boxicons', [Boxicons::class, 'index'])->name('icons-boxicons');
 
-// form elements
 Route::get('/forms/basic-inputs', [BasicInput::class, 'index'])->name('forms-basic-inputs');
 Route::get('/forms/input-groups', [InputGroups::class, 'index'])->name('forms-input-groups');
 
-// form layouts
 Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
 Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
 
-// tables
 Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
+
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/admin', function () {
+        return 'Solo admins';
+    });
+});
