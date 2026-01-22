@@ -29,6 +29,6 @@ class RegisterBasic extends Controller
     ]);
 
     Auth::login($user);
-    return redirect()->route('dashboard-analytics')->with('success', 'Successful registration');
+    return redirect()->route('dashboard-analytics')->with('success', 'Registro exitoso');
   }
 }

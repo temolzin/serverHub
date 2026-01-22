@@ -19,7 +19,7 @@
             </a>
           </div>
           <!-- /Logo -->
-          <h4 class="mb-1">Adventure starts here 🚀</h4>
+          <h4 class="mb-1">Adventure starts here</h4>
           <p class="mb-6">Make your app management easy and fun!</p>
           @if ($errors->any())
           <div class="alert alert-danger">

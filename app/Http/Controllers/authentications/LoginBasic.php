@@ -25,7 +25,7 @@ class LoginBasic extends Controller
     }
 
     return back()->withErrors([
-      'email' => 'Incorrect credentials',
+      'email' => 'Credenciales Incorrectas',
     ]);
   }
 }
