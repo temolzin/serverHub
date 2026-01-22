@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 @endphp
 
 <!--  Brand demo (display only for navbar-full and hide on below xl) -->
-@if (isset($navbarFull))
+@if(isset($navbarFull))
 <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
   <a href="{{url('/')}}" class="app-brand-link gap-2">
     <span class="app-brand-logo demo">@include('_partials.macros')</span>
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 </div>
 @endif
 <!-- ! Not required for layout-without-menu -->
-@if (!isset($navbarHideToggle))
+@if(!isset($navbarHideToggle))
 <div
   class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 {{isset($contentNavbar) ? ' d-xl-none ' : '' }}">
   <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
