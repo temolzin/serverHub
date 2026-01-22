@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\authentications;
 
 use Illuminate\Support\Facades\Auth;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -26,7 +25,7 @@ class LoginBasic extends Controller
     }
 
     return back()->withErrors([
-      'email' => 'Credenciales incorrectas',
+      'email' => 'Incorrect credentials',
     ]);
   }
 }

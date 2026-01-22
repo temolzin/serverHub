@@ -67,6 +67,6 @@
   // Extension: npm
   "npm.packageManager": "yarn",
   "[blade]": {
-    "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+    "editor.defaultFormatter": "onecentlin.laravel-blade"
   }
 }

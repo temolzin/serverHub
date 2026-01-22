@@ -21,12 +21,14 @@ class RegisterBasic extends Controller
       'email' => 'required|string|email|max:255|unique:users',
       'password' => 'required|string|min:8|confirmed',
     ]);
+
     $user = User::create([
       'name' => $request->username,
       'email' => $request->email,
       'password' => $request->password,
     ]);
+
     Auth::login($user);
-    return redirect()->route('dashboard-analytics')->with('success', 'Registro exitoso ');
+    return redirect()->route('dashboard-analytics')->with('success', 'Successful registration');
   }
 }
