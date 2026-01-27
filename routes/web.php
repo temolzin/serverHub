@@ -44,32 +44,26 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
-// Main Page Route
 Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
 
-// layout
 Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
 Route::get('/layouts/without-navbar', [WithoutNavbar::class, 'index'])->name('layouts-without-navbar');
 Route::get('/layouts/fluid', [Fluid::class, 'index'])->name('layouts-fluid');
 Route::get('/layouts/container', [Container::class, 'index'])->name('layouts-container');
 Route::get('/layouts/blank', [Blank::class, 'index'])->name('layouts-blank');
 
-// pages
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
 Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
 Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
 Route::get('/pages/misc-error', [MiscError::class, 'index'])->name('pages-misc-error');
 Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name('pages-misc-under-maintenance');
 
-// authentication
 Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
 Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
 
-// cards
 Route::get('/cards/basic', [CardBasic::class, 'index'])->name('cards-basic');
 
-// User Interface
 Route::get('/ui/accordion', [Accordion::class, 'index'])->name('ui-accordion');
 Route::get('/ui/alerts', [Alerts::class, 'index'])->name('ui-alerts');
 Route::get('/ui/badges', [Badges::class, 'index'])->name('ui-badges');
@@ -90,11 +84,9 @@ Route::get('/ui/toasts', [Toasts::class, 'index'])->name('ui-toasts');
 Route::get('/ui/tooltips-popovers', [TooltipsPopovers::class, 'index'])->name('ui-tooltips-popovers');
 Route::get('/ui/typography', [Typography::class, 'index'])->name('ui-typography');
 
-// extended ui
 Route::get('/extended/ui-perfect-scrollbar', [PerfectScrollbar::class, 'index'])->name('extended-ui-perfect-scrollbar');
 Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('extended-ui-text-divider');
 
-// icons
 Route::get('/icons/boxicons', [Boxicons::class, 'index'])->name('icons-boxicons');
 
 Route::get('/forms/basic-inputs', [BasicInput::class, 'index'])->name('forms-basic-inputs');

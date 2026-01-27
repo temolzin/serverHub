@@ -5,15 +5,12 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-// 👉 Spatie
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+
     public function run(): void
     {
         $this->call(RoleSeeder::class);
@@ -34,10 +31,10 @@ class DatabaseSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+          $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-        $adminRole->givePermissionTo(Permission::all());
+          $adminRole->givePermissionTo(Permission::all());
 
-        $user->assignRole($adminRole);
+          $user->assignRole($adminRole);
     }
 }
