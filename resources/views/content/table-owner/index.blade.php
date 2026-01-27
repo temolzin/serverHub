@@ -18,7 +18,6 @@
             <th>Owner</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>Status</th>
             <th class="text-end">Actions</th>
           </tr>
         </thead>
@@ -39,9 +38,6 @@
             </td>
             <td>juan.perez@email.com</td>
             <td>5512345678</td>
-            <td>
-              <span class="badge bg-label-success">Active</span>
-            </td>
             <td class="text-end">
               <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -74,9 +70,6 @@
             </td>
             <td>ana.lopez@email.com</td>
             <td>5587654321</td>
-            <td>
-              <span class="badge bg-label-warning">Pending</span>
-            </td>
             <td class="text-end">
               <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
