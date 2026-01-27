@@ -89,6 +89,9 @@ Route::middleware('auth')->group(function () {
   Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
   Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
   Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
+  Route::get('/table-owner', function () {
+    return view('content.table-owner.index');
+  })->name('owner.index');
 });
 
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
