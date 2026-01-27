@@ -12,6 +12,7 @@ class LoginBasic extends Controller
   {
     return view('content.authentications.auth-login-basic');
   }
+
   public function login(Request $request)
   {
     $credentials = $request->validate([

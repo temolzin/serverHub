@@ -14,6 +14,7 @@ class RegisterBasic extends Controller
   {
     return view('content.authentications.auth-register-basic');
   }
+
   public function store(Request $request)
   {
     $request->validate([

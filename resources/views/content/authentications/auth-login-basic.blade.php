@@ -5,7 +5,6 @@
 @section('page-style')
   @vite(['resources/assets/vendor/scss/pages/page-auth.scss'])
 @endsection
-
 @section('content')
   <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
