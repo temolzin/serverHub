@@ -44,6 +44,7 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Owner;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 Route::middleware('auth')->group(function () {
@@ -89,9 +90,10 @@ Route::middleware('auth')->group(function () {
   Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
   Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
   Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
-  Route::get('/table-owner', function () {
-    return view('content.table-owner.index');
-  })->name('owner.index');
+  Route::get('/owners', function () {
+    $owners = Owner::whereNull('deleted_at')->get();
+    return view('owners.index', compact('owners'));
+  })->name('owners.index');
 });
 
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');

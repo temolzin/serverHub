@@ -1,15 +1,6 @@
 {
   "menu": [
     {
-      "menuHeader": "OWNER"
-    },
-    {
-      "name": "OWNER",
-      "icon": "menu-icon icon-base bx bx-id-card",
-      "slug": "table-owner",
-      "url": "table-owner"
-    },
-    {
       "url": "/",
       "name": "Dashboards",
       "icon": "menu-icon icon-base bx bx-home-smile",
@@ -156,6 +147,12 @@
           "target": "_blank"
         }
       ]
+    },
+    {
+      "name": "Propietarios",
+      "icon": "menu-icon icon-base bx bx-id-card",
+      "slug": "owners",
+      "url": "owners"
     },
     {
       "menuHeader": "Apps & Pages"
