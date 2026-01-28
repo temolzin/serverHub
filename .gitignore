@@ -27,6 +27,8 @@ yarn-error.log
 /.vscode
 vendor
 composer.lock
+composer.json
+yearn.lock
 
 !/public/assets
 !/public/assets/*
