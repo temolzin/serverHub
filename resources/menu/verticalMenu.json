@@ -149,6 +149,12 @@
       ]
     },
     {
+      "name": "Propietarios",
+      "icon": "menu-icon icon-base bx bx-id-card",
+      "slug": "owners",
+      "url": "owners"
+    },
+    {
       "menuHeader": "Apps & Pages"
     },
     {
