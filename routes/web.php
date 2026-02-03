@@ -46,6 +46,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Owner;
 use App\Models\GcpMachine;
+use App\Models\TypeApplication;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 Route::middleware('auth')->group(function () {
@@ -99,6 +100,10 @@ Route::middleware('auth')->group(function () {
     $gcpMachines = GcpMachine::with('owner')->get();
     return view('gcp-machines.index', compact('gcpMachines'));
   })->name('gcp-machines.index');
+  Route::get('/type-applications', function () {
+    $typeApplications = TypeApplication::whereNull('deleted_at')->get();
+    return view('type-applications.index', compact('typeApplications'));
+  })->name('type-applications.index');
 });
 
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
