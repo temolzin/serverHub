@@ -10,6 +10,7 @@ return new class extends Migration
   {
     Schema::create('gcp_machines', function (Blueprint $table) {
       $table->id();
+      $table->unsignedBigInteger('owner_id');
       $table->string('project_name');
       $table->string('environment');
       $table->string('machine_name');
@@ -24,7 +25,6 @@ return new class extends Migration
       $table->string('kernel_version')->nullable();
       $table->integer('ram_memory');
       $table->integer('swap_memory');
-      $table->unsignedBigInteger('owner_id');
       $table->timestamps();
       $table->softDeletes();
 
