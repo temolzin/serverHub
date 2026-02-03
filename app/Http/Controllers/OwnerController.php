@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Owner;
 
 class OwnerController extends Controller
 {
   public function index()
   {
-    return view('content.table-owner.index');
+    $owners = Owner::whereNull('deleted_at')->get();
+    return view('owners.index', compact('owners'));
   }
 
   public function create()

@@ -161,6 +161,12 @@
       "url": "gcp-machines"
     },
     {
+      "name": "Tipo de aplicación",
+      "icon": "menu-icon icon-base bx bx-layer",
+      "slug": "type-applications",
+      "url": "type-applications"
+    },
+    {
       "menuHeader": "Apps & Pages"
     },
     {
