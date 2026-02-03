@@ -24,11 +24,11 @@ return new class extends Migration
       $table->string('kernel_version')->nullable();
       $table->integer('ram_memory');
       $table->integer('swap_memory');
-      $table->foreignId('owner_id')
-        ->constrained('owners')
-        ->cascadeOnDelete();
+      $table->unsignedBigInteger('owner_id');
       $table->timestamps();
       $table->softDeletes();
+
+      $table->foreign('owner_id')->references('id')->on('owners')->onDelete('cascade');
     });
   }
 
