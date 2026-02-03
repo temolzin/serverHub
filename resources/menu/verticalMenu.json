@@ -155,6 +155,12 @@
       "url": "owners"
     },
     {
+      "name": "Máquinas GCP",
+      "icon": "menu-icon icon-base bx bx-server",
+      "slug": "gcp-machines",
+      "url": "gcp-machines"
+    },
+    {
       "menuHeader": "Apps & Pages"
     },
     {
