@@ -45,6 +45,7 @@ use App\Http\Controllers\form_layouts\HorizontalForm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Owner;
+use App\Models\GcpMachine;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 Route::middleware('auth')->group(function () {
@@ -94,6 +95,10 @@ Route::middleware('auth')->group(function () {
     $owners = Owner::whereNull('deleted_at')->get();
     return view('owners.index', compact('owners'));
   })->name('owners.index');
+  Route::get('/gcp-machines', function () {
+    $gcpMachines = GcpMachine::with('owner')->get();
+    return view('gcp-machines.index', compact('gcpMachines'));
+  })->name('gcp-machines.index');
 });
 
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');

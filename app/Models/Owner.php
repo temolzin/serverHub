@@ -15,4 +15,9 @@ class Owner extends Model
     'email',
     'number_phone',
   ];
+
+  public function gcpMachines()
+  {
+    return $this->hasMany(GcpMachine::class);
+  }
 }
