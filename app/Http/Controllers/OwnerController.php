@@ -3,24 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Owner;
 
-class GcpMachineController extends Controller
+class OwnerController extends Controller
 {
   public function index()
   {
-    return view('content.table-gcp-machines.index');
+    $owners = Owner::whereNull('deleted_at')->get();
+    return view('owners.index', compact('owners'));
   }
 
   public function create()
   {
-    return view('content.table-gcp-machines.create');
+    return view('content.table-owner.create');
   }
 
   public function store(Request $request) {}
 
   public function edit($id)
   {
-    return view('content.table-gcp-machines.edit');
+    return view('content.table-owner.edit');
   }
 
   public function update(Request $request, $id) {}

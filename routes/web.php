@@ -44,9 +44,9 @@ use App\Http\Controllers\form_layouts\VerticalForm;
 use App\Http\Controllers\form_layouts\HorizontalForm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Owner;
-use App\Models\GcpMachine;
-use App\Models\TypeApplication;
+use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\GcpMachineController;
+use App\Http\Controllers\TypeApplicationController;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 Route::middleware('auth')->group(function () {
@@ -92,18 +92,9 @@ Route::middleware('auth')->group(function () {
   Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
   Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
   Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
-  Route::get('/owners', function () {
-    $owners = Owner::whereNull('deleted_at')->get();
-    return view('owners.index', compact('owners'));
-  })->name('owners.index');
-  Route::get('/gcp-machines', function () {
-    $gcpMachines = GcpMachine::with('owner')->get();
-    return view('gcp-machines.index', compact('gcpMachines'));
-  })->name('gcp-machines.index');
-  Route::get('/type-applications', function () {
-    $typeApplications = TypeApplication::whereNull('deleted_at')->get();
-    return view('type-applications.index', compact('typeApplications'));
-  })->name('type-applications.index');
+  Route::get('/owners', [OwnerController::class, 'index'])->name('owners.index');
+  Route::get('/gcp-machines', [GcpMachineController::class, 'index'])->name('gcp-machines.index');
+  Route::get('/type-applications', [TypeApplicationController::class, 'index'])->name('type-applications.index');
 });
 
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');

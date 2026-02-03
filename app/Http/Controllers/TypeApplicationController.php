@@ -3,24 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\TypeApplication;
 
-class OwnerController extends Controller
+class TypeApplicationController extends Controller
 {
   public function index()
   {
-    return view('content.table-owner.index');
+    $typeApplications = TypeApplication::all();
+    return view('type-application.index', compact('typeApplications'));
   }
 
   public function create()
   {
-    return view('content.table-owner.create');
+    return view('type-application.create');
   }
 
   public function store(Request $request) {}
 
   public function edit($id)
   {
-    return view('content.table-owner.edit');
+    return view('type-application.edit');
   }
 
   public function update(Request $request, $id) {}
