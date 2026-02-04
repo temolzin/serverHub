@@ -167,6 +167,12 @@
       "url": "type-applications"
     },
     {
+      "name": "Databases",
+      "icon": "menu-icon icon-base bx bx-data",
+      "slug": "databases",
+      "url": "databases"
+    },
+    {
       "menuHeader": "Apps & Pages"
     },
     {

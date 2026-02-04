@@ -1,68 +1,61 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Owners')
+@section('title', 'Databases')
 
 @section('content')
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Propietarios</h5>
-          <button class="btn btn-primary">
-            <i class="bx bx-plus me-1"></i> Agregar propietario
-          </button>
+          <h5 class="mb-0">Databases</h5>
         </div>
+
         <div class="table-responsive text-nowrap">
           <table class="table align-middle">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Propietario</th>
-                <th>Email</th>
-                <th>Telefono</th>
-                <th class="text-end">Acciones</th>
+                <th>Server</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Port</th>
+                <th>Version</th>
+                <th>Last Update</th>
+                <th>Comments</th>
               </tr>
             </thead>
+
             <tbody>
-              @forelse ($owners as $owner)
+              @forelse ($databases as $database)
                 <tr>
-                  <td>{{ $owner->id }}</td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="avatar avatar-sm me-3">
-                        <span class="avatar-initial rounded-circle bg-label-primary">
-                          {{ strtoupper(substr($owner->name, 0, 1)) }}
-                        </span>
-                      </div>
-                      <div>
-                        <span class="fw-medium">
-                          {{ $owner->name }} {{ $owner->last_name }}
-                        </span>
-                      </div>
-                    </div>
+                  <td>{{ $database->id }}</td>
+
+                  <td class="fw-medium">
+                    {{ $database->server->dns_name }}
                   </td>
-                  <td>{{ $owner->email }}</td>
-                  <td>{{ $owner->number_phone ?? '—' }}</td>
-                  <td class="text-end">
-                    <div class="dropdown">
-                      <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">
-                          <i class="bx bx-edit-alt me-1"></i> Editar
-                        </a>
-                        <a class="dropdown-item text-danger" href="#">
-                          <i class="bx bx-trash me-1"></i> Borrar
-                        </a>
-                      </div>
-                    </div>
+
+                  <td>{{ $database->name }}</td>
+                  <td>{{ $database->type }}</td>
+
+                  <td>
+                    <span class="badge bg-label-success">
+                      {{ $database->status }}
+                    </span>
+                  </td>
+
+                  <td>{{ $database->port }}</td>
+                  <td>{{ $database->version }}</td>
+                  <td>{{ $database->last_update ?? '—' }}</td>
+
+                  <td class="small text-muted">
+                    {{ $database->comments ?? '—' }}
                   </td>
                 </tr>
               @empty
                 <tr>
-                  <td colspan="5" class="text-center text-muted">
-                    No se encontraron propietarios
+                  <td colspan="9" class="text-center text-muted">
+                    No databases found
                   </td>
                 </tr>
               @endforelse

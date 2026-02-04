@@ -48,9 +48,11 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\GcpMachineController;
 use App\Http\Controllers\TypeApplicationController;
 use App\Http\Controllers\tables\Basic as TablesBasic;
+use App\Http\Controllers\DatabaseController;
 
 Route::middleware('auth')->group(function () {
 
+  Route::get('/databases', [DatabaseController::class, 'index']) ->name('databases.index');
   Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
   Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
   Route::get('/layouts/without-navbar', [WithoutNavbar::class, 'index'])->name('layouts-without-navbar');
