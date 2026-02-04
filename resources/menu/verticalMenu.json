@@ -156,7 +156,7 @@
     },
     {
       "name": "Máquinas GCP",
-      "icon": "menu-icon icon-base bx bx-server",
+      "icon": "menu-icon icon-base bx bx-cloud",
       "slug": "gcp-machines",
       "url": "gcp-machines"
     },
@@ -165,6 +165,12 @@
       "icon": "menu-icon icon-base bx bx-layer",
       "slug": "type-applications",
       "url": "type-applications"
+    },
+    {
+      "name": "Servidores",
+      "icon": "menu-icon icon-base bx bx-server",
+      "slug": "servers",
+      "url": "servers"
     },
     {
       "menuHeader": "Apps & Pages"

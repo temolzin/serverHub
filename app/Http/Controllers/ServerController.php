@@ -3,26 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TypeApplication;
+use App\Models\Server;
 
-class TypeApplicationController extends Controller
+class ServerController extends Controller
 {
   public function index()
   {
-    $typeApplications = TypeApplication::all();
-    return view('type-applications.index', compact('typeApplications'));
+    $servers = Server::all();
+    return view('servers.index', compact('servers'));
   }
 
   public function create()
   {
-    return view('type-application.create');
+    return view('servers.create');
   }
 
   public function store(Request $request) {}
 
+  public function show($id)
+  {
+    return view('servers.show');
+  }
+
   public function edit($id)
   {
-    return view('type-application.edit');
+    return view('servers.edit');
   }
 
   public function update(Request $request, $id) {}
