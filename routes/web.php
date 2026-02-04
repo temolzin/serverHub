@@ -52,6 +52,12 @@ use App\Http\Controllers\tables\Basic as TablesBasic;
 
 Route::middleware('auth')->group(function () {
 
+  Route::middleware(['role:admin'])->group(function () {
+  Route::get('/admin', function () {
+        return 'Solo admins';
+    });
+});
+
   Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
   Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
   Route::get('/layouts/without-navbar', [WithoutNavbar::class, 'index'])->name('layouts-without-navbar');
