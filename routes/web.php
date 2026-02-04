@@ -48,6 +48,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\GcpMachineController;
 use App\Http\Controllers\TypeApplicationController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
 Route::middleware('auth')->group(function () {
@@ -97,6 +98,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/gcp-machines', [GcpMachineController::class, 'index'])->name('gcp-machines.index');
   Route::get('/type-applications', [TypeApplicationController::class, 'index'])->name('type-applications.index');
   Route::get('/servers', [ServerController::class, 'index'])->name('servers.index');
+  Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
 });
 
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');

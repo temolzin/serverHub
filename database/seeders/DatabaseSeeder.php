@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
     $this->call(GcpMachineSeeder::class);
     $this->call(TypeApplicationSeeder::class);
     $this->call(ServerSeeder::class);
+    $this->call(ApplicationSeeder::class);
   }
 }
