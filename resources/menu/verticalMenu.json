@@ -173,6 +173,12 @@
       "url": "servers"
     },
     {
+      "name": "Aplicaciones",
+      "icon": "menu-icon icon-base bx bx-grid-alt",
+      "slug": "applications",
+      "url": "applications"
+    },
+    {
       "menuHeader": "Apps & Pages"
     },
     {
