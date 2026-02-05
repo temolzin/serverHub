@@ -2,17 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-  public function run(): void
-  {
-    $this->call(UserSeeder::class);
-    $this->call(OwnerSeeder::class);
-    $this->call(GcpMachineSeeder::class);
-    $this->call(TypeApplicationSeeder::class);
-    $this->call(ServerSeeder::class);
-  }
+    public function run(): void
+    {
+        $this->call([
+            RolePermissionSeeder::class,
+            UserSeeder::class,
+            OwnerSeeder::class,
+            GcpMachineSeeder::class,
+            TypeApplicationSeeder::class,
+            ServerSeeder::class,
+        ]);
+    }
 }
