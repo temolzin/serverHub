@@ -95,6 +95,9 @@ Route::middleware('auth')->group(function () {
   Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
   Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
   Route::get('/owners', [OwnerController::class, 'index'])->name('owners.index');
+  Route::post('/owners', [OwnerController::class, 'store'])->name('owners.store');
+  Route::put('/owners/{owner}', [OwnerController::class, 'update'])->name('owners.update');
+  Route::delete('/owners/{owner}', [OwnerController::class, 'destroy'])->name('owners.destroy');
   Route::get('/gcp-machines', [GcpMachineController::class, 'index'])->name('gcp-machines.index');
   Route::get('/type-applications', [TypeApplicationController::class, 'index'])->name('type-applications.index');
   Route::get('/servers', [ServerController::class, 'index'])->name('servers.index');
