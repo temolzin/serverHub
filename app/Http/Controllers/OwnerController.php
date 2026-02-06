@@ -10,26 +10,29 @@ class OwnerController extends Controller
   public function index(Request $request)
   {
     $owners = Owner::query();
-
-    if ($request->filled('name')) {
-      $owners->where('name', 'like', '%' . $request->name . '%');
+    if ($request->filled('search')) {
+      $search = $request->search;
+      $owners->where(function ($q) use ($search) {
+        $q->where('name', 'like', "%{$search}%")
+          ->orWhere('last_name', 'like', "%{$search}%")
+          ->orWhere('email', 'like', "%{$search}%")
+          ->orWhere('number_phone', 'like', "%{$search}%");
+      });
     }
 
-    if ($request->filled('email')) {
-      $owners->where('email', 'like', '%' . $request->email . '%');
-    }
+    $owners = $owners
+      ->orderBy('id', 'desc')
+      ->paginate(10)
+      ->withQueryString();
 
-    if ($request->filled('phone')) {
-      $owners->where('number_phone', 'like', '%' . $request->phone . '%');
-    }
     if ($request->ajax()) {
-      return view('owners.search', [
-        'owners' => $owners->get()
+      return response()->json([
+        'table' => view('owners.search', compact('owners'))->render(),
+        'pagination' => $owners->links('pagination::bootstrap-5')->render(),
       ]);
     }
-    return view('owners.index', [
-      'owners' => $owners->get()
-    ]);
+
+    return view('owners.index', compact('owners'));
   }
 
   public function create()
@@ -47,7 +50,6 @@ class OwnerController extends Controller
     ]);
 
     Owner::create($request->all());
-
     return redirect()
       ->route('owners.index')
       ->with('success', 'Propietario creado correctamente');
@@ -68,16 +70,19 @@ class OwnerController extends Controller
     ]);
 
     $owner->update($validated);
-
     return redirect()
       ->route('owners.index')
       ->with('success', 'El propietario fue actualizado correctamente.');
   }
 
+  public function show(Owner $owner)
+  {
+    return view('owners.show', compact('owner'));
+  }
+
   public function destroy(Owner $owner)
   {
     $owner->delete();
-
     return redirect()
       ->route('owners.index')
       ->with('success', 'Propietario eliminado correctamente');

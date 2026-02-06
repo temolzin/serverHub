@@ -98,6 +98,7 @@ Route::middleware('auth')->group(function () {
   Route::post('/owners', [OwnerController::class, 'store'])->name('owners.store');
   Route::put('/owners/{owner}', [OwnerController::class, 'update'])->name('owners.update');
   Route::delete('/owners/{owner}', [OwnerController::class, 'destroy'])->name('owners.destroy');
+  Route::get('/owners/{owner}', [OwnerController::class, 'show'])->name('owners.show');
   Route::get('/gcp-machines', [GcpMachineController::class, 'index'])->name('gcp-machines.index');
   Route::get('/type-applications', [TypeApplicationController::class, 'index'])->name('type-applications.index');
   Route::get('/servers', [ServerController::class, 'index'])->name('servers.index');

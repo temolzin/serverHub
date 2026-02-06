@@ -9,32 +9,47 @@
         @csrf
         @method('PUT')
         <div class="modal-body">
-          <div class="row mb-3">
-            <label class="col-sm-3 col-form-label">Nombre</label>
-            <div class="col-sm-9">
+          <div class="mb-4">
+            <label class="form-label">Nombre</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text">
+                <i class="bx bx-user"></i>
+              </span>
               <input type="text" name="name" class="form-control" maxlength="20" value="{{ $owner->name }}"
                 required>
             </div>
+            <small class="text-muted">Máximo 20 caracteres</small>
           </div>
-          <div class="row mb-3">
-            <label class="col-sm-3 col-form-label">Apellido</label>
-            <div class="col-sm-9">
+          <div class="mb-4">
+            <label class="form-label">Apellido</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text">
+                <i class="bx bx-id-card"></i>
+              </span>
               <input type="text" name="last_name" class="form-control" maxlength="50" value="{{ $owner->last_name }}"
                 required>
             </div>
+            <small class="text-muted">Máximo 50 caracteres</small>
           </div>
-          <div class="row mb-3">
-            <label class="col-sm-3 col-form-label">Email</label>
-            <div class="col-sm-9">
+          <div class="mb-4">
+            <label class="form-label">Email</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text">
+                <i class="bx bx-envelope"></i>
+              </span>
               <input type="email" name="email" class="form-control" value="{{ $owner->email }}" required>
             </div>
           </div>
-          <div class="row mb-3">
-            <label class="col-sm-3 col-form-label">Teléfono</label>
-            <div class="col-sm-9">
-              <input type="text" name="number_phone" class="form-control" maxlength="10"
-                value="{{ $owner->number_phone }}">
+          <div class="mb-4">
+            <label class="form-label">Teléfono</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text">
+                <i class="bx bx-phone"></i>
+              </span>
+              <input type="text" name="number_phone" class="form-control" maxlength="10" pattern="[0-9]*"
+                inputmode="numeric" value="{{ $owner->number_phone }}">
             </div>
+            <small class="text-muted">Solo números (10 dígitos)</small>
           </div>
         </div>
         <div class="modal-footer">
