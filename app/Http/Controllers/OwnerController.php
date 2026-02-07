@@ -28,7 +28,7 @@ class OwnerController extends Controller
     if ($request->ajax()) {
       return response()->json([
         'table' => view('owners.search', compact('owners'))->render(),
-        'pagination' => $owners->links('pagination::bootstrap-5')->render(),
+        'pagination' => $owners->links()->render(),
       ]);
     }
 
@@ -46,7 +46,7 @@ class OwnerController extends Controller
       'name' => 'required|string|max:20',
       'last_name' => 'required|string|max:50',
       'email' => 'required|email|unique:owners,email',
-      'number_phone' => 'nullable|string|max:10',
+      'number_phone' => 'required|digits:10',
     ]);
 
     Owner::create($request->all());
@@ -66,7 +66,7 @@ class OwnerController extends Controller
       'name'         => 'required|string|max:20',
       'last_name'    => 'required|string|max:50',
       'email'        => 'required|email|unique:owners,email,' . $owner->id,
-      'number_phone' => 'nullable|string|max:10',
+      'number_phone' => 'required|digits:10',
     ]);
 
     $owner->update($validated);

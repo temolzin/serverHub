@@ -5,7 +5,8 @@
         <h5 class="modal-title">Crear propietario</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form action="{{ route('owners.store') }}" method="POST">
+      <form action="{{ route('owners.store') }}" method="POST"
+        onsubmit="this.querySelector('button[type=submit]').disabled=true;">
         @csrf
         <div class="modal-body">
           <div class="mb-4">
@@ -44,7 +45,7 @@
                 <i class="bx bx-phone"></i>
               </span>
               <input type="text" name="number_phone" class="form-control" placeholder="5512345678" maxlength="10"
-                pattern="[0-9]*" inputmode="numeric">
+                pattern="[0-9]*" inputmode="numeric" required>
             </div>
             <small class="text-muted">Solo números (10 dígitos)</small>
           </div>

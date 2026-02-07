@@ -47,7 +47,7 @@
                 <i class="bx bx-phone"></i>
               </span>
               <input type="text" name="number_phone" class="form-control" maxlength="10" pattern="[0-9]*"
-                inputmode="numeric" value="{{ $owner->number_phone }}">
+                inputmode="numeric" value="{{ $owner->number_phone }}" required>
             </div>
             <small class="text-muted">Solo números (10 dígitos)</small>
           </div>

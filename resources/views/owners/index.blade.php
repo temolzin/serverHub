@@ -32,7 +32,7 @@
             <input type="text" id="search-owner" class="form-control form-control-sm w-50"
               placeholder="Buscar por nombre, email o teléfono">
           </div>
-          <div class="table-responsive text-nowrap">
+          <div class="table-responsive text-nowrap" style="overflow-y: hidden;">
             <table class="table align-middle">
               <thead>
                 <tr>
@@ -47,9 +47,29 @@
                 @include('owners.search', ['owners' => $owners])
               </tbody>
             </table>
-            <div id="owners-pagination" class="mt-3">
-              {{ $owners->links('pagination::bootstrap-5') }}
-            </div>
+            @if ($owners->hasPages())
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-end">
+                  <li class="page-item {{ $owners->onFirstPage() ? 'disabled' : '' }}">
+                    <a class="page-link" href="{{ $owners->previousPageUrl() }}">
+                      <i class="bx bx-chevron-left"></i>
+                    </a>
+                  </li>
+                  @for ($page = 1; $page <= $owners->lastPage(); $page++)
+                    <li class="page-item {{ $page == $owners->currentPage() ? 'active' : '' }}">
+                      <a class="page-link" href="{{ $owners->url($page) }}">
+                        {{ $page }}
+                      </a>
+                    </li>
+                  @endfor
+                  <li class="page-item {{ $owners->hasMorePages() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $owners->nextPageUrl() }}">
+                      <i class="bx bx-chevron-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            @endif
           </div>
         </div>
       </div>
