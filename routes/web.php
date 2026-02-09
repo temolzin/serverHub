@@ -62,6 +62,58 @@ use App\Http\Controllers\ServerDatabaseController;
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
 
+use App\Http\Controllers\DatabaseController;
+
+Route::middleware('auth')->group(function () {
+
+  Route::get('/databases', [DatabaseController::class, 'index']) ->name('databases.index');
+  Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+  Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
+  Route::get('/layouts/without-navbar', [WithoutNavbar::class, 'index'])->name('layouts-without-navbar');
+  Route::get('/layouts/fluid', [Fluid::class, 'index'])->name('layouts-fluid');
+  Route::get('/layouts/container', [Container::class, 'index'])->name('layouts-container');
+  Route::get('/layouts/blank', [Blank::class, 'index'])->name('layouts-blank');
+  Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
+  Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
+  Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
+  Route::get('/pages/misc-error', [MiscError::class, 'index'])->name('pages-misc-error');
+  Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name('pages-misc-under-maintenance');
+  Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
+  Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
+  Route::get('/cards/basic', [CardBasic::class, 'index'])->name('cards-basic');
+  Route::get('/ui/accordion', [Accordion::class, 'index'])->name('ui-accordion');
+  Route::get('/ui/alerts', [Alerts::class, 'index'])->name('ui-alerts');
+  Route::get('/ui/badges', [Badges::class, 'index'])->name('ui-badges');
+  Route::get('/ui/buttons', [Buttons::class, 'index'])->name('ui-buttons');
+  Route::get('/ui/carousel', [Carousel::class, 'index'])->name('ui-carousel');
+  Route::get('/ui/collapse', [Collapse::class, 'index'])->name('ui-collapse');
+  Route::get('/ui/dropdowns', [Dropdowns::class, 'index'])->name('ui-dropdowns');
+  Route::get('/ui/footer', [Footer::class, 'index'])->name('ui-footer');
+  Route::get('/ui/list-groups', [ListGroups::class, 'index'])->name('ui-list-groups');
+  Route::get('/ui/modals', [Modals::class, 'index'])->name('ui-modals');
+  Route::get('/ui/navbar', [Navbar::class, 'index'])->name('ui-navbar');
+  Route::get('/ui/offcanvas', [Offcanvas::class, 'index'])->name('ui-offcanvas');
+  Route::get('/ui/pagination-breadcrumbs', [PaginationBreadcrumbs::class, 'index'])->name('ui-pagination-breadcrumbs');
+  Route::get('/ui/progress', [Progress::class, 'index'])->name('ui-progress');
+  Route::get('/ui/spinners', [Spinners::class, 'index'])->name('ui-spinners');
+  Route::get('/ui/tabs-pills', [TabsPills::class, 'index'])->name('ui-tabs-pills');
+  Route::get('/ui/toasts', [Toasts::class, 'index'])->name('ui-toasts');
+  Route::get('/ui/tooltips-popovers', [TooltipsPopovers::class, 'index'])->name('ui-tooltips-popovers');
+  Route::get('/ui/typography', [Typography::class, 'index'])->name('ui-typography');
+  Route::get('/extended/ui-perfect-scrollbar', [PerfectScrollbar::class, 'index'])->name('extended-ui-perfect-scrollbar');
+  Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('extended-ui-text-divider');
+  Route::get('/icons/boxicons', [Boxicons::class, 'index'])->name('icons-boxicons');
+  Route::get('/forms/basic-inputs', [BasicInput::class, 'index'])->name('forms-basic-inputs');
+  Route::get('/forms/input-groups', [InputGroups::class, 'index'])->name('forms-input-groups');
+  Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
+  Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
+  Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
+  Route::get('/owners', [OwnerController::class, 'index'])->name('owners.index');
+  Route::get('/gcp-machines', [GcpMachineController::class, 'index'])->name('gcp-machines.index');
+  Route::get('/type-applications', [TypeApplicationController::class, 'index'])->name('type-applications.index');
+});
+
+
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
 Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('register.store');
 
@@ -135,6 +187,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/type-applications', [TypeApplicationController::class, 'index'])
         ->middleware('permission:viewTypeApplication')
         ->name('type-applications.index');
+
+    Route::get('/databases', [ServerDatabaseController::class, 'index'])
+        ->middleware('permission:viewServerDatabase')
+        ->name('databases.index');
+
+    Route::get('/databases', [DatabaseController::class, 'index'])
+        ->middleware('permission:viewDatabase')
+        ->name('databases.index');
+
 
     Route::post('/logout', function (Request $request) {
         Auth::logout();
