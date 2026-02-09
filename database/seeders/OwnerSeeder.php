@@ -9,25 +9,31 @@ class OwnerSeeder extends Seeder
 {
   public function run(): void
   {
-    Owner::create([
-      'name' => 'Luis',
-      'last_name' => 'Pérez',
-      'email' => 'luis.perez@empresa.com',
-      'number_phone' => '5512345678',
-    ]);
+    Owner::updateOrCreate(
+      ['email' => 'luis.perez@empresa.com'],
+      [
+        'name' => 'Luis',
+        'last_name' => 'Pérez',
+        'number_phone' => '5512345678',
+      ]
+    );
 
-    Owner::create([
-      'name' => 'Ana',
-      'last_name' => 'López',
-      'email' => 'ana.lopez@empresa.com',
-      'number_phone' => '5587654321',
-    ]);
+    Owner::updateOrCreate(
+      ['email' => 'ana.lopez@empresa.com'],
+      [
+        'name' => 'Ana',
+        'last_name' => 'López',
+        'number_phone' => '5587654321',
+      ]
+    );
 
-    Owner::create([
-      'name' => 'Carlos',
-      'last_name' => 'Ramírez',
-      'email' => 'carlos.ramirez@empresa.com',
-      'number_phone' => '554678124643',
-    ]);
+    Owner::updateOrCreate(
+      ['email' => 'carlos.ramirez@empresa.com'],
+      [
+        'name' => 'Carlos',
+        'last_name' => 'Ramírez',
+        'number_phone' => '554678124643',
+      ]
+    );
   }
 }

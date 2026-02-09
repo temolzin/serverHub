@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             GcpMachineSeeder::class,
             TypeApplicationSeeder::class,
             ServerSeeder::class,
+            ServerDatabaseSeeder::class,
         ]);
     }
 }

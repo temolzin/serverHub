@@ -57,6 +57,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\GcpMachineController;
 use App\Http\Controllers\TypeApplicationController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\ServerDatabaseController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -141,4 +142,9 @@ Route::middleware('auth')->group(function () {
         $request->session()->regenerateToken();
         return redirect('/login');
     })->name('logout');
+});
+
+Route::middleware(['auth', 'permission:viewDatabase'])->group(function () {
+    Route::get('/databases', [ServerDatabaseController::class, 'index'])
+        ->name('databases.index');
 });

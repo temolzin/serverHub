@@ -21,6 +21,8 @@ class RolePermissionSeeder extends Seeder
             'viewServer',
             'viewGcpMachine',
             'viewTypeApplication',
+            'viewDatabase',
+            'viewServerDatabase',
         ];
 
         foreach ($permissions as $permission) {
