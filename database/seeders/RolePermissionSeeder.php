@@ -11,22 +11,36 @@ class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
-
         $admin = Role::firstOrCreate(['name' => 'Admin']);
-        $user  = Role::firstOrCreate(['name' => 'User']);
 
         $permissions = [
-            'viewOwner',
-            'viewServer',
-            'viewGcpMachine',
-            'viewTypeApplication',
+            [
+                'name' => 'viewOwner',
+                'description' => 'Allows viewing owners',
+            ],
+            [
+                'name' => 'viewServer',
+                'description' => 'Allows viewing servers',
+            ],
+            [
+                'name' => 'viewGcpMachine',
+                'description' => 'Allows viewing GCP machines',
+            ],
+            [
+                'name' => 'viewTypeApplication',
+                'description' => 'Allows viewing application types',
+            ],
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            Permission::firstOrCreate(
+                ['name' => $permission['name']],
+                ['description' => $permission['description']]
+            );
         }
 
-        $admin->syncPermissions($permissions);
+        $admin->syncPermissions(
+            collect($permissions)->pluck('name')->toArray()
+        );
     }
 }
