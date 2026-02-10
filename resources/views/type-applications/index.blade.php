@@ -110,7 +110,6 @@
           fetchTypeApplications(url);
         }, 300);
       });
-      // Delegación de eventos para paginación
       paginationContainer.addEventListener('click', function(e) {
         const link = e.target.closest('a.page-link');
         if (link) {
