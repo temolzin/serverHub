@@ -37,9 +37,11 @@
               <span class="input-group-text">
                 <i class="bx bx-envelope"></i>
               </span>
-              <input type="email" name="email" class="form-control" value="{{ $owner->email }}" required>
+              <input type="email" name="email" class="form-control email-check" value="{{ $owner->email }}" required
+                data-exclude="{{ $owner->id }}" data-error-target="edit-owner-email-error-{{ $owner->id }}">
             </div>
           </div>
+          <div id="edit-owner-email-error-{{ $owner->id }}" class="text-danger text-center mb-2 d-none"></div>
           <div class="mb-4">
             <label class="form-label">Teléfono</label>
             <div class="input-group input-group-merge">

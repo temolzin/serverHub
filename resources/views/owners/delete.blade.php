@@ -8,7 +8,7 @@
       <form action="{{ route('owners.destroy', $owner) }}" method="POST">
         @csrf
         @method('DELETE')
-        <div class="modal-body">
+        <div class="modal-body text-center">
           <p class="mb-0">
             ¿Estás seguro de eliminar al propietario
             <strong>{{ $owner->name }} {{ $owner->last_name }}</strong>?
