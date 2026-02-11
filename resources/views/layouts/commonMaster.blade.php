@@ -44,6 +44,19 @@
   @yield('layoutContent')
   <!--/ Layout Content -->
 
+  @if (session('error'))
+    <div class="bs-toast toast toast-placement-ex m-2 fade bg-danger top-0 end-0 show" role="alert"
+      aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <i class="bx bx-error-circle me-2"></i>
+        <div class="me-auto fw-semibold">Access denied</div>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body">
+        {{ session('error') }}
+      </div>
+    </div>
+  @endif
 
 
   <!-- Include Scripts -->

@@ -23,6 +23,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-       //
+      $exceptions->render(function (
+        \Spatie\Permission\Exceptions\UnauthorizedException $e,
+        \Illuminate\Http\Request $request
+    ) {
+        return redirect('/')
+            ->with('error', 'No tienes permisos para acceder a esta sección.');
+    });
     })
     ->create();

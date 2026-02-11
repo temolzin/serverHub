@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
-// Dashboard
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
 use App\Http\Controllers\layouts\WithoutNavbar;
@@ -53,9 +51,26 @@ use App\Http\Controllers\ServerController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\tables\Basic as TablesBasic;
 
+Route::get('/login', [LoginBasic::class, 'index'])
+    ->name('login');
+Route::post('/login', [LoginBasic::class, 'login'])
+    ->name('login.post');
+Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])
+    ->name('register.basic');
+Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])
+    ->name('register.store');
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/login');
+})->name('logout');
+
 Route::middleware('auth')->group(function () {
+
     Route::get('/', [Analytics::class, 'index'])
-    ->name('dashboard-analytics');
+        ->name('dashboard-analytics');
     Route::get('/layouts/without-menu', [WithoutMenu::class, 'index']);
     Route::get('/layouts/without-navbar', [WithoutNavbar::class, 'index']);
     Route::get('/layouts/fluid', [Fluid::class, 'index']);
@@ -96,6 +111,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:Admin'])->group(function () {
+    Route::get('/admin', function () {
+        return 'Bienvenido Admin';
+    })->name('admin.dashboard');
     Route::get('/tables/basic', [TablesBasic::class, 'index'])
         ->name('tables-basic');
     Route::resource('owners', OwnerController::class);
@@ -106,22 +124,4 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
         ->name('servers.index');
     Route::get('/applications', [ApplicationController::class, 'index'])
         ->name('applications.index');
-    Route::get('/admin', function () {
-        return 'Bienvenido Admin';
-    })->name('admin.dashboard');
 });
-
-Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])
-    ->name('register.basic');
-Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])
-    ->name('register.store');
-Route::get('/login', [LoginBasic::class, 'index'])
-    ->name('login');
-Route::post('/login', [LoginBasic::class, 'login'])
-    ->name('login.post');
-Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect('/login');
-})->name('logout');
