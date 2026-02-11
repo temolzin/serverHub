@@ -117,5 +117,34 @@
         fetchOwners(link.href);
       });
     });
+    document.addEventListener('blur', function(e) {
+      if (!e.target.classList.contains('email-check')) return;
+      const input = e.target;
+      const email = input.value.trim();
+      const exclude = input.dataset.exclude || '';
+      const errorTargetId = input.dataset.errorTarget;
+      const errorDiv = document.getElementById(errorTargetId);
+
+      if (!email) {
+        errorDiv.classList.add('d-none');
+        input.setCustomValidity('');
+        return;
+      }
+
+      fetch(`/owners/check-email?email=${encodeURIComponent(email)}&exclude=${exclude}`)
+        .then(res => res.json())
+        .then(data => {
+          const message = data.exists ?
+            'Ya existe un propietario con ese correo.' :
+            '';
+          errorDiv.textContent = message;
+          errorDiv.classList.toggle('d-none', !data.exists);
+          input.setCustomValidity(message);
+        })
+        .catch(() => {
+          errorDiv.classList.add('d-none');
+          input.setCustomValidity('');
+        });
+    }, true);
   </script>
 @endpush

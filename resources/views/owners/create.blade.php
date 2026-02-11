@@ -40,11 +40,11 @@
               <span class="input-group-text">
                 <i class="bx bx-envelope"></i>
               </span>
-              <input type="email" name="email" class="form-control" placeholder="correo@empresa.com" required
-                id="owner-email-input" onblur="checkOwnerEmailExists(this)">
+              <input type="email" name="email" class="form-control email-check" placeholder="correo@empresa.com"
+                required data-error-target="owner-email-error">
             </div>
           </div>
-          <div id="owner-email-error" class="text-danger text-center mb-2" style="display:none;"></div>
+          <div id="owner-email-error" class="text-danger text-center mb-2 d-none"></div>
           <div class="mb-4">
             <label class="form-label">Teléfono</label>
             <div class="input-group input-group-merge">
@@ -66,32 +66,6 @@
           </button>
         </div>
       </form>
-      <script>
-        function checkOwnerEmailExists(input) {
-          const email = input.value.trim();
-          const errorDiv = document.getElementById('owner-email-error');
-          if (!email) {
-            errorDiv.style.display = 'none';
-            return;
-          }
-          fetch(`/owners/check-email?email=${encodeURIComponent(email)}`)
-            .then(res => res.json())
-            .then(data => {
-              if (data.exists) {
-                errorDiv.textContent = 'Ya existe un propietario con ese correo.';
-                errorDiv.style.display = 'block';
-                input.setCustomValidity('Ya existe un propietario con ese correo.');
-              } else {
-                errorDiv.style.display = 'none';
-                input.setCustomValidity('');
-              }
-            })
-            .catch(() => {
-              errorDiv.style.display = 'none';
-              input.setCustomValidity('');
-            });
-        }
-      </script>
     </div>
   </div>
 </div>

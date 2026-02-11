@@ -10,8 +10,16 @@ class OwnerController extends Controller
   public function checkEmail(Request $request)
   {
     $email = $request->query('email');
-    $exists = Owner::where('email', $email)->exists();
-    return response()->json(['exists' => $exists]);
+    $exclude = $request->query('exclude');
+    $query = Owner::where('email', $email);
+
+    if ($exclude) {
+      $query->where('id', '!=', $exclude);
+    }
+
+    return response()->json([
+      'exists' => $query->exists()
+    ]);
   }
   public function index(Request $request)
   {
