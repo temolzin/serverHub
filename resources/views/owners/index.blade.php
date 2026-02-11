@@ -10,7 +10,7 @@
         title: '¡Listo!',
         text: '{{ session('success') }}',
         confirmButtonText: 'Perfecto',
-        timer: 2500,
+        timer: 5000,
         timerProgressBar: true
       })
     })
