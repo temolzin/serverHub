@@ -107,6 +107,10 @@ Route::middleware('auth')->group(function () {
   Route::delete('/type-applications/{type_application}', [TypeApplicationController::class, 'destroy'])->name('type-applications.destroy');
   Route::get('/type-applications/{type_application}', [TypeApplicationController::class, 'show'])->name('type-applications.show');
   Route::get('/servers', [ServerController::class, 'index'])->name('servers.index');
+  Route::get('/servers/check-ip', [ServerController::class, 'checkIp']);
+  Route::resource('servers', ServerController::class);
+  Route::resource('servers', ServerController::class);
+  Route::resource('servers', ServerController::class);
   Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
 });
 
