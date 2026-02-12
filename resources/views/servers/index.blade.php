@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Servidores')
+@section('title', 'Servers')
 
 @if (session('success'))
   <script>
@@ -15,6 +15,14 @@
       })
     })
   </script>
+  @if ($errors->any())
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var myModal = new bootstrap.Modal(document.getElementById('createServerModal'));
+        myModal.show();
+      });
+    </script>
+  @endif
 @endif
 
 @section('content')
@@ -30,31 +38,17 @@
         <div class="card-body">
           <div class="mb-4">
             <input type="text" id="search-server" class="form-control form-control-sm w-50"
-              placeholder="Buscar por IP, DNS, Hostname o Propietario">
+              placeholder="Buscar por aplicación, hostname o IP">
           </div>
           <div class="table-responsive text-nowrap">
             <table class="table align-middle">
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Propietario</th>
                   <th>Aplicación</th>
-                  <th>VM (VMware)</th>
-                  <th>Estado</th>
-                  <th>DNS</th>
-                  <th>IP primaria</th>
+                  <th>Hostname</th>
                   <th>Entorno</th>
-                  <th>Datacenter</th>
-                  <th>Sistema operativo</th>
-                  <th>Versión interna</th>
-                  <th>Hostname interno</th>
-                  <th>IP usuario</th>
-                  <th>IP monitoreo</th>
-                  <th>Otras IPs</th>
-                  <th>RAM (MB)</th>
-                  <th>Swap (MB)</th>
-                  <th>Último parche</th>
-                  <th>Comentarios</th>
+                  <th>IP primaria</th>
                   <th class="text-end">Acciones</th>
                 </tr>
               </thead>
@@ -63,46 +57,23 @@
               </tbody>
             </table>
             <div id="servers-pagination">
+              @include('servers.pagination', ['servers' => $servers])
             </div>
-            @if ($servers->hasPages())
-              <nav>
-                <ul class="pagination justify-content-end">
-                  <li class="page-item {{ $servers->onFirstPage() ? 'disabled' : '' }}">
-                    <a class="page-link" href="{{ $servers->previousPageUrl() }}">
-                      <i class="bx bx-chevron-left"></i>
-                    </a>
-                  </li>
-                  @for ($page = 1; $page <= $servers->lastPage(); $page++)
-                    <li class="page-item {{ $page == $servers->currentPage() ? 'active' : '' }}">
-                      <a class="page-link" href="{{ $servers->url($page) }}">
-                        {{ $page }}
-                      </a>
-                    </li>
-                  @endfor
-                  <li class="page-item {{ $servers->hasMorePages() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $servers->nextPageUrl() }}">
-                      <i class="bx bx-chevron-right"></i>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            @endif
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
   @include('servers.create')
 @endsection
 
 @push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-
       const input = document.getElementById('search-server');
       const table = document.getElementById('servers-search');
-      const paginationContainer = document.getElementById('servers-pagination');
+      const pagination = document.getElementById('servers-pagination');
       let timeout = null;
 
       function fetchServers(url) {
@@ -113,40 +84,85 @@
           })
           .then(res => res.json())
           .then(data => {
-            table.innerHTML = data.table;
-            paginationContainer.innerHTML = data.pagination ?? '';
+            document.getElementById('servers-search').innerHTML = data.table;
+            document.getElementById('servers-pagination').innerHTML = data.pagination;
           });
       }
+
       input.addEventListener('keyup', function() {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-
           const value = input.value.trim();
           let url = `{{ route('servers.index') }}`;
-
           if (value !== '') {
             url += `?search=${encodeURIComponent(value)}`;
           }
-
           fetchServers(url);
         }, 300);
       });
-      document.addEventListener('click', function(e) {
 
+      document.addEventListener('click', function(e) {
         const link = e.target.closest('#servers-pagination a');
         if (!link) return;
 
         e.preventDefault();
-        let url = link.href;
-        const value = input.value.trim();
+        fetchServers(link.href);
+      });
 
-        if (value !== '') {
-          const separator = url.includes('?') ? '&' : '?';
-          url += separator + 'search=' + encodeURIComponent(value);
-        }
+    });
 
-        fetchServers(url);
+    document.addEventListener("DOMContentLoaded", function() {
+      new TomSelect("#ownerSelect", {
+        create: false,
+        sortField: {
+          field: "text",
+          direction: "asc"
+        },
+        placeholder: "Buscar propietario..."
+      });
+
+      new TomSelect("#typeApplicationSelect", {
+        create: false,
+        sortField: {
+          field: "text",
+          direction: "asc"
+        },
+        placeholder: "Buscar aplicación..."
       });
     });
+
+    document.addEventListener('blur', function(e) {
+
+      if (!e.target.classList.contains('ip-check')) return;
+
+      const input = e.target;
+      const ip = input.value.trim();
+      const exclude = input.dataset.exclude || '';
+      const errorTargetId = input.dataset.errorTarget;
+      const errorDiv = document.getElementById(errorTargetId);
+
+      if (!ip) {
+        errorDiv.classList.add('d-none');
+        input.setCustomValidity('');
+        return;
+      }
+
+      fetch(`/servers/check-ip?ip=${encodeURIComponent(ip)}&exclude=${exclude}`)
+        .then(res => res.json())
+        .then(data => {
+
+          const message = data.exists ?
+            'Ya existe un servidor con esa IP.' :
+            '';
+
+          errorDiv.textContent = message;
+          errorDiv.classList.toggle('d-none', !data.exists);
+          input.setCustomValidity(message);
+        })
+        .catch(() => {
+          errorDiv.classList.add('d-none');
+          input.setCustomValidity('');
+        });
+    }, true);
   </script>
 @endpush

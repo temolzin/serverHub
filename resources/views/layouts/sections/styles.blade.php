@@ -14,6 +14,7 @@
 
 <!-- Vendor Styles -->
 @vite('resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.scss')
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
 @yield('vendor-style')
 
 <!-- Page Styles -->

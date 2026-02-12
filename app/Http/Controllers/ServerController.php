@@ -11,91 +11,111 @@ class ServerController extends Controller
 {
   public function checkIp(Request $request)
   {
-    $ip = $request->ip;
-    $exclude = $request->exclude;
-    $exists = Server::where('primary_ip_address', $ip)
-      ->when($exclude, fn($q) => $q->where('id', '!=', $exclude))
-      ->exists();
-    return response()->json(['exists' => $exists]);
+    $ip = $request->query('ip');
+    $exclude = $request->query('exclude');
+
+    $query = Server::where('primary_ip_address', $ip);
+
+    if ($exclude) {
+      $query->where('id', '!=', $exclude);
+    }
+    return response()->json([
+      'exists' => $query->exists()
+    ]);
   }
 
   public function index(Request $request)
   {
-    $query = Server::with(['owner', 'typeApplication']);
+    $servers = Server::with(['owner', 'typeApplication']);
 
-    if ($request->search) {
+    if ($request->filled('search')) {
       $search = $request->search;
-      $query->where(function ($q) use ($search) {
-        $q->where('primary_ip_address', 'like', "%$search%")
-          ->orWhere('dns_name', 'like', "%$search%")
-          ->orWhere('hostname_internal', 'like', "%$search%")
-          ->orWhereHas('owner', function ($sub) use ($search) {
-            $sub->where('name', 'like', "%$search%");
+      $servers->where(function ($q) use ($search) {
+        $q->where('hostname_internal', 'like', "%{$search}%")
+          ->orWhere('primary_ip_address', 'like', "%{$search}%")
+          ->orWhere('environment', 'like', "%{$search}%")
+          ->orWhereHas('typeApplication', function ($sub) use ($search) {
+            $sub->where('name_application', 'like', "%{$search}%");
           });
       });
     }
-    $servers = $query->latest()->paginate(10);
+
+    $servers = $servers
+      ->orderBy('id', 'desc')
+      ->paginate(10)
+      ->withQueryString();
     $owners = Owner::orderBy('name')->get();
     $typeApplications = TypeApplication::orderBy('name_application')->get();
 
     if ($request->ajax()) {
-
-      $owners = Owner::orderBy('name')->get();
-      $typeApplications = TypeApplication::orderBy('name_application')->get();
       return response()->json([
         'table' => view('servers.search', compact('servers', 'owners', 'typeApplications'))->render(),
-        'pagination' => $request->search
-          ? ''
-          : (string) $servers->links('pagination::bootstrap-5')
+        'pagination' => view('servers.pagination', compact('servers'))->render(),
       ]);
     }
     return view('servers.index', compact('servers', 'owners', 'typeApplications'));
   }
 
-  public function create()
-  {
-    return view('servers.create');
-  }
-
   public function store(Request $request)
   {
-    $request->validate([
-      'primary_ip_address' => 'required|unique:servers,primary_ip_address',
-      'owner_id' => 'required',
-      'type_application_id' => 'required'
+    $validated = $request->validate([
+      'owner_id'                 => 'required|exists:owners,id',
+      'type_application_id'      => 'required|exists:type_applications,id',
+      'vm_according_to_the_vmware' => 'required|string|max:255',
+      'primary_ip_address'       => 'required|unique:servers,primary_ip_address',
+      'environment'              => 'required|string|max:255',
+      'datacenter'               => 'required|string|max:255',
+      'os_according_to_the_vmware' => 'required|string|max:255',
+      'os_version_internal'      => 'required|string|max:255',
+      'hostname_internal'        => 'required|string|max:255',
+      'ram_memory'               => 'required|integer',
+      'swap_memory'              => 'required|integer',
+      'dns_name'                 => 'nullable|string|max:255',
+      'ip_user'                  => 'nullable|string|max:255',
+      'ip_monitoring'            => 'nullable|string|max:255',
+      'other_ips'                => 'nullable|string',
+      'latest_security_patch'    => 'nullable|date',
+      'comments'                 => 'nullable|string',
     ]);
-    Server::create($request->all());
-    return redirect()->route('servers.index')
-      ->with('success', 'Servidor creado correctamente');
-  }
 
-  public function edit($id)
-  {
-    $owners = Owner::orderBy('name')->get();
-    $typeApplications = TypeApplication::orderBy('name_application')->get();
-    return view('servers.edit', compact(
-      'server',
-      'owners',
-      'typeApplications'
-    ));
+    Server::create($validated);
+    return redirect()
+      ->route('servers.index')
+      ->with('success', 'Servidor creado correctamente');
   }
 
   public function update(Request $request, Server $server)
   {
-    $request->validate([
-      'primary_ip_address' => 'required|unique:servers,primary_ip_address,' . $server->id,
-      'owner_id' => 'required',
-      'type_application_id' => 'required'
+    $validated = $request->validate([
+      'owner_id'                 => 'required|exists:owners,id',
+      'type_application_id'      => 'required|exists:type_applications,id',
+      'vm_according_to_the_vmware' => 'required|string|max:255',
+      'primary_ip_address'       => 'required|unique:servers,primary_ip_address,' . $server->id,
+      'environment'              => 'required|string|max:255',
+      'datacenter'               => 'required|string|max:255',
+      'os_according_to_the_vmware' => 'required|string|max:255',
+      'os_version_internal'      => 'required|string|max:255',
+      'hostname_internal'        => 'required|string|max:255',
+      'ram_memory'               => 'required|integer',
+      'swap_memory'              => 'required|integer',
+      'dns_name'                 => 'nullable|string|max:255',
+      'ip_user'                  => 'nullable|string|max:255',
+      'ip_monitoring'            => 'nullable|string|max:255',
+      'other_ips'                => 'nullable|string',
+      'latest_security_patch'    => 'nullable|date',
+      'comments'                 => 'nullable|string',
     ]);
-    $server->update($request->all());
-    return redirect()->route('servers.index')
-      ->with('success', 'Servidor actualizado correctamente');
+    $server->update($validated);
+    return redirect()
+      ->route('servers.index')
+      ->with('success', 'El servidor fue actualizado correctamente.');
   }
 
   public function destroy(Server $server)
   {
     $server->delete();
-    return redirect()->route('servers.index')
+    return redirect()
+      ->route('servers.index')
       ->with('success', 'Servidor eliminado correctamente');
   }
 }
