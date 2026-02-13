@@ -8,9 +8,6 @@ use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $roleAdmin = Role::firstOrCreate([
@@ -23,24 +20,35 @@ class RoleSeeder extends Seeder
                 'description' => 'Permite ver los usuarios.',
             ],
             [
-                'name' => 'editUser',
-                'description' => 'Permite editar los usuarios.',
+                'name' => 'viewOwner',
+                'description' => 'Permite ver los propietarios.',
             ],
             [
-                'name' => 'deleteUser',
-                'description' => 'Permite eliminar los usuarios.',
+                'name' => 'viewServer',
+                'description' => 'Permite ver los servidores.',
+            ],
+            [
+                'name' => 'viewTypeApplication',
+                'description' => 'Permite ver los tipos de aplicación.',
+            ],
+            [
+                'name' => 'viewGcpMachine',
+                'description' => 'Permite ver las máquinas GCP.',
+            ],
+            [
+                'name' => 'viewApplication',
+                'description' => 'Permite ver las aplicaciones.',
             ],
         ];
 
-        foreach ($permissions as $permission) {
-            $perm = Permission::firstOrCreate(
-                ['name' => $permission['name']],
-                ['description' => $permission['description']]
+        foreach ($permissions as $perm) {
+
+            $permission = Permission::firstOrCreate(
+                ['name' => $perm['name']],
+                ['description' => $perm['description']]
             );
 
-            if (! $roleAdmin->hasPermissionTo($perm)) {
-                $roleAdmin->givePermissionTo($perm);
-            }
+            $roleAdmin->givePermissionTo($permission);
         }
     }
 }
