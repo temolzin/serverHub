@@ -8,7 +8,7 @@
       <form action="{{ route('type-applications.destroy', $type) }}" method="POST">
         @csrf
         @method('DELETE')
-        <div class="modal-body">
+        <div class="modal-body text-center">
           <p class="mb-0">
             ¿Estás seguro de eliminar el tipo de aplicación
             <strong>{{ $type->type_application }} - {{ $type->name_application }}</strong>?

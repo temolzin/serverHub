@@ -7,6 +7,20 @@ use App\Models\Owner;
 
 class OwnerController extends Controller
 {
+  public function checkEmail(Request $request)
+  {
+    $email = $request->query('email');
+    $exclude = $request->query('exclude');
+    $query = Owner::where('email', $email);
+
+    if ($exclude) {
+      $query->where('id', '!=', $exclude);
+    }
+
+    return response()->json([
+      'exists' => $query->exists()
+    ]);
+  }
   public function index(Request $request)
   {
     $owners = Owner::query();
@@ -49,10 +63,17 @@ class OwnerController extends Controller
       'number_phone' => 'required|digits:10',
     ]);
 
-    Owner::create($request->all());
-    return redirect()
-      ->route('owners.index')
-      ->with('success', 'Propietario creado correctamente');
+    try {
+      Owner::create($request->all());
+      return redirect()
+        ->route('owners.index')
+        ->with('success', 'Propietario creado correctamente');
+    } catch (\Illuminate\Database\QueryException $e) {
+      return redirect()
+        ->back()
+        ->withInput()
+        ->with('error', 'El correo ya existe, por favor ingresa uno diferente.');
+    }
   }
 
   public function edit($id)

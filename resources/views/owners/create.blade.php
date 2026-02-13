@@ -9,6 +9,11 @@
         onsubmit="this.querySelector('button[type=submit]').disabled=true;">
         @csrf
         <div class="modal-body">
+          @if (session('error'))
+            <div class="alert alert-danger text-center mb-4">
+              {{ session('error') }}
+            </div>
+          @endif
           <div class="mb-4">
             <label class="form-label">Nombre</label>
             <div class="input-group input-group-merge">
@@ -35,9 +40,11 @@
               <span class="input-group-text">
                 <i class="bx bx-envelope"></i>
               </span>
-              <input type="email" name="email" class="form-control" placeholder="correo@empresa.com" required>
+              <input type="email" name="email" class="form-control email-check" placeholder="correo@empresa.com"
+                required data-error-target="owner-email-error">
             </div>
           </div>
+          <div id="owner-email-error" class="text-danger text-center mb-2 d-none"></div>
           <div class="mb-4">
             <label class="form-label">Teléfono</label>
             <div class="input-group input-group-merge">
@@ -51,7 +58,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal" onclick="this.form.reset();">
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">

@@ -2,77 +2,183 @@
 
 @section('title', 'GCP Machines')
 
+@if (session('success'))
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      Swal.fire({
+        icon: 'success',
+        title: '¡Listo!',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'Perfecto',
+        timer: 5000,
+        timerProgressBar: true
+      });
+    });
+  </script>
+@endif
+
 @section('content')
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Máquinas de GCP</h5>
+          <h5 class="mb-0">Maquinas GCP</h5>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal">
+            <i class="bx bx-plus me-1"></i> Agregar máquina
+          </button>
         </div>
-        <div class="table-responsive text-nowrap">
-          <table class="table align-middle">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Propietario</th>
-                <th>Proyecto</th>
-                <th>Entorno</th>
-                <th>Nombre de la máquina</th>
-                <th>Nombre interno</th>
-                <th>Sistema operativo</th>
-                <th>Kernel</th>
-                <th>Parche de seguridad</th>
-                <th>IP interna</th>
-                <th>Alias IP</th>
-                <th>Alias 2 IP</th>
-                <th>Alias 3 IP</th>
-                <th>Otras IP</th>
-                <th>RAM (MB)</th>
-                <th>Swap (MB)</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse ($gcpMachines as $machine)
+        <div class="card-body">
+          <div class="mb-4">
+            <input type="text" id="search-gcp" class="form-control form-control-sm w-50"
+              placeholder="Buscar por proyecto, máquina o IP">
+          </div>
+          <div class="table-responsive text-nowrap" style="overflow-y: hidden;">
+            <table class="table align-middle">
+              <thead>
                 <tr>
-                  <td>{{ $machine->id }}</td>
-                  <td>
-                    {{ optional($machine->owner)->name }}
-                    {{ optional($machine->owner)->last_name }}
-                  </td>
-                  <td class="fw-medium">
-                    {{ $machine->project_name }}
-                  </td>
-                  <td>
-                    <span class="badge bg-label-info">
-                      {{ $machine->environment }}
-                    </span>
-                  </td>
-                  <td>{{ $machine->machine_name }}</td>
-                  <td class="text-muted">{{ $machine->machine_internal_name }}</td>
-                  <td>{{ $machine->operations_system }}</td>
-                  <td>{{ $machine->kernel_version ?? '—' }}</td>
-                  <td>{{ $machine->latest_security_patch ?? '—' }}</td>
-                  <td>{{ $machine->internal_ip ?? '—' }}</td>
-                  <td>{{ $machine->alias_ip ?? '—' }}</td>
-                  <td>{{ $machine->alias2_ip ?? '—' }}</td>
-                  <td>{{ $machine->alias3_ip ?? '—' }}</td>
-                  <td class="small">{{ $machine->other_ips ?? '—' }}</td>
-                  <td>{{ $machine->ram_memory }} MB</td>
-                  <td>{{ $machine->swap_memory }} MB</td>
-                  <td class="text-end">
-                  </td>
+                  <th>ID</th>
+                  <th>Proyecto</th>
+                  <th>Máquina</th>
+                  <th>Entorno</th>
+                  <th>IP interna</th>
+                  <th class="text-end">Acciones</th>
                 </tr>
-              @empty
-                <tr>
-                  <td colspan="17" class="text-center text-muted">
-                    No se encontraron máquinas de GCP
-                  </td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
+              </thead>
+              <tbody id="gcp-search">
+                @include('gcp-machines.search', ['gcpMachines' => $gcpMachines])
+              </tbody>
+            </table>
+            <div id="gcp-pagination">
+              @if ($gcpMachines->hasPages())
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-end">
+                    <li class="page-item {{ $gcpMachines->onFirstPage() ? 'disabled' : '' }}">
+                      <a class="page-link" href="{{ $gcpMachines->previousPageUrl() }}">
+                        <i class="bx bx-chevron-left"></i>
+                      </a>
+                    </li>
+                    @for ($page = 1; $page <= $gcpMachines->lastPage(); $page++)
+                      <li class="page-item {{ $page == $gcpMachines->currentPage() ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $gcpMachines->url($page) }}">
+                          {{ $page }}
+                        </a>
+                      </li>
+                    @endfor
+                    <li class="page-item {{ $gcpMachines->hasMorePages() ? '' : 'disabled' }}">
+                      <a class="page-link" href="{{ $gcpMachines->nextPageUrl() }}">
+                        <i class="bx bx-chevron-right"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              @endif
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  @include('gcp-machines.create')
 @endsection
+
+@push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const input = document.getElementById('search-gcp');
+      const table = document.getElementById('gcp-search');
+      const pagination = document.getElementById('gcp-pagination');
+      let timeout = null;
+
+      function fetchGcp(url) {
+        fetch(url, {
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          })
+          .then(res => res.json())
+          .then(data => {
+            table.innerHTML = data.table;
+            pagination.innerHTML = data.pagination;
+          });
+      }
+      input.addEventListener('keyup', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          const value = input.value.trim();
+          let url = `{{ route('gcp-machines.index') }}`;
+
+          if (value !== '') {
+            url += `?search=${encodeURIComponent(value)}`;
+          }
+
+          fetchGcp(url);
+
+        }, 300);
+      });
+
+      document.addEventListener('click', function(e) {
+        const link = e.target.closest('#gcp-pagination a');
+        if (!link) return;
+
+        e.preventDefault();
+        fetchGcp(link.href);
+      });
+
+    });
+
+    document.addEventListener('blur', function(e) {
+
+      if (!e.target.classList.contains('ip-check')) return;
+
+      const input = e.target;
+      const ip = input.value.trim();
+      const errorDiv = document.getElementById('gcp-ip-error');
+
+      if (!ip) {
+        errorDiv.classList.add('d-none');
+        input.setCustomValidity('');
+        return;
+      }
+
+      fetch(`/gcp-machines/check-ip?ip=${encodeURIComponent(ip)}`)
+        .then(res => res.json())
+        .then(data => {
+          const message = data.exists ?
+            'Ya existe una máquina con esa IP interna.' :
+            '';
+          errorDiv.textContent = message;
+          errorDiv.classList.toggle('d-none', !data.exists);
+          input.setCustomValidity(message);
+        });
+    }, true);
+    document.addEventListener("DOMContentLoaded", function() {
+      new TomSelect("#ownerSelect", {
+        create: false,
+        sortField: {
+          field: "text",
+          direction: "asc"
+        },
+        placeholder: "Buscar propietario..."
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const cancelBtn = document.getElementById('cancelCreateGcp');
+      const form = document.getElementById('createGcpForm');
+      const modal = document.getElementById('createGcpMachineModal');
+
+      cancelBtn.addEventListener('click', function() {
+        form.reset();
+        form.querySelectorAll('input, textarea, select').forEach(el => {
+          el.classList.remove('is-invalid');
+          el.setCustomValidity('');
+        });
+        form.querySelectorAll('.text-danger').forEach(el => {
+          el.classList.add('d-none');
+          el.textContent = '';
+        });
+      });
+    });
+  </script>
+@endpush
