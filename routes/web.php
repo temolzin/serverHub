@@ -101,12 +101,20 @@ Route::middleware('auth')->group(function () {
   Route::delete('/owners/{owner}', [OwnerController::class, 'destroy'])->name('owners.destroy');
   Route::get('/owners/{owner}', [OwnerController::class, 'show'])->name('owners.show');
   Route::get('/gcp-machines', [GcpMachineController::class, 'index'])->name('gcp-machines.index');
+  Route::post('/gcp-machines', [GcpMachineController::class, 'store'])->name('gcp-machines.store');
+  Route::put('/gcp-machines/{gcp_machine}', [GcpMachineController::class, 'update'])->name('gcp-machines.update');
+  Route::delete('/gcp-machines/{gcp_machine}', [GcpMachineController::class, 'destroy'])->name('gcp-machines.destroy');
+  Route::get('/gcp-machines/check-ip', [GcpMachineController::class, 'checkIp'])->name('gcp-machines.check-ip');
   Route::get('/type-applications', [TypeApplicationController::class, 'index'])->name('type-applications.index');
   Route::post('/type-applications', [TypeApplicationController::class, 'store'])->name('type-applications.store');
   Route::put('/type-applications/{type_application}', [TypeApplicationController::class, 'update'])->name('type-applications.update');
   Route::delete('/type-applications/{type_application}', [TypeApplicationController::class, 'destroy'])->name('type-applications.destroy');
   Route::get('/type-applications/{type_application}', [TypeApplicationController::class, 'show'])->name('type-applications.show');
   Route::get('/servers', [ServerController::class, 'index'])->name('servers.index');
+  Route::post('/servers', [ServerController::class, 'store'])->name('servers.store');
+  Route::put('/servers/{server}', [ServerController::class, 'update'])->name('servers.update');
+  Route::delete('/servers/{server}', [ServerController::class, 'destroy'])->name('servers.destroy');
+  Route::get('/servers/check-ip', [ServerController::class, 'checkIp'])->name('servers.check-ip');
   Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
 });
 
