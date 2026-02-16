@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Server;
+use Illuminate\Support\Str;
 
 class ServerSeeder extends Seeder
 {
@@ -11,6 +12,7 @@ class ServerSeeder extends Seeder
   {
     Server::create([
       'owner_id' => 1,
+      'uuid' => (string) Str::uuid(),
       'type_application_id' => 1,
       'vm_according_to_the_vmware' => 'VM-001',
       'state' => true,

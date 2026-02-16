@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\GcpMachine;
 use App\Models\Owner;
+use Illuminate\Support\Str;
 
 class GcpMachineSeeder extends Seeder
 {
@@ -18,6 +18,7 @@ class GcpMachineSeeder extends Seeder
     }
 
     GcpMachine::create([
+      'uuid' => (string) Str::uuid(),
       'project_name' => 'serverhub-prod',
       'environment' => 'production',
       'machine_name' => 'gcp-vm-01',
@@ -36,6 +37,7 @@ class GcpMachineSeeder extends Seeder
     ]);
 
     GcpMachine::create([
+      'uuid' => (string) Str::uuid(),
       'project_name' => 'serverhub-staging',
       'environment' => 'staging',
       'machine_name' => 'gcp-vm-02',

@@ -13,6 +13,7 @@ class GcpMachine extends Model
 
   protected $fillable = [
     'project_name',
+    'uuid',
     'environment',
     'machine_name',
     'machine_internal_name',
