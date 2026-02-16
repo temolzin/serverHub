@@ -13,6 +13,7 @@ class Server extends Model
 
   protected $fillable = [
     'owner_id',
+    'uuid',
     'type_application_id',
     'vm_according_to_the_vmware',
     'state',
