@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,11 +9,11 @@ return new class extends Migration
   public function up(): void
   {
     Schema::table('servers', function (Blueprint $table) {
-      $table->string('uuid')->nullable()->unique()->after('id');
+      $table->string('uuid')->unique()->after('id');
     });
 
     Schema::table('gcp_machines', function (Blueprint $table) {
-      $table->string('uuid')->nullable()->unique()->after('id');
+      $table->string('uuid')->unique()->after('id');
     });
   }
 
