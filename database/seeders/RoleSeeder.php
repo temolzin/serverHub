@@ -12,8 +12,8 @@ class RoleSeeder extends Seeder
     {
         $roleAdmin = Role::firstOrCreate([
             'name' => 'Admin',
-        ]);
 
+            ]);
         $permissions = [
             [
                 'name' => 'viewUser',
@@ -42,12 +42,10 @@ class RoleSeeder extends Seeder
         ];
 
         foreach ($permissions as $perm) {
-
             $permission = Permission::firstOrCreate(
                 ['name' => $perm['name']],
                 ['description' => $perm['description']]
             );
-
             $roleAdmin->givePermissionTo($permission);
         }
     }

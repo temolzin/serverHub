@@ -33,8 +33,6 @@
 
 <body>
   @yield('layoutContent')
-  <!--/ Layout Content -->
-
   @if (session('error'))
     <div class="bs-toast toast toast-placement-ex m-2 fade bg-danger top-0 end-0 show" role="alert"
       aria-live="assertive" aria-atomic="true">
@@ -49,8 +47,6 @@
     </div>
   @endif
 
-
-  <!-- Include Scripts -->
   @include('layouts/sections/scripts')
   @stack('scripts')
 </body>

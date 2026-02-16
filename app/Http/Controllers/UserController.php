@@ -9,20 +9,17 @@ use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
-
     public function index()
     {
       $users = \App\Models\User::all();
       return view('users.index', compact('users'));
     }
-
     public function editPermissions(User $user)
     {
         $permissions = Permission::where('name', '!=', 'viewUser')->get();
 
         return view('users.permissions', compact('user', 'permissions'));
     }
-
     public function updatePermissions(Request $request, User $user)
     {
         $user->syncPermissions($request->permissions ?? []);

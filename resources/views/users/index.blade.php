@@ -3,10 +3,7 @@
 @section('title', 'Users')
 
 @section('content')
-
   <h3>Usuarios</h3>
-
-  {{-- Mensaje SOLO UNA VEZ --}}
   @if (session()->has('success'))
     <div class="alert alert-success">
       {{ session()->get('success') }}
