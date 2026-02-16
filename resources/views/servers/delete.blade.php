@@ -1,17 +1,24 @@
-<div class="modal fade" id="deleteOwnerModal{{ $owner->id }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="deleteServerModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-danger">Eliminar propietario</h5>
+        <h5 class="modal-title text-danger">
+          <i class="bx bx-trash me-1"></i>
+          Eliminar servidor
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form action="{{ route('owners.destroy', $owner) }}" method="POST">
+      <form action="{{ route('servers.destroy', $server) }}" method="POST">
         @csrf
         @method('DELETE')
         <div class="modal-body text-center">
           <p class="mb-0">
-            ¿Estás seguro de eliminar al propietario
-            <strong>{{ $owner->name }} {{ $owner->last_name }}</strong>?
+            ¿Estás seguro de eliminar el servidor con IP
+            <strong>{{ $server->primary_ip_address }}</strong>?
+          </p>
+          <p class="mt-2">
+            Hostname:
+            <strong>{{ $server->hostname_internal }}</strong>
           </p>
           <p class="text-muted mt-2">
             Esta acción no se puede deshacer.
