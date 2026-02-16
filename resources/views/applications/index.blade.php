@@ -185,5 +185,24 @@
         }
       });
     });
+    document.addEventListener('DOMContentLoaded', function() {
+
+      const createModal = document.getElementById('createApplicationModal');
+      const createForm = document.getElementById('createApplicationForm');
+
+      if (createModal) {
+        createModal.addEventListener('hidden.bs.modal', function() {
+          createForm.reset();
+
+          if (createForm.querySelector('#ownerSelect')?.tomselect) {
+            createForm.querySelector('#ownerSelect').tomselect.clear();
+          }
+
+          if (createForm.querySelector('#serverSelect')?.tomselect) {
+            createForm.querySelector('#serverSelect').tomselect.clear();
+          }
+        });
+      }
+    });
   </script>
 @endpush
