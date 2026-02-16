@@ -15,10 +15,8 @@ use App\Http\Controllers\UserController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
-
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
 Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('register.store');
-
 Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
@@ -27,38 +25,28 @@ Route::post('/logout', function (Request $request) {
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
-
-    Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
-
+    Route::get('/', [Analytics::class, 'index'])
+        ->name('dashboard-analytics');
     Route::middleware('permission:viewOwner')
-    ->resource('owners', OwnerController::class);
-
-Route::middleware('permission:viewServer')
-    ->get('/servers', [ServerController::class, 'index'])
-    ->name('servers.index');
-
-Route::middleware('permission:viewTypeApplication')
-    ->resource('type-applications', TypeApplicationController::class);
-
-Route::middleware('permission:viewGcpMachine')
-    ->get('/gcp-machines', [GcpMachineController::class, 'index'])
-    ->name('gcp-machines.index');
-
-Route::middleware('permission:viewApplication')
-    ->get('/applications', [ApplicationController::class, 'index'])
-    ->name('applications.index');
-
+        ->resource('owners', OwnerController::class);
+    Route::middleware('permission:viewServer')
+        ->resource('servers', ServerController::class);
+    Route::middleware('permission:viewTypeApplication')
+        ->resource('type-applications', TypeApplicationController::class);
+    Route::middleware('permission:viewGcpMachine')
+        ->resource('gcp-machines', GcpMachineController::class);
+    Route::middleware('permission:viewApplication')
+        ->resource('applications', ApplicationController::class);
 
     Route::middleware('role:Admin')->group(function () {
-
         Route::get('/users', [UserController::class, 'index'])
             ->name('users.index');
-
-        Route::get('/users/{user}/permissions', [UserController::class, 'editPermissions'])
-            ->name('users.permissions.edit');
-
-        Route::post('/users/{user}/permissions', [UserController::class, 'updatePermissions'])
-            ->name('users.permissions.update');
+        Route::get('/users/{user}/permissions',
+            [UserController::class, 'editPermissions']
+        )->name('users.permissions.edit');
+        Route::post('/users/{user}/permissions',
+            [UserController::class, 'updatePermissions']
+        )->name('users.permissions.update');
 
     });
 
