@@ -7,6 +7,12 @@
       "slug": "dashboard"
     },
     {
+      "url": "/users",
+      "name": "Usuarios",
+      "slug": "users",
+      "icon": "menu-icon tf-icons bx bx-user"
+    },
+    {
       "name": "Propietarios",
       "icon": "menu-icon icon-base bx bx-id-card",
       "slug": "owners",

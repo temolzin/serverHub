@@ -10,7 +10,7 @@ class UserSeeder extends Seeder
 {
   public function run(): void
   {
-    User::updateOrCreate(
+    $user = User::updateOrCreate(
       ['email' => 'jose@gmail.com'],
       [
         'name' => 'jose',
@@ -18,5 +18,8 @@ class UserSeeder extends Seeder
         'email_verified_at' => now(),
       ]
     );
+      if (! $user->hasRole('Admin')) {
+        $user->assignRole('Admin');
+    }
   }
 }
