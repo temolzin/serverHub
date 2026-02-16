@@ -115,7 +115,11 @@ Route::middleware('auth')->group(function () {
   Route::put('/servers/{server}', [ServerController::class, 'update'])->name('servers.update');
   Route::delete('/servers/{server}', [ServerController::class, 'destroy'])->name('servers.destroy');
   Route::get('/servers/check-ip', [ServerController::class, 'checkIp'])->name('servers.check-ip');
+  Route::get('/applications/servers-by-owner/{owner}', [ApplicationController::class, 'getServersByOwner'])->name('applications.servers.byOwner');
   Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+  Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store');
+  Route::put('/applications/{application}', [ApplicationController::class, 'update'])->name('applications.update');
+  Route::delete('/applications/{application}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 });
 
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
