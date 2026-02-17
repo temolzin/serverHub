@@ -15,14 +15,14 @@ class DatabaseController extends Controller
       if ($request->filled('search')) {
             $search = $request->search;
 
-                $databases->where(function ($q) use ($search) {
-                  $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('type', 'like', "%{$search}%")
-                  ->orWhere('status', 'like', "%{$search}%")
-                  ->orWhereHas('server', function ($sub) use ($search) {
-                  $sub->where('hostname_internal', 'like', "%{$search}%");
-              });
-        });
+            $databases->where(function ($q) use ($search) {
+              $q->where('name', 'like', "%{$search}%")
+              ->orWhere('type', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%")
+              ->orWhereHas('server', function ($sub) use ($search) {
+              $sub->where('hostname_internal', 'like', "%{$search}%");
+          });
+      });
     }
 
     $databases = $databases
