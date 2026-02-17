@@ -10,6 +10,7 @@ return new class extends Migration
   {
     Schema::create('servers', function (Blueprint $table) {
       $table->id();
+      $table->uuid('uuid')->unique();
       $table->unsignedBigInteger('owner_id');
       $table->unsignedBigInteger('type_application_id');
       $table->string('vm_according_to_the_vmware');

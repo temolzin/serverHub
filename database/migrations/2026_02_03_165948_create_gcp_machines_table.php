@@ -10,6 +10,7 @@ return new class extends Migration
   {
     Schema::create('gcp_machines', function (Blueprint $table) {
       $table->id();
+      $table->uuid('uuid')->nullable();
       $table->unsignedBigInteger('owner_id');
       $table->string('project_name');
       $table->string('environment');
