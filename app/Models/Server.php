@@ -42,6 +42,7 @@ class Server extends Model
   {
     return $this->belongsTo(TypeApplication::class);
   }
+
   public function databases()
   {
     return $this->hasMany(Database::class);

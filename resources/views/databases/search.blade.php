@@ -12,7 +12,6 @@
       </span>
     </td>
     <td>{{ $database->last_update ?? '—' }}</td>
-
     <td class="text-end">
       <div class="dropdown">
         <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -33,11 +32,9 @@
       </div>
     </td>
   </tr>
-
   @include('databases.show', ['database' => $database])
   @include('databases.edit', ['database' => $database, 'servers' => $servers])
   @include('databases.delete', ['database' => $database])
-
 @empty
   <tr>
     <td colspan="6" class="text-center text-muted">

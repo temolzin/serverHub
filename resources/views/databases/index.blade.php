@@ -13,12 +13,10 @@
           </button>
         </div>
         <div class="card-body">
-
           <div class="mb-4">
             <input type="text" id="search-database" class="form-control form-control-sm w-50"
               placeholder="Buscar por nombre, tipo o servidor">
           </div>
-
           <div class="table-responsive text-nowrap">
             <table class="table align-middle">
               <thead>
@@ -34,12 +32,10 @@
                   <th class="text-end">Acciones</th>
                 </tr>
               </thead>
-
               <tbody id="databases-search">
                 @include('databases.search', ['databases' => $databases, 'servers' => $servers])
               </tbody>
             </table>
-
             <div id="databases-pagination">
               @include('databases.pagination', ['databases' => $databases])
             </div>
@@ -48,7 +44,6 @@
       </div>
     </div>
   </div>
-
   @include('databases.create')
   @push('scripts')
     <script>
@@ -68,7 +63,6 @@
               document.getElementById('databases-pagination').innerHTML = data.pagination;
             });
         }
-
         input.addEventListener('keyup', function() {
           clearTimeout(timeout);
           timeout = setTimeout(() => {
@@ -79,7 +73,6 @@
             fetchDatabases(url);
           }, 300);
         });
-
         document.addEventListener('click', function(e) {
           const link = e.target.closest('#databases-pagination a');
           if (!link) return;

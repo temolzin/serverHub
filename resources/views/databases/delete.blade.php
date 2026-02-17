@@ -1,5 +1,4 @@
 <div class="modal fade" id="deleteDatabaseModal{{ $database->id }}" tabindex="-1" aria-hidden="true">
-
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -9,7 +8,6 @@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
       <form action="{{ route('databases.destroy', $database) }}" method="POST">
         @csrf
         @method('DELETE')
@@ -28,7 +26,6 @@
             Esta acción no se puede deshacer.
           </p>
         </div>
-
         <div class="modal-footer">
           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar

@@ -10,7 +10,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal">
         </button>
       </div>
-
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6 mb-3">
@@ -21,7 +20,6 @@
             <input type="text" class="form-control" value="{{ optional($database->server)->hostname_internal }}"
               disabled>
           </div>
-
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-data me-1 text-primary"></i>
@@ -29,7 +27,6 @@
             </label>
             <input type="text" class="form-control" value="{{ $database->name }}" disabled>
           </div>
-
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-layer me-1 text-primary"></i>
@@ -37,7 +34,6 @@
             </label>
             <input type="text" class="form-control" value="{{ $database->type }}" disabled>
           </div>
-
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-network-chart me-1 text-primary"></i>
@@ -45,7 +41,6 @@
             </label>
             <input type="text" class="form-control" value="{{ $database->port ?? '—' }}" disabled>
           </div>
-
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-code me-1 text-primary"></i>
@@ -53,7 +48,6 @@
             </label>
             <input type="text" class="form-control" value="{{ $database->version ?? '—' }}" disabled>
           </div>
-
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-check-circle me-1 text-primary"></i>
@@ -61,7 +55,6 @@
             </label>
             <input type="text" class="form-control" value="{{ $database->status ?? '—' }}" disabled>
           </div>
-
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-calendar me-1 text-primary"></i>
@@ -69,7 +62,6 @@
             </label>
             <input type="text" class="form-control" value="{{ $database->last_update ?? '—' }}" disabled>
           </div>
-
           <div class="col-12 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-comment-detail me-1 text-primary"></i>
@@ -77,7 +69,6 @@
             </label>
             <textarea class="form-control" rows="3" disabled>{{ $database->comments ?? '—' }}</textarea>
           </div>
-
         </div>
       </div>
       <div class="modal-footer">

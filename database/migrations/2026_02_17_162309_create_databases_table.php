@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('server_id')
                   ->constrained()
                   ->onDelete('cascade');
-
             $table->string('name');
             $table->string('type');
             $table->string('status')->nullable();
@@ -25,7 +24,6 @@ return new class extends Migration
             $table->integer('port')->nullable();
             $table->string('version')->nullable();
             $table->date('last_update')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });

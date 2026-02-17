@@ -5,7 +5,6 @@
         <h5 class="modal-title">Crear base de datos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
       <form action="{{ route('databases.store') }}" method="POST">
         @csrf
         <div class="modal-body">
@@ -23,7 +22,6 @@
               </select>
             </div>
           </div>
-
           <div class="mb-4">
             <label class="form-label">Nombre</label>
             <div class="input-group input-group-merge">
@@ -31,7 +29,6 @@
               <input type="text" name="name" class="form-control" required>
             </div>
           </div>
-
           <div class="mb-4">
             <label class="form-label">Tipo</label>
             <div class="input-group input-group-merge">
@@ -39,7 +36,6 @@
               <input type="text" name="type" class="form-control" required>
             </div>
           </div>
-
           <div class="mb-4">
             <label class="form-label">Puerto</label>
             <div class="input-group input-group-merge">
@@ -47,7 +43,6 @@
               <input type="number" name="port" class="form-control">
             </div>
           </div>
-
           <div class="mb-4">
             <label class="form-label">Versión</label>
             <div class="input-group input-group-merge">
@@ -55,7 +50,6 @@
               <input type="text" name="version" class="form-control">
             </div>
           </div>
-
           <div class="mb-4">
             <label class="form-label">Estado</label>
             <div class="input-group input-group-merge">
@@ -63,7 +57,6 @@
               <input type="text" name="status" class="form-control">
             </div>
           </div>
-
           <div class="mb-4">
             <label class="form-label">Última actualización</label>
             <div class="input-group input-group-merge">
@@ -71,7 +64,6 @@
               <input type="date" name="last_update" class="form-control">
             </div>
           </div>
-
           <div class="mb-4">
             <label class="form-label">Comentarios</label>
             <div class="input-group input-group-merge">
@@ -79,9 +71,7 @@
               <textarea name="comments" class="form-control"></textarea>
             </div>
           </div>
-
         </div>
-
         <div class="modal-footer">
           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar

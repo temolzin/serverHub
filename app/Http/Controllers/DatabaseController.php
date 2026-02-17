@@ -11,10 +11,8 @@ class DatabaseController extends Controller
 public function index(Request $request)
 {
     $databases = Database::with('server');
-
     if ($request->filled('search')) {
         $search = $request->search;
-
         $databases->where(function ($q) use ($search) {
             $q->where('name', 'like', "%{$search}%")
               ->orWhere('type', 'like', "%{$search}%")
@@ -24,15 +22,15 @@ public function index(Request $request)
               });
         });
     }
-    $databases = $databases
+      $databases = $databases
         ->orderBy('id', 'desc')
         ->paginate(10)
         ->withQueryString();
-    $servers = Server::orderBy('hostname_internal')->get();
-    if ($request->ajax()) {
-        return response()->json([
-            'table' => view('databases.search', compact('databases','servers'))->render(),
-            'pagination' => view('databases.pagination', compact('databases'))->render(),
+        $servers = Server::orderBy('hostname_internal')->get();
+          if ($request->ajax()) {
+              return response()->json([
+                'table' => view('databases.search', compact('databases','servers'))->render(),
+                'pagination' => view('databases.pagination', compact('databases'))->render(),
         ]);
     }
     return view('databases.index', compact('databases', 'servers'));
@@ -53,7 +51,7 @@ public function index(Request $request)
 
         Database::create($validated);
 
-        return redirect()
+          return redirect()
             ->route('databases.index')
             ->with('success', 'Base de datos creada correctamente.');
     }
