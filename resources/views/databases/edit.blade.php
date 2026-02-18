@@ -62,6 +62,15 @@
             </div>
           </div>
           <div class="mb-4">
+            <label class="form-label">Versión</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text">
+                <i class="bx bx-code"></i>
+              </span>
+              <input type="text" name="version" class="form-control" value="{{ $database->version }}">
+            </div>
+          </div>
+          <div class="mb-4">
             <label class="form-label">Estado</label>
             <div class="input-group input-group-merge">
               <span class="input-group-text">

@@ -16,13 +16,12 @@ class DatabaseController extends Controller
 
       if ($request->filled('search')) {
             $search = $request->search;
-
             $databases->where(function ($q) use ($search) {
               $q->where('name', 'like', "%{$search}%")
               ->orWhere('type', 'like', "%{$search}%")
               ->orWhere('status', 'like', "%{$search}%")
               ->orWhereHas('instance.server', function ($sub) use ($search) {
-              $sub->where('hostname_internal', 'like', "%{$search}%"); });
+                $sub->where('hostname_internal', 'like', "%{$search}%"); });
       });
     }
 
@@ -55,6 +54,7 @@ class DatabaseController extends Controller
             'status'    => 'nullable|string|max:255',
             'comments'  => 'nullable|string',
             'port'      => 'nullable|integer',
+            'version' => 'nullable|string|max:255',
             'last_update' => 'nullable|date',
         ]);
 
@@ -75,6 +75,7 @@ class DatabaseController extends Controller
             'status'    => 'nullable|string|max:255',
             'comments'  => 'nullable|string',
             'port'      => 'nullable|integer',
+            'version' => 'nullable|string|max:255',
             'last_update' => 'nullable|date',
         ]);
 

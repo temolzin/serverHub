@@ -18,6 +18,7 @@ class Database extends Model
         'status',
         'comments',
         'port',
+        'version',
         'last_update',
     ];
 

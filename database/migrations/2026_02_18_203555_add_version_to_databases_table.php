@@ -12,20 +12,14 @@ return new class extends Migration
   public function up(): void
   {
     Schema::table('databases', function (Blueprint $table) {
-      $table->foreignId('owner_id')
-        ->constrained()
-        ->onDelete('cascade');
+        $table->string('version')->nullable()->after('port');
     });
   }
 
-    /**
-     * Reverse the migrations.
-     */
   public function down(): void
   {
     Schema::table('databases', function (Blueprint $table) {
-      $table->dropForeign(['owner_id']);
-      $table->dropColumn('owner_id');
+        $table->dropColumn('version');
     });
   }
 };

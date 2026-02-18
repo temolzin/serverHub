@@ -15,7 +15,7 @@
                 <i class="bx bx-server"></i>
               </span>
               <select name="instance_id" class="form-select" required>
-                <option value="">Seleccionar versión</option>
+                <option value="">Seleccionar estancia</option>
                 @forelse ($instances as $instance)
                   <option value="{{ $instance->id }}">
                     {{ $instance->server->hostname_internal }}
@@ -70,6 +70,15 @@
                 <i class="bx bx-network-chart"></i>
               </span>
               <input type="number" name="port" class="form-control">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Versión</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text">
+                <i class="bx bx-code"></i>
+              </span>
+              <input type="text" name="version" class="form-control">
             </div>
           </div>
           <div class="mb-4">

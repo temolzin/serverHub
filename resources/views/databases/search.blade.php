@@ -6,7 +6,7 @@
     <td>{{ optional($database->instance?->server)->hostname_internal ?? '—' }}</td>
     <td>{{ $database->owner?->name }} {{ $database->owner?->last_name ?? '—' }}</td>
     <td>{{ $database->port }}</td>
-    <td>{{ $database->instance?->version ?? '—' }}</td>
+    <td>{{ $database->version ?? ($database->instance?->version ?? '—') }}</td>
     <td>
       <span class="badge bg-label-info">
         {{ $database->status ?? '—' }}

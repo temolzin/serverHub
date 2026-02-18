@@ -17,14 +17,13 @@ class InstanceController extends Controller
       $query = Instance::with('server');
 
         if ($request->filled('search')) {
-            $search = $request->search;
-
+          $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('version', 'like', "%{$search}%")
                   ->orWhere('edition', 'like', "%{$search}%")
                   ->orWhereHas('server', function ($sub) use ($search) {
-                      $sub->where('hostname_internal', 'like', "%{$search}%");
-                  });
+                    $sub->where('hostname_internal', 'like', "%{$search}%");
+                });
             });
         }
 
@@ -91,20 +90,20 @@ class InstanceController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Instance $instance)
-{
-    $validated = $request->validate([
+    {
+      $validated = $request->validate([
         'server_id' => 'required|exists:servers,id',
         'memory' => 'required|integer',
         'version' => 'required|string|max:255',
         'edition' => 'required|string|max:255',
-    ]);
+      ]);
 
-    $instance->update($validated);
+      $instance->update($validated);
 
-    return redirect()
+      return redirect()
         ->route('instances.index')
         ->with('success', 'Instancia actualizada correctamente.');
-}
+    }
 
     /**
      * Remove the specified resource from storage.
