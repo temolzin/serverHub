@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('databases', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('instance_id')
+            $table->foreignId('server_id')
                   ->constrained()
                   ->onDelete('cascade');
             $table->string('name');
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->text('comments')->nullable();
             $table->integer('port')->nullable();
+            $table->string('version')->nullable();
             $table->date('last_update')->nullable();
             $table->timestamps();
             $table->softDeletes();

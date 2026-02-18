@@ -14,17 +14,17 @@ class ServerDatabaseSeeder extends Seeder
         $instances = Instance::all();
         $owners = Owner::all();
 
-    foreach ($instances as $instance) {
-        Database::create([
-            'instance_id' => $instance->id,
-            'owner_id'    => $owners->random()->id,
-            'name' => 'db_' . rand(1, 100),
-            'type' => collect(['MySQL', 'PostgreSQL'])->random(),
-            'status' => 'Active',
-            'port' => rand(3000, 6000),
-            'last_update' => now(),
-            'comments' => 'Base generada automáticamente',
-      ]);
+      foreach ($instances as $instance) {
+          Database::create([
+              'instance_id' => $instance->id,
+              'owner_id'    => $owners->random()->id,
+              'name' => 'db_' . rand(1, 100),
+              'type' => collect(['MySQL', 'PostgreSQL'])->random(),
+              'status' => 'Active',
+              'port' => rand(3000, 6000),
+              'last_update' => now(),
+              'comments' => 'Base generada automáticamente',
+          ]);
+        }
     }
-  }
 }

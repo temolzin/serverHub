@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('instances', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('server_id')->constrained()->onDelete('cascade');
-        $table->integer('memory');
-        $table->string('version');
-        $table->string('edition');
-        $table->timestamps();
+          $table->id();
+          $table->foreignId('server_id')->constrained()->onDelete('cascade');
+          $table->integer('memory');
+          $table->string('version');
+          $table->string('edition');
+          $table->timestamps();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('instances');
+      Schema::dropIfExists('instances');
     }
 };
