@@ -3,9 +3,10 @@
     <td>{{ $database->id }}</td>
     <td>{{ $database->name }}</td>
     <td>{{ $database->type }}</td>
-    <td>{{ optional($database->server)->hostname_internal }}</td>
+    <td>{{ optional($database->instance?->server)->hostname_internal ?? '—' }}</td>
+    <td>{{ $database->owner?->name }} {{ $database->owner?->last_name ?? '—' }}</td>
     <td>{{ $database->port }}</td>
-    <td>{{ $database->version ?? '—' }}</td>
+    <td>{{ $database->instance?->version ?? '—' }}</td>
     <td>
       <span class="badge bg-label-info">
         {{ $database->status ?? '—' }}
@@ -33,7 +34,7 @@
     </td>
   </tr>
   @include('databases.show', ['database' => $database])
-  @include('databases.edit', ['database' => $database, 'servers' => $servers])
+  @include('databases.edit', ['database' => $database, 'instances' => $instances, 'owners' => $owners])
   @include('databases.delete', ['database' => $database])
 @empty
   <tr>

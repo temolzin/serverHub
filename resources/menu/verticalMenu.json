@@ -47,6 +47,12 @@
       "icon": "menu-icon icon-base bx bx-data",
       "slug": "databases",
       "url": "databases"
+    },
+    {
+      "name": "Instancias",
+      "icon": "menu-icon icon-base bx bx-server",
+      "slug": "instances",
+      "url": "instances"
     }
   ]
 }

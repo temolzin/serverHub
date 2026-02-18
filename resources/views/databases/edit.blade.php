@@ -15,10 +15,10 @@
               <span class="input-group-text">
                 <i class="bx bx-server"></i>
               </span>
-              <select name="server_id" class="form-select" required>
-                @foreach ($servers as $server)
-                  <option value="{{ $server->id }}" {{ $database->server_id == $server->id ? 'selected' : '' }}>
-                    {{ $server->hostname_internal }}
+              <select name="instance_id" class="form-select" required>
+                @foreach ($instances as $instance)
+                  <option value="{{ $instance->id }}" {{ $database->instance_id == $instance->id ? 'selected' : '' }}>
+                    {{ $instance->server->hostname_internal }}
                   </option>
                 @endforeach
               </select>
@@ -32,6 +32,16 @@
               </span>
               <input type="text" name="name" class="form-control" value="{{ $database->name }}" required>
             </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Propietario</label>
+            <select name="owner_id" class="form-select" required>
+              @foreach ($owners as $owner)
+                <option value="{{ $owner->id }}" {{ $database->owner_id == $owner->id ? 'selected' : '' }}>
+                  {{ $owner->name }} {{ $owner->last_name }}
+                </option>
+              @endforeach
+            </select>
           </div>
           <div class="mb-4">
             <label class="form-label">Tipo</label>
@@ -49,15 +59,6 @@
                 <i class="bx bx-network-chart"></i>
               </span>
               <input type="number" name="port" class="form-control" value="{{ $database->port }}">
-            </div>
-          </div>
-          <div class="mb-4">
-            <label class="form-label">Versión</label>
-            <div class="input-group input-group-merge">
-              <span class="input-group-text">
-                <i class="bx bx-code"></i>
-              </span>
-              <input type="text" name="version" class="form-control" value="{{ $database->version }}">
             </div>
           </div>
           <div class="mb-4">

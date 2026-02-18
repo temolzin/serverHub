@@ -11,18 +11,23 @@ class Database extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'server_id',
+        'instance_id',
+        'owner_id',
         'name',
         'type',
         'status',
         'comments',
         'port',
-        'version',
         'last_update',
     ];
 
-    public function server()
+    public function instance()
     {
-        return $this->belongsTo(Server::class);
+    return $this->belongsTo(Instance::class);
+    }
+
+    public function owner()
+    {
+    return $this->belongsTo(Owner::class);
     }
 }

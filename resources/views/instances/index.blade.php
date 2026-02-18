@@ -1,58 +1,54 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Bases de Datos')
+@section('title', 'Instancias')
 
 @section('content')
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Bases de Datos</h5>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createDatabaseModal">
-            <i class="bx bx-plus me-1"></i> Agregar base de datos
+          <h5 class="mb-0">Instancias</h5>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createInstanceModal">
+            <i class="bx bx-plus me-1"></i> Agregar instancia
           </button>
         </div>
         <div class="card-body">
           <div class="mb-4">
-            <input type="text" id="search-database" class="form-control form-control-sm w-50"
-              placeholder="Buscar por nombre, tipo o servidor">
+            <input type="text" id="search-instance" class="form-control form-control-sm w-50"
+              placeholder="Buscar por versión, edición o servidor">
           </div>
           <div class="table-responsive text-nowrap">
             <table class="table align-middle">
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Tipo</th>
                   <th>Servidor</th>
-                  <th>Propietario</th>
-                  <th>Puerto</th>
+                  <th>Memoria (MB)</th>
                   <th>Versión</th>
-                  <th>Estado</th>
-                  <th>Última actualización</th>
+                  <th>Edición</th>
                   <th class="text-end">Acciones</th>
                 </tr>
               </thead>
-              <tbody id="databases-search">
-                @include('databases.search', ['databases' => $databases, 'instances' => $instances])
+              <tbody id="instances-search">
+                @include('instances.search', ['instances' => $instances, 'servers' => $servers])
               </tbody>
             </table>
-            <div id="databases-pagination">
-              @include('databases.pagination', ['databases' => $databases])
+            <div id="instances-pagination">
+              @include('instances.pagination', ['instances' => $instances])
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  @include('databases.create')
+  @include('instances.create')
   @push('scripts')
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        const input = document.getElementById('search-database');
+        const input = document.getElementById('search-instance');
         let timeout = null;
 
-        function fetchDatabases(url) {
+        function fetchInstances(url) {
           fetch(url, {
               headers: {
                 'X-Requested-With': 'XMLHttpRequest'
@@ -60,25 +56,25 @@
             })
             .then(res => res.json())
             .then(data => {
-              document.getElementById('databases-search').innerHTML = data.table;
-              document.getElementById('databases-pagination').innerHTML = data.pagination;
+              document.getElementById('instances-search').innerHTML = data.table;
+              document.getElementById('instances-pagination').innerHTML = data.pagination;
             });
         }
         input.addEventListener('keyup', function() {
           clearTimeout(timeout);
           timeout = setTimeout(() => {
-            let url = `{{ route('databases.index') }}`;
+            let url = `{{ route('instances.index') }}`;
             if (input.value.trim() !== '') {
               url += `?search=${encodeURIComponent(input.value)}`;
             }
-            fetchDatabases(url);
+            fetchInstances(url);
           }, 300);
         });
         document.addEventListener('click', function(e) {
-          const link = e.target.closest('#databases-pagination a');
+          const link = e.target.closest('#instances-pagination a');
           if (!link) return;
           e.preventDefault();
-          fetchDatabases(link.href);
+          fetchInstances(link.href);
         });
       });
     </script>
