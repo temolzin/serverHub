@@ -9,15 +9,14 @@
         @csrf
         <div class="modal-body">
           <div class="mb-4">
-            <label class="form-label">Instance</label>
+            <label class="form-label">Instancia</label>
             <div class="input-group input-group-merge">
               <span class="input-group-text"><i class="bx bx-layer"></i></span>
               <select name="instance_id" class="form-select" required>
-                <option value="">Seleccionar instance</option>
+                <option value="">Seleccionar instancia</option>
                 @foreach ($instances as $instance)
                   <option value="{{ $instance->id }}">
                     {{ $instance->server->hostname_internal }}
-                    -
                     {{ $instance->version }}
                     ({{ $instance->edition }})
                   </option>
@@ -108,7 +107,6 @@
       const instanceSelect = document.getElementById('instance-select');
       const ownerInput = document.getElementById('owner-id');
       if (!serverSelect || !instanceSelect || !ownerInput) return;
-      // Ocultar instances al cargar
       Array.from(instanceSelect.options).forEach(option => {
         if (option.value) option.style.display = 'none';
       });

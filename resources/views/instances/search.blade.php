@@ -27,7 +27,7 @@
 @empty
   <tr>
     <td colspan="6" class="text-center text-muted">
-      No hay instances registradas
+      No hay instancias registradas
     </td>
   </tr>
 @endforelse

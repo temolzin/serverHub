@@ -7,9 +7,9 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Instances</h5>
+          <h5 class="mb-0">Instancias</h5>
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createInstanceModal">
-            <i class="bx bx-plus me-1"></i> Agregar Instance
+            <i class="bx bx-plus me-1"></i> Agregar Instancia
           </button>
         </div>
         <div class="card-body">

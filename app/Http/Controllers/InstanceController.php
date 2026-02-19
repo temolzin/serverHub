@@ -40,7 +40,7 @@ class InstanceController extends Controller
     {
         $validated = $request->validate([
             'server_id' => 'required|exists:servers,id',
-            'memory'    => 'required|integer|min:1',
+            'memory' => 'required|integer|min:1|max:262144',
             'version'   => 'required|string|max:255',
             'edition'   => 'nullable|string|max:255',
         ]);
@@ -54,7 +54,7 @@ class InstanceController extends Controller
     {
         $validated = $request->validate([
             'server_id' => 'required|exists:servers,id',
-            'memory'    => 'required|integer|min:1',
+            'memory' => 'required|integer|min:1|max:262144',
             'version'   => 'required|string|max:255',
             'edition'   => 'nullable|string|max:255',
         ]);

@@ -4,7 +4,7 @@
       <form action="{{ route('instances.store') }}" method="POST">
         @csrf
         <div class="modal-header">
-          <h5 class="modal-title">Crear Instance</h5>
+          <h5 class="modal-title">Crear Instancia</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -21,7 +21,8 @@
           </div>
           <div class="mb-3">
             <label>Memoria (MB)</label>
-            <input type="number" name="memory" class="form-control" required>
+            <input type="number" name="memory" class="form-control" min="1" max="262144"
+              placeholder="1 - 262144 MB" required>
           </div>
           <div class="mb-3">
             <label>Versión</label>

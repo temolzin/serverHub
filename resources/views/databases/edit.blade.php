@@ -10,7 +10,7 @@
         @method('PUT')
         <div class="modal-body">
           <div class="mb-4">
-            <label class="form-label">Instance</label>
+            <label class="form-label">Instancia</label>
             <div class="input-group input-group-merge">
               <span class="input-group-text">
                 <i class="bx bx-layer"></i>
@@ -19,7 +19,6 @@
                 @foreach ($instances as $instance)
                   <option value="{{ $instance->id }}" {{ $database->instance_id == $instance->id ? 'selected' : '' }}>
                     {{ $instance->server->hostname_internal }}
-                    -
                     {{ $instance->version }}
                     ({{ $instance->edition }})
                   </option>

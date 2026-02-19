@@ -2,7 +2,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Editar Instance</h5>
+        <h5 class="modal-title">Editar Instancia</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('instances.update', $instance) }}" method="POST">
@@ -21,7 +21,11 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Memoria (MB)</label>
-            <input type="number" name="memory" class="form-control" value="{{ $instance->memory }}" required>
+            <input type="number" name="memory" class="form-control" value="{{ $instance->memory }}" min="1"
+              max="262144" required>
+            <small class="text-muted">
+              Rango permitido: 1 MB - 262144 MB
+            </small>
           </div>
           <div class="mb-3">
             <label class="form-label">Versión</label>
