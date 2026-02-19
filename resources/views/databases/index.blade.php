@@ -24,7 +24,8 @@
                   <th>ID</th>
                   <th>Nombre</th>
                   <th>Tipo</th>
-                  <th>Servidor</th>
+                  <th>Instancia</th>
+                  <th>Propietario</th>
                   <th>Puerto</th>
                   <th>Versión</th>
                   <th>Estado</th>

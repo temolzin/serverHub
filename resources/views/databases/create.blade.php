@@ -9,14 +9,31 @@
         @csrf
         <div class="modal-body">
           <div class="mb-4">
-            <label class="form-label">Servidor</label>
+            <label class="form-label">Instance</label>
             <div class="input-group input-group-merge">
-              <span class="input-group-text"><i class="bx bx-server"></i></span>
-              <select name="server_id" class="form-select" required>
-                <option value="">Seleccionar servidor</option>
-                @foreach ($servers as $server)
-                  <option value="{{ $server->id }}">
-                    {{ $server->hostname_internal }}
+              <span class="input-group-text"><i class="bx bx-layer"></i></span>
+              <select name="instance_id" class="form-select" required>
+                <option value="">Seleccionar instance</option>
+                @foreach ($instances as $instance)
+                  <option value="{{ $instance->id }}">
+                    {{ $instance->server->hostname_internal }}
+                    -
+                    {{ $instance->version }}
+                    ({{ $instance->edition }})
+                  </option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Propietario</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text"><i class="bx bx-user"></i></span>
+              <select name="owner_id" class="form-select" required>
+                <option value="">Seleccionar propietario</option>
+                @foreach ($owners as $owner)
+                  <option value="{{ $owner->id }}">
+                    {{ $owner->name }} {{ $owner->last_name }}
                   </option>
                 @endforeach
               </select>
@@ -84,3 +101,32 @@
     </div>
   </div>
 </div>
+@push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const serverSelect = document.getElementById('server-select');
+      const instanceSelect = document.getElementById('instance-select');
+      const ownerInput = document.getElementById('owner-id');
+      if (!serverSelect || !instanceSelect || !ownerInput) return;
+      // Ocultar instances al cargar
+      Array.from(instanceSelect.options).forEach(option => {
+        if (option.value) option.style.display = 'none';
+      });
+      serverSelect.addEventListener('change', function() {
+        const serverId = this.value;
+        const selectedOption = this.options[this.selectedIndex];
+        const ownerId = selectedOption?.dataset.owner;
+        ownerInput.value = ownerId ?? '';
+        Array.from(instanceSelect.options).forEach(option => {
+          if (!option.value) return;
+          if (option.dataset.server == serverId) {
+            option.style.display = 'block';
+          } else {
+            option.style.display = 'none';
+          }
+        });
+        instanceSelect.value = '';
+      });
+    });
+  </script>
+@endpush

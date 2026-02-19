@@ -10,15 +10,33 @@
         @method('PUT')
         <div class="modal-body">
           <div class="mb-4">
-            <label class="form-label">Servidor</label>
+            <label class="form-label">Instance</label>
             <div class="input-group input-group-merge">
               <span class="input-group-text">
-                <i class="bx bx-server"></i>
+                <i class="bx bx-layer"></i>
               </span>
-              <select name="server_id" class="form-select" required>
-                @foreach ($servers as $server)
-                  <option value="{{ $server->id }}" {{ $database->server_id == $server->id ? 'selected' : '' }}>
-                    {{ $server->hostname_internal }}
+              <select name="instance_id" class="form-select" required>
+                @foreach ($instances as $instance)
+                  <option value="{{ $instance->id }}" {{ $database->instance_id == $instance->id ? 'selected' : '' }}>
+                    {{ $instance->server->hostname_internal }}
+                    -
+                    {{ $instance->version }}
+                    ({{ $instance->edition }})
+                  </option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Propietario</label>
+            <div class="input-group input-group-merge">
+              <span class="input-group-text">
+                <i class="bx bx-user"></i>
+              </span>
+              <select name="owner_id" class="form-select" required>
+                @foreach ($owners as $owner)
+                  <option value="{{ $owner->id }}" {{ $database->owner_id == $owner->id ? 'selected' : '' }}>
+                    {{ $owner->name }} {{ $owner->last_name }}
                   </option>
                 @endforeach
               </select>
@@ -75,7 +93,8 @@
               <span class="input-group-text">
                 <i class="bx bx-calendar"></i>
               </span>
-              <input type="date" name="last_update" class="form-control" value="{{ $database->last_update }}">
+              <input type="date" name="last_update" class="form-control"
+                value="{{ \Carbon\Carbon::parse($database->last_update)->format('Y-m-d') }}">
             </div>
           </div>
           <div class="mb-4">

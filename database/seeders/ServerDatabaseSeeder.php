@@ -4,18 +4,19 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Database;
-use App\Models\Server;
+use App\Models\Instance;
 
 class ServerDatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $servers = Server::all();
+        $instances = Instance::with('server')->get();
 
-        foreach ($servers as $server) {
+        foreach ($instances as $instance) {
             Database::create([
-                'server_id'   => $server->id,
-                'name'        => 'db_' . $server->id,
+                'instance_id'   => $instance->id,
+                'owner_id'     => $instance->server->owner_id,
+                'name'        => 'db_' . $instance->id,
                 'type'        => 'MySQL',
                 'status'      => 'Active',
                 'port'        => 3306,

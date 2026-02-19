@@ -20,4 +20,9 @@ class Owner extends Model
   {
     return $this->hasMany(GcpMachine::class);
   }
+
+  public function databases()
+  {
+    return $this->hasMany(Database::class);
+  }
 }

@@ -47,4 +47,9 @@ class Server extends Model
   {
     return $this->hasMany(Database::class);
   }
+
+  public function instances()
+  {
+    return $this->hasMany(Instance::class);
+  }
 }
