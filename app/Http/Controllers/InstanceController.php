@@ -40,28 +40,28 @@ class InstanceController extends Controller
     {
         $validated = $request->validate([
             'server_id' => 'required|exists:servers,id',
-            'memory' => 'required|integer|min:1|max:262144',
+            'memory' => 'required|integer|min:1024|max:32768',
             'version'   => 'required|string|max:255',
             'edition'   => 'nullable|string|max:255',
         ]);
         Instance::create($validated);
         return redirect()
           ->route('instances.index')
-          ->with('success', 'Instance creada correctamente.');
+          ->with('success', 'Instancia creada correctamente.');
     }
 
     public function update(Request $request, Instance $instance)
     {
         $validated = $request->validate([
             'server_id' => 'required|exists:servers,id',
-            'memory' => 'required|integer|min:1|max:262144',
+            'memory' => 'required|integer|min:1024|max:32768',
             'version'   => 'required|string|max:255',
             'edition'   => 'nullable|string|max:255',
         ]);
         $instance->update($validated);
         return redirect()
             ->route('instances.index')
-            ->with('success', 'Instance actualizada correctamente.');
+            ->with('success', 'Instancia actualizada correctamente.');
     }
 
     public function destroy(Instance $instance)
@@ -69,6 +69,6 @@ class InstanceController extends Controller
         $instance->delete();
         return redirect()
             ->route('instances.index')
-            ->with('success', 'Instance eliminada correctamente.');
+            ->with('success', 'Instancia eliminada correctamente.');
     }
 }

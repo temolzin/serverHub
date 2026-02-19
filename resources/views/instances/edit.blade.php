@@ -21,10 +21,10 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Memoria (MB)</label>
-            <input type="number" name="memory" class="form-control" value="{{ $instance->memory }}" min="1"
-              max="262144" required>
+            <input type="number" name="memory" class="form-control" value="{{ $instance->memory }}" min="1024"
+              max="32768" required>
             <small class="text-muted">
-              Rango permitido: 1 MB - 262144 MB
+              Rango permitido: 1024 MB - 32768 MB
             </small>
           </div>
           <div class="mb-3">

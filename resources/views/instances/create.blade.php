@@ -21,8 +21,11 @@
           </div>
           <div class="mb-3">
             <label>Memoria (MB)</label>
-            <input type="number" name="memory" class="form-control" min="1" max="262144"
-              placeholder="1 - 262144 MB" required>
+            <input type="number" name="memory" class="form-control" min="1024" max="32768"
+              placeholder="1024 - 32768 MB" required>
+            <small class="text-muted">
+              Rango permitido: 1024 MB - 32768 MB
+            </small>
           </div>
           <div class="mb-3">
             <label>Versión</label>
