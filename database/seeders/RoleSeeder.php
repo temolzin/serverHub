@@ -47,6 +47,10 @@ class RoleSeeder extends Seeder
                 'name' => 'viewInstance',
                 'description' => 'Permite ver las instancias.',
             ],
+            [
+                'name' => 'viewStorage',
+                'description' => 'Permite ver los almacenamientos.',
+            ],
         ];
 
         foreach ($permissions as $perm) {

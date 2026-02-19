@@ -14,6 +14,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DatabaseController;
 use App\Http\Controllers\InstanceController;
+use App\Http\Controllers\StorageController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -43,6 +44,8 @@ Route::middleware('auth')->group(function () {
         ->resource('databases', DatabaseController::class);
     Route::middleware('permission:viewInstance')
     ->resource('instances', InstanceController::class);
+    Route::middleware(['permission:viewStorage'])
+    ->resource('storages', StorageController::class);
 
     Route::middleware('role:Admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])
