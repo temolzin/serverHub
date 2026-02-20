@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Server extends Model
 {
@@ -32,6 +33,15 @@ class Server extends Model
     'latest_security_patch',
     'comments',
   ];
+
+  protected static function booted()
+  {
+    static::creating(function ($server) {
+      if (empty($server->uuid)) {
+        $server->uuid = (string) Str::uuid();
+      }
+    });
+  }
 
   public function owner()
   {

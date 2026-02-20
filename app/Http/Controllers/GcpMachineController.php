@@ -107,15 +107,15 @@ class GcpMachineController extends Controller
     $gcp_machine->update($validated);
 
     return redirect()
-      ->route('gcp-machines.index')
+      ->route('gcp-machines.index', ['page' => $request->page])
       ->with('success', 'Máquina actualizada con éxito');
   }
 
-  public function destroy(GcpMachine $gcp_machine)
+  public function destroy(Request $request, GcpMachine $gcp_machine)
   {
     $gcp_machine->delete();
     return redirect()
-      ->route('gcp-machines.index')
+      ->route('gcp-machines.index', ['page' => $request->page])
       ->with('success', 'Máquina eliminada con éxito');
   }
 }

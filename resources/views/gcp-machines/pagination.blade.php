@@ -6,8 +6,15 @@
           <i class="bx bx-chevron-left"></i>
         </a>
       </li>
-      @for ($page = 1; $page <= $gcpMachines->lastPage(); $page++)
-        <li class="page-item {{ $page == $gcpMachines->currentPage() ? 'active' : '' }}">
+      @php
+        $current = $gcpMachines->currentPage();
+        $last = $gcpMachines->lastPage();
+        $window = 2;
+        $start = max($current - $window, 1);
+        $end = min($current + $window, $last);
+      @endphp
+      @for ($page = $start; $page <= $end; $page++)
+        <li class="page-item {{ $page == $current ? 'active' : '' }}">
           <a class="page-link" href="{{ $gcpMachines->url($page) }}">
             {{ $page }}
           </a>

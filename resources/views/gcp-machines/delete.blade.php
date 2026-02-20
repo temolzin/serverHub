@@ -11,6 +11,7 @@
       <form action="{{ route('gcp-machines.destroy', $machine) }}" method="POST">
         @csrf
         @method('DELETE')
+        <input type="hidden" name="page" value="{{ request('page') }}">
         <div class="modal-body text-center">
           <p class="mb-2">
             ¿Estás seguro de eliminar la máquina

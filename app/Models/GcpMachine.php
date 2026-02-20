@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class GcpMachine extends Model
 {
@@ -29,6 +30,16 @@ class GcpMachine extends Model
     'swap_memory',
     'owner_id',
   ];
+
+  protected static function booted()
+  {
+    static::creating(function ($machine) {
+      if (empty($machine->uuid)) {
+        $machine->uuid = (string) Str::uuid();
+      }
+    });
+  }
+
   public function owner()
   {
     return $this->belongsTo(Owner::class);
