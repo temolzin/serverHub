@@ -1,20 +1,7 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Almacenamiento')
-@if (session('success'))
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      Swal.fire({
-        icon: 'success',
-        title: '¡Listo!',
-        text: '{{ session('success') }}',
-        confirmButtonText: 'Perfecto',
-        timer: 5000,
-        timerProgressBar: true
-      })
-    })
-  </script>
-@endif
+@section('title', 'Storages')
+
 @section('content')
   <div class="row">
     <div class="col-12">
