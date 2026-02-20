@@ -44,6 +44,10 @@ class RoleSeeder extends Seeder
                 'description' => 'Permite ver las bases de datos.',
             ],
             [
+                'name' => 'viewInstance',
+                'description' => 'Permite ver las instancias.',
+            ],
+            [  
                 'name' => 'viewStorage',
                 'description' => 'Permite ver los almacenamientos.',
             ],
