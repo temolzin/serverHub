@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Servers')
+@section('title', 'Servidores')
 
 @if (session('success'))
   <script>

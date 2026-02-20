@@ -1,6 +1,6 @@
 @extends('layouts/blankLayout')
 
-@section('title', 'Register Basic - Pages')
+@section('title', 'Registro - Pages')
 
 @section('page-style')
   @vite(['resources/assets/vendor/scss/pages/page-auth.scss'])
@@ -17,8 +17,8 @@
                 <span class="app-brand-text demo text-heading fw-bold">{{ config('variables.templateName') }}</span>
               </a>
             </div>
-            <h4 class="mb-1">Adventure starts here</h4>
-            <p class="mb-6">Make your app management easy and fun!</p>
+            <h4 class="mb-1">La aventura comienza aquí</h4>
+            <p class="mb-6">¡Haz que la gestión de tu aplicación sea fácil y divertida!</p>
             @if ($errors->any())
               <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -31,17 +31,17 @@
             <form id="formAuthentication" class="mb-6" action="{{ route('register.store') }}" method="POST">
               @csrf
               <div class="mb-6">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Nombre de usuario</label>
                 <input type="text" class="form-control" id="username" name="username"
-                  placeholder="Enter your username" autofocus required />
+                  placeholder="Ingrese su nombre de usuario" autofocus required />
               </div>
               <div class="mb-6">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                <label for="email" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese su correo"
                   required />
               </div>
               <div class="form-password-toggle">
-                <label class="form-label" for="password">Password</label>
+                <label class="form-label" for="password">Contraseña</label>
                 <div class="input-group input-group-merge">
                   <input type="password" id="password" class="form-control" name="password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
@@ -49,7 +49,7 @@
                   <span class="input-group-text cursor-pointer"><i class="icon-base bx bx-hide"></i></span>
                 </div>
                 <div class="form-password-toggle mb-6">
-                  <label class="form-label" for="password_confirmation">Confirm Password</label>
+                  <label class="form-label" for="password_confirmation">Confirmar contraseña</label>
                   <div class="input-group input-group-merge">
                     <input type="password" id="password_confirmation" class="form-control" name="password_confirmation"
                       placeholder="••••••••••" required>
@@ -60,17 +60,17 @@
               <div class="my-7">
                 <div class="form-check mb-0">
                   <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
-                  <label class="form-check-label" for="terms-conditions">I agree to
-                    <a href="javascript:void(0);">privacy policy & terms</a>
+                  <label class="form-check-label" for="terms-conditions">Estoy de acuerdo con los
+                    <a href="javascript:void(0);">Política y términos de privacidad</a>
                   </label>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary d-grid w-100">Sign up</button>
+              <button type="submit" class="btn btn-primary d-grid w-100">Registrarse</button>
             </form>
             <p class="text-center">
-              <span>Already have an account?</span>
+              <span>¿Ya tienes una cuenta?</span>
               <a href="{{ url('auth/login-basic') }}">
-                <span>Sign in instead</span>
+                <span>Iniciar sesión</span>
               </a>
             </p>
           </div>

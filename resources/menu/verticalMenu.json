@@ -2,7 +2,7 @@
   "menu": [
     {
       "url": "/",
-      "name": "Dashboards",
+      "name": "Panel de Control",
       "icon": "menu-icon icon-base bx bx-home-smile",
       "slug": "dashboard"
     },
