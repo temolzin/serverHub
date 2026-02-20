@@ -107,15 +107,15 @@ class ServerController extends Controller
     ]);
     $server->update($validated);
     return redirect()
-      ->route('servers.index')
+      ->route('servers.index', ['page' => $request->page])
       ->with('success', 'El servidor fue actualizado correctamente.');
   }
 
-  public function destroy(Server $server)
+  public function destroy(Request $request, Server $server)
   {
     $server->delete();
     return redirect()
-      ->route('servers.index')
+      ->route('servers.index', ['page' => $request->page])
       ->with('success', 'Servidor eliminado correctamente');
   }
 }

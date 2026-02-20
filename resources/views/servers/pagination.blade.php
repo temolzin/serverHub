@@ -6,8 +6,14 @@
           <i class="bx bx-chevron-left"></i>
         </a>
       </li>
-      @for ($page = 1; $page <= $servers->lastPage(); $page++)
-        <li class="page-item {{ $page == $servers->currentPage() ? 'active' : '' }}">
+      @php
+        $current = $servers->currentPage();
+        $last = $servers->lastPage();
+        $start = max($current - 2, 1);
+        $end = min($current + 2, $last);
+      @endphp
+      @for ($page = $start; $page <= $end; $page++)
+        <li class="page-item {{ $page == $current ? 'active' : '' }}">
           <a class="page-link" href="{{ $servers->url($page) }}">
             {{ $page }}
           </a>

@@ -27,16 +27,11 @@
           </a>
         </div>
       </div>
+      @include('servers.show', ['server' => $server])
+      @include('servers.edit', ['server' => $server])
+      @include('servers.delete', ['server' => $server])
     </td>
   </tr>
-  @include('servers.show', ['server' => $server])
-  @include('servers.edit', [
-      'server' => $server,
-      'owners' => $owners,
-      'typeApplications' => $typeApplications,
-  ])
-  @include('servers.delete', ['server' => $server])
-
 @empty
   <tr>
     <td colspan="6" class="text-center text-muted">

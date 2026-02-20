@@ -11,6 +11,7 @@
       <form action="{{ route('servers.destroy', $server) }}" method="POST">
         @csrf
         @method('DELETE')
+        <input type="hidden" name="page" value="{{ request('page') }}">
         <div class="modal-body text-center">
           <p class="mb-0">
             ¿Estás seguro de eliminar el servidor con IP

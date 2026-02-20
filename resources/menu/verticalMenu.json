@@ -53,6 +53,12 @@
       "icon": "menu-icon icon-base bx bx-layer",
       "slug": "instances",
       "url": "instances"
+    },
+    {
+      "name": "Almacenamientos",
+      "icon": "menu-icon icon-base bx bx-hdd",
+      "slug": "storages",
+      "url": "storages"
     }
   ]
 }

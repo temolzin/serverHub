@@ -11,6 +11,13 @@
       <div class="modal-body text-start">
         <div class="row">
           <div class="col-md-6 mb-4">
+            <label class="form-label fw-semibold">UUID</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bx bx-fingerprint"></i></span>
+              <input type="text" class="form-control" value="{{ $machine->uuid ?? 'N/A' }}" disabled>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Proyecto</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-folder"></i></span>
@@ -102,7 +109,7 @@
               <input type="text" class="form-control" value="{{ $machine->swap_memory }}" disabled>
             </div>
           </div>
-          <div class="col-md-6 mb-4">
+          <div class="col-md-12 mb-4">
             <label class="form-label fw-semibold">Último parche de seguridad</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-shield-quarter"></i></span>

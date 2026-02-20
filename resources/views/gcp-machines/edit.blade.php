@@ -11,6 +11,7 @@
       <form action="{{ route('gcp-machines.update', $machine) }}" method="POST">
         @csrf
         @method('PUT')
+        <input type="hidden" name="page" value="{{ request('page') }}">
         <div class="modal-body text-start">
           <div class="row">
             <div class="col-md-6 mb-4">
