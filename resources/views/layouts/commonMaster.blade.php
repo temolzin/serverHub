@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="layout-menu-fixed layout-compact" data-assets-path="{{ asset('/assets') . '/' }}" dir="ltr"
+<html lang="es" class="layout-menu-fixed layout-compact" data-assets-path="{{ asset('/assets') . '/' }}" dir="ltr"
   data-skin="default" data-base-url="{{ url('/') }}" data-framework="laravel" data-bs-theme="light"
   data-template="vertical-menu-template">
 

@@ -1,6 +1,6 @@
 @extends('layouts/blankLayout')
 
-@section('title', 'Login Basic - Pages')
+@section('title', 'Iniciar sesión - Pages')
 
 @section('page-style')
   @vite(['resources/assets/vendor/scss/pages/page-auth.scss'])
@@ -17,17 +17,17 @@
                 <span class="app-brand-text demo text-heading fw-bold">{{ config('variables.templateName') }}</span>
               </a>
             </div>
-            <h4 class="mb-1">Welcome to {{ config('variables.templateName') }}! 👋</h4>
-            <p class="mb-6">Please sign-in to your account and start the adventure</p>
+            <h4 class="mb-1">Bienvenido a {{ config('variables.templateName') }}! 👋</h4>
+            <p class="mb-6">Por favor inicia sesión en tu cuenta y comienza la aventura</p>
             <form id="formAuthentication" class="mb-6" action="{{ route('login.post') }}" method="POST">
               @csrf
               <div class="mb-6">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                <label for="email" class="form-label">Correo</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu correo"
                   autofocus required />
               </div>
               <div class="mb-6 form-password-toggle">
-                <label class="form-label" for="password">Password</label>
+                <label class="form-label" for="password">Contraseña</label>
                 <div class="input-group input-group-merge">
                   <input type="password" id="password" class="form-control" name="password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
@@ -39,21 +39,21 @@
                 <div class="d-flex justify-content-between">
                   <div class="form-check mb-0">
                     <input class="form-check-input" type="checkbox" id="remember-me" />
-                    <label class="form-check-label" for="remember-me"> Remember Me </label>
+                    <label class="form-check-label" for="remember-me"> Recordarme </label>
                   </div>
                   <a href="{{ url('auth/forgot-password-basic') }}">
-                    <span>Forgot Password?</span>
+                    <span>¿Olvidaste tu contraseña?</span>
                   </a>
                 </div>
               </div>
               <div class="mb-6">
-                <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+                <button class="btn btn-primary d-grid w-100" type="submit">Iniciar Sesión</button>
               </div>
             </form>
             <p class="text-center">
-              <span>New on our platform?</span>
+              <span>¿No tienes cuenta?</span>
               <a href="{{ url('auth/register-basic') }}">
-                <span>Create an account</span>
+                <span>Crear Cuenta</span>
               </a>
             </p>
           </div>

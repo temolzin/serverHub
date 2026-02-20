@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Owners')
+@section('title', 'Propietarios')
 
 @if (session('success'))
   <script>
