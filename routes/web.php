@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
         ->resource('applications', ApplicationController::class);
     Route::middleware('permission:viewDatabase')
         ->resource('databases', DatabaseController::class);
-    Route::middleware(['permission:viewStorage'])
+    Route::middleware('permission:viewStorage')
         ->resource('storages', StorageController::class);
 
 

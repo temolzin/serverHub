@@ -45,7 +45,7 @@ class RoleSeeder extends Seeder
             ],
             [
                 'name' => 'viewStorage',
-                'description' => 'Permite ver los storages.',
+                'description' => 'Permite ver los almacenamientos.',
             ],
         ];
 

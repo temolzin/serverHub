@@ -31,7 +31,7 @@
 @empty
   <tr>
     <td colspan="6" class="text-center text-muted">
-      No hay storages registrados
+      No hay almacenamientos registrados
     </td>
   </tr>
 @endforelse

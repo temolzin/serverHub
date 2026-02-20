@@ -49,7 +49,7 @@
       "url": "databases"
     },
     {
-      "name": "Storages",
+      "name": "Almacenamientos",
       "icon": "menu-icon icon-base bx bx-hdd",
       "slug": "storages",
       "url": "storages"
