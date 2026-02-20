@@ -12,6 +12,7 @@ use App\Http\Controllers\TypeApplicationController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\DatabaseController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
@@ -19,38 +20,40 @@ Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
 Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('register.store');
 Route::post('/logout', function (Request $request) {
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect('/login');
+  Auth::logout();
+  $request->session()->invalidate();
+  $request->session()->regenerateToken();
+  return redirect('/login');
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [Analytics::class, 'index'])
-        ->name('dashboard-analytics');
-    Route::middleware('permission:viewOwner')
-        ->resource('owners', OwnerController::class);
-    Route::middleware('permission:viewServer')
-        ->resource('servers', ServerController::class);
-    Route::middleware('permission:viewTypeApplication')
-        ->resource('type-applications', TypeApplicationController::class);
-    Route::middleware('permission:viewGcpMachine')
-        ->resource('gcp-machines', GcpMachineController::class);
-    Route::middleware('permission:viewApplication')
-        ->resource('applications', ApplicationController::class);
-    Route::middleware('permission:viewDatabase')
-        ->resource('databases', DatabaseController::class);
+  Route::get('/', [Analytics::class, 'index'])
+    ->name('dashboard-analytics');
+  Route::middleware('permission:viewOwner')
+    ->resource('owners', OwnerController::class);
+  Route::middleware('permission:viewServer')
+    ->resource('servers', ServerController::class);
+  Route::middleware('permission:viewTypeApplication')
+    ->resource('type-applications', TypeApplicationController::class);
+  Route::middleware('permission:viewGcpMachine')
+    ->resource('gcp-machines', GcpMachineController::class);
+  Route::middleware('permission:viewApplication')
+    ->resource('applications', ApplicationController::class);
+  Route::middleware('permission:viewDatabase')
+    ->resource('databases', DatabaseController::class);
 
-    Route::middleware('role:Admin')->group(function () {
-        Route::get('/users', [UserController::class, 'index'])
-            ->name('users.index');
-        Route::get('/users/{user}/permissions',
-            [UserController::class, 'editPermissions']
-        )->name('users.permissions.edit');
-        Route::post('/users/{user}/permissions',
-            [UserController::class, 'updatePermissions']
-        )->name('users.permissions.update');
-
-    });
-
+  Route::middleware('role:Admin')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])
+      ->name('users.index');
+    Route::get(
+      '/users/{user}/permissions',
+      [UserController::class, 'editPermissions']
+    )->name('users.permissions.edit');
+    Route::post(
+      '/users/{user}/permissions',
+      [UserController::class, 'updatePermissions']
+    )->name('users.permissions.update');
+    Route::post('/servers/import', [ImportController::class, 'import'])
+      ->name('servers.import');
+  });
 });
