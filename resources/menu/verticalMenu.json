@@ -47,6 +47,12 @@
       "icon": "menu-icon icon-base bx bx-data",
       "slug": "databases",
       "url": "databases"
+    },
+    {
+      "name": "Storages",
+      "icon": "menu-icon icon-base bx bx-hdd",
+      "slug": "storages",
+      "url": "storages"
     }
   ]
 }

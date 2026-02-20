@@ -43,6 +43,10 @@ class RoleSeeder extends Seeder
                 'name' => 'viewDatabase',
                 'description' => 'Permite ver las bases de datos.',
             ],
+            [
+                'name' => 'viewStorage',
+                'description' => 'Permite ver los storages.',
+            ],
         ];
 
         foreach ($permissions as $perm) {
