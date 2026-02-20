@@ -118,7 +118,6 @@
           .then(data => {
             document.getElementById('servers-search').innerHTML = data.table;
             document.getElementById('servers-pagination').innerHTML = data.pagination;
-            // 🔥 REACTIVAR DROPDOWNS
             const dropdowns = document.querySelectorAll('.dropdown-toggle');
             dropdowns.forEach(el => {
               new bootstrap.Dropdown(el);
