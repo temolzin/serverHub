@@ -61,19 +61,19 @@
           </li>
           <li>
             <a class="dropdown-item" href="javascript:void(0);">
-              <i class="icon-base bx bx-user icon-md me-3"></i><span>My Profile</span>
+              <i class="icon-base bx bx-user icon-md me-3"></i><span>Mi Perfil</span>
             </a>
           </li>
           <li>
             <a class="dropdown-item" href="javascript:void(0);">
-              <i class="icon-base bx bx-cog icon-md me-3"></i><span>Settings</span>
+              <i class="icon-base bx bx-cog icon-md me-3"></i><span>Configuracion</span>
             </a>
           </li>
           <li>
             <a class="dropdown-item" href="javascript:void(0);">
               <span class="d-flex align-items-center align-middle">
                 <i class="flex-shrink-0 icon-base bx bx-credit-card icon-md me-3"></i><span
-                  class="flex-grow-1 align-middle">Billing Plan</span>
+                  class="flex-grow-1 align-middle">Plan de pago</span>
                 <span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>
               </span>
             </a>
@@ -86,7 +86,7 @@
               @csrf
               <button type="submit" class="dropdown-item">
                 <i class="icon-base bx bx-power-off me-3"></i>
-                <span>Log out</span>
+                <span>Cerrar sesion</span>
               </button>
             </form>
           </li>
