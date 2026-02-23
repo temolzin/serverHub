@@ -1,6 +1,7 @@
 @if ($instances->hasPages())
   <nav>
     <ul class="pagination justify-content-end">
+      {{-- Previous --}}
       <li class="page-item {{ $instances->onFirstPage() ? 'disabled' : '' }}">
         <a class="page-link" href="{{ $instances->previousPageUrl() }}">
           <i class="bx bx-chevron-left"></i>
