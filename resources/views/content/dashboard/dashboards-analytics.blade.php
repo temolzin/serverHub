@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Panel de Control - Analytics')
+@section('title', 'Dashboard - Analytics')
 
 @section('vendor-style')
   @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
