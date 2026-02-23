@@ -22,33 +22,39 @@ Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
 Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('register.store');
 Route::post('/logout', function (Request $request) {
-  Auth::logout();
-  $request->session()->invalidate();
-  $request->session()->regenerateToken();
-  return redirect('/login');
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/login');
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
-  Route::get('/', [Analytics::class, 'index'])
-    ->name('dashboard-analytics');
-  Route::middleware('permission:viewOwner')
-    ->resource('owners', OwnerController::class);
-  Route::middleware('permission:viewServer')
-    ->resource('servers', ServerController::class);
-  Route::middleware('permission:viewTypeApplication')
-    ->resource('type-applications', TypeApplicationController::class);
-  Route::middleware('permission:viewGcpMachine')
-    ->resource('gcp-machines', GcpMachineController::class);
-  Route::middleware('permission:viewApplication')
-    ->resource('applications', ApplicationController::class);
-  Route::middleware('permission:viewDatabase')
-    ->resource('databases', DatabaseController::class);
     Route::get('/', [Analytics::class, 'index'])
         ->name('dashboard-analytics');
     Route::middleware('permission:viewOwner')
         ->resource('owners', OwnerController::class);
-    Route::middleware('permission:viewServer')
-        ->resource('servers', ServerController::class);
+    Route::middleware('permission:viewServer')->group(function () {
+        Route::get('/servers/check-ip', [ServerController::class, 'checkIp'])
+            ->name('servers.check-ip');
+        Route::post('/servers/{server}/power-on', [ServerController::class, 'powerOn'])
+            ->name('servers.power-on');
+        Route::post('/servers/{server}/power-off', [ServerController::class, 'powerOff'])
+            ->name('servers.power-off');
+        Route::get('/servers-off', [ServerController::class, 'offIndex'])
+            ->name('servers-off.index');
+        Route::post('/servers-off', [ServerController::class, 'offStore'])
+            ->name('servers-off.store');
+        Route::put('/servers-off/{server}', [ServerController::class, 'offUpdate'])
+            ->name('servers-off.update');
+        Route::delete('/servers-off/{server}', [ServerController::class, 'offDestroy'])
+            ->name('servers-off.destroy');
+        Route::resource('servers', ServerController::class)->except(['create', 'edit', 'show']);
+        Route::post('/servers/import', [ImportController::class, 'import'])
+            ->name('servers.import');
+        Route::post('/servers-off/import', [ImportController::class, 'importPoweredOff'])
+            ->name('servers-off.import');
+    });
+
     Route::middleware('permission:viewTypeApplication')
         ->resource('type-applications', TypeApplicationController::class);
     Route::middleware('permission:viewGcpMachine')
@@ -62,31 +68,16 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:viewStorage')
         ->resource('storages', StorageController::class);
 
-
     Route::middleware('role:Admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])
             ->name('users.index');
-        Route::get('/users/{user}/permissions',
+        Route::get(
+            '/users/{user}/permissions',
             [UserController::class, 'editPermissions']
         )->name('users.permissions.edit');
-        Route::post('/users/{user}/permissions',
+        Route::post(
+            '/users/{user}/permissions',
             [UserController::class, 'updatePermissions']
         )->name('users.permissions.update');
-
     });
-
-  Route::middleware('role:Admin')->group(function () {
-    Route::get('/users', [UserController::class, 'index'])
-      ->name('users.index');
-    Route::get(
-      '/users/{user}/permissions',
-      [UserController::class, 'editPermissions']
-    )->name('users.permissions.edit');
-    Route::post(
-      '/users/{user}/permissions',
-      [UserController::class, 'updatePermissions']
-    )->name('users.permissions.update');
-    Route::post('/servers/import', [ImportController::class, 'import'])
-      ->name('servers.import');
-  });
 });

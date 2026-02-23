@@ -53,9 +53,9 @@
                 <i class="bx bx-check-circle me-1 text-primary"></i>
                 Estado
               </label>
-              <select name="state" class="form-select">
-                <option value="1">poweredOn</option>
-                <option value="0">poweredOff</option>
+              <select name="state" class="form-select" required>
+                <option value="poweredOn">poweredOn</option>
+                <option value="poweredOff">poweredOff</option>
               </select>
             </div>
             <div class="col-md-6 mb-4">
@@ -68,10 +68,11 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">
                 <i class="bx bx-network-chart me-1 text-primary"></i>
-                IP primaria
+                IP primaria (opcional)
               </label>
-              <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="192.168.1.1"
-                required>
+              <input type="text" name="primary_ip_address" class="form-control ip-check"
+                data-error-target="create-primary-ip-error">
+              <div id="create-primary-ip-error" class="invalid-feedback d-none"></div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">

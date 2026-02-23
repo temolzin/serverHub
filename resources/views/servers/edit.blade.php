@@ -1,3 +1,4 @@
+@php($isPoweredOff = $server->isPoweredOff())
 <div class="modal fade" id="editServerModal{{ $server->id }}" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
@@ -53,9 +54,9 @@
                 <i class="bx bx-check-circle me-1 text-primary"></i>
                 Estado
               </label>
-              <select name="state" class="form-select">
-                <option value="1" {{ $server->state ? 'selected' : '' }}>poweredOn</option>
-                <option value="0" {{ !$server->state ? 'selected' : '' }}>poweredOff</option>
+              <select name="state" class="form-select" required>
+                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>poweredOn</option>
+                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>poweredOff</option>
               </select>
             </div>
             <div class="col-md-6 mb-4">
@@ -68,10 +69,12 @@
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-network-chart me-1 text-primary"></i>
-                IP primaria
+                IP primaria (opcional)
               </label>
               <input type="text" name="primary_ip_address" class="form-control ip-check"
-                value="{{ $server->primary_ip_address }}" data-exclude="{{ $server->id }}" required>
+                value="{{ $server->primary_ip_address }}" data-exclude="{{ $server->id }}"
+                data-error-target="edit-primary-ip-error-{{ $server->id }}">
+              <div id="edit-primary-ip-error-{{ $server->id }}" class="invalid-feedback d-none"></div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -117,7 +120,8 @@
                 <i class="bx bx-memory-card me-1 text-primary"></i>
                 RAM (MB)
               </label>
-              <input type="number" name="ram_memory" class="form-control" value="{{ $server->ram_memory }}" required>
+              <input type="number" name="ram_memory" class="form-control" value="{{ $server->ram_memory }}"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
