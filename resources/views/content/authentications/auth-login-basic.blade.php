@@ -1,6 +1,6 @@
 @extends('layouts/blankLayout')
 
-@section('title', 'Inicio de sesion - Pages')
+@section('title', 'Inicio de sesion')
 
 @section('page-style')
   @vite(['resources/assets/vendor/scss/pages/page-auth.scss'])
