@@ -9,56 +9,29 @@
         onsubmit="this.querySelector('button[type=submit]').disabled=true;">
         @csrf
         <div class="modal-body">
-          @if (session('error'))
-            <div class="alert alert-danger text-center mb-4">
-              {{ session('error') }}
-            </div>
-          @endif
           <div class="mb-4">
             <label class="form-label">Nombre</label>
-            <div class="input-group input-group-merge">
-              <span class="input-group-text">
-                <i class="bx bx-user"></i>
-              </span>
-              <input type="text" name="name" class="form-control" placeholder="Juan" maxlength="20" required>
-            </div>
+            <input type="text" name="name" class="form-control" placeholder="Ej: Juan" maxlength="20" required>
             <small class="text-muted">Máximo 20 caracteres</small>
           </div>
           <div class="mb-4">
             <label class="form-label">Apellido</label>
-            <div class="input-group input-group-merge">
-              <span class="input-group-text">
-                <i class="bx bx-id-card"></i>
-              </span>
-              <input type="text" name="last_name" class="form-control" placeholder="Pérez" maxlength="50" required>
-            </div>
+            <input type="text" name="last_name" class="form-control" placeholder="Ej: Pérez" maxlength="50" required>
             <small class="text-muted">Máximo 50 caracteres</small>
           </div>
           <div class="mb-4">
             <label class="form-label">Email</label>
-            <div class="input-group input-group-merge">
-              <span class="input-group-text">
-                <i class="bx bx-envelope"></i>
-              </span>
-              <input type="email" name="email" class="form-control email-check" placeholder="correo@empresa.com"
-                required data-error-target="owner-email-error">
-            </div>
+            <input type="email" name="email" class="form-control" placeholder="correo@empresa.com" required>
           </div>
-          <div id="owner-email-error" class="text-danger text-center mb-2 d-none"></div>
           <div class="mb-4">
             <label class="form-label">Teléfono</label>
-            <div class="input-group input-group-merge">
-              <span class="input-group-text">
-                <i class="bx bx-phone"></i>
-              </span>
-              <input type="text" name="number_phone" class="form-control" placeholder="5512345678" maxlength="10"
-                pattern="[0-9]*" inputmode="numeric" required>
-            </div>
+            <input type="text" name="number_phone" class="form-control" placeholder="Ej: 5512345678" maxlength="10"
+              pattern="[0-9]*" inputmode="numeric" required>
             <small class="text-muted">Solo números (10 dígitos)</small>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal" onclick="this.form.reset();">
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">

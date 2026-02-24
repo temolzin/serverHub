@@ -21,7 +21,7 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Bases de Datos</h5>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createDatabaseModal">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createDatabaseModal">
             <i class="bx bx-plus me-1"></i> Agregar base de datos
           </button>
         </div>

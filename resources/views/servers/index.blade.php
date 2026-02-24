@@ -32,10 +32,10 @@
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Servidores</h5>
           <div class="d-flex gap-2">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createServerModal">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createServerModal">
               <i class="bx bx-plus me-1"></i> Agregar servidor
             </button>
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
               Subir Excel
             </button>
           </div>
@@ -80,7 +80,7 @@
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancelar
                       </button>
-                      <button type="submit" class="btn btn-success">
+                      <button type="submit" class="btn btn-primary">
                         Subir Excel
                       </button>
                     </div>

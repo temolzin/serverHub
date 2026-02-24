@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title d-flex align-items-center gap-2">
-          <i class="bx bx-edit text-warning"></i>
+          <i class="bx bx-edit text-primary"></i>
           Editar máquina GCP
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -17,7 +17,9 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">Propietario</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-user"></i></span>
+                <span class="input-group-text">
+                  <i class="bx bx-user text-primary"></i>
+                </span>
                 <select name="owner_id" class="form-select" required>
                   @foreach ($owners as $owner)
                     <option value="{{ $owner->id }}" {{ $machine->owner_id == $owner->id ? 'selected' : '' }}>
@@ -30,48 +32,60 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre del proyecto</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-folder"></i></span>
-                <input type="text" name="project_name" class="form-control" value="{{ $machine->project_name }}"
-                  required>
+                <span class="input-group-text">
+                  <i class="bx bx-folder text-primary"></i>
+                </span>
+                <input type="text" name="project_name" class="form-control" placeholder="Ej: gcp-prod-finanzas"
+                  value="{{ $machine->project_name }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Entorno</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-globe"></i></span>
-                <input type="text" name="environment" class="form-control" value="{{ $machine->environment }}"
-                  required>
+                <span class="input-group-text">
+                  <i class="bx bx-globe text-primary"></i>
+                </span>
+                <input type="text" name="environment" class="form-control"
+                  placeholder="Ej: Producción, QA, Desarrollo" value="{{ $machine->environment }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre máquina</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-desktop"></i></span>
-                <input type="text" name="machine_name" class="form-control" value="{{ $machine->machine_name }}"
-                  required>
+                <span class="input-group-text">
+                  <i class="bx bx-desktop text-primary"></i>
+                </span>
+                <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-app-prod-01"
+                  value="{{ $machine->machine_name }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre interno</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-chip"></i></span>
-                <input type="text" name="machine_internal_name" class="form-control"
+                <span class="input-group-text">
+                  <i class="bx bx-chip text-primary"></i>
+                </span>
+                <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: srv-app-01"
                   value="{{ $machine->machine_internal_name }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Sistema operativo</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-cog"></i></span>
-                <input type="text" name="operations_system" class="form-control"
+                <span class="input-group-text">
+                  <i class="bx bx-cog text-primary"></i>
+                </span>
+                <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS"
                   value="{{ $machine->operations_system }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">IP interna</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-network-chart"></i></span>
-                <input type="text" name="internal_ip" class="form-control ip-check"
+                <span class="input-group-text">
+                  <i class="bx bx-network-chart text-primary"></i>
+                </span>
+                <input type="text" name="internal_ip" class="form-control ip-check" placeholder="Ej: 10.10.10.15"
                   value="{{ $machine->internal_ip }}" required data-exclude="{{ $machine->id }}"
                   data-error-target="edit-gcp-ip-error-{{ $machine->id }}">
               </div>
@@ -80,36 +94,49 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">Alias IP</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-link"></i></span>
-                <input type="text" name="alias_ip" class="form-control" value="{{ $machine->alias_ip }}">
+                <span class="input-group-text">
+                  <i class="bx bx-link text-primary"></i>
+                </span>
+                <input type="text" name="alias_ip" class="form-control" placeholder="Ej: api.empresa.com"
+                  value="{{ $machine->alias_ip }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Alias 2 IP</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-link-alt"></i></span>
-                <input type="text" name="alias2_ip" class="form-control" value="{{ $machine->alias2_ip }}">
+                <span class="input-group-text">
+                  <i class="bx bx-link-alt text-primary"></i>
+                </span>
+                <input type="text" name="alias2_ip" class="form-control" placeholder="Ej: backend.empresa.com"
+                  value="{{ $machine->alias2_ip }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Alias 3 IP</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-link-alt"></i></span>
-                <input type="text" name="alias3_ip" class="form-control" value="{{ $machine->alias3_ip }}">
+                <span class="input-group-text">
+                  <i class="bx bx-link-alt text-primary"></i>
+                </span>
+                <input type="text" name="alias3_ip" class="form-control" placeholder="Ej: admin.empresa.com"
+                  value="{{ $machine->alias3_ip }}">
               </div>
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label">Kernel</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-data"></i></span>
-                <input type="text" name="kernel_version" class="form-control"
+                <span class="input-group-text">
+                  <i class="bx bx-data text-primary"></i>
+                </span>
+                <input type="text" name="kernel_version" class="form-control" placeholder="Ej: 5.15.0-94-generic"
                   value="{{ $machine->kernel_version }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Último parche</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-shield-quarter"></i></span>
+                <span class="input-group-text">
+                  <i class="bx bx-shield-quarter text-primary"></i>
+                </span>
                 <input type="date" name="latest_security_patch" class="form-control"
                   value="{{ $machine->latest_security_patch }}">
               </div>
@@ -117,24 +144,30 @@
             <div class="col-md-3 mb-4">
               <label class="form-label">RAM (MB)</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-memory-card"></i></span>
-                <input type="number" name="ram_memory" class="form-control" value="{{ $machine->ram_memory }}"
-                  required>
+                <span class="input-group-text">
+                  <i class="bx bx-memory-card text-primary"></i>
+                </span>
+                <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 4096"
+                  value="{{ $machine->ram_memory }}" required>
               </div>
             </div>
             <div class="col-md-3 mb-4">
               <label class="form-label">Swap (MB)</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-transfer"></i></span>
-                <input type="number" name="swap_memory" class="form-control" value="{{ $machine->swap_memory }}"
-                  required>
+                <span class="input-group-text">
+                  <i class="bx bx-transfer text-primary"></i>
+                </span>
+                <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 2048"
+                  value="{{ $machine->swap_memory }}" required>
               </div>
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label">Otras IPs</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-list-ul"></i></span>
-                <textarea name="other_ips" class="form-control" rows="2">{{ $machine->other_ips }}</textarea>
+                <span class="input-group-text">
+                  <i class="bx bx-list-ul text-primary"></i>
+                </span>
+                <textarea name="other_ips" class="form-control" rows="2" placeholder="Ej: 10.10.10.20, 10.10.10.21">{{ $machine->other_ips }}</textarea>
               </div>
             </div>
           </div>
@@ -143,7 +176,7 @@
           <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar
           </button>
-          <button type="submit" class="btn btn-warning">
+          <button type="submit" class="btn btn-primary">
             <i class="bx bx-save me-1"></i>
             Actualizar
           </button>

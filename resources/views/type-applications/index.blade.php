@@ -23,7 +23,7 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Tipo de aplicaciones</h5>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTypeApplicationModal">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createTypeApplicationModal">
             <i class="bx bx-plus me-1"></i> Agregar tipo de aplicación
           </button>
         </div>

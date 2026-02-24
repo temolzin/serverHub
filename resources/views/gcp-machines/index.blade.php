@@ -23,7 +23,7 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Maquinas GCP</h5>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal">
             <i class="bx bx-plus me-1"></i> Agregar máquina
           </button>
         </div>
