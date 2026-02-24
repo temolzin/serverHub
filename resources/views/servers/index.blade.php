@@ -32,7 +32,6 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Servidores Activos</h5>
           <div class="d-flex gap-2">
@@ -44,13 +43,11 @@
             </button>
           </div>
         </div>
-
         <div class="card-body">
           <div class="mb-4">
             <input type="text" id="search-server" class="form-control form-control-sm w-50"
               placeholder="Buscar por UUID, aplicacion, hostname o IP">
           </div>
-
           <div class="table-responsive text-nowrap">
             <table class="table align-middle">
               <thead>
@@ -67,20 +64,16 @@
                 @include('servers.search', ['servers' => $servers])
               </tbody>
             </table>
-
             <div id="servers-pagination">
               @include('servers.pagination', ['servers' => $servers])
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
-
   @include('servers.create')
 
-  {{-- Modal Excel --}}
   <div class="modal fade" id="uploadExcelModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -166,10 +159,7 @@
         e.preventDefault();
         fetchServers(link.href);
       });
-
     });
-
-    /* -------- IP CHECK -------- */
 
     document.addEventListener('blur', function(e) {
 
@@ -195,7 +185,6 @@
           const message = data.exists ?
             'Ya existe un servidor con esa IP.' :
             '';
-
           errorDiv.textContent = message;
           errorDiv.classList.toggle('d-none', !data.exists);
           input.setCustomValidity(message);
@@ -204,7 +193,6 @@
           errorDiv.classList.add('d-none');
           input.setCustomValidity('');
         });
-
     }, true);
   </script>
 @endpush
