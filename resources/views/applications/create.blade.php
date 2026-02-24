@@ -86,8 +86,7 @@
                 <i class="bx bx-folder me-1 text-primary"></i>
                 Ruta de instalación
               </label>
-              <input type="text" name="installation_route" class="form-control"
-                placeholder="Ej: C:\inetpub\app o /var/www/app">
+              <input type="text" name="installation_route" class="form-control" placeholder="Ej: C:\inetpub\app o /var/www/app">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">
@@ -108,16 +107,14 @@
                 <i class="bx bx-cog me-1 text-primary"></i>
                 Procesos
               </label>
-              <textarea name="processes" rows="2" class="form-control" placeholder="Ej: app.exe, worker.js, java -jar app.jar">
-              </textarea>
+              <textarea name="processes" rows="2" class="form-control" placeholder="Ej: app.exe, worker.js, java -jar app.jar"></textarea>
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label">
                 <i class="bx bx-time me-1 text-primary"></i>
                 Tareas programadas
               </label>
-              <textarea name="cron_jobs" rows="2" class="form-control"
-                placeholder="Ej: 0 2 * * * /usr/bin/php artisan schedule:run">
+              <textarea name="cron_jobs" rows="2" class="form-control" placeholder="Ej: 0 2 * * * /usr/bin/php artisan schedule:run">
               </textarea>
             </div>
             <div class="col-md-12 mb-4">
@@ -125,8 +122,7 @@
                 <i class="bx bx-comment me-1 text-primary"></i>
                 Comentarios
               </label>
-              <textarea name="comments" rows="3" class="form-control"
-                placeholder="Información adicional relevante de la aplicación">
+              <textarea name="comments" rows="3" class="form-control" placeholder="Información adicional relevante de la aplicación">
               </textarea>
             </div>
           </div>

@@ -25,13 +25,11 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre del proyecto</label>
-              <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-prod"
-                required>
+              <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-prod" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Entorno</label>
-              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo"
-                required>
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre máquina</label>
@@ -39,13 +37,11 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre interno</label>
-              <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01"
-                required>
+              <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Sistema operativo</label>
-              <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS"
-                required>
+              <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">IP interna</label>

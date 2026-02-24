@@ -132,8 +132,7 @@
                 <i class="bx bx-comment-detail me-1 text-primary"></i>
                 Comentarios
               </label>
-              <textarea name="comments" class="form-control" rows="2"
-                placeholder="Información adicional relevante de la aplicación">{{ $application->comments }}</textarea>
+              <textarea name="comments" class="form-control" rows="2" placeholder="Información adicional relevante de la aplicación">{{ $application->comments }}</textarea>
             </div>
           </div>
         </div>
