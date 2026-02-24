@@ -14,6 +14,9 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6 mb-4">
+              <label class="form-label">Propietario</label>
+              <select name="owner_id" class="form-select" required>
+                <option value="" disabled selected>Selecciona un propietario</option>
               <label class="form-label">
                 <i class="bx bx-user me-1 text-primary"></i>
                 Propietario
@@ -29,6 +32,9 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">Aplicación</label>
+              <select name="type_application_id" class="form-select" required>
+                <option value="" disabled selected>Selecciona una aplicación</option>
               <label class="form-label">
                 <i class="bx bx-layer me-1 text-primary"></i>
                 Aplicación
@@ -44,13 +50,15 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-server me-1 text-primary"></i>
-                VM (VMware)
-              </label>
-              <input type="text" name="vm_according_to_the_vmware" class="form-control" required>
+              <label class="form-label">VM (VMware)</label>
+              <input type="text" name="vm_according_to_the_vmware" class="form-control"
+                placeholder="Ej: vm-app-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">Estado</label>
+              <select name="state" class="form-select">
+                <option value="1">poweredOn</option>
+                <option value="0">poweredOff</option>
               <label class="form-label">
                 <i class="bx bx-check-circle me-1 text-primary"></i>
                 Estado
@@ -61,13 +69,13 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-globe me-1 text-primary"></i>
-                DNS
-              </label>
-              <input type="text" name="dns_name" class="form-control">
+              <label class="form-label">DNS</label>
+              <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com">
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">IP primaria</label>
+              <input type="text" name="primary_ip_address" class="form-control ip-check"
+                placeholder="Ej: 192.168.1.10" required>
               <label class="form-label">
                 <i class="bx bx-network-chart me-1 text-primary"></i>
                 IP primaria (opcional)
@@ -89,74 +97,47 @@
               <input type="text" name="ip_monitoring" class="form-control">
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-code-alt me-1 text-primary"></i>
-                Entorno
-              </label>
-              <input type="text" name="environment" class="form-control" required>
+              <label class="form-label">Entorno</label>
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-building me-1 text-primary"></i>
-                Datacenter
-              </label>
-              <input type="text" name="datacenter" class="form-control" required>
+              <label class="form-label">Datacenter</label>
+              <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-chip me-1 text-primary"></i>
-                Sistema operativo
-              </label>
-              <input type="text" name="os_according_to_the_vmware" class="form-control" required>
+              <label class="form-label">Sistema operativo</label>
+              <input type="text" name="os_according_to_the_vmware" class="form-control"
+                placeholder="Ej: Windows Server 2019" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-code me-1 text-primary"></i>
-                Versión interna
-              </label>
-              <input type="text" name="os_version_internal" class="form-control" required>
+              <label class="form-label">Versión interna</label>
+              <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
+                required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-desktop me-1 text-primary"></i>
-                Hostname interno
-              </label>
-              <input type="text" name="hostname_internal" class="form-control" required>
+              <label class="form-label">Hostname interno</label>
+              <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01"
+                required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-memory-card me-1 text-primary"></i>
-                RAM (MB)
-              </label>
-              <input type="number" name="ram_memory" class="form-control" required>
+              <label class="form-label">RAM (MB)</label>
+              <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 16384" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-data me-1 text-primary"></i>
-                Swap (MB)
-              </label>
-              <input type="number" name="swap_memory" class="form-control" required>
+              <label class="form-label">Swap (MB)</label>
+              <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-calendar me-1 text-primary"></i>
-                Último parche
-              </label>
+              <label class="form-label">Último parche</label>
               <input type="date" name="latest_security_patch" class="form-control">
             </div>
             <div class="col-md-12 mb-4">
-              <label class="form-label">
-                <i class="bx bx-list-ul me-1 text-primary"></i>
-                Otras IPs
-              </label>
-              <textarea name="other_ips" rows="2" class="form-control"></textarea>
+              <label class="form-label">Otras IPs</label>
+              <textarea name="other_ips" rows="2" class="form-control" placeholder="IPs adicionales separadas por coma"></textarea>
             </div>
             <div class="col-md-12 mb-4">
-              <label class="form-label">
-                <i class="bx bx-comment me-1 text-primary"></i>
-                Comentarios
-              </label>
-              <textarea name="comments" rows="3" class="form-control"></textarea>
+              <label class="form-label">Comentarios</label>
+              <textarea name="comments" rows="3" class="form-control" placeholder="Información adicional relevante"></textarea>
             </div>
           </div>
         </div>

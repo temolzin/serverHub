@@ -2,7 +2,10 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Editar Instancia</h5>
+        <h5 class="modal-title d-flex align-items-center gap-2">
+          <i class="bx bx-edit text-primary"></i>
+          Editar Instancia
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('instances.update', $instance) }}" method="POST">
@@ -10,8 +13,12 @@
         @method('PUT')
         <div class="modal-body">
           <div class="mb-3">
-            <label class="form-label">Servidor</label>
+            <label class="form-label">
+              <i class="bx bx-server me-1 text-primary"></i>
+              Servidor
+            </label>
             <select name="server_id" class="form-select" required>
+              <option disabled>Seleccione un servidor</option>
               @foreach ($servers as $server)
                 <option value="{{ $server->id }}" {{ $instance->server_id == $server->id ? 'selected' : '' }}>
                   {{ $server->hostname_internal }}
@@ -20,20 +27,31 @@
             </select>
           </div>
           <div class="mb-3">
-            <label class="form-label">Memoria (MB)</label>
-            <input type="number" name="memory" class="form-control" value="{{ $instance->memory }}" min="1024"
-              max="32768" required>
+            <label class="form-label">
+              <i class="bx bx-memory-card me-1 text-primary"></i>
+              Memoria (MB)
+            </label>
+            <input type="number" name="memory" class="form-control" placeholder="Ej: 8192"
+              value="{{ $instance->memory }}" min="1024" max="32768" required>
             <small class="text-muted">
               Rango permitido: 1024 MB - 32768 MB
             </small>
           </div>
           <div class="mb-3">
-            <label class="form-label">Versión</label>
-            <input type="text" name="version" class="form-control" value="{{ $instance->version }}" required>
+            <label class="form-label">
+              <i class="bx bx-code me-1 text-primary"></i>
+              Versión
+            </label>
+            <input type="text" name="version" class="form-control" placeholder="Ej: SQL Server 2019"
+              value="{{ $instance->version }}" required>
           </div>
           <div class="mb-3">
-            <label class="form-label">Edición</label>
-            <input type="text" name="edition" class="form-control" value="{{ $instance->edition }}">
+            <label class="form-label">
+              <i class="bx bx-layer me-1 text-primary"></i>
+              Edición
+            </label>
+            <input type="text" name="edition" class="form-control" placeholder="Ej: Enterprise, Standard"
+              value="{{ $instance->edition }}">
           </div>
         </div>
         <div class="modal-footer">
@@ -41,6 +59,7 @@
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">
+            <i class="bx bx-save me-1"></i>
             Actualizar
           </button>
         </div>

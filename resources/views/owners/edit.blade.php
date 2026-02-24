@@ -2,7 +2,10 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Editar propietario</h5>
+        <h5 class="modal-title d-flex align-items-center gap-2">
+          <i class="bx bx-edit text-primary"></i>
+          Editar propietario
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('owners.update', $owner) }}" method="POST">
@@ -11,45 +14,46 @@
         <div class="modal-body">
           <div class="mb-4">
             <label class="form-label">Nombre</label>
-            <div class="input-group input-group-merge">
+            <div class="input-group">
               <span class="input-group-text">
-                <i class="bx bx-user"></i>
+                <i class="bx bx-user text-primary"></i>
               </span>
-              <input type="text" name="name" class="form-control" maxlength="20" value="{{ $owner->name }}"
-                required>
+              <input type="text" name="name" class="form-control" placeholder="Ej: Carlos" maxlength="20"
+                value="{{ $owner->name }}" required>
             </div>
             <small class="text-muted">Máximo 20 caracteres</small>
           </div>
           <div class="mb-4">
             <label class="form-label">Apellido</label>
-            <div class="input-group input-group-merge">
+            <div class="input-group">
               <span class="input-group-text">
-                <i class="bx bx-id-card"></i>
+                <i class="bx bx-id-card text-primary"></i>
               </span>
-              <input type="text" name="last_name" class="form-control" maxlength="50" value="{{ $owner->last_name }}"
-                required>
+              <input type="text" name="last_name" class="form-control" placeholder="Ej: Ramírez" maxlength="50"
+                value="{{ $owner->last_name }}" required>
             </div>
             <small class="text-muted">Máximo 50 caracteres</small>
           </div>
           <div class="mb-4">
             <label class="form-label">Email</label>
-            <div class="input-group input-group-merge">
+            <div class="input-group">
               <span class="input-group-text">
-                <i class="bx bx-envelope"></i>
+                <i class="bx bx-envelope text-primary"></i>
               </span>
-              <input type="email" name="email" class="form-control email-check" value="{{ $owner->email }}" required
+              <input type="email" name="email" class="form-control email-check"
+                placeholder="Ej: carlos.ramirez@empresa.com" value="{{ $owner->email }}" required
                 data-exclude="{{ $owner->id }}" data-error-target="edit-owner-email-error-{{ $owner->id }}">
             </div>
           </div>
           <div id="edit-owner-email-error-{{ $owner->id }}" class="text-danger text-center mb-2 d-none"></div>
           <div class="mb-4">
             <label class="form-label">Teléfono</label>
-            <div class="input-group input-group-merge">
+            <div class="input-group">
               <span class="input-group-text">
-                <i class="bx bx-phone"></i>
+                <i class="bx bx-phone text-primary"></i>
               </span>
-              <input type="text" name="number_phone" class="form-control" maxlength="10" pattern="[0-9]*"
-                inputmode="numeric" value="{{ $owner->number_phone }}" required>
+              <input type="text" name="number_phone" class="form-control" placeholder="Ej: 5512345678" maxlength="10"
+                pattern="[0-9]*" inputmode="numeric" value="{{ $owner->number_phone }}" required>
             </div>
             <small class="text-muted">Solo números (10 dígitos)</small>
           </div>
@@ -59,6 +63,7 @@
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">
+            <i class="bx bx-save me-1"></i>
             Actualizar
           </button>
         </div>

@@ -6,7 +6,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       Swal.fire({
         icon: 'success',
-        title: 'Success!',
+        title: '¡Listo!',
         text: '{{ session('success') }}',
         confirmButtonText: 'OK',
         timer: 5000,
@@ -21,7 +21,7 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Almacenamiento</h5>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createStorageModal">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createStorageModal">
             <i class="bx bx-plus me-1"></i> Agregar almacenamiento
           </button>
         </div>

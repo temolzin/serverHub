@@ -11,39 +11,39 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Nombre del servidor</label>
-              <input type="text" name="hostname" class="form-control" required>
+              <input type="text" name="hostname" class="form-control" placeholder="Ej: storage-prod-01" required>
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">IP de Datos (Data IP)</label>
-              <input type="text" name="data_ip" class="form-control">
+              <input type="text" name="data_ip" class="form-control" placeholder="Ej: 10.10.10.5">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Plataforma</label>
-              <input type="text" name="platform" class="form-control">
+              <input type="text" name="platform" class="form-control" placeholder="Ej: NetApp, Dell EMC">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Nombre del Sistema Operativo</label>
-              <input type="text" name="os_name" class="form-control">
+              <input type="text" name="os_name" class="form-control" placeholder="Ej: ONTAP 9">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Sistema Operativo Interno</label>
-              <input type="text" name="os_internal" class="form-control">
+              <input type="text" name="os_internal" class="form-control" placeholder="Ej: 9.12.1P3">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Sistema Operativo (General)</label>
-              <input type="text" name="operations_system" class="form-control">
+              <input type="text" name="operations_system" class="form-control" placeholder="Ej: Linux Storage OS">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">IP Interna</label>
-              <input type="text" name="internal_ip" class="form-control">
+              <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 192.168.100.20">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Entorno</label>
-              <input type="text" name="environment" class="form-control">
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, DR">
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Centro de datos</label>
-              <input type="text" name="datacenter" class="form-control">
+              <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-Querétaro-01">
             </div>
           </div>
         </div>
