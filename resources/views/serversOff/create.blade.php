@@ -8,7 +8,7 @@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form action="{{ route('servers-off.store') }}" method="POST"
+      <form id="createServerOffForm" action="{{ route('servers-off.store') }}" method="POST"
         onsubmit="this.querySelector('button[type=submit]').disabled=true;">
         @csrf
         <div class="modal-body">
@@ -55,7 +55,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          <button type="button" id="cancelCreateServerOff" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">

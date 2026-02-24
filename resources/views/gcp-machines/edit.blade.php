@@ -71,11 +71,9 @@
               <label class="form-label">IP interna</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bx bx-network-chart"></i></span>
-                <input type="text" name="internal_ip" class="form-control ip-check"
-                  value="{{ $machine->internal_ip }}" required data-exclude="{{ $machine->id }}"
-                  data-error-target="edit-gcp-ip-error-{{ $machine->id }}">
+                <input type="text" name="internal_ip" class="form-control"
+                  value="{{ $machine->internal_ip }}" required>
               </div>
-              <div id="edit-gcp-ip-error-{{ $machine->id }}" class="text-danger small mt-1 d-none"></div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Alias IP</label>

@@ -34,8 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:viewOwner')
         ->resource('owners', OwnerController::class);
     Route::middleware('permission:viewServer')->group(function () {
-        Route::get('/servers/check-ip', [ServerController::class, 'checkIp'])
-            ->name('servers.check-ip');
         Route::post('/servers/{server}/power-on', [ServerController::class, 'powerOn'])
             ->name('servers.power-on');
         Route::post('/servers/{server}/power-off', [ServerController::class, 'powerOff'])

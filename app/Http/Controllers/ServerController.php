@@ -7,20 +7,9 @@ use App\Models\Server;
 use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ServerController extends Controller
 {
-    public function checkIp(Request $request)
-    {
-        return response()->json([
-            'exists' => Server::withTrashed()
-                ->where('primary_ip_address', $request->ip)
-                ->when($request->exclude, fn($q) => $q->where('id', '!=', $request->exclude))
-                ->exists()
-        ]);
-    }
-
     public function index(Request $request)
     {
         return $this->renderIndex($request, false);
@@ -192,13 +181,8 @@ class ServerController extends Controller
             'owner_id' => 'required|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
             'vm_according_to_the_vmware' => 'required|string|max:255',
-            'state' => ['required', Rule::in(['poweredOn', 'poweredOff', '1', '0', 'true', 'false', 'on', 'off'])],
-            'primary_ip_address' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('servers', 'primary_ip_address')->ignore($server?->id),
-            ],
+            'state' => 'required|in:poweredOn,poweredOff,1,0,true,false,on,off',
+            'primary_ip_address' => 'nullable|string|max:255',
             'environment' => 'required|string|max:255',
             'datacenter' => 'required|string|max:255',
             'os_according_to_the_vmware' => 'required|string|max:255',
@@ -223,13 +207,8 @@ class ServerController extends Controller
             'datacenter' => 'nullable|string|max:255',
             'os_version_internal' => 'nullable|string|max:255',
             'os_according_to_the_vmware' => 'nullable|string|max:255',
-            'state' => ['nullable', Rule::in(['poweredOn', 'poweredOff', '1', '0', 'true', 'false', 'on', 'off'])],
-            'primary_ip_address' => [
-                'nullable',
-                'string',
-                'max:255',
-                Rule::unique('servers', 'primary_ip_address')->ignore($server?->id),
-            ],
+            'state' => 'nullable|in:poweredOn,poweredOff,1,0,true,false,on,off',
+            'primary_ip_address' => 'nullable|string|max:255',
             'latest_security_patch' => 'nullable|date',
             'comments' => 'nullable|string',
         ]);
@@ -240,10 +219,6 @@ class ServerController extends Controller
         $vm = $validated['vm_according_to_the_vmware'];
         $dns = $validated['dns_name'] ?? ($server?->dns_name);
         $primaryIp = $validated['primary_ip_address'] ?? ($server?->primary_ip_address);
-
-        if (empty($primaryIp)) {
-            $primaryIp = $this->buildOffPlaceholderIp($vm, $dns, $server);
-        }
 
         return [
             'owner_id' => $server?->owner_id,
@@ -265,30 +240,6 @@ class ServerController extends Controller
             'ip_monitoring' => $server?->ip_monitoring,
             'other_ips' => $server?->other_ips,
         ];
-    }
-
-    private function buildOffPlaceholderIp(string $vm, ?string $dns, ?Server $server = null): string
-    {
-        $base = 'off-' . substr(
-            sha1(strtolower(trim($vm)) . '|' . strtolower(trim((string) $dns))),
-            0,
-            24
-        );
-
-        $candidate = $base;
-        $counter = 1;
-
-        while (
-            Server::withTrashed()
-            ->when($server, fn(Builder $query) => $query->where('id', '!=', $server->id))
-            ->where('primary_ip_address', $candidate)
-            ->exists()
-        ) {
-            $candidate = "{$base}-{$counter}";
-            $counter++;
-        }
-
-        return $candidate;
     }
 
     private function normalizeState(?string $state, string $default = 'poweredOn'): string

@@ -20,7 +20,8 @@
                 <i class="bx bx-user me-1 text-primary"></i>
                 Propietario
               </label>
-              <select name="owner_id" class="form-select" required>
+              <select name="owner_id" class="form-select server-searchable-select" data-placeholder="Buscar propietario..."
+                required>
                 @foreach ($owners as $owner)
                   <option value="{{ $owner->id }}" {{ $server->owner_id == $owner->id ? 'selected' : '' }}>
                     {{ $owner->name }} {{ $owner->last_name }}
@@ -33,7 +34,8 @@
                 <i class="bx bx-layer me-1 text-primary"></i>
                 Aplicación
               </label>
-              <select name="type_application_id" class="form-select" required>
+              <select name="type_application_id" class="form-select server-searchable-select"
+                data-placeholder="Buscar aplicacion..." required>
                 @foreach ($typeApplications as $type)
                   <option value="{{ $type->id }}" {{ $server->type_application_id == $type->id ? 'selected' : '' }}>
                     {{ $type->name_application }}
@@ -71,10 +73,22 @@
                 <i class="bx bx-network-chart me-1 text-primary"></i>
                 IP primaria (opcional)
               </label>
-              <input type="text" name="primary_ip_address" class="form-control ip-check"
-                value="{{ $server->primary_ip_address }}" data-exclude="{{ $server->id }}"
-                data-error-target="edit-primary-ip-error-{{ $server->id }}">
-              <div id="edit-primary-ip-error-{{ $server->id }}" class="invalid-feedback d-none"></div>
+              <input type="text" name="primary_ip_address" class="form-control"
+                value="{{ $server->primary_ip_address }}">
+            </div>
+            <div class="col-md-6 mb-4">
+              <label class="form-label d-block text-start">
+                <i class="bx bx-user me-1 text-primary"></i>
+                IP usuario
+              </label>
+              <input type="text" name="ip_user" class="form-control" value="{{ $server->ip_user }}">
+            </div>
+            <div class="col-md-6 mb-4">
+              <label class="form-label d-block text-start">
+                <i class="bx bx-radar me-1 text-primary"></i>
+                IP monitoreo
+              </label>
+              <input type="text" name="ip_monitoring" class="form-control" value="{{ $server->ip_monitoring }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">

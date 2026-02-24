@@ -30,9 +30,15 @@ class GcpMachineController extends Controller
 
     if ($request->filled('search')) {
       $search = $request->search;
+      $uuidSearch = str_replace('-', '', strtolower($search));
 
-      $gcpMachines->where(function ($q) use ($search) {
+      $gcpMachines->where(function ($q) use ($search, $uuidSearch) {
         $q->where('project_name', 'like', "%{$search}%")
+          ->orWhere('uuid', 'like', "%{$search}%")
+          ->orWhereRaw(
+            "REPLACE(LOWER(COALESCE(uuid, '')), '-', '') LIKE ?",
+            ["%{$uuidSearch}%"]
+          )
           ->orWhere('machine_name', 'like', "%{$search}%")
           ->orWhere('machine_internal_name', 'like', "%{$search}%")
           ->orWhere('internal_ip', 'like', "%{$search}%");
@@ -66,7 +72,7 @@ class GcpMachineController extends Controller
       'machine_name' => 'required|string|max:255',
       'machine_internal_name' => 'required|string|max:255',
       'operations_system' => 'required|string|max:255',
-      'internal_ip' => 'required|unique:gcp_machines,internal_ip',
+      'internal_ip' => 'required|string|max:255',
       'ram_memory' => 'required|integer',
       'swap_memory' => 'required|integer',
       'latest_security_patch' => 'nullable|date',
@@ -93,7 +99,7 @@ class GcpMachineController extends Controller
       'machine_name' => 'required|string|max:255',
       'machine_internal_name' => 'required|string|max:255',
       'operations_system' => 'required|string|max:255',
-      'internal_ip' => 'required|unique:gcp_machines,internal_ip,' . $gcp_machine->id,
+      'internal_ip' => 'required|string|max:255',
       'ram_memory' => 'required|integer',
       'swap_memory' => 'required|integer',
       'latest_security_patch' => 'nullable|date',

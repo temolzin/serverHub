@@ -160,6 +160,29 @@
         e.preventDefault();
         fetchServers(link.href);
       });
+
+      const createForm = document.getElementById('createServerOffForm');
+      const cancelCreateBtn = document.getElementById('cancelCreateServerOff');
+      if (createForm && cancelCreateBtn) {
+        cancelCreateBtn.addEventListener('click', function() {
+          createForm.reset();
+
+          createForm.querySelectorAll('input, textarea, select').forEach(function(el) {
+            el.classList.remove('is-invalid');
+            el.setCustomValidity('');
+          });
+
+          createForm.querySelectorAll('.text-danger, .invalid-feedback').forEach(function(el) {
+            el.classList.add('d-none');
+            el.textContent = '';
+          });
+
+          const submitBtn = createForm.querySelector('button[type="submit"]');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+          }
+        });
+      }
     });
   </script>
 @endpush

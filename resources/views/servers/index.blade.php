@@ -105,6 +105,7 @@
 @endsection
 
 @push('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
 
@@ -121,6 +122,42 @@
           .forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
       }
 
+      function initSearchableSelects(scope = document) {
+        if (typeof TomSelect === 'undefined') return;
+
+        const selects = scope.querySelectorAll('.server-searchable-select');
+        selects.forEach(select => {
+          if (select.tomselect) return;
+
+          const tom = new TomSelect(select, {
+            create: false,
+            sortField: {
+              field: 'text',
+              direction: 'asc'
+            },
+            placeholder: select.dataset.placeholder || 'Buscar...'
+          });
+
+          if (select.closest('[id^="editServerModal"]')) {
+            const alignLeft = () => {
+              tom.control.style.textAlign = 'left';
+              tom.control_input.style.textAlign = 'left';
+              tom.dropdown.style.textAlign = 'left';
+              tom.dropdown_content.style.textAlign = 'left';
+              tom.dropdown
+                .querySelectorAll('.option, .optgroup-header')
+                .forEach(el => {
+                  el.style.textAlign = 'left';
+                });
+            };
+
+            alignLeft();
+            tom.on('dropdown_open', alignLeft);
+            tom.on('type', alignLeft);
+          }
+        });
+      }
+
       function fetchServers(url) {
         fetch(url, {
             headers: {
@@ -135,6 +172,7 @@
             table.innerHTML = data.table;
             pagination.innerHTML = data.pagination;
             hydrateBootstrap();
+            initSearchableSelects(table);
           })
           .catch(err => {
             console.error(err);
@@ -159,40 +197,37 @@
         e.preventDefault();
         fetchServers(link.href);
       });
-    });
 
-    document.addEventListener('blur', function(e) {
+      const createForm = document.getElementById('createServerForm');
+      const cancelCreateBtn = document.getElementById('cancelCreateServer');
+      if (createForm && cancelCreateBtn) {
+        cancelCreateBtn.addEventListener('click', function() {
+          createForm.reset();
 
-      if (!e.target.classList.contains('ip-check')) return;
+          createForm.querySelectorAll('input, textarea, select').forEach(el => {
+            el.classList.remove('is-invalid');
+            el.setCustomValidity('');
 
-      const input = e.target;
-      const ip = input.value.trim();
-      const exclude = input.dataset.exclude || '';
-      const errorDiv = document.getElementById(input.dataset.errorTarget);
-      const url = `{{ route('servers.check-ip') }}`;
+            if (el.tomselect) {
+              const defaultOption = el.querySelector('option[selected]');
+              const defaultValue = defaultOption ? defaultOption.value : '';
+              el.tomselect.setValue(defaultValue, true);
+            }
+          });
 
-      if (!errorDiv) return;
+          createForm.querySelectorAll('.text-danger, .invalid-feedback').forEach(el => {
+            el.classList.add('d-none');
+            el.textContent = '';
+          });
 
-      if (!ip) {
-        errorDiv.classList.add('d-none');
-        input.setCustomValidity('');
-        return;
+          const submitBtn = createForm.querySelector('button[type="submit"]');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+          }
+        });
       }
 
-      fetch(`${url}?ip=${encodeURIComponent(ip)}&exclude=${exclude}`)
-        .then(res => res.json())
-        .then(data => {
-          const message = data.exists ?
-            'Ya existe un servidor con esa IP.' :
-            '';
-          errorDiv.textContent = message;
-          errorDiv.classList.toggle('d-none', !data.exists);
-          input.setCustomValidity(message);
-        })
-        .catch(() => {
-          errorDiv.classList.add('d-none');
-          input.setCustomValidity('');
-        });
-    }, true);
+      initSearchableSelects(document);
+    });
   </script>
 @endpush

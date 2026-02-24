@@ -45,10 +45,7 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">IP interna</label>
-              <input type="text" name="internal_ip" class="form-control ip-check" required
-                data-error-target="gcp-ip-error">
-              <div id="gcp-ip-error" class="text-danger small mt-1 d-none">
-              </div>
+              <input type="text" name="internal_ip" class="form-control" required>
               @error('internal_ip')
                 <div class="text-danger small">
                   {{ $message }}
