@@ -1,3 +1,4 @@
+@php($isPoweredOff = $server->isPoweredOff())
 <div class="modal fade" id="editServerModal{{ $server->id }}" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
@@ -44,6 +45,32 @@
                   @endforeach
                 </select>
               </div>
+              <label class="form-label d-block text-start">
+                <i class="bx bx-user me-1 text-primary"></i>
+                Propietario
+              </label>
+              <select name="owner_id" class="form-select server-searchable-select" data-placeholder="Buscar propietario..."
+                required>
+                @foreach ($owners as $owner)
+                  <option value="{{ $owner->id }}" {{ $server->owner_id == $owner->id ? 'selected' : '' }}>
+                    {{ $owner->name }} {{ $owner->last_name }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6 mb-4">
+              <label class="form-label d-block text-start">
+                <i class="bx bx-layer me-1 text-primary"></i>
+                Aplicación
+              </label>
+              <select name="type_application_id" class="form-select server-searchable-select"
+                data-placeholder="Buscar aplicacion..." required>
+                @foreach ($typeApplications as $type)
+                  <option value="{{ $type->id }}" {{ $server->type_application_id == $type->id ? 'selected' : '' }}>
+                    {{ $type->name_application }}
+                  </option>
+                @endforeach
+              </select>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">VM (VMware)</label>
@@ -66,6 +93,14 @@
                   <option value="0" {{ !$server->state ? 'selected' : '' }}>poweredOff</option>
                 </select>
               </div>
+              <label class="form-label d-block text-start">
+                <i class="bx bx-check-circle me-1 text-primary"></i>
+                Estado
+              </label>
+              <select name="state" class="form-select" required>
+                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>poweredOn</option>
+                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>poweredOff</option>
+              </select>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">DNS</label>
@@ -87,6 +122,26 @@
                   placeholder="Ej: 192.168.1.15" value="{{ $server->primary_ip_address }}"
                   data-exclude="{{ $server->id }}" required>
               </div>
+              <label class="form-label d-block text-start">
+                <i class="bx bx-network-chart me-1 text-primary"></i>
+                IP primaria (opcional)
+              </label>
+              <input type="text" name="primary_ip_address" class="form-control"
+                value="{{ $server->primary_ip_address }}">
+            </div>
+            <div class="col-md-6 mb-4">
+              <label class="form-label d-block text-start">
+                <i class="bx bx-user me-1 text-primary"></i>
+                IP usuario
+              </label>
+              <input type="text" name="ip_user" class="form-control" value="{{ $server->ip_user }}">
+            </div>
+            <div class="col-md-6 mb-4">
+              <label class="form-label d-block text-start">
+                <i class="bx bx-radar me-1 text-primary"></i>
+                IP monitoreo
+              </label>
+              <input type="text" name="ip_monitoring" class="form-control" value="{{ $server->ip_monitoring }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Entorno</label>
@@ -147,6 +202,12 @@
                 <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8192"
                   value="{{ $server->ram_memory }}" required>
               </div>
+              <label class="form-label d-block text-start">
+                <i class="bx bx-memory-card me-1 text-primary"></i>
+                RAM (MB)
+              </label>
+              <input type="number" name="ram_memory" class="form-control" value="{{ $server->ram_memory }}"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Swap (MB)</label>

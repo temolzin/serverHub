@@ -88,8 +88,10 @@
                 <input type="text" name="internal_ip" class="form-control ip-check" placeholder="Ej: 10.10.10.15"
                   value="{{ $machine->internal_ip }}" required data-exclude="{{ $machine->id }}"
                   data-error-target="edit-gcp-ip-error-{{ $machine->id }}">
+                <span class="input-group-text"><i class="bx bx-network-chart"></i></span>
+                <input type="text" name="internal_ip" class="form-control"
+                  value="{{ $machine->internal_ip }}" required>
               </div>
-              <div id="edit-gcp-ip-error-{{ $machine->id }}" class="text-danger small mt-1 d-none"></div>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Alias IP</label>
