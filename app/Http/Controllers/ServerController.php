@@ -177,11 +177,15 @@ class ServerController extends Controller
 
     private function validateActiveServer(Request $request, ?Server $server = null): array
     {
+        $request->merge([
+            'state' => $this->normalizeState($request->state)
+        ]);
+
         return $request->validate([
             'owner_id' => 'required|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
             'vm_according_to_the_vmware' => 'required|string|max:255',
-            'state' => 'required|in:poweredOn,poweredOff,1,0,true,false,on,off',
+            'state' => 'required|in:poweredOn,poweredOff',
             'primary_ip_address' => 'nullable|string|max:255',
             'environment' => 'required|string|max:255',
             'datacenter' => 'required|string|max:255',
@@ -201,13 +205,17 @@ class ServerController extends Controller
 
     private function validateOffServer(Request $request, ?Server $server = null): array
     {
+        $request->merge([
+            'state' => $this->normalizeState($request->state, 'poweredOff')
+        ]);
+
         return $request->validate([
             'vm_according_to_the_vmware' => 'required|string|max:255',
             'dns_name' => 'nullable|string|max:255',
             'datacenter' => 'nullable|string|max:255',
             'os_version_internal' => 'nullable|string|max:255',
             'os_according_to_the_vmware' => 'nullable|string|max:255',
-            'state' => 'nullable|in:poweredOn,poweredOff,1,0,true,false,on,off',
+            'state' => 'nullable|in:poweredOn,poweredOff',
             'primary_ip_address' => 'nullable|string|max:255',
             'latest_security_patch' => 'nullable|date',
             'comments' => 'nullable|string',
