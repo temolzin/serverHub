@@ -2,189 +2,279 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Server;
 use App\Models\GcpMachine;
+use App\Models\Server;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class ImportController extends Controller
 {
-  private function getValue(array $data, array $possibleKeys, $default = null)
-  {
-    foreach ($possibleKeys as $key) {
-      if (isset($data[$key]) && $data[$key] !== null && $data[$key] !== '') {
-        return trim($data[$key]);
-      }
+    private function getValue(array $data, array $keys, $default = null)
+    {
+        foreach ($keys as $key) {
+            $value = $data[$key] ?? null;
+            if ($value !== null && $value !== '') {
+                return trim($value);
+            }
+        }
+        return $default;
     }
-    return $default;
-  }
 
-  public function import(Request $request)
-  {
-    $request->validate([
-      'file' => 'required|mimes:xlsx'
-    ]);
-    $sheets = Excel::toCollection(null, $request->file('file'));
-
-    foreach ($sheets as $rows) {
-
-      if ($rows->isEmpty()) {
-        continue;
-      }
-
-      $header = $rows->first()->toArray();
-      $rows = $rows->skip(1);
-
-      foreach ($rows as $row) {
-        $row = $row->toArray();
-
-        if (count($header) != count($row)) {
-          continue;
-        }
-
-        $normalizedHeader = [];
-        foreach ($header as $key => $value) {
-          $clean = strtolower(trim($value));
-
-          if (in_array($clean, $normalizedHeader)) {
-            $clean .= '_' . $key;
-          }
-          $normalizedHeader[] = $clean;
-        }
-
-        $data = array_combine($normalizedHeader, $row);
-        $isGcpSheet = collect($normalizedHeader)->contains(function ($value) {
-          return str_contains($value, 'nombre de maquina');
-        });
-
-        if ($isGcpSheet) {
-          $internalIp = null;
-
-          foreach ($data as $key => $value) {
-            if (str_contains(strtolower($key), 'ip interna') && !empty($value)) {
-              $internalIp = trim($value);
-              break;
-            }
-          }
-
-          if (!$internalIp) {
-            continue;
-          }
-          $aliasList = collect();
-          foreach ($data as $key => $value) {
-            $normalizedKey = strtolower(trim($key));
-            if (preg_match('/^ip alias/', $normalizedKey) && !empty($value)) {
-
-              $values = preg_split('/\r\n|\r|\n/', $value);
-
-              foreach ($values as $ip) {
-                $clean = trim($ip);
-                if (!empty($clean)) {
-                  $aliasList->push($clean);
+    private function normalizeHeaders(array $header): array
+    {
+        return collect($header)
+            ->map(fn($value, $key) => strtolower(trim((string) $value)))
+            ->map(function ($value, $key) use ($header) {
+                static $used = [];
+                if (in_array($value, $used, true)) {
+                    $value .= '_' . $key;
                 }
-              }
+                $used[] = $value;
+                return $value;
+            })
+            ->toArray();
+    }
+
+    private function normalizeState(?string $state, string $default = 'poweredOn'): string
+    {
+        $value = strtolower(trim((string) $state));
+        return $value === ''
+            ? $default
+            : (in_array($value, Server::POWERED_OFF_VALUES, true) ? 'poweredOff' : 'poweredOn');
+    }
+
+    private function normalizeLatestPatch($value): ?string
+    {
+        if (!$value) return null;
+
+        try {
+            return is_numeric($value)
+                ? ExcelDate::excelToDateTimeObject($value)->format('Y-m-d')
+                : Carbon::parse($value)->format('Y-m-d');
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    private function buildData(array $headers, array $row): ?array
+    {
+        return count($headers) === count($row)
+            ? array_combine($headers, $row)
+            : null;
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        foreach (Excel::toCollection(null, $request->file('file')) as $rows) {
+
+            if ($rows->isEmpty()) continue;
+            $headers = $this->normalizeHeaders($rows->first()->toArray());
+            foreach ($rows->skip(1) as $row) {
+
+                $data = $this->buildData($headers, $row->toArray());
+                if (!$data) continue;
+
+                $isGcp = collect($headers)
+                    ->contains(fn($h) => str_contains($h, 'nombre de maquina'));
+                $isGcp
+                    ? $this->importGcpRow($data)
+                    : $this->importServerRow($data);
             }
-          }
-          $aliasList = $aliasList->values();
-          $alias1 = $aliasList[0] ?? null;
-          $alias2 = $aliasList[1] ?? null;
-          $alias3 = $aliasList[2] ?? null;
-          $ramMemory = null;
-          $swapMemory = null;
+        }
 
-          foreach ($data as $key => $value) {
-            $normalizedKey = strtolower(trim($key));
+        return back()->with('success', 'Excel importado correctamente');
+    }
 
-            if (str_contains($normalizedKey, 'memoria ram') && !empty($value)) {
-              $ramMemory = (int) $value;
-            }
+    private function importGcpRow(array $data): void
+    {
+        $internalIp = collect($data)
+            ->first(fn($value, $key) => str_contains(strtolower($key), 'ip interna') && $value);
 
-            if (str_contains($normalizedKey, 'memoria swap') && !empty($value)) {
-              $swapMemory = (int) $value;
-            }
-          }
+        if (!$internalIp) return;
 
-          GcpMachine::updateOrCreate(
-            ['internal_ip' => $internalIp],
+        $aliases = collect($data)
+            ->filter(fn($v, $k) => preg_match('/^ip alias/i', $k) && $v)
+            ->flatMap(fn($v) => preg_split('/\r\n|\r|\n/', $v))
+            ->map(fn($ip) => trim($ip))
+            ->filter()
+            ->values();
+
+        GcpMachine::updateOrCreate(
+            ['internal_ip' => trim($internalIp)],
             [
-              'project_name' => $data['nombre de proyecto'] ?? 'N/A',
-              'environment' => $data['entorno'] ?? 'N/A',
-              'machine_name' => $data['nombre de maquina'] ?? 'N/A',
-              'machine_internal_name' => $data['nombre de maquina interna'] ?? 'N/A',
-              'operations_system' => $data['sistema operativo'] ?? 'N/A',
-              'kernel_version' => $data['version de kernel'] ?? null,
-              'alias_ip'  => $alias1,
-              'alias2_ip' => $alias2,
-              'alias3_ip' => $alias3,
-              'ram_memory' => $ramMemory ?? 0,
-              'swap_memory' => $swapMemory ?? 0,
+                'project_name' => $data['nombre de proyecto'] ?? 'N/A',
+                'environment' => $data['entorno'] ?? 'N/A',
+                'machine_name' => $data['nombre de maquina'] ?? 'N/A',
+                'machine_internal_name' => $data['nombre de maquina interna'] ?? 'N/A',
+                'operations_system' => $data['sistema operativo'] ?? 'N/A',
+                'kernel_version' => $data['version de kernel'] ?? null,
+                'alias_ip'  => $aliases[0] ?? null,
+                'alias2_ip' => $aliases[1] ?? null,
+                'alias3_ip' => $aliases[2] ?? null,
+                'ram_memory' => (int) collect($data)->first(fn($v, $k) => str_contains($k, 'memoria ram') && $v),
+                'swap_memory' => (int) collect($data)->first(fn($v, $k) => str_contains($k, 'memoria swap') && $v),
             ]
-          );
-        } else {
+        );
+    }
 
-          $primaryIp = $this->getValue($data, [
+    private function importServerRow(array $data): void
+    {
+        $primaryIp = $this->getValue($data, [
             'primary ip address',
             'primary ip address ',
             'primary ip address.1'
-          ]);
+        ]);
 
-          if (!$primaryIp) {
-            continue;
-          }
+        if (!$primaryIp) return;
 
-          $ips = collect([
-            $this->getValue($data, ['ip2']),
-            $this->getValue($data, ['ip3']),
-            $this->getValue($data, ['ip4']),
-            $this->getValue($data, ['ip5']),
-          ]);
-
-          $otherIps = $ips
+        $otherIps = collect(['ip2', 'ip3', 'ip4', 'ip5'])
+            ->map(fn($key) => $this->getValue($data, [$key]))
             ->filter()
-            ->flatMap(function ($item) {
-              return preg_split('/\r\n|\r|\n/', $item);
-            })
+            ->flatMap(fn($v) => preg_split('/\r\n|\r|\n/', $v))
             ->map(fn($ip) => trim($ip))
             ->filter()
             ->unique()
             ->implode(', ');
 
-          $server = Server::withTrashed()->updateOrCreate(
+        $server = Server::withTrashed()->updateOrCreate(
             ['primary_ip_address' => $primaryIp],
             [
-              'owner_id' => Auth::id(),
-              'type_application_id' => 1,
-              'vm_according_to_the_vmware' => $this->getValue($data, ['vm']),
-              'state' => $this->getValue($data, ['state', 'powerstate']),
-              'datacenter' => $this->getValue($data, ['datacenter']),
-              'environment' => $this->getValue($data, ['enviroment', 'entorno'], 'N/A'),
-              'os_according_to_the_vmware' => $this->getValue($data, [
-                'os according to the wmware',
-                'os according wmware'
-              ], 'N/A'),
-              'os_version_internal' => $this->getValue($data, [
-                'real os',
-                'real os internal'
-              ]),
-              'hostname_internal' => $this->getValue($data, [
-                'hostname real',
-                'real hostname'
-              ]),
-              'ip_user' => $this->getValue($data, ['ip']),
-              'ip_monitoring' => $this->getValue($data, ['monitoreo']),
-              'dns_name' => $this->getValue($data, ['dns name']),
-              'other_ips' => $otherIps,
-              'ram_memory' => 0,
-              'swap_memory' => 0,
+                'owner_id' => Auth::id(),
+                'type_application_id' => 1,
+                'vm_according_to_the_vmware' => $this->getValue($data, ['vm']),
+                'state' => $this->normalizeState(
+                    $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
+                ),
+                'datacenter' => $this->getValue($data, ['datacenter']),
+                'environment' => $this->getValue($data, ['enviroment', 'entorno'], 'N/A'),
+                'os_according_to_the_vmware' => $this->getValue($data, [
+                    'os according to the wmware',
+                    'os according wmware',
+                    'os according to the vmware tools',
+                    'os according to the vmware'
+                ], 'N/A'),
+                'os_version_internal' => $this->getValue($data, [
+                    'real os',
+                    'real os internal',
+                    'os according to the configuration file'
+                ]),
+                'hostname_internal' => $this->getValue($data, [
+                    'hostname real',
+                    'real hostname'
+                ]),
+                'ip_user' => $this->getValue($data, ['ip']),
+                'ip_monitoring' => $this->getValue($data, ['monitoreo']),
+                'dns_name' => $this->getValue($data, ['dns name']),
+                'other_ips' => $otherIps,
+                'latest_security_patch' => $this->normalizeLatestPatch(
+                    $this->getValue($data, ['latest security patch'])
+                ),
+                'comments' => $this->getValue($data, ['comments', 'comentarios']),
+                'ram_memory' => 0,
+                'swap_memory' => 0,
             ]
-          );
-          if ($server->trashed()) {
+        );
+
+        if ($server->trashed()) {
             $server->restore();
-          }
         }
-      }
     }
-    return back()->with('success', 'Excel importado correctamente');
-  }
+
+    public function importPoweredOff(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $file = $request->file('file');
+        $sheets = Excel::toCollection(null, $file);
+        $sheetNames = IOFactory::load($file->getRealPath())->getSheetNames();
+
+        $allowed = ['bajatultitlan', 'tuloff', 'qrooff'];
+        $count = 0;
+
+        foreach ($sheets as $i => $rows) {
+
+            $name = strtolower(trim((string) ($sheetNames[$i] ?? '')));
+            if (!in_array($name, $allowed, true) || $rows->isEmpty()) continue;
+
+            $headers = $this->normalizeHeaders($rows->first()->toArray());
+
+            foreach ($rows->skip(1) as $row) {
+
+                $data = $this->buildData($headers, $row->toArray());
+                if (!$data) continue;
+
+                $vm = $this->getValue($data, ['vm']);
+                if (!$vm) continue;
+
+                $primaryIp = $this->getValue($data, ['primary ip address']);
+
+                $payload = [
+                    'owner_id' => Auth::id(),
+                    'type_application_id' => 1,
+                    'vm_according_to_the_vmware' => $vm,
+                    'state' => 'poweredOff',
+                    'dns_name' => $this->getValue($data, ['dns name']),
+                    'primary_ip_address' => $primaryIp ?: null,
+                    'datacenter' => $this->getValue($data, ['datacenter']),
+                    'environment' => $this->getValue($data, ['environment', 'entorno'], 'N/A'),
+                    'hostname_internal' => $this->getValue(
+                        $data,
+                        ['hostname internal', 'hostname real', 'real hostname'],
+                        $vm
+                    ),
+                    'os_version_internal' => $this->getValue($data, [
+                        'os according to the configuration file',
+                        'os_version_internal',
+                        'real os',
+                        'real os internal',
+                    ]),
+                    'os_according_to_the_vmware' => $this->getValue($data, [
+                        'os according to the vmware tools',
+                        'os according to the vmware',
+                        'os according to the wmware',
+                        'os according wmware',
+                    ]),
+                    'latest_security_patch' => $this->normalizeLatestPatch(
+                        $this->getValue($data, ['latest security patch'])
+                    ),
+                    'comments' => $this->getValue($data, ['comments', 'comentarios']),
+                    'ram_memory' => 0,
+                    'swap_memory' => 0,
+                ];
+
+                $server = $primaryIp
+                    ? Server::withTrashed()->where('primary_ip_address', $primaryIp)->first()
+                    : Server::withTrashed()
+                    ->where('vm_according_to_the_vmware', $vm)
+                    ->orderByDesc('id')
+                    ->first();
+                $server
+                    ? $server->fill($payload)->save()
+                    : $server = Server::create($payload);
+
+                if ($server->trashed()) {
+                    $server->restore();
+                }
+
+                $count++;
+            }
+        }
+
+        return back()->with(
+            'success',
+            $count === 0
+                ? 'No se importaron filas: revisa que existan datos en BajaTultitlan, TulOff y QroOff.'
+                : "Excel importado correctamente ({$count} servidores apagados)."
+        );
+    }
 }

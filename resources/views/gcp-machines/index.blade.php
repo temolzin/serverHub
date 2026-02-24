@@ -7,7 +7,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       Swal.fire({
         icon: 'success',
-        title: '¡Listo!',
+        title: '\u00a1Listo!',
         text: '{{ session('success') }}',
         confirmButtonText: 'Perfecto',
         timer: 5000,
@@ -24,13 +24,13 @@
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0">Maquinas GCP</h5>
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal">
-            <i class="bx bx-plus me-1"></i> Agregar máquina
+            <i class="bx bx-plus me-1"></i> Agregar m&aacute;quina
           </button>
         </div>
         <div class="card-body">
           <div class="mb-4">
             <input type="text" id="search-gcp" class="form-control form-control-sm w-50"
-              placeholder="Buscar por proyecto, máquina o IP">
+              placeholder="Buscar por proyecto, maquina, UUID o IP">
           </div>
           <div class="table-responsive text-nowrap" style="overflow-y: hidden;">
             <table class="table align-middle">
@@ -38,7 +38,7 @@
                 <tr>
                   <th>ID</th>
                   <th>Proyecto</th>
-                  <th>Máquina</th>
+                  <th>M&aacute;quina</th>
                   <th>Entorno</th>
                   <th>IP interna</th>
                   <th class="text-end">Acciones</th>
@@ -102,32 +102,6 @@
         fetchGcp(link.href);
       });
     });
-
-    document.addEventListener('blur', function(e) {
-
-      if (!e.target.classList.contains('ip-check')) return;
-
-      const input = e.target;
-      const ip = input.value.trim();
-      const errorDiv = document.getElementById('gcp-ip-error');
-
-      if (!ip) {
-        errorDiv.classList.add('d-none');
-        input.setCustomValidity('');
-        return;
-      }
-
-      fetch(`/gcp-machines/check-ip?ip=${encodeURIComponent(ip)}`)
-        .then(res => res.json())
-        .then(data => {
-          const message = data.exists ?
-            'Ya existe una máquina con esa IP interna.' :
-            '';
-          errorDiv.textContent = message;
-          errorDiv.classList.toggle('d-none', !data.exists);
-          input.setCustomValidity(message);
-        });
-    }, true);
     document.addEventListener("DOMContentLoaded", function() {
       new TomSelect("#ownerSelect", {
         create: false,
@@ -149,6 +123,12 @@
         form.querySelectorAll('input, textarea, select').forEach(el => {
           el.classList.remove('is-invalid');
           el.setCustomValidity('');
+
+          if (el.tomselect) {
+            const defaultOption = el.querySelector('option[selected]');
+            const defaultValue = defaultOption ? defaultOption.value : '';
+            el.tomselect.setValue(defaultValue, true);
+          }
         });
         form.querySelectorAll('.text-danger').forEach(el => {
           el.classList.add('d-none');
