@@ -225,6 +225,58 @@
         fetchServers(link.href);
       });
 
+      function ensureExcelAlertOnTop() {
+        if (document.getElementById('excel-upload-alert-zindex')) return;
+
+        const style = document.createElement('style');
+        style.id = 'excel-upload-alert-zindex';
+        style.textContent = `
+        .swal2-container.excel-upload-alert-top {
+            z-index: 20000 !important;
+        }
+    `;
+        document.head.appendChild(style);
+      }
+
+      function showExcelLoadingAlert() {
+        if (typeof Swal === 'undefined') return;
+
+        ensureExcelAlertOnTop();
+
+        Swal.fire({
+          title: 'Subiendo Excel',
+          text: 'Procesando archivo, por favor espera...',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          customClass: {
+            container: 'excel-upload-alert-top'
+          },
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      }
+
+      document
+        .querySelectorAll('form[action="{{ route('servers.import') }}"]')
+        .forEach(form => {
+          form.addEventListener('submit', function() {
+
+            const modalEl = form.closest('.modal');
+            if (modalEl) {
+              bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+            }
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+              submitBtn.disabled = true;
+            }
+
+            showExcelLoadingAlert();
+          });
+        });
+
       const createForm = document.getElementById('createServerForm');
       const cancelCreateBtn = document.getElementById('cancelCreateServer');
       if (createForm && cancelCreateBtn) {

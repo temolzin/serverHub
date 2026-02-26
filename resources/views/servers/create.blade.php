@@ -14,12 +14,12 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6 mb-4">
-              <label class="form-label">Propietario</label>
+              <label class="form-label">Propietario (obligatorio)</label>
               <select name="owner_id" class="form-select" required>
                 <option value="" disabled selected>Selecciona un propietario</option>
               <label class="form-label">
                 <i class="bx bx-user me-1 text-primary"></i>
-                Propietario
+                Propietario (obligatorio)
               </label>
               <select name="owner_id" class="form-select server-searchable-select" data-placeholder="Buscar propietario..."
                 required>
@@ -32,12 +32,12 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Aplicación</label>
+              <label class="form-label">Aplicación (obligatorio)</label>
               <select name="type_application_id" class="form-select" required>
                 <option value="" disabled selected>Selecciona una aplicación</option>
               <label class="form-label">
                 <i class="bx bx-layer me-1 text-primary"></i>
-                Aplicación
+                Aplicación (obligatorio)
               </label>
               <select name="type_application_id" class="form-select server-searchable-select"
                 data-placeholder="Buscar aplicacion..." required>
@@ -50,18 +50,18 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">VM (VMware)</label>
+              <label class="form-label">VM (VMware) (obligatorio)</label>
               <input type="text" name="vm_according_to_the_vmware" class="form-control"
                 placeholder="Ej: vm-app-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Estado</label>
+              <label class="form-label">Estado (obligatorio)</label>
               <select name="state" class="form-select">
                 <option value="1">poweredOn</option>
                 <option value="0">poweredOff</option>
               <label class="form-label">
                 <i class="bx bx-check-circle me-1 text-primary"></i>
-                Estado
+                Estado (obligatorio)
               </label>
               <select name="state" class="form-select" required>
                 <option value="poweredOn">poweredOn</option>
@@ -97,34 +97,34 @@
               <input type="text" name="ip_monitoring" class="form-control">
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Entorno</label>
+              <label class="form-label">Entorno (obligatorio)</label>
               <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Datacenter</label>
+              <label class="form-label">Datacenter (obligatorio)</label>
               <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Sistema operativo</label>
+              <label class="form-label">Sistema operativo (obligatorio)</label>
               <input type="text" name="os_according_to_the_vmware" class="form-control"
                 placeholder="Ej: Windows Server 2019" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Versión interna</label>
+              <label class="form-label">Versión interna (obligatorio)</label>
               <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
                 required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Hostname interno</label>
+              <label class="form-label">Hostname interno (obligatorio)</label>
               <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01"
                 required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">RAM (MB)</label>
+              <label class="form-label">RAM (MB) (obligatorio)</label>
               <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 16384" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Swap (MB)</label>
+              <label class="form-label">Swap (MB) (obligatorio)</label>
               <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" required>
             </div>
             <div class="col-md-6 mb-4">

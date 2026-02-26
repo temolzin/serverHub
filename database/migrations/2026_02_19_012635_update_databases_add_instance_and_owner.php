@@ -6,37 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-      Schema::table('databases', function (Blueprint $table) {
-        $table->foreignId('instance_id')
-              ->after('id')
-              ->constrained()
-              ->onDelete('cascade');
-        $table->foreignId('owner_id')
-              ->after('instance_id')
-              ->constrained()
-              ->onDelete('cascade');
-        $table->dropForeign(['server_id']);
-        $table->dropColumn('server_id');
-      });
+        Schema::table('databases', function (Blueprint $table) {
+            $table->foreignId('instance_id')
+                ->after('id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->foreignId('owner_id')
+                ->after('instance_id')
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->dropConstrainedForeignId('server_id');
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-      Schema::table('databases', function (Blueprint $table) {
-        $table->foreignId('server_id')
-              ->constrained()
-              ->onDelete('cascade');
-        $table->dropForeign(['instance_id']);
-        $table->dropForeign(['owner_id']);
-        $table->dropColumn(['instance_id', 'owner_id']);
-      });
+        Schema::table('databases', function (Blueprint $table) {
+            $table->foreignId('server_id')
+                ->after('id')
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
+            $table->dropConstrainedForeignId('instance_id');
+            $table->dropConstrainedForeignId('owner_id');
+        });
     }
 };

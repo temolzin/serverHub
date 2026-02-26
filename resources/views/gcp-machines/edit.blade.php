@@ -15,7 +15,7 @@
         <div class="modal-body text-start">
           <div class="row">
             <div class="col-md-6 mb-4">
-              <label class="form-label">Propietario</label>
+              <label class="form-label">Propietario (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-user text-primary"></i>
@@ -30,7 +30,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre del proyecto</label>
+              <label class="form-label">Nombre del proyecto (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-folder text-primary"></i>
@@ -40,7 +40,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Entorno</label>
+              <label class="form-label">Entorno (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-globe text-primary"></i>
@@ -50,7 +50,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre máquina</label>
+              <label class="form-label">Nombre máquina (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-desktop text-primary"></i>
@@ -60,7 +60,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre interno</label>
+              <label class="form-label">Nombre interno (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-chip text-primary"></i>
@@ -70,7 +70,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Sistema operativo</label>
+              <label class="form-label">Sistema operativo (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-cog text-primary"></i>
@@ -80,7 +80,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">IP interna</label>
+              <label class="form-label">IP interna (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-network-chart text-primary"></i>
@@ -144,7 +144,7 @@
               </div>
             </div>
             <div class="col-md-3 mb-4">
-              <label class="form-label">RAM (MB)</label>
+              <label class="form-label">RAM (MB) (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-memory-card text-primary"></i>
@@ -154,7 +154,7 @@
               </div>
             </div>
             <div class="col-md-3 mb-4">
-              <label class="form-label">Swap (MB)</label>
+              <label class="form-label">Swap (MB) (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-transfer text-primary"></i>
