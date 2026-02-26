@@ -48,13 +48,11 @@
                       {{ ucfirst($group) }}
                     </small>
                     @foreach ($groupPermissions as $permission)
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="permissions[]"
-                          value="{{ $permission->name }}">
-                        <label class="form-check-label">
-                          {{ $permission->name }}
+                    <div class="form-check">
+                        <input  class="form-check-input"  type="checkbox"  name="permissions[]" value="{{ $permission->name }}"> <label class="form-check-label">
+                        {{ $permission->description }}
                         </label>
-                      </div>
+                    </div>
                     @endforeach
                   </div>
                 @endforeach
