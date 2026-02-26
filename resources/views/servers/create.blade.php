@@ -8,21 +8,19 @@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form id="createServerForm" action="{{ route('servers.store') }}" method="POST"
-        onsubmit="this.querySelector('button[type=submit]').disabled=true;">
+      <form id="createServerForm"
+            action="{{ route('servers.store') }}"
+            method="POST"
+            onsubmit="this.querySelector('button[type=submit]').disabled=true;">
         @csrf
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6 mb-4">
-              <label class="form-label">Propietario</label>
-              <select name="owner_id" class="form-select" required>
-                <option value="" disabled selected>Selecciona un propietario</option>
               <label class="form-label">
                 <i class="bx bx-user me-1 text-primary"></i>
                 Propietario
               </label>
-              <select name="owner_id" class="form-select server-searchable-select" data-placeholder="Buscar propietario..."
-                required>
+              <select name="owner_id" class="form-select server-searchable-select" required>
                 <option value="">Seleccionar propietario</option>
                 @foreach ($owners as $owner)
                   <option value="{{ $owner->id }}">
@@ -32,15 +30,11 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Aplicación</label>
-              <select name="type_application_id" class="form-select" required>
-                <option value="" disabled selected>Selecciona una aplicación</option>
               <label class="form-label">
                 <i class="bx bx-layer me-1 text-primary"></i>
                 Aplicación
               </label>
-              <select name="type_application_id" class="form-select server-searchable-select"
-                data-placeholder="Buscar aplicacion..." required>
+              <select name="type_application_id" class="form-select server-searchable-select" required>
                 <option value="">Seleccionar aplicación</option>
                 @foreach ($typeApplications as $type)
                   <option value="{{ $type->id }}">
@@ -51,14 +45,9 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">VM (VMware)</label>
-              <input type="text" name="vm_according_to_the_vmware" class="form-control"
-                placeholder="Ej: vm-app-prod-01" required>
+              <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Estado</label>
-              <select name="state" class="form-select">
-                <option value="1">poweredOn</option>
-                <option value="0">poweredOff</option>
               <label class="form-label">
                 <i class="bx bx-check-circle me-1 text-primary"></i>
                 Estado
@@ -73,14 +62,11 @@
               <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com">
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">IP primaria</label>
-              <input type="text" name="primary_ip_address" class="form-control ip-check"
-                placeholder="Ej: 192.168.1.10" required>
               <label class="form-label">
                 <i class="bx bx-network-chart me-1 text-primary"></i>
-                IP primaria (opcional)
+                IP primaria
               </label>
-              <input type="text" name="primary_ip_address" class="form-control">
+              <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.10" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">
@@ -106,18 +92,15 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Sistema operativo</label>
-              <input type="text" name="os_according_to_the_vmware" class="form-control"
-                placeholder="Ej: Windows Server 2019" required>
+              <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Versión interna</label>
-              <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
-                required>
+              <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Hostname interno</label>
-              <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01"
-                required>
+              <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">RAM (MB)</label>
@@ -133,16 +116,21 @@
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label">Otras IPs</label>
-              <textarea name="other_ips" rows="2" class="form-control" placeholder="IPs adicionales separadas por coma"></textarea>
+              <textarea name="other_ips" rows="2" class="form-control" placeholder="IPs separadas por coma"></textarea>
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label">Comentarios</label>
-              <textarea name="comments" rows="3" class="form-control" placeholder="Información adicional relevante"></textarea>
+              <textarea name="comments"
+                        rows="3"
+                        class="form-control"
+                        placeholder="Información adicional"></textarea>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" id="cancelCreateServer" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          <button type="button"
+                  class="btn btn-label-secondary"
+                  data-bs-dismiss="modal">
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">

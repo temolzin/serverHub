@@ -46,7 +46,6 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">IP interna</label>
               <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 10.0.0.15" required>
-              <input type="text" name="internal_ip" class="form-control" required>
               @error('internal_ip')
                 <div class="text-danger small">
                   {{ $message }}
