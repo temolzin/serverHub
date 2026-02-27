@@ -16,7 +16,7 @@
         <div class="modal-body text-start">
           <div class="row">
             <div class="col-md-6 mb-4">
-              <label class="form-label">Propietario</label>
+              <label class="form-label">Propietario (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-user text-primary"></i>
@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Aplicación</label>
+              <label class="form-label">Aplicación (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-layer text-primary"></i>
@@ -47,7 +47,7 @@
               </div>
               <label class="form-label d-block text-start">
                 <i class="bx bx-user me-1 text-primary"></i>
-                Propietario
+                Propietario (obligatorio)
               </label>
               <select name="owner_id" class="form-select server-searchable-select" data-placeholder="Buscar propietario..."
                 required>
@@ -61,7 +61,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-layer me-1 text-primary"></i>
-                Aplicación
+                Aplicación (obligatorio)
               </label>
               <select name="type_application_id" class="form-select server-searchable-select"
                 data-placeholder="Buscar aplicacion..." required>
@@ -73,7 +73,7 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">VM (VMware)</label>
+              <label class="form-label">VM (VMware) (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-server text-primary"></i>
@@ -83,7 +83,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Estado</label>
+              <label class="form-label">Estado (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-check-circle text-primary"></i>
@@ -95,7 +95,7 @@
               </div>
               <label class="form-label d-block text-start">
                 <i class="bx bx-check-circle me-1 text-primary"></i>
-                Estado
+                Estado (obligatorio)
               </label>
               <select name="state" class="form-select" required>
                 <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>poweredOn</option>
@@ -144,7 +144,7 @@
               <input type="text" name="ip_monitoring" class="form-control" value="{{ $server->ip_monitoring }}">
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Entorno</label>
+              <label class="form-label">Entorno (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-code-alt text-primary"></i>
@@ -154,7 +154,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Datacenter</label>
+              <label class="form-label">Datacenter (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-building text-primary"></i>
@@ -164,7 +164,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Sistema operativo</label>
+              <label class="form-label">Sistema operativo (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-chip text-primary"></i>
@@ -174,7 +174,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Versión interna</label>
+              <label class="form-label">Versión interna (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-code text-primary"></i>
@@ -184,7 +184,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Hostname interno</label>
+              <label class="form-label">Hostname interno (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-desktop text-primary"></i>
@@ -194,7 +194,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">RAM (MB)</label>
+              <label class="form-label">RAM (MB) (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-memory-card text-primary"></i>
@@ -204,13 +204,13 @@
               </div>
               <label class="form-label d-block text-start">
                 <i class="bx bx-memory-card me-1 text-primary"></i>
-                RAM (MB)
+                RAM (MB) (obligatorio)
               </label>
               <input type="number" name="ram_memory" class="form-control" value="{{ $server->ram_memory }}"
                 required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Swap (MB)</label>
+              <label class="form-label">Swap (MB) (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-data text-primary"></i>

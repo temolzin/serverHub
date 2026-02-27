@@ -13,6 +13,8 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 
 class ImportController extends Controller
 {
+    private const FORCED_OFF_SHEETS = ['bajatultitlan', 'tuloff', 'qrooff'];
+
     private function getValue(array $data, array $keys, $default = null)
     {
         foreach ($keys as $key) {
@@ -21,18 +23,21 @@ class ImportController extends Controller
                 return trim($value);
             }
         }
+
         return $default;
     }
 
     private function normalizeHeaders(array $header): array
     {
+        $used = [];
+
         return collect($header)
-            ->map(fn($value, $key) => strtolower(trim((string) $value)))
-            ->map(function ($value, $key) use ($header) {
-                static $used = [];
+            ->map(fn($value) => strtolower(trim((string) $value)))
+            ->map(function ($value, $key) use (&$used) {
                 if (in_array($value, $used, true)) {
                     $value .= '_' . $key;
                 }
+
                 $used[] = $value;
                 return $value;
             })
@@ -42,14 +47,19 @@ class ImportController extends Controller
     private function normalizeState(?string $state, string $default = 'poweredOn'): string
     {
         $value = strtolower(trim((string) $state));
-        return $value === ''
-            ? $default
-            : (in_array($value, Server::POWERED_OFF_VALUES, true) ? 'poweredOff' : 'poweredOn');
+
+        return match (true) {
+            $value === '' => $default,
+            in_array($value, Server::POWERED_OFF_VALUES, true) => 'poweredOff',
+            default => 'poweredOn'
+        };
     }
 
     private function normalizeLatestPatch($value): ?string
     {
-        if (!$value) return null;
+        if (!$value) {
+            return null;
+        }
 
         try {
             return is_numeric($value)
@@ -62,9 +72,58 @@ class ImportController extends Controller
 
     private function buildData(array $headers, array $row): ?array
     {
-        return count($headers) === count($row)
-            ? array_combine($headers, $row)
-            : null;
+        return count($headers) !== count($row)
+            ? null
+            : array_combine($headers, $row);
+    }
+
+    private function readWorkbook($file): array
+    {
+        return [
+            Excel::toCollection(null, $file),
+            IOFactory::load($file->getRealPath())->getSheetNames(),
+        ];
+    }
+
+    private function createStats(array $buckets): array
+    {
+        return collect($buckets)
+            ->mapWithKeys(fn($bucket) => [$bucket => ['created' => 0, 'updated' => 0]])
+            ->all();
+    }
+
+    private function incrementStats(array &$stats, string $bucket, ?string $status): void
+    {
+        $status && isset($stats[$bucket][$status]) && $stats[$bucket][$status]++;
+    }
+
+    private function totalProcessed(array $stats): int
+    {
+        return collect($stats)->sum(fn($bucket) => array_sum($bucket));
+    }
+
+    private function respondWithImportResult(
+        array $stats,
+        string $emptyMessage,
+        string $successMessage = 'Excel importado correctamente.'
+    )
+    {
+        if ($this->totalProcessed($stats) === 0) {
+            return back()->with('success', $emptyMessage);
+        }
+
+        return back()->with('success', $successMessage);
+    }
+
+    private function isGcpHeaders(array $headers): bool
+    {
+        return collect($headers)
+            ->contains(fn($header) => str_contains($header, 'nombre de maquina'));
+    }
+
+    private function isForcedOffSheet(?string $sheetName): bool
+    {
+        return in_array(strtolower(trim((string) $sheetName)), self::FORCED_OFF_SHEETS, true);
     }
 
     public function import(Request $request)
@@ -73,41 +132,79 @@ class ImportController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        foreach (Excel::toCollection(null, $request->file('file')) as $rows) {
+        [$sheets, $sheetNames] = $this->readWorkbook($request->file('file'));
 
-            if ($rows->isEmpty()) continue;
+        $stats = $this->createStats(['servers_on', 'servers_off', 'gcp_machines']);
+
+        foreach ($sheets as $i => $rows) {
+
+            if ($rows->isEmpty()) {
+                continue;
+            }
+
             $headers = $this->normalizeHeaders($rows->first()->toArray());
+            $isForcedOff = $this->isForcedOffSheet($sheetNames[$i] ?? null);
+
             foreach ($rows->skip(1) as $row) {
 
                 $data = $this->buildData($headers, $row->toArray());
-                if (!$data) continue;
+                if (!$data) {
+                    continue;
+                }
 
-                $isGcp = collect($headers)
-                    ->contains(fn($h) => str_contains($h, 'nombre de maquina'));
-                $isGcp
-                    ? $this->importGcpRow($data)
-                    : $this->importServerRow($data);
+                $result = $isForcedOff
+                    ? [
+                        'bucket' => 'servers_off',
+                        'status' => $this->importForcedOffServerRow($data)
+                    ]
+                    : $this->resolveGeneralRowImport($headers, $data);
+
+                $this->incrementStats($stats, $result['bucket'], $result['status']);
             }
         }
 
-        return back()->with('success', 'Excel importado correctamente');
+        return $this->respondWithImportResult(
+            $stats,
+            'No se importaron registros validos desde el Excel.'
+        );
     }
 
-    private function importGcpRow(array $data): void
+    private function resolveGeneralRowImport(array $headers, array $data): array
+    {
+        if ($this->isGcpHeaders($headers)) {
+            return [
+                'bucket' => 'gcp_machines',
+                'status' => $this->importGcpRow($data),
+            ];
+        }
+
+        $result = $this->importServerRow($data);
+
+        return [
+            'bucket' => ($result['state'] ?? null) === 'poweredOff'
+                ? 'servers_off'
+                : 'servers_on',
+            'status' => $result['status'] ?? null,
+        ];
+    }
+
+    private function importGcpRow(array $data): ?string
     {
         $internalIp = collect($data)
             ->first(fn($value, $key) => str_contains(strtolower($key), 'ip interna') && $value);
 
-        if (!$internalIp) return;
+        if (!$internalIp) {
+            return null;
+        }
 
         $aliases = collect($data)
             ->filter(fn($v, $k) => preg_match('/^ip alias/i', $k) && $v)
             ->flatMap(fn($v) => preg_split('/\r\n|\r|\n/', $v))
-            ->map(fn($ip) => trim($ip))
+            ->map('trim')
             ->filter()
             ->values();
 
-        GcpMachine::updateOrCreate(
+        $machine = GcpMachine::updateOrCreate(
             ['internal_ip' => trim($internalIp)],
             [
                 'project_name' => $data['nombre de proyecto'] ?? 'N/A',
@@ -123,9 +220,11 @@ class ImportController extends Controller
                 'swap_memory' => (int) collect($data)->first(fn($v, $k) => str_contains($k, 'memoria swap') && $v),
             ]
         );
+
+        return $machine->wasRecentlyCreated ? 'created' : 'updated';
     }
 
-    private function importServerRow(array $data): void
+    private function importServerRow(array $data): ?array
     {
         $primaryIp = $this->getValue($data, [
             'primary ip address',
@@ -133,59 +232,130 @@ class ImportController extends Controller
             'primary ip address.1'
         ]);
 
-        if (!$primaryIp) return;
+        $vm = $this->getValue($data, ['vm']);
+
+        if (!$primaryIp && !$vm) {
+            return null;
+        }
 
         $otherIps = collect(['ip2', 'ip3', 'ip4', 'ip5'])
             ->map(fn($key) => $this->getValue($data, [$key]))
             ->filter()
             ->flatMap(fn($v) => preg_split('/\r\n|\r|\n/', $v))
-            ->map(fn($ip) => trim($ip))
+            ->map('trim')
             ->filter()
             ->unique()
             ->implode(', ');
 
-        $server = Server::withTrashed()->updateOrCreate(
-            ['primary_ip_address' => $primaryIp],
-            [
-                'owner_id' => Auth::id(),
-                'type_application_id' => 1,
-                'vm_according_to_the_vmware' => $this->getValue($data, ['vm']),
-                'state' => $this->normalizeState(
-                    $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
-                ),
-                'datacenter' => $this->getValue($data, ['datacenter']),
-                'environment' => $this->getValue($data, ['enviroment', 'entorno'], 'N/A'),
-                'os_according_to_the_vmware' => $this->getValue($data, [
-                    'os according to the wmware',
-                    'os according wmware',
-                    'os according to the vmware tools',
-                    'os according to the vmware'
-                ], 'N/A'),
-                'os_version_internal' => $this->getValue($data, [
-                    'real os',
-                    'real os internal',
-                    'os according to the configuration file'
-                ]),
-                'hostname_internal' => $this->getValue($data, [
-                    'hostname real',
-                    'real hostname'
-                ]),
-                'ip_user' => $this->getValue($data, ['ip']),
-                'ip_monitoring' => $this->getValue($data, ['monitoreo']),
-                'dns_name' => $this->getValue($data, ['dns name']),
-                'other_ips' => $otherIps,
-                'latest_security_patch' => $this->normalizeLatestPatch(
-                    $this->getValue($data, ['latest security patch'])
-                ),
-                'comments' => $this->getValue($data, ['comments', 'comentarios']),
-                'ram_memory' => 0,
-                'swap_memory' => 0,
-            ]
-        );
+        $payload = [
+            'owner_id' => Auth::id(),
+            'type_application_id' => 1,
+            'vm_according_to_the_vmware' => $vm,
+            'state' => $this->normalizeState(
+                $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
+            ),
+            'datacenter' => $this->getValue($data, ['datacenter']),
+            'environment' => $this->getValue($data, ['enviroment', 'entorno'], 'N/A'),
+            'os_according_to_the_vmware' => $this->getValue($data, [
+                'os according to the wmware',
+                'os according wmware',
+                'os according to the vmware tools',
+                'os according to the vmware'
+            ], 'N/A'),
+            'os_version_internal' => $this->getValue($data, [
+                'real os',
+                'real os internal',
+                'os according to the configuration file'
+            ]),
+            'hostname_internal' => $this->getValue($data, [
+                'hostname real',
+                'real hostname'
+            ]),
+            'ip_user' => $this->getValue($data, ['ip']),
+            'ip_monitoring' => $this->getValue($data, ['monitoreo']),
+            'dns_name' => $this->getValue($data, ['dns name']),
+            'other_ips' => $otherIps,
+            'latest_security_patch' => $this->normalizeLatestPatch(
+                $this->getValue($data, ['latest security patch'])
+            ),
+            'comments' => $this->getValue($data, ['comments', 'comentarios']),
+            'ram_memory' => 0,
+            'swap_memory' => 0,
+        ];
 
-        if ($server->trashed()) {
-            $server->restore();
+        $server = $primaryIp
+            ? Server::withTrashed()->updateOrCreate(
+                ['primary_ip_address' => $primaryIp],
+                $payload
+            )
+            : Server::updateOrCreate(
+                ['vm_according_to_the_vmware' => $vm],
+                $payload
+            );
+
+        $server->trashed() && $server->restore();
+
+        return [
+            'status' => $server->wasRecentlyCreated ? 'created' : 'updated',
+            'state'  => $payload['state'],
+        ];
+    }
+
+    private function importForcedOffServerRow(array $data): ?string
+    {
+        $vm = $this->getValue($data, ['vm']);
+
+        if (!$vm) {
+            return null;
         }
+
+        $primaryIp = $this->getValue($data, [
+            'primary ip address',
+            'primary ip address ',
+            'primary ip address.1',
+        ]);
+
+        $payload = [
+            'owner_id' => Auth::id(),
+            'type_application_id' => 1,
+            'vm_according_to_the_vmware' => $vm,
+            'state' => 'poweredOff',
+            'environment' => $this->getValue($data, ['environment', 'entorno'], 'N/A'),
+            'datacenter' => $this->getValue($data, ['datacenter']),
+            'hostname_internal' => $this->getValue(
+                $data,
+                ['hostname internal', 'hostname real', 'real hostname'],
+                $vm
+            ),
+            'os_according_to_the_vmware' => $this->getValue($data, [
+                'os according to the vmware tools',
+                'os according to the vmware',
+                'os according to the wmware',
+                'os according wmware',
+            ], 'N/A'),
+            'os_version_internal' => $this->getValue($data, [
+                'os according to the configuration file',
+                'os_version_internal',
+                'real os',
+                'real os internal',
+            ]),
+            'ram_memory' => 0,
+            'swap_memory' => 0,
+        ];
+
+        $server = $primaryIp
+            ? Server::withTrashed()->updateOrCreate(
+                ['primary_ip_address' => $primaryIp],
+                $payload
+            )
+            : Server::withTrashed()->updateOrCreate(
+                ['vm_according_to_the_vmware' => $vm],
+                $payload
+            );
+
+        $server->trashed() && $server->restore();
+
+        return $server->wasRecentlyCreated ? 'created' : 'updated';
     }
 
     public function importPoweredOff(Request $request)
@@ -194,87 +364,33 @@ class ImportController extends Controller
             'file' => 'required|mimes:xlsx,xls',
         ]);
 
-        $file = $request->file('file');
-        $sheets = Excel::toCollection(null, $file);
-        $sheetNames = IOFactory::load($file->getRealPath())->getSheetNames();
-
-        $allowed = ['bajatultitlan', 'tuloff', 'qrooff'];
-        $count = 0;
+        [$sheets, $sheetNames] = $this->readWorkbook($request->file('file'));
+        $stats = $this->createStats(['servers_off']);
 
         foreach ($sheets as $i => $rows) {
-
-            $name = strtolower(trim((string) ($sheetNames[$i] ?? '')));
-            if (!in_array($name, $allowed, true) || $rows->isEmpty()) continue;
+            if ($rows->isEmpty() || !$this->isForcedOffSheet($sheetNames[$i] ?? null)) {
+                continue;
+            }
 
             $headers = $this->normalizeHeaders($rows->first()->toArray());
 
             foreach ($rows->skip(1) as $row) {
-
                 $data = $this->buildData($headers, $row->toArray());
-                if (!$data) continue;
-
-                $vm = $this->getValue($data, ['vm']);
-                if (!$vm) continue;
-
-                $primaryIp = $this->getValue($data, ['primary ip address']);
-
-                $payload = [
-                    'owner_id' => Auth::id(),
-                    'type_application_id' => 1,
-                    'vm_according_to_the_vmware' => $vm,
-                    'state' => 'poweredOff',
-                    'dns_name' => $this->getValue($data, ['dns name']),
-                    'primary_ip_address' => $primaryIp ?: null,
-                    'datacenter' => $this->getValue($data, ['datacenter']),
-                    'environment' => $this->getValue($data, ['environment', 'entorno'], 'N/A'),
-                    'hostname_internal' => $this->getValue(
-                        $data,
-                        ['hostname internal', 'hostname real', 'real hostname'],
-                        $vm
-                    ),
-                    'os_version_internal' => $this->getValue($data, [
-                        'os according to the configuration file',
-                        'os_version_internal',
-                        'real os',
-                        'real os internal',
-                    ]),
-                    'os_according_to_the_vmware' => $this->getValue($data, [
-                        'os according to the vmware tools',
-                        'os according to the vmware',
-                        'os according to the wmware',
-                        'os according wmware',
-                    ]),
-                    'latest_security_patch' => $this->normalizeLatestPatch(
-                        $this->getValue($data, ['latest security patch'])
-                    ),
-                    'comments' => $this->getValue($data, ['comments', 'comentarios']),
-                    'ram_memory' => 0,
-                    'swap_memory' => 0,
-                ];
-
-                $server = $primaryIp
-                    ? Server::withTrashed()->where('primary_ip_address', $primaryIp)->first()
-                    : Server::withTrashed()
-                    ->where('vm_according_to_the_vmware', $vm)
-                    ->orderByDesc('id')
-                    ->first();
-                $server
-                    ? $server->fill($payload)->save()
-                    : $server = Server::create($payload);
-
-                if ($server->trashed()) {
-                    $server->restore();
+                if (!$data) {
+                    continue;
                 }
 
-                $count++;
+                $this->incrementStats(
+                    $stats,
+                    'servers_off',
+                    $this->importForcedOffServerRow($data)
+                );
             }
         }
 
-        return back()->with(
-            'success',
-            $count === 0
-                ? 'No se importaron filas: revisa que existan datos en BajaTultitlan, TulOff y QroOff.'
-                : "Excel importado correctamente ({$count} servidores apagados)."
+        return $this->respondWithImportResult(
+            $stats,
+            'No se importaron filas: revisa que existan datos en BajaTultitlan, TulOff y QroOff.'
         );
     }
 }

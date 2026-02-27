@@ -206,17 +206,26 @@ class ServerController extends Controller
     private function validateOffServer(Request $request, ?Server $server = null): array
     {
         $request->merge([
-            'state' => $this->normalizeState($request->state, 'poweredOff')
+            'state' => $this->normalizeState($request->state ?? 'poweredOff', 'poweredOff')
         ]);
 
         return $request->validate([
+            'owner_id' => 'required|exists:owners,id',
+            'type_application_id' => 'required|exists:type_applications,id',
             'vm_according_to_the_vmware' => 'required|string|max:255',
-            'dns_name' => 'nullable|string|max:255',
-            'datacenter' => 'nullable|string|max:255',
-            'os_version_internal' => 'nullable|string|max:255',
-            'os_according_to_the_vmware' => 'nullable|string|max:255',
-            'state' => 'nullable|in:poweredOn,poweredOff',
+            'state' => 'required|in:poweredOn,poweredOff',
             'primary_ip_address' => 'nullable|string|max:255',
+            'environment' => 'required|string|max:255',
+            'datacenter' => 'required|string|max:255',
+            'os_according_to_the_vmware' => 'required|string|max:255',
+            'os_version_internal' => 'required|string|max:255',
+            'hostname_internal' => 'required|string|max:255',
+            'ram_memory' => 'required|integer|min:0',
+            'swap_memory' => 'required|integer|min:0',
+            'dns_name' => 'nullable|string|max:255',
+            'ip_user' => 'nullable|string|max:255',
+            'ip_monitoring' => 'nullable|string|max:255',
+            'other_ips' => 'nullable|string',
             'latest_security_patch' => 'nullable|date',
             'comments' => 'nullable|string',
         ]);
@@ -224,30 +233,10 @@ class ServerController extends Controller
 
     private function buildOffPayload(array $validated, ?Server $server = null): array
     {
-        $vm = $validated['vm_according_to_the_vmware'];
-        $dns = $validated['dns_name'] ?? ($server?->dns_name);
-        $primaryIp = $validated['primary_ip_address'] ?? ($server?->primary_ip_address);
+        $payload = $validated;
+        $payload['state'] = $this->normalizeState($payload['state'] ?? 'poweredOff', 'poweredOff');
 
-        return [
-            'owner_id' => $server?->owner_id,
-            'type_application_id' => $server?->type_application_id,
-            'vm_according_to_the_vmware' => $vm,
-            'state' => $this->normalizeState($validated['state'] ?? 'poweredOff', 'poweredOff'),
-            'dns_name' => $dns,
-            'primary_ip_address' => $primaryIp,
-            'environment' => $server?->environment ?? 'N/A',
-            'datacenter' => $validated['datacenter'] ?? null,
-            'os_according_to_the_vmware' => $validated['os_according_to_the_vmware'] ?? null,
-            'os_version_internal' => $validated['os_version_internal'] ?? null,
-            'hostname_internal' => $server?->hostname_internal ?? ($dns ?: $vm),
-            'ram_memory' => $server?->ram_memory ?? 0,
-            'swap_memory' => $server?->swap_memory ?? 0,
-            'latest_security_patch' => $validated['latest_security_patch'] ?? null,
-            'comments' => $validated['comments'] ?? null,
-            'ip_user' => $server?->ip_user,
-            'ip_monitoring' => $server?->ip_monitoring,
-            'other_ips' => $server?->other_ips,
-        ];
+        return $payload;
     }
 
     private function normalizeState(?string $state, string $default = 'poweredOn'): string
