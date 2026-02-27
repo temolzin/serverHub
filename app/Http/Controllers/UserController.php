@@ -8,14 +8,26 @@ use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        $users = User::paginate(10);
-        $permissions = Permission::all()->groupBy(function ($permission) {
-            return explode(' ', $permission->name)[1] ?? 'General';
-        });
-        return view('users.index', compact('users', 'permissions'));
-    }
+    public function index(Request $request)
+{
+    $search = $request->search;
+
+    $users = User::with('roles')
+        ->when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        })
+        ->paginate(10)
+        ->withQueryString();
+         $permissions = Permission::all()->groupBy(function ($permission) {
+        return explode(' ', $permission->name)[1] ?? 'General';
+    });
+
+    return view('users.index', compact('users', 'permissions'));
+}
+
 
     public function store(Request $request)
     {

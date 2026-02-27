@@ -28,6 +28,24 @@ document.addEventListener('DOMContentLoaded', function () {
         </button>
       </div>
       <div class="card-body">
+       <form method="GET" action="{{ route('users.index') }}" class="mb-3">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-group">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    class="form-control"
+                    placeholder="Buscar por nombre, email"
+                >
+                <button class="btn btn-primary">
+                    Buscar
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
@@ -72,6 +90,11 @@ document.addEventListener('DOMContentLoaded', function () {
             </tbody>
           </table>
         </div>
+                @if ($users->hasPages())
+          <div class="mt-3 d-flex justify-content-end">
+            {{ $users->links() }}
+          </div>
+        @endif
       </div>
     </div>
   </div>

@@ -20,7 +20,7 @@
                   Nombre
                 </label>
                 <input type="text" name="name" class="form-control" placeholder="Ejemplo: Juan Perez"
-                  value="{{ $user->name }}" required>
+                  value="{{ old('name', $user->name) }}" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">
@@ -28,7 +28,7 @@
                   Correo
                 </label>
                 <input type="email" name="email" class="form-control" placeholder="Ejemplo: correo@empresa.com"
-                  value="{{ $user->email }}" required>
+                  value="{{ old('email', $user->email) }}" required>
               </div>
               <div class="mb-3">
                 <label class="form-label">
