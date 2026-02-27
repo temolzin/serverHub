@@ -233,8 +233,7 @@
         style.textContent = `
         .swal2-container.excel-upload-alert-top {
             z-index: 20000 !important;
-        }
-    `;
+        }`;
         document.head.appendChild(style);
       }
 
