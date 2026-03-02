@@ -19,44 +19,39 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
+
     public function boot(): void
-{
-    View::composer('*', function ($view) {
+    {
+        View::composer('*', function ($view) {
 
-        if (!Auth::check()) {
-            return;
-        }
+            if (!Auth::check()) {
+                return;
+            }
 
-        $menuPath = resource_path('menu/verticalMenu.json');
-        $menuData = json_decode(file_get_contents($menuPath), true);
+            $menuPath = resource_path('menu/verticalMenu.json');
+            $menuData = json_decode(file_get_contents($menuPath), true);
+            $user = Auth::user();
+            $filteredMenu = collect($menuData['menu'])
+                ->filter(function ($item) use ($user) {
 
-        $user = Auth::user();
+                    if ($user->hasRole('Admin')) {
+                        return true;
+                    }
 
-        $filteredMenu = collect($menuData['menu'])
-            ->filter(function ($item) use ($user) {
+                    if (!empty($item['role'])) {
+                        return $user->hasRole($item['role']);
+                    }
 
-                // Admin ve todo
-                if ($user->hasRole('Admin')) {
-                    return true;
-                }
+                    if (!empty($item['permission'])) {
+                        return $user->can($item['permission']);
+                    }
 
-                // Si tiene role específico
-                if (!empty($item['role'])) {
-                    return $user->hasRole($item['role']);
-                }
+                    return $item['slug'] === 'dashboard';
+                })
+                ->values()
+                ->toArray();
 
-                // Si tiene permiso específico
-                if (!empty($item['permission'])) {
-                    return $user->can($item['permission']);
-                }
-
-                // Siempre permitir dashboard
-                return $item['slug'] === 'dashboard';
-            })
-            ->values()
-            ->toArray();
-
-        $view->with('menu', $filteredMenu);
-    });
-}
+            $view->with('menu', $filteredMenu);
+        });
+    }
 }
