@@ -67,15 +67,10 @@ Route::middleware('auth')->group(function () {
         ->resource('storages', StorageController::class);
 
     Route::middleware('role:Admin')->group(function () {
-        Route::get('/users', [UserController::class, 'index'])
-            ->name('users.index');
         Route::get(
             '/users/{user}/permissions',
             [UserController::class, 'editPermissions']
         )->name('users.permissions.edit');
-        Route::post(
-            '/users/{user}/permissions',
-            [UserController::class, 'updatePermissions']
-        )->name('users.permissions.update');
+        Route::resource('users', UserController::class);
     });
 });

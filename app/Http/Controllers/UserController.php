@@ -2,30 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-      $users = User::all();
-      return view('users.index', compact('users'));
-    }
-    public function editPermissions(User $user)
-    {
-        $permissions = Permission::where('name', '!=', 'viewUser')->get();
+        $search = $request->search;
+        $users = User::with('roles')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+            });
+        })
+        ->paginate(10)
+        ->withQueryString();
+        $permissions = Permission::all()->groupBy(function ($permission) {
+            return explode(' ', $permission->name)[1] ?? 'General';
+        });
+    return view('users.index', compact('users', 'permissions'));
+}
 
-        return view('users.permissions', compact('user', 'permissions'));
-    }
-    public function updatePermissions(Request $request, User $user)
+
+    public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        $user = User::create($validated);
         $user->syncPermissions($request->permissions ?? []);
+        return redirect()->route('users.index')
+            ->with('success', 'Usuario creado correctamente');
+    }
 
-        return redirect()
-        ->route('users.index')
-        ->with('success', 'Permisos actualizados correctamente.');
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6',
+        ]);
+
+        $data = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ];
+
+        if (!empty($validated['password'])) {
+            $data['password'] = $validated['password'];
+        }
+
+        $user->update($data);
+        $user->syncPermissions($request->permissions ?? []);
+        return redirect()->route('users.index')
+            ->with('success', 'Usuario actualizado correctamente');
+    }
+
+    public function destroy(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'No puedes eliminar tu propio usuario.');
+        }
+        $user->delete();
+        return back()->with('success', 'Usuario eliminado correctamente');
     }
 }
