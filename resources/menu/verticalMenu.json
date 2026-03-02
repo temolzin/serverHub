@@ -10,61 +10,71 @@
             "url": "/users",
             "name": "Usuarios",
             "slug": "users",
-            "icon": "menu-icon tf-icons bx bx-user"
+            "icon": "menu-icon tf-icons bx bx-user",
+            "role": "Admin"
         },
         {
             "name": "Propietarios",
             "icon": "menu-icon icon-base bx bx-id-card",
             "slug": "owners",
-            "url": "owners"
+            "url": "owners",
+            "permission": "viewOwner"
         },
         {
             "name": "Máquinas GCP",
             "icon": "menu-icon icon-base bx bx-cloud",
             "slug": "gcp-machines",
-            "url": "gcp-machines"
+            "url": "gcp-machines",
+            "permission": "viewGcpMachine"
         },
         {
             "name": "Tipo de aplicación",
             "icon": "menu-icon icon-base bx bx-layer",
             "slug": "type-applications",
-            "url": "type-applications"
+            "url": "type-applications",
+            "permission": "viewTypeApplication"
         },
         {
             "name": "Servidores",
             "icon": "menu-icon icon-base bx bx-server",
             "slug": "servers.",
-            "url": "servers"
+            "url": "servers",
+            "permission": "viewServer"
         },
         {
             "name": "Servidores Apagados",
             "icon": "menu-icon icon-base bx bx-power-off",
             "slug": "servers-off.",
-            "url": "servers-off"
+            "url": "servers-off",
+            "permission": "viewServer"
         },
         {
             "name": "Aplicaciones",
             "icon": "menu-icon icon-base bx bx-grid-alt",
             "slug": "applications",
-            "url": "applications"
+            "url": "applications",
+            "permission": "viewApplication"
         },
         {
             "name": "Bases de Datos",
             "icon": "menu-icon icon-base bx bx-data",
             "slug": "databases",
-            "url": "databases"
+            "url": "databases",
+            "permission": "viewDatabase"
         },
         {
             "name": "Instancias",
             "icon": "menu-icon icon-base bx bx-layer",
             "slug": "instances",
-            "url": "instances"
+            "url": "instances",
+            "permission": "viewInstance"
         },
         {
             "name": "Almacenamientos",
             "icon": "menu-icon icon-base bx bx-hdd",
             "slug": "storages",
-            "url": "storages"
+            "url": "storages",
+            "permission": "viewStorage"
         }
     ]
 }
