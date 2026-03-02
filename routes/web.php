@@ -71,6 +71,6 @@ Route::middleware('auth')->group(function () {
             '/users/{user}/permissions',
             [UserController::class, 'editPermissions']
         )->name('users.permissions.edit');
-        Route::resource('users', UserController::class)->except(['show']);
+        Route::resource('users', UserController::class);
     });
 });

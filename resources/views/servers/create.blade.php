@@ -8,10 +8,7 @@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form id="createServerForm"
-            action="{{ route('servers.store') }}"
-            method="POST"
-            onsubmit="this.querySelector('button[type=submit]').disabled=true;">
+      <form id="createServerForm" action="{{ route('servers.store') }}" method="POST" onsubmit="this.querySelector('button[type=submit]').disabled=true;">
         @csrf
         <div class="modal-body">
           <div class="row">
@@ -120,17 +117,12 @@
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label">Comentarios</label>
-              <textarea name="comments"
-                        rows="3"
-                        class="form-control"
-                        placeholder="Información adicional"></textarea>
+              <textarea name="comments" rows="3" class="form-control" placeholder="Información adicional"></textarea>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button"
-                  class="btn btn-label-secondary"
-                  data-bs-dismiss="modal">
+          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">
