@@ -15,7 +15,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">
                 <i class="bx bx-user me-1 text-primary"></i>
-                Propietario
+                Propietario (obligatorio)
               </label>
               <select name="owner_id" class="form-select server-searchable-select" required>
                 <option value="">Seleccionar propietario</option>
@@ -29,7 +29,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">
                 <i class="bx bx-layer me-1 text-primary"></i>
-                Aplicación
+                Aplicación (obligatorio)
               </label>
               <select name="type_application_id" class="form-select server-searchable-select" required>
                 <option value="">Seleccionar aplicación</option>
@@ -47,7 +47,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">
                 <i class="bx bx-check-circle me-1 text-primary"></i>
-                Estado
+                Estado (obligatorio)
               </label>
               <select name="state" class="form-select" required>
                 <option value="poweredOn">poweredOn</option>
@@ -80,11 +80,11 @@
               <input type="text" name="ip_monitoring" class="form-control">
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Entorno</label>
+              <label class="form-label">Entorno (obligatorio)</label>
               <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Datacenter</label>
+              <label class="form-label">Datacenter (obligatorio)</label>
               <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" required>
             </div>
             <div class="col-md-6 mb-4">
@@ -100,11 +100,11 @@
               <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">RAM (MB)</label>
+              <label class="form-label">RAM (MB) (obligatorio)</label>
               <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 16384" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Swap (MB)</label>
+              <label class="form-label">Swap (MB) (obligatorio)</label>
               <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" required>
             </div>
             <div class="col-md-6 mb-4">

@@ -8,12 +8,12 @@
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form action="{{ route('gcp-machines.store') }}" method="POST">
+      <form id="createGcpForm" action="{{ route('gcp-machines.store') }}" method="POST">
         @csrf
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6 mb-4">
-              <label class="form-label">Propietario</label>
+              <label class="form-label">Propietario (obligatorio)</label>
               <select name="owner_id" class="form-select" required>
                 <option value="" disabled selected>Selecciona un propietario</option>
                 @foreach ($owners as $owner)
@@ -24,27 +24,27 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre del proyecto</label>
+              <label class="form-label">Nombre del proyecto (obligatorio)</label>
               <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-prod" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Entorno</label>
+              <label class="form-label">Entorno (obligatorio)</label>
               <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre máquina</label>
+              <label class="form-label">Nombre máquina (obligatorio)</label>
               <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-app-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre interno</label>
+              <label class="form-label">Nombre interno (obligatorio)</label>
               <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Sistema operativo</label>
+              <label class="form-label">Sistema operativo (obligatorio)</label>
               <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">IP interna</label>
+              <label class="form-label">IP interna (obligatorio)</label>
               <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 10.0.0.15" required>
               @error('internal_ip')
                 <div class="text-danger small">
@@ -73,11 +73,11 @@
               <input type="date" name="latest_security_patch" class="form-control">
             </div>
             <div class="col-md-3 mb-4">
-              <label class="form-label">RAM (MB)</label>
+              <label class="form-label">RAM (MB) (obligatorio)</label>
               <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8192" required>
             </div>
             <div class="col-md-3 mb-4">
-              <label class="form-label">Swap (MB)</label>
+              <label class="form-label">Swap (MB) (obligatorio)</label>
               <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 2048" required>
             </div>
             <div class="col-md-12 mb-4">
@@ -87,7 +87,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          <button type="button" id="cancelCreateGcp" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">
