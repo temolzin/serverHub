@@ -102,6 +102,35 @@ class ImportController extends Controller
         return collect($stats)->sum(fn($bucket) => array_sum($bucket));
     }
 
+    private function getBucketLabel(string $bucket): string
+    {
+        return match ($bucket) {
+            'servers_on' => 'Servidores encendidos',
+            'servers_off' => 'Servidores apagados',
+            'gcp_machines' => 'Maquinas GCP',
+            default => ucwords(str_replace('_', ' ', $bucket)),
+        };
+    }
+
+    private function buildImportSummary(array $stats): array
+    {
+        return collect($stats)
+            ->map(function (array $bucketStats, string $bucket) {
+                $created = (int) ($bucketStats['created'] ?? 0);
+                $updated = (int) ($bucketStats['updated'] ?? 0);
+
+                return [
+                    'bucket' => $bucket,
+                    'label' => $this->getBucketLabel($bucket),
+                    'total' => $created + $updated,
+                    'created' => $created,
+                    'updated' => $updated,
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
     private function respondWithImportResult(
         array $stats,
         string $emptyMessage,
@@ -112,7 +141,9 @@ class ImportController extends Controller
             return back()->with('success', $emptyMessage);
         }
 
-        return back()->with('success', $successMessage);
+        return back()
+            ->with('success', $successMessage)
+            ->with('import_summary', $this->buildImportSummary($stats));
     }
 
     private function isGcpHeaders(array $headers): bool

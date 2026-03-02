@@ -4,14 +4,36 @@
 
 @if (session('success'))
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
+      const successMessage = @json(session('success'));
+      const importSummary = @json(session('import_summary', []));
+      const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      } [char]));
+
+      const rows = Array.isArray(importSummary) && importSummary.length ?
+        importSummary.map(item => `
+            <li class="d-flex justify-content-between border-bottom py-1">
+                <span>${escapeHtml(item.label ?? 'Tabla')}</span>
+                <strong>${Number(item.total) || 0}</strong>
+            </li>`).join('') : '';
       Swal.fire({
         icon: 'success',
         title: 'Listo',
-        text: @json(session('success')),
         confirmButtonText: 'Perfecto',
-        timer: 5000,
-        timerProgressBar: true
+        ...(rows ? {
+          html: `<div class="text-start mb-3">
+                <p class="mb-2 fw-semibold">Total importado por tabla:</p>
+                <ul class="list-unstyled mb-0">${rows}</ul>
+            </div>
+            <p class="mb-0">${escapeHtml(successMessage)}</p>`
+        } : {
+          text: successMessage
+        })
       });
     });
   </script>
@@ -135,6 +157,7 @@
   <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      let excelUploadProgressInterval = null;
 
       const input = document.getElementById('search-server');
       const table = document.getElementById('servers-search');
@@ -233,6 +256,24 @@
         style.textContent = `
         .swal2-container.excel-upload-alert-top {
             z-index: 20000 !important;
+        }
+        .swal2-container.excel-upload-alert-top .swal2-actions {
+            width: 100%;
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+        .excel-upload-progress {
+            width: min(320px, 85%);
+            margin: 0.75rem auto 0;
+        }
+        .excel-upload-progress .progress {
+            height: 8px;
+        }
+        .excel-upload-progress .progress-bar {
+            width: 0%;
+            transition: width 260ms ease;
         }`;
         document.head.appendChild(style);
       }
@@ -242,17 +283,77 @@
 
         ensureExcelAlertOnTop();
 
+        const createProgressBar = () => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'excel-upload-progress';
+          wrapper.innerHTML = `
+            <div class="progress">
+                <div
+                    class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0">
+                </div>
+            </div>`;
+          return wrapper;
+        };
+
+        const calculateIncrement = progress =>
+          progress < 55 ? Math.random() * 7 + 3 :
+          progress < 80 ? Math.random() * 4 + 1.5 :
+          progress < 95 ? Math.random() * 1.6 + 0.4 :
+          0;
+
         Swal.fire({
           title: 'Subiendo Excel',
-          text: 'Procesando archivo, por favor espera...',
+          html: '<p class="mb-0">Procesando archivo, por favor espera...</p>',
           allowOutsideClick: false,
           allowEscapeKey: false,
           showConfirmButton: false,
           customClass: {
             container: 'excel-upload-alert-top'
           },
+
           didOpen: () => {
             Swal.showLoading();
+
+            const loader = Swal.getLoader();
+            const actions = Swal.getActions();
+            if (!loader || !actions) return;
+
+            actions.querySelector('.excel-upload-progress')?.remove();
+
+            const progressWrapper = createProgressBar();
+            actions.appendChild(progressWrapper);
+
+            const progressBar = progressWrapper.querySelector('.progress-bar');
+            if (!progressBar) return;
+
+            let currentProgress = 6;
+
+            const updateProgress = value => {
+              progressBar.style.width = `${value}%`;
+              progressBar.setAttribute('aria-valuenow', String(Math.round(value)));
+            };
+
+            updateProgress(currentProgress);
+
+            clearInterval(excelUploadProgressInterval);
+
+            excelUploadProgressInterval = setInterval(() => {
+              currentProgress = Math.min(
+                95,
+                currentProgress + calculateIncrement(currentProgress)
+              );
+
+              updateProgress(Number(currentProgress.toFixed(1)));
+            }, 320);
+          },
+
+          willClose: () => {
+            clearInterval(excelUploadProgressInterval);
+            excelUploadProgressInterval = null;
           }
         });
       }

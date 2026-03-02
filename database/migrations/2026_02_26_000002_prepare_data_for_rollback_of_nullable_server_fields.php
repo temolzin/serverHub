@@ -33,6 +33,22 @@ return new class extends Migration
             ->whereNull('state')
             ->update(['state' => 1]);
 
+        DB::table('servers')
+            ->whereNull('datacenter')
+            ->update(['datacenter' => 'UNKNOWN']);
+
+        DB::table('servers')
+            ->whereNull('hostname_internal')
+            ->update(['hostname_internal' => 'N/A']);
+
+        DB::table('servers')
+            ->whereNull('os_version_internal')
+            ->update(['os_version_internal' => 'N/A']);
+
+        DB::table('servers')
+            ->whereNull('os_according_to_the_vmware')
+            ->update(['os_according_to_the_vmware' => 'N/A']);
+
         Schema::table('servers', function (Blueprint $table) {
             $table->unsignedBigInteger('owner_id')->nullable(false)->change();
             $table->unsignedBigInteger('type_application_id')->nullable(false)->change();
@@ -47,7 +63,7 @@ return new class extends Migration
             $table->unsignedBigInteger('owner_id')->nullable(false)->change();
         });
         Schema::table('servers', function (Blueprint $table) {
-            $table->string('primary_ip_address', 255)->nullable(false)->change();
+            $table->string('primary_ip_address', 45)->nullable(false)->change();
         });
     }
 };
