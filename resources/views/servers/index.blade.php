@@ -60,6 +60,9 @@
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createServerModal">
               <i class="bx bx-plus me-1"></i> Agregar servidor
             </button>
+            <a href="{{ route('export', 'servers') }}" class="btn btn-primary">
+                Exportar Excel
+            </a>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
               Subir Excel
             </button>

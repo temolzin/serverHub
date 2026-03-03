@@ -21,11 +21,16 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Tipo de aplicaciones</h5>
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createTypeApplicationModal">
+        <div class="card-header d-flex align-items-center">
+        <h5 class="mb-0">Tipo de aplicaciones</h5>
+        <div class="ms-auto d-flex gap-2">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createTypeApplicationModal">
             <i class="bx bx-plus me-1"></i> Agregar tipo de aplicación
-          </button>
+            </button>
+            <a href="{{ route('export', 'type-applications') }}" class="btn btn-primary">
+            Exportar Excel
+            </a>
+        </div>
         </div>
         <div class="card-body">
           <div class="mb-4">
