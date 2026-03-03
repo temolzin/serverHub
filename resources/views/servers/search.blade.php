@@ -1,14 +1,17 @@
 @forelse ($servers as $server)
+  @php
+    $applicationName = optional($server->typeApplication)->name_application;
+  @endphp
   <tr>
     <td>{{ $server->id }}</td>
-    <td>{{ optional($server->typeApplication)->name_application }}</td>
-    <td>{{ $server->hostname_internal }}</td>
+    <td>{{ filled($applicationName) ? $applicationName : 'N/A' }}</td>
+    <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
     <td>
       <span class="badge bg-label-info">
-        {{ $server->environment }}
+        {{ filled($server->environment) ? $server->environment : 'N/A' }}
       </span>
     </td>
-    <td>{{ $server->primary_ip_address }}</td>
+    <td>{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}</td>
     <td class="text-end">
       <div class="dropdown">
         <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

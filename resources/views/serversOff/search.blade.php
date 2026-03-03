@@ -2,9 +2,9 @@
   @php($isOff = $server->isPoweredOff())
   <tr>
     <td>{{ $server->id }}</td>
-    <td>{{ $server->vm_according_to_the_vmware ?? 'N/A' }}</td>
-    <td>{{ $server->dns_name ?? 'N/A' }}</td>
-    <td>{{ $server->os_according_to_the_vmware ?? 'N/A' }}</td>
+    <td>{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}</td>
+    <td>{{ filled($server->dns_name) ? $server->dns_name : 'N/A' }}</td>
+    <td>{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}</td>
     <td>
       <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}">
         {{ $isOff ? 'poweredOff' : 'poweredOn' }}

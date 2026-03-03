@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Maquinas GCP')
+@section('title', 'Máquinas GCP')
 
 @if (session('success'))
   <script>
@@ -35,7 +35,7 @@
         <div class="card-body">
           <div class="mb-4">
             <input type="text" id="search-gcp" class="form-control form-control-sm w-50"
-              placeholder="Buscar por proyecto, maquina, UUID o IP">
+              placeholder="Buscar por proyecto, máquina, UUID o IP">
           </div>
           <div class="table-responsive text-nowrap" style="overflow-y: hidden;">
             <table class="table align-middle">

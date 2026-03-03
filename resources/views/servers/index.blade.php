@@ -78,7 +78,7 @@
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Aplicacion</th>
+                  <th>Aplicación</th>
                   <th>Hostname</th>
                   <th>Entorno</th>
                   <th>IP primaria</th>

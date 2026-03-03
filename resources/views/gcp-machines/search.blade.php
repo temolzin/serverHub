@@ -1,14 +1,14 @@
 @forelse ($gcpMachines as $machine)
   <tr>
     <td>{{ $machine->id }}</td>
-    <td>{{ $machine->project_name }}</td>
-    <td>{{ $machine->machine_name }}</td>
+    <td>{{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}</td>
+    <td>{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}</td>
     <td>
       <span class="badge bg-label-primary">
-        {{ $machine->environment }}
+        {{ filled($machine->environment) ? $machine->environment : 'N/A' }}
       </span>
     </td>
-    <td>{{ $machine->internal_ip }}</td>
+    <td>{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}</td>
     <td class="text-end">
       <div class="dropdown">
         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

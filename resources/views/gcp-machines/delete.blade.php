@@ -15,10 +15,10 @@
         <div class="modal-body text-center">
           <p class="mb-2">
             ¿Estás seguro de eliminar la máquina
-            <strong>{{ $machine->machine_name }}</strong>?
+            <strong>{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}</strong>?
           </p>
           <p class="text-muted small">
-            Proyecto: {{ $machine->project_name }}
+            Proyecto: {{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}
           </p>
           <p class="text-muted">
             Esta acción no se puede deshacer.
