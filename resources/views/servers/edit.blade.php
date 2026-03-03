@@ -31,7 +31,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">
-                <i class="bx bx-layer me-1 text-primary"></i> Aplicación
+                <i class="bx bx-layer me-1 text-primary"></i> Aplicacion
               </label>
               <select name="type_application_id" class="form-select text-start" required>
                 @foreach ($typeApplications as $type)
@@ -44,7 +44,10 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">VM (VMware)</label>
-              <input type="text" name="vm_according_to_the_vmware" class="form-control text-start" placeholder="Ej: vm-app-prod-01" value="{{ $server->vm_according_to_the_vmware }}"required>
+              <input type="text" name="vm_according_to_the_vmware" class="form-control text-start"
+                placeholder="Ej: vm-app-prod-01"
+                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}"
+                required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">
@@ -57,61 +60,78 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">DNS</label>
-              <input type="text" name="dns_name" class="form-control text-start" placeholder="Ej: app.empresa.com" value="{{ $server->dns_name }}">
+              <input type="text" name="dns_name" class="form-control text-start" placeholder="Ej: app.empresa.com"
+                value="{{ filled($server->dns_name) ? $server->dns_name : 'N/A' }}">
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">
                 <i class="bx bx-network-chart me-1 text-primary"></i> IP primaria
               </label>
-              <input type="text" name="primary_ip_address" class="form-control text-start" placeholder="Ej: 192.168.1.15" value="{{ $server->primary_ip_address }}" required>
+              <input type="text" name="primary_ip_address" class="form-control text-start"
+                placeholder="Ej: 192.168.1.15"
+                value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">IP usuario</label>
-              <input type="text" name="ip_user" class="form-control text-start" placeholder="Ej: 192.168.1.50" value="{{ $server->ip_user }}">
+              <input type="text" name="ip_user" class="form-control text-start" placeholder="Ej: 192.168.1.50"
+                value="{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}">
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">IP monitoreo</label>
-              <input type="text" name="ip_monitoring" class="form-control text-start" placeholder="Ej: 192.168.1.60" value="{{ $server->ip_monitoring }}">
+              <input type="text" name="ip_monitoring" class="form-control text-start" placeholder="Ej: 192.168.1.60"
+                value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}">
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Entorno</label>
-              <input type="text" name="environment" class="form-control text-start" placeholder="Ej: Producción" value="{{ $server->environment }}" required>
+              <input type="text" name="environment" class="form-control text-start" placeholder="Ej: Produccion"
+                value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Datacenter</label>
-              <input type="text" name="datacenter" class="form-control text-start" placeholder="Ej: DC-MX-01" value="{{ $server->datacenter }}" required>
+              <input type="text" name="datacenter" class="form-control text-start" placeholder="Ej: DC-MX-01"
+                value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Sistema operativo</label>
-              <input type="text" name="os_according_to_the_vmware" class="form-control text-start" placeholder="Ej: Windows Server 2019" value="{{ $server->os_according_to_the_vmware }}"required>
+              <input type="text" name="os_according_to_the_vmware" class="form-control text-start"
+                placeholder="Ej: Windows Server 2019"
+                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}"
+                required>
             </div>
             <div class="col-md-6">
-              <label class="form-label text-start w-100">Versión interna</label>
-              <input type="text" name="os_version_internal" class="form-control text-start" placeholder="Ej: 10.0.17763" value="{{ $server->os_version_internal }}"required>
+              <label class="form-label text-start w-100">Version interna</label>
+              <input type="text" name="os_version_internal" class="form-control text-start" placeholder="Ej: 10.0.17763"
+                value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Hostname interno</label>
-              <input type="text" name="hostname_internal" class="form-control text-start" placeholder="Ej: srv-app-01" value="{{ $server->hostname_internal }}" required>
+              <input type="text" name="hostname_internal" class="form-control text-start" placeholder="Ej: srv-app-01"
+                value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">RAM (MB)</label>
-              <input type="number" name="ram_memory" class="form-control text-start" placeholder="Ej: 8192" value="{{ $server->ram_memory }}" required>
+              <input type="number" name="ram_memory" class="form-control text-start" placeholder="Ej: 8192"
+                value="{{ $server->ram_memory ?? 0 }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Swap (MB)</label>
-              <input type="number" name="swap_memory" class="form-control text-start" placeholder="Ej: 4096" value="{{ $server->swap_memory }}" required>
+              <input type="number" name="swap_memory" class="form-control text-start" placeholder="Ej: 4096"
+                value="{{ $server->swap_memory ?? 0 }}" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label text-start w-100">Último parche</label>
-              <input type="date" name="latest_security_patch" class="form-control text-start" value="{{ $server->latest_security_patch }}">
+              <label class="form-label text-start w-100">Ultimo parche</label>
+              <input type="date" name="latest_security_patch" class="form-control text-start"
+                value="{{ $server->latest_security_patch }}">
             </div>
             <div class="col-12">
               <label class="form-label text-start w-100">Otras IPs</label>
-              <textarea name="other_ips" rows="2" class="form-control text-start" placeholder="Ej: 192.168.1.20, 192.168.1.21">{{ $server->other_ips }}</textarea>
+              <textarea name="other_ips" rows="2" class="form-control text-start"
+                placeholder="Ej: 192.168.1.20, 192.168.1.21">{{ filled($server->other_ips) ? $server->other_ips : 'N/A' }}</textarea>
             </div>
             <div class="col-12">
               <label class="form-label text-start w-100">Comentarios</label>
-              <textarea name="comments" rows="3" class="form-control text-start" placeholder="Información adicional del servidor">{{ $server->comments }}</textarea>
+              <textarea name="comments" rows="3" class="form-control text-start"
+                placeholder="Informacion adicional del servidor">{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
             </div>
           </div>
         </div>

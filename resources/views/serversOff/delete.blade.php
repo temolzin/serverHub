@@ -14,13 +14,14 @@
         <input type="hidden" name="page" value="{{ request('page') }}">
         <div class="modal-body text-center">
           <p class="mb-0">
-            ¿Eliminar el servidor <strong>{{ $server->vm_according_to_the_vmware }}</strong>?
+            Eliminar el servidor
+            <strong>{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}</strong>?
           </p>
           <p class="mt-2">
-            DNS: <strong>{{ $server->dns_name ?? 'N/A' }}</strong>
+            DNS: <strong>{{ filled($server->dns_name) ? $server->dns_name : 'N/A' }}</strong>
           </p>
           <p class="text-muted mt-2">
-            Esta acción no se puede deshacer.
+            Esta accion no se puede deshacer.
           </p>
         </div>
         <div class="modal-footer">
@@ -28,7 +29,7 @@
             Cancelar
           </button>
           <button type="submit" class="btn btn-danger">
-            Sí, eliminar
+            Si, eliminar
           </button>
         </div>
       </form>

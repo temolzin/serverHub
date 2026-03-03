@@ -4,7 +4,7 @@
       <div class="modal-header">
         <h5 class="modal-title text-danger">
           <i class="bx bx-trash me-2"></i>
-          Eliminar máquina GCP
+          Eliminar maquina GCP
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -14,14 +14,14 @@
         <input type="hidden" name="page" value="{{ request('page') }}">
         <div class="modal-body text-center">
           <p class="mb-2">
-            ¿Estás seguro de eliminar la máquina
-            <strong>{{ $machine->machine_name }}</strong>?
+            Estas seguro de eliminar la maquina
+            <strong>{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}</strong>?
           </p>
           <p class="text-muted small">
-            Proyecto: {{ $machine->project_name }}
+            Proyecto: {{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}
           </p>
           <p class="text-muted">
-            Esta acción no se puede deshacer.
+            Esta accion no se puede deshacer.
           </p>
         </div>
         <div class="modal-footer">
@@ -29,7 +29,7 @@
             Cancelar
           </button>
           <button type="submit" class="btn btn-danger">
-            Sí, eliminar
+            Si, eliminar
           </button>
         </div>
       </form>

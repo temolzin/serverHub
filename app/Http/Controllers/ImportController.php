@@ -243,10 +243,10 @@ class ImportController extends Controller
                 'machine_name' => $data['nombre de maquina'] ?? 'N/A',
                 'machine_internal_name' => $data['nombre de maquina interna'] ?? 'N/A',
                 'operations_system' => $data['sistema operativo'] ?? 'N/A',
-                'kernel_version' => $data['version de kernel'] ?? null,
-                'alias_ip'  => $aliases[0] ?? null,
-                'alias2_ip' => $aliases[1] ?? null,
-                'alias3_ip' => $aliases[2] ?? null,
+                'kernel_version' => $data['version de kernel'] ?? 'N/A',
+                'alias_ip'  => $aliases[0] ?? 'N/A',
+                'alias2_ip' => $aliases[1] ?? 'N/A',
+                'alias3_ip' => $aliases[2] ?? 'N/A',
                 'ram_memory' => (int) collect($data)->first(fn($v, $k) => str_contains($k, 'memoria ram') && $v),
                 'swap_memory' => (int) collect($data)->first(fn($v, $k) => str_contains($k, 'memoria swap') && $v),
             ]
@@ -281,11 +281,11 @@ class ImportController extends Controller
         $payload = [
             'owner_id' => Auth::id(),
             'type_application_id' => 1,
-            'vm_according_to_the_vmware' => $vm,
+            'vm_according_to_the_vmware' => $vm ?: 'N/A',
             'state' => $this->normalizeState(
                 $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
             ),
-            'datacenter' => $this->getValue($data, ['datacenter']),
+            'datacenter' => $this->getValue($data, ['datacenter'], 'N/A'),
             'environment' => $this->getValue($data, ['enviroment', 'entorno'], 'N/A'),
             'os_according_to_the_vmware' => $this->getValue($data, [
                 'os according to the wmware',
@@ -297,19 +297,19 @@ class ImportController extends Controller
                 'real os',
                 'real os internal',
                 'os according to the configuration file'
-            ]),
+            ], 'N/A'),
             'hostname_internal' => $this->getValue($data, [
                 'hostname real',
                 'real hostname'
-            ]),
-            'ip_user' => $this->getValue($data, ['ip']),
-            'ip_monitoring' => $this->getValue($data, ['monitoreo']),
-            'dns_name' => $this->getValue($data, ['dns name']),
-            'other_ips' => $otherIps,
+            ], $vm ?: 'N/A'),
+            'ip_user' => $this->getValue($data, ['ip'], 'N/A'),
+            'ip_monitoring' => $this->getValue($data, ['monitoreo'], 'N/A'),
+            'dns_name' => $this->getValue($data, ['dns name'], 'N/A'),
+            'other_ips' => $otherIps !== '' ? $otherIps : 'N/A',
             'latest_security_patch' => $this->normalizeLatestPatch(
                 $this->getValue($data, ['latest security patch'])
             ),
-            'comments' => $this->getValue($data, ['comments', 'comentarios']),
+            'comments' => $this->getValue($data, ['comments', 'comentarios'], 'N/A'),
             'ram_memory' => 0,
             'swap_memory' => 0,
         ];
@@ -352,7 +352,7 @@ class ImportController extends Controller
             'vm_according_to_the_vmware' => $vm,
             'state' => 'poweredOff',
             'environment' => $this->getValue($data, ['environment', 'entorno'], 'N/A'),
-            'datacenter' => $this->getValue($data, ['datacenter']),
+            'datacenter' => $this->getValue($data, ['datacenter'], 'N/A'),
             'hostname_internal' => $this->getValue(
                 $data,
                 ['hostname internal', 'hostname real', 'real hostname'],
@@ -369,7 +369,7 @@ class ImportController extends Controller
                 'os_version_internal',
                 'real os',
                 'real os internal',
-            ]),
+            ], 'N/A'),
             'ram_memory' => 0,
             'swap_memory' => 0,
         ];

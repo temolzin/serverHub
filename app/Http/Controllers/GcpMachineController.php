@@ -83,7 +83,7 @@ class GcpMachineController extends Controller
       'kernel_version' => 'nullable|string|max:255',
     ]);
 
-    GcpMachine::create($validated);
+    GcpMachine::create($this->normalizeMachinePayload($validated));
 
     return redirect()
       ->route('gcp-machines.index')
@@ -110,7 +110,7 @@ class GcpMachineController extends Controller
       'kernel_version' => 'nullable|string|max:255',
     ]);
 
-    $gcp_machine->update($validated);
+    $gcp_machine->update($this->normalizeMachinePayload($validated));
 
     return redirect()
       ->route('gcp-machines.index', ['page' => $request->page])
@@ -123,5 +123,31 @@ class GcpMachineController extends Controller
     return redirect()
       ->route('gcp-machines.index', ['page' => $request->page])
       ->with('success', 'Máquina eliminada con éxito');
+  }
+
+  private function normalizeMachinePayload(array $payload): array
+  {
+    $fieldsWithNaFallback = [
+      'project_name',
+      'environment',
+      'machine_name',
+      'machine_internal_name',
+      'operations_system',
+      'internal_ip',
+      'alias_ip',
+      'alias2_ip',
+      'alias3_ip',
+      'other_ips',
+      'kernel_version',
+    ];
+
+    foreach ($fieldsWithNaFallback as $field) {
+      $value = $payload[$field] ?? null;
+      if ($value === null || trim((string) $value) === '') {
+        $payload[$field] = 'N/A';
+      }
+    }
+
+    return $payload;
   }
 }

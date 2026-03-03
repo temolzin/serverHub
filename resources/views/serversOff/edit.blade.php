@@ -32,7 +32,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-layer me-1 text-primary"></i>
-                Aplicación (obligatorio)
+                Aplicacion (obligatorio)
               </label>
               <select name="type_application_id" class="form-select server-searchable-select"
                 data-placeholder="Buscar aplicacion..." required>
@@ -49,7 +49,9 @@
                 VM (VMware) (obligatorio)
               </label>
               <input type="text" name="vm_according_to_the_vmware" class="form-control"
-                placeholder="Ej: vm-app-prod-01" value="{{ $server->vm_according_to_the_vmware }}" required>
+                placeholder="Ej: vm-app-prod-01"
+                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -67,7 +69,7 @@
                 DNS
               </label>
               <input type="text" name="dns_name" class="form-control" placeholder="Ej: app.empresa.com"
-                value="{{ $server->dns_name }}">
+                value="{{ filled($server->dns_name) ? $server->dns_name : 'N/A' }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -75,7 +77,8 @@
                 IP primaria (opcional)
               </label>
               <input type="text" name="primary_ip_address" class="form-control ip-check"
-                placeholder="Ej: 192.168.1.15" value="{{ $server->primary_ip_address }}"
+                placeholder="Ej: 192.168.1.15"
+                value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}"
                 data-exclude="{{ $server->id }}">
             </div>
             <div class="col-md-6 mb-4">
@@ -83,30 +86,32 @@
                 <i class="bx bx-user me-1 text-primary"></i>
                 IP usuario
               </label>
-              <input type="text" name="ip_user" class="form-control" value="{{ $server->ip_user }}">
+              <input type="text" name="ip_user" class="form-control"
+                value="{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-radar me-1 text-primary"></i>
                 IP monitoreo
               </label>
-              <input type="text" name="ip_monitoring" class="form-control" value="{{ $server->ip_monitoring }}">
+              <input type="text" name="ip_monitoring" class="form-control"
+                value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-code-alt me-1 text-primary"></i>
                 Entorno (obligatorio)
               </label>
-              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción"
-                value="{{ $server->environment }}" required>
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion"
+                value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-building me-1 text-primary"></i>
                 Datacenter (obligatorio)
               </label>
-              <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-México-01"
-                value="{{ $server->datacenter }}" required>
+              <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01"
+                value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -114,15 +119,17 @@
                 Sistema operativo (obligatorio)
               </label>
               <input type="text" name="os_according_to_the_vmware" class="form-control"
-                placeholder="Ej: Windows Server 2019" value="{{ $server->os_according_to_the_vmware }}" required>
+                placeholder="Ej: Windows Server 2019"
+                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-code me-1 text-primary"></i>
-                Versión interna (obligatorio)
+                Version interna (obligatorio)
               </label>
               <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
-                value="{{ $server->os_version_internal }}" required>
+                value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -130,7 +137,7 @@
                 Hostname interno (obligatorio)
               </label>
               <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-app-01"
-                value="{{ $server->hostname_internal }}" required>
+                value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -138,7 +145,7 @@
                 RAM (MB) (obligatorio)
               </label>
               <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8192"
-                value="{{ $server->ram_memory }}" required>
+                value="{{ $server->ram_memory ?? 0 }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -146,12 +153,12 @@
                 Swap (MB) (obligatorio)
               </label>
               <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096"
-                value="{{ $server->swap_memory }}" required>
+                value="{{ $server->swap_memory ?? 0 }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-calendar me-1 text-primary"></i>
-                Último parche
+                Ultimo parche
               </label>
               <input type="date" name="latest_security_patch" class="form-control"
                 value="{{ $server->latest_security_patch }}">
@@ -161,14 +168,16 @@
                 <i class="bx bx-list-ul me-1 text-primary"></i>
                 Otras IPs
               </label>
-              <textarea name="other_ips" rows="2" class="form-control" placeholder="Ej: 192.168.1.20, 192.168.1.21">{{ $server->other_ips }}</textarea>
+              <textarea name="other_ips" rows="2" class="form-control"
+                placeholder="Ej: 192.168.1.20, 192.168.1.21">{{ filled($server->other_ips) ? $server->other_ips : 'N/A' }}</textarea>
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-comment-detail me-1 text-primary"></i>
                 Comentarios
               </label>
-              <textarea name="comments" rows="3" class="form-control" placeholder="Información adicional del servidor">{{ $server->comments }}</textarea>
+              <textarea name="comments" rows="3" class="form-control"
+                placeholder="Informacion adicional del servidor">{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
             </div>
           </div>
         </div>
