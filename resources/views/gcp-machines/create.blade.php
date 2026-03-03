@@ -14,11 +14,22 @@
           <div class="row">
             <div class="col-md-6 mb-4">
               <label class="form-label">Propietario (obligatorio)</label>
-              <select name="owner_id" class="form-select" required>
+              <select name="owner_id" id="ownerSelect" class="form-select" required>
                 <option value="" disabled selected>Selecciona un propietario</option>
                 @foreach ($owners as $owner)
                   <option value="{{ $owner->id }}">
                     {{ $owner->name }} {{ $owner->last_name }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6 mb-4">
+              <label class="form-label">Aplicacion</label>
+              <select name="application_id" id="applicationSelect" class="form-select">
+                <option value="" selected>Selecciona una aplicacion (opcional)</option>
+                @foreach ($applications as $application)
+                  <option value="{{ $application->id }}">
+                    {{ $application->name }}
                   </option>
                 @endforeach
               </select>

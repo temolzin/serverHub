@@ -1,4 +1,5 @@
 @php($ownerFullName = trim((optional($machine->owner)->name ?? '') . ' ' . (optional($machine->owner)->last_name ?? '')))
+@php($applicationName = optional($machine->application)->name)
 <div class="modal fade" id="showGcpMachineModal{{ $machine->id }}" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -30,6 +31,13 @@
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-user"></i></span>
               <input type="text" class="form-control" value="{{ filled($ownerFullName) ? $ownerFullName : 'N/A' }}" disabled>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <label class="form-label fw-semibold">Aplicacion</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bx bx-layer"></i></span>
+              <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">

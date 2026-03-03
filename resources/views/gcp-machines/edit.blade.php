@@ -30,6 +30,25 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">Aplicacion</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bx bx-layer text-primary"></i>
+                </span>
+                <select name="application_id" class="form-select">
+                  <option value="" {{ empty($machine->application_id) ? 'selected' : '' }}>
+                    Sin aplicacion
+                  </option>
+                  @foreach ($applications as $application)
+                    <option value="{{ $application->id }}"
+                      {{ $machine->application_id == $application->id ? 'selected' : '' }}>
+                      {{ $application->name }}
+                    </option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
               <label class="form-label">Nombre del proyecto (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
