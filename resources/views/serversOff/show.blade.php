@@ -30,7 +30,7 @@
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
               <i class="bx bx-layer me-1 text-primary"></i>
-              Aplicacion
+              Aplicación
             </label>
             <input type="text" class="form-control"
               value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
@@ -92,7 +92,7 @@
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
               <i class="bx bx-code me-1 text-primary"></i>
-              Version interna
+              Versión interna
             </label>
             <input type="text" class="form-control"
               value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" disabled>
@@ -137,7 +137,7 @@
           <div class="col-md-12 mb-3">
             <label class="form-label fw-semibold d-block text-start">
               <i class="bx bx-calendar me-1 text-primary"></i>
-              Ultimo parche
+              Último parche
             </label>
             <input type="text" class="form-control"
               value="{{ filled($server->latest_security_patch) ? $server->latest_security_patch : 'N/A' }}" disabled>

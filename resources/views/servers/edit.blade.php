@@ -31,7 +31,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">
-                <i class="bx bx-layer me-1 text-primary"></i> Aplicacion
+                <i class="bx bx-layer me-1 text-primary"></i> Aplicación
               </label>
               <select name="type_application_id" class="form-select text-start" required>
                 @foreach ($typeApplications as $type)
@@ -83,7 +83,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Entorno</label>
-              <input type="text" name="environment" class="form-control text-start" placeholder="Ej: Produccion"
+              <input type="text" name="environment" class="form-control text-start" placeholder="Ej: Producción"
                 value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
@@ -99,7 +99,7 @@
                 required>
             </div>
             <div class="col-md-6">
-              <label class="form-label text-start w-100">Version interna</label>
+              <label class="form-label text-start w-100">Versión interna</label>
               <input type="text" name="os_version_internal" class="form-control text-start" placeholder="Ej: 10.0.17763"
                 value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" required>
             </div>
@@ -119,7 +119,7 @@
                 value="{{ $server->swap_memory ?? 0 }}" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label text-start w-100">Ultimo parche</label>
+              <label class="form-label text-start w-100">Último parche</label>
               <input type="date" name="latest_security_patch" class="form-control text-start"
                 value="{{ $server->latest_security_patch }}">
             </div>
@@ -131,7 +131,7 @@
             <div class="col-12">
               <label class="form-label text-start w-100">Comentarios</label>
               <textarea name="comments" rows="3" class="form-control text-start"
-                placeholder="Informacion adicional del servidor">{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
+                placeholder="Información adicional del servidor">{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
             </div>
           </div>
         </div>

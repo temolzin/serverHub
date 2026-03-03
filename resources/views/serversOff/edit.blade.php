@@ -32,7 +32,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-layer me-1 text-primary"></i>
-                Aplicacion (obligatorio)
+                Aplicación (obligatorio)
               </label>
               <select name="type_application_id" class="form-select server-searchable-select"
                 data-placeholder="Buscar aplicacion..." required>
@@ -102,7 +102,7 @@
                 <i class="bx bx-code-alt me-1 text-primary"></i>
                 Entorno (obligatorio)
               </label>
-              <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion"
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción"
                 value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" required>
             </div>
             <div class="col-md-6 mb-4">
@@ -126,7 +126,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-code me-1 text-primary"></i>
-                Version interna (obligatorio)
+                Versión interna (obligatorio)
               </label>
               <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
                 value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" required>
@@ -158,7 +158,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-calendar me-1 text-primary"></i>
-                Ultimo parche
+                Último parche
               </label>
               <input type="date" name="latest_security_patch" class="form-control"
                 value="{{ $server->latest_security_patch }}">
@@ -177,7 +177,7 @@
                 Comentarios
               </label>
               <textarea name="comments" rows="3" class="form-control"
-                placeholder="Informacion adicional del servidor">{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
+                placeholder="Información adicional del servidor">{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
             </div>
           </div>
         </div>

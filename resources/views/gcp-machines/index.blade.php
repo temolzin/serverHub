@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Maquinas GCP')
+@section('title', 'Máquinas GCP')
 
 @if (session('success'))
   <script>
@@ -22,7 +22,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Maquinas GCP</h5>
+          <h5 class="mb-0">Máquinas GCP</h5>
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal">
             <i class="bx bx-plus me-1"></i> Agregar m&aacute;quina
           </button>
@@ -30,7 +30,7 @@
         <div class="card-body">
           <div class="mb-4">
             <input type="text" id="search-gcp" class="form-control form-control-sm w-50"
-              placeholder="Buscar por proyecto, maquina, UUID o IP">
+              placeholder="Buscar por proyecto, máquina, UUID o IP">
           </div>
           <div class="table-responsive text-nowrap" style="overflow-y: hidden;">
             <table class="table align-middle">

@@ -14,7 +14,7 @@
         <input type="hidden" name="page" value="{{ request('page') }}">
         <div class="modal-body text-center">
           <p class="mb-0">
-            Estas seguro de eliminar el servidor con IP
+            ¿Estás seguro de eliminar el servidor con IP
             <strong>{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}</strong>?
           </p>
           <p class="mt-2">
@@ -22,7 +22,7 @@
             <strong>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</strong>
           </p>
           <p class="text-muted mt-2">
-            Esta accion no se puede deshacer.
+            Esta acción no se puede deshacer.
           </p>
         </div>
         <div class="modal-footer">
@@ -30,7 +30,7 @@
             Cancelar
           </button>
           <button type="submit" class="btn btn-danger">
-            Si, eliminar
+            Sí, eliminar
           </button>
         </div>
       </form>
