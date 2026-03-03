@@ -20,13 +20,17 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="row">
   <div class="col-12">
     <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex align-items-center">
         <h5 class="mb-0">Usuarios</h5>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">
-          <i class="bx bx-plus me-1"></i>
-          Agregar Usuario
-        </button>
-      </div>
+            <div class="ms-auto d-flex gap-2">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                <i class="bx bx-plus me-1"></i> Agregar Usuario
+                </button>
+                <a href="{{ route('export', 'users') }}" class="btn btn-primary">
+                    Exportar Excel
+                </a>
+            </div>
+        </div>
       <div class="card-body">
        <form method="GET" action="{{ route('users.index') }}" class="mb-3">
           <div class="row">

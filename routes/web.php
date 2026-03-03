@@ -16,6 +16,7 @@ use App\Http\Controllers\ImportController;
 use App\Http\Controllers\DatabaseController;
 use App\Http\Controllers\InstanceController;
 use App\Http\Controllers\StorageController;
+use App\Http\Controllers\ExportController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -72,5 +73,7 @@ Route::middleware('auth')->group(function () {
             [UserController::class, 'editPermissions']
         )->name('users.permissions.edit');
         Route::resource('users', UserController::class);
+        Route::get('/export/{module}', [ExportController::class, 'export'])
+            ->name('export');
     });
 });
