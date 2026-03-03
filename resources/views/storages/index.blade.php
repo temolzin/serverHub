@@ -21,14 +21,14 @@
       <div class="card">
         <div class="card-header d-flex align-items-center">
         <h5 class="mb-0">Almacenamiento</h5>
-        <div class="ms-auto d-flex gap-2">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createStorageModal">
-            <i class="bx bx-plus me-1"></i> Agregar almacenamiento
-            </button>
-            <a href="{{ route('export', 'storages') }}" class="btn btn-primary">
-            Exportar Excel
-            </a>
-        </div>
+            <div class="ms-auto d-flex gap-2">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createStorageModal">
+                <i class="bx bx-plus me-1"></i> Agregar almacenamiento
+                </button>
+                <a href="{{ route('export', 'storages') }}" class="btn btn-primary">
+                    Exportar Excel
+                </a>
+            </div>
         </div>
         <div class="card-body">
           <div class="mb-4">

@@ -4,21 +4,30 @@ namespace App\Http\Controllers;
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GenericExport;
+use App\Models\Owner;
+use App\Models\Server;
+use App\Models\Database;
+use App\Models\Instance;
+use App\Models\Storage;
+use App\Models\TypeApplication;
+use App\Models\GcpMachine;
+use App\Models\Application;
+use App\Models\User;
 
 class ExportController extends Controller
 {
     public function export($module)
     {
         $map = [
-            'owners' => \App\Models\Owner::class,
-            'servers' => \App\Models\Server::class,
-            'databases' => \App\Models\Database::class,
-            'instances' => \App\Models\Instance::class,
-            'storages' => \App\Models\Storage::class,
-            'type-applications' => \App\Models\TypeApplication::class,
-            'gcp-machines' => \App\Models\GcpMachine::class,
-            'applications' => \App\Models\Application::class,
-            'users' => \App\Models\User::class,
+            'owners' => Owner::class,
+            'servers' => Server::class,
+            'databases' => Database::class,
+            'instances' => Instance::class,
+            'storages' => Storage::class,
+            'type-applications' => TypeApplication::class,
+            'gcp-machines' => GcpMachine::class,
+            'applications' => Application::class,
+            'users' => User::class,
         ];
 
         if (!array_key_exists($module, $map)) {

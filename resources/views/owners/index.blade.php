@@ -28,7 +28,7 @@
                 <i class="bx bx-plus me-1"></i> Agregar propietario
                 </button>
                 <a href="{{ route('export', 'owners') }}" class="btn btn-primary">
-                Exportar Excel
+                    Exportar Excel
                 </a>
             </div>
         </div>
