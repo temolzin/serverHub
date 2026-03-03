@@ -35,4 +35,9 @@ class Application extends Model
   {
     return $this->belongsTo(Server::class);
   }
+
+  public function gcpMachines()
+  {
+    return $this->hasMany(GcpMachine::class);
+  }
 }

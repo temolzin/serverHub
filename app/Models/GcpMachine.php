@@ -14,6 +14,7 @@ class GcpMachine extends Model
 
   protected $fillable = [
     'project_name',
+    'application_id',
     'uuid',
     'environment',
     'machine_name',
@@ -43,5 +44,10 @@ class GcpMachine extends Model
   public function owner()
   {
     return $this->belongsTo(Owner::class);
+  }
+
+  public function application()
+  {
+    return $this->belongsTo(Application::class);
   }
 }

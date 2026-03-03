@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\GcpMachine;
 use App\Models\Owner;
+use App\Models\Application;
 
 class GcpMachineController extends Controller
 {
@@ -26,7 +27,7 @@ class GcpMachineController extends Controller
 
     public function index(Request $request)
     {
-        $gcpMachines = GcpMachine::with('owner');
+        $gcpMachines = GcpMachine::with(['owner', 'application']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -41,7 +42,10 @@ class GcpMachineController extends Controller
                     )
                     ->orWhere('machine_name', 'like', "%{$search}%")
                     ->orWhere('machine_internal_name', 'like', "%{$search}%")
-                    ->orWhere('internal_ip', 'like', "%{$search}%");
+                    ->orWhere('internal_ip', 'like', "%{$search}%")
+                    ->orWhereHas('application', function ($sub) use ($search) {
+                        $sub->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -50,23 +54,26 @@ class GcpMachineController extends Controller
             ->paginate(10)
             ->withQueryString();
         $owners = Owner::orderBy('name')->get();
+        $applications = Application::orderBy('name')->get();
 
         if ($request->ajax()) {
             return response()->json([
                 'table' => view('gcp-machines.search', [
                     'gcpMachines' => $gcpMachines,
-                    'owners' => $owners
+                    'owners' => $owners,
+                    'applications' => $applications
                 ])->render(),
                 'pagination' => view('gcp-machines.pagination', compact('gcpMachines'))->render(),
             ]);
         }
-        return view('gcp-machines.index', compact('gcpMachines', 'owners'));
+        return view('gcp-machines.index', compact('gcpMachines', 'owners', 'applications'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'owner_id' => 'required|exists:owners,id',
+            'application_id' => 'nullable|exists:applications,id',
             'project_name' => 'required|string|max:255',
             'environment' => 'required|string|max:255',
             'machine_name' => 'required|string|max:255',
@@ -94,6 +101,7 @@ class GcpMachineController extends Controller
     {
         $validated = $request->validate([
             'owner_id' => 'required|exists:owners,id',
+            'application_id' => 'nullable|exists:applications,id',
             'project_name' => 'required|string|max:255',
             'environment' => 'required|string|max:255',
             'machine_name' => 'required|string|max:255',

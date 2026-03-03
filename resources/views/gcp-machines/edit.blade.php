@@ -30,6 +30,25 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">Aplicacion</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bx bx-layer text-primary"></i>
+                </span>
+                <select name="application_id" class="form-select">
+                  <option value="" {{ empty($machine->application_id) ? 'selected' : '' }}>
+                    Sin aplicacion
+                  </option>
+                  @foreach ($applications as $application)
+                    <option value="{{ $application->id }}"
+                      {{ $machine->application_id == $application->id ? 'selected' : '' }}>
+                      {{ $application->name }}
+                    </option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
               <label class="form-label">Nombre del proyecto (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
@@ -45,7 +64,8 @@
                 <span class="input-group-text">
                   <i class="bx bx-globe text-primary"></i>
                 </span>
-                <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo"
+                <input type="text" name="environment" class="form-control"
+                  placeholder="Ej: Producción, QA, Desarrollo"
                   value="{{ filled($machine->environment) ? $machine->environment : 'N/A' }}" required>
               </div>
             </div>
@@ -66,7 +86,8 @@
                   <i class="bx bx-chip text-primary"></i>
                 </span>
                 <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: srv-app-01"
-                  value="{{ filled($machine->machine_internal_name) ? $machine->machine_internal_name : 'N/A' }}" required>
+                  value="{{ filled($machine->machine_internal_name) ? $machine->machine_internal_name : 'N/A' }}"
+                  required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
@@ -90,7 +111,7 @@
                   data-exclude="{{ $machine->id }}" data-error-target="edit-gcp-ip-error-{{ $machine->id }}">
               </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <label class="form-label">Alias IP</label>
               <div class="input-group">
                 <span class="input-group-text">
@@ -100,7 +121,7 @@
                   value="{{ filled($machine->alias_ip) ? $machine->alias_ip : 'N/A' }}">
               </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <label class="form-label">Alias 2 IP</label>
               <div class="input-group">
                 <span class="input-group-text">
@@ -110,7 +131,7 @@
                   value="{{ filled($machine->alias2_ip) ? $machine->alias2_ip : 'N/A' }}">
               </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <label class="form-label">Alias 3 IP</label>
               <div class="input-group">
                 <span class="input-group-text">

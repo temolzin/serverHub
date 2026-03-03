@@ -108,14 +108,29 @@
       });
     });
     document.addEventListener("DOMContentLoaded", function() {
-      new TomSelect("#ownerSelect", {
-        create: false,
-        sortField: {
-          field: "text",
-          direction: "asc"
-        },
-        placeholder: "Buscar propietario..."
-      });
+      const ownerSelect = document.querySelector("#ownerSelect");
+      if (ownerSelect) {
+        new TomSelect(ownerSelect, {
+          create: false,
+          sortField: {
+            field: "text",
+            direction: "asc"
+          },
+          placeholder: "Buscar propietario..."
+        });
+      }
+
+      const applicationSelect = document.querySelector("#applicationSelect");
+      if (applicationSelect) {
+        new TomSelect(applicationSelect, {
+          create: false,
+          sortField: {
+            field: "text",
+            direction: "asc"
+          },
+          placeholder: "Buscar aplicacion..."
+        });
+      }
     });
 
     document.addEventListener('DOMContentLoaded', function() {

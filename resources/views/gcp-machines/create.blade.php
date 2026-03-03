@@ -14,7 +14,7 @@
           <div class="row">
             <div class="col-md-6 mb-4">
               <label class="form-label">Propietario (obligatorio)</label>
-              <select name="owner_id" class="form-select" required>
+              <select name="owner_id" id="ownerSelect" class="form-select" required>
                 <option value="" disabled selected>Selecciona un propietario</option>
                 @foreach ($owners as $owner)
                   <option value="{{ $owner->id }}">
@@ -24,12 +24,25 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">Aplicacion</label>
+              <select name="application_id" id="applicationSelect" class="form-select">
+                <option value="" selected>Selecciona una aplicacion (opcional)</option>
+                @foreach ($applications as $application)
+                  <option value="{{ $application->id }}">
+                    {{ $application->name }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6 mb-4">
               <label class="form-label">Nombre del proyecto (obligatorio)</label>
-              <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-prod" required>
+              <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-prod"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Entorno (obligatorio)</label>
-              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo" required>
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre máquina (obligatorio)</label>
@@ -37,11 +50,13 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre interno (obligatorio)</label>
-              <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01" required>
+              <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Sistema operativo (obligatorio)</label>
-              <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" required>
+              <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS"
+                required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">IP interna (obligatorio)</label>
@@ -52,15 +67,15 @@
                 </div>
               @enderror
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <label class="form-label">Alias IP</label>
               <input type="text" name="alias_ip" class="form-control" placeholder="Ej: 10.0.1.10">
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <label class="form-label">Alias 2 IP</label>
               <input type="text" name="alias2_ip" class="form-control" placeholder="Ej: 10.0.1.11">
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <label class="form-label">Alias 3 IP</label>
               <input type="text" name="alias3_ip" class="form-control" placeholder="Ej: 10.0.1.12">
             </div>
