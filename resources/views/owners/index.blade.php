@@ -22,10 +22,15 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Propietarios</h5>
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createOwnerModal">
-            <i class="bx bx-plus me-1"></i> Agregar propietario
-          </button>
+        <h5 class="mb-0">Propietarios</h5>
+            <div class="d-flex gap-2">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createOwnerModal">
+                <i class="bx bx-plus me-1"></i> Agregar propietario
+                </button>
+                <a href="{{ route('export', 'owners') }}" class="btn btn-primary">
+                    Exportar Excel
+                </a>
+            </div>
         </div>
         <div class="card-body">
           <div class="mb-4">
