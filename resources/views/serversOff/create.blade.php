@@ -48,8 +48,7 @@
                 <i class="bx bx-server me-1 text-primary"></i>
                 VM (VMware) (obligatorio)
               </label>
-              <input type="text" name="vm_according_to_the_vmware" class="form-control"
-                placeholder="Ej: vm-app-prod-01" required>
+              <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -73,8 +72,7 @@
                 <i class="bx bx-network-chart me-1 text-primary"></i>
                 IP primaria (opcional)
               </label>
-              <input type="text" name="primary_ip_address" class="form-control ip-check"
-                placeholder="Ej: 192.168.1.10">
+              <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.10">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -109,24 +107,21 @@
                 <i class="bx bx-chip me-1 text-primary"></i>
                 Sistema operativo (obligatorio)
               </label>
-              <input type="text" name="os_according_to_the_vmware" class="form-control"
-                placeholder="Ej: Windows Server 2019" required>
+              <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-code me-1 text-primary"></i>
                 Versión interna (obligatorio)
               </label>
-              <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
-                required>
+              <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-desktop me-1 text-primary"></i>
                 Hostname interno (obligatorio)
               </label>
-              <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01"
-                required>
+              <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">

@@ -48,10 +48,8 @@
                 <i class="bx bx-server me-1 text-primary"></i>
                 VM (VMware) (obligatorio)
               </label>
-              <input type="text" name="vm_according_to_the_vmware" class="form-control"
-                placeholder="Ej: vm-app-prod-01"
-                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}"
-                required>
+              <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01"
+                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -76,26 +74,22 @@
                 <i class="bx bx-network-chart me-1 text-primary"></i>
                 IP primaria (opcional)
               </label>
-              <input type="text" name="primary_ip_address" class="form-control ip-check"
-                placeholder="Ej: 192.168.1.15"
-                value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}"
-                data-exclude="{{ $server->id }}">
+              <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.15"
+                value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" data-exclude="{{ $server->id }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-user me-1 text-primary"></i>
                 IP usuario
               </label>
-              <input type="text" name="ip_user" class="form-control"
-                value="{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}">
+              <input type="text" name="ip_user" class="form-control" value="{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
                 <i class="bx bx-radar me-1 text-primary"></i>
                 IP monitoreo
               </label>
-              <input type="text" name="ip_monitoring" class="form-control"
-                value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}">
+              <input type="text" name="ip_monitoring" class="form-control" value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}">
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">
@@ -118,10 +112,8 @@
                 <i class="bx bx-chip me-1 text-primary"></i>
                 Sistema operativo (obligatorio)
               </label>
-              <input type="text" name="os_according_to_the_vmware" class="form-control"
-                placeholder="Ej: Windows Server 2019"
-                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}"
-                required>
+              <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019"
+                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label d-block text-start">

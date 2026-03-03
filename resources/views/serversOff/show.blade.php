@@ -32,17 +32,14 @@
               <i class="bx bx-layer me-1 text-primary"></i>
               Aplicación
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
+            <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
               <i class="bx bx-server me-1 text-primary"></i>
               VM (VMware)
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}"
-              disabled>
+            <input type="text" class="form-control" value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
@@ -63,8 +60,7 @@
               <i class="bx bx-network-chart me-1 text-primary"></i>
               IP primaria
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" disabled>
+            <input type="text" class="form-control" value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
@@ -85,25 +81,21 @@
               <i class="bx bx-chip me-1 text-primary"></i>
               Sistema operativo
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}"
-              disabled>
+            <input type="text" class="form-control" value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
               <i class="bx bx-code me-1 text-primary"></i>
               Versión interna
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" disabled>
+            <input type="text" class="form-control" value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
               <i class="bx bx-desktop me-1 text-primary"></i>
               Hostname interno
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" disabled>
+            <input type="text" class="form-control" value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
@@ -117,8 +109,7 @@
               <i class="bx bx-line-chart me-1 text-primary"></i>
               IP monitoreo
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}" disabled>
+            <input type="text" class="form-control" value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold d-block text-start">
@@ -139,8 +130,7 @@
               <i class="bx bx-calendar me-1 text-primary"></i>
               Último parche
             </label>
-            <input type="text" class="form-control"
-              value="{{ filled($server->latest_security_patch) ? $server->latest_security_patch : 'N/A' }}" disabled>
+            <input type="text" class="form-control" value="{{ filled($server->latest_security_patch) ? $server->latest_security_patch : 'N/A' }}" disabled>
           </div>
           <div class="col-12 mb-3">
             <label class="form-label fw-semibold d-block text-start">

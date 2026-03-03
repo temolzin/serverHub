@@ -22,8 +22,7 @@
               </label>
               <select name="owner_id" class="form-select text-start" required>
                 @foreach ($owners as $owner)
-                  <option value="{{ $owner->id }}"
-                    {{ $server->owner_id == $owner->id ? 'selected' : '' }}>
+                  <option value="{{ $owner->id }}" {{ $server->owner_id == $owner->id ? 'selected' : '' }}>
                     {{ $owner->name }} {{ $owner->last_name }}
                   </option>
                 @endforeach
@@ -35,8 +34,7 @@
               </label>
               <select name="type_application_id" class="form-select text-start" required>
                 @foreach ($typeApplications as $type)
-                  <option value="{{ $type->id }}"
-                    {{ $server->type_application_id == $type->id ? 'selected' : '' }}>
+                  <option value="{{ $type->id }}" {{ $server->type_application_id == $type->id ? 'selected' : '' }}>
                     {{ $type->name_application }}
                   </option>
                 @endforeach
@@ -44,10 +42,8 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">VM (VMware)</label>
-              <input type="text" name="vm_according_to_the_vmware" class="form-control text-start"
-                placeholder="Ej: vm-app-prod-01"
-                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}"
-                required>
+              <input type="text" name="vm_according_to_the_vmware" class="form-control text-start" placeholder="Ej: vm-app-prod-01"
+                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">
@@ -67,8 +63,7 @@
               <label class="form-label text-start w-100">
                 <i class="bx bx-network-chart me-1 text-primary"></i> IP primaria
               </label>
-              <input type="text" name="primary_ip_address" class="form-control text-start"
-                placeholder="Ej: 192.168.1.15"
+              <input type="text" name="primary_ip_address" class="form-control text-start" placeholder="Ej: 192.168.1.15"
                 value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
@@ -93,10 +88,8 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Sistema operativo</label>
-              <input type="text" name="os_according_to_the_vmware" class="form-control text-start"
-                placeholder="Ej: Windows Server 2019"
-                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}"
-                required>
+              <input type="text" name="os_according_to_the_vmware" class="form-control text-start" placeholder="Ej: Windows Server 2019"
+                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Versión interna</label>
@@ -105,7 +98,7 @@
             </div>
             <div class="col-md-6">
               <label class="form-label text-start w-100">Hostname interno</label>
-              <input type="text" name="hostname_internal" class="form-control text-start" placeholder="Ej: srv-app-01"
+              <input type="text" name="hostname_internal"class="form-control text-start" placeholder="Ej: srv-app-01"
                 value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" required>
             </div>
             <div class="col-md-6">
