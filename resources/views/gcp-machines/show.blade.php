@@ -16,91 +16,105 @@
             <label class="form-label fw-semibold">UUID</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-fingerprint"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->uuid) ? $machine->uuid : 'N/A' }}" disabled>
+              <input type="text" class="form-control" value="{{ filled($machine->uuid) ? $machine->uuid : 'N/A' }}"
+                disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Proyecto</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-folder"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Propietario</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-user"></i></span>
-              <input type="text" class="form-control" value="{{ filled($ownerFullName) ? $ownerFullName : 'N/A' }}" disabled>
+              <input type="text" class="form-control" value="{{ filled($ownerFullName) ? $ownerFullName : 'N/A' }}"
+                disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Aplicacion</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-layer"></i></span>
-              <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Nombre máquina</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-desktop"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Nombre interno</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-chip"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->machine_internal_name) ? $machine->machine_internal_name : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->machine_internal_name) ? $machine->machine_internal_name : 'N/A' }}"
+                disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Sistema operativo</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-cog"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->operations_system) ? $machine->operations_system : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->operations_system) ? $machine->operations_system : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Versión kernel</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-data"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->kernel_version) ? $machine->kernel_version : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->kernel_version) ? $machine->kernel_version : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Entorno</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-globe"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->environment) ? $machine->environment : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->environment) ? $machine->environment : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">IP interna</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-network-chart"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}" disabled>
             </div>
           </div>
-          <div class="col-md-6 mb-4">
+          <div class="col-md-4 mb-4">
             <label class="form-label fw-semibold">Alias IP</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-link"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->alias_ip) ? $machine->alias_ip : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->alias_ip) ? $machine->alias_ip : 'N/A' }}" disabled>
             </div>
           </div>
-          <div class="col-md-6 mb-4">
+          <div class="col-md-4 mb-4">
             <label class="form-label fw-semibold">Alias 2 IP</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-link-alt"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->alias2_ip) ? $machine->alias2_ip : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->alias2_ip) ? $machine->alias2_ip : 'N/A' }}" disabled>
             </div>
           </div>
-          <div class="col-md-6 mb-4">
+          <div class="col-md-4 mb-4">
             <label class="form-label fw-semibold">Alias 3 IP</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-link-alt"></i></span>
-              <input type="text" class="form-control" value="{{ filled($machine->alias3_ip) ? $machine->alias3_ip : 'N/A' }}" disabled>
+              <input type="text" class="form-control"
+                value="{{ filled($machine->alias3_ip) ? $machine->alias3_ip : 'N/A' }}" disabled>
             </div>
           </div>
           <div class="col-md-6 mb-4">
@@ -122,7 +136,8 @@
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-shield-quarter"></i></span>
               <input type="text" class="form-control"
-                value="{{ filled($machine->latest_security_patch) ? $machine->latest_security_patch : 'N/A' }}" disabled>
+                value="{{ filled($machine->latest_security_patch) ? $machine->latest_security_patch : 'N/A' }}"
+                disabled>
             </div>
           </div>
           <div class="col-md-12 mb-4">
