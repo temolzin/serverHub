@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
 
 class Database extends Model
 {
@@ -20,6 +21,7 @@ class Database extends Model
         'port',
         'version',
         'last_update',
+        'created_by'
     ];
 
     public function instance()
@@ -35,5 +37,10 @@ class Database extends Model
     public function servers()
     {
         return $this->hasMany(Server::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

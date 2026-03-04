@@ -18,6 +18,10 @@
             <input type="text" class="form-control"
               value="{{ optional($application->owner)->name }} {{ optional($application->owner)->last_name }}" disabled>
           </div>
+        <div class="col-md-6">
+            <label class="form-label">Creado por</label>
+            <input type="text" class="form-control" value="{{ $application->creator->name ?? 'N/A' }}" disabled>
+          </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold d-flex align-items-center gap-2">
               <i class="bx bx-server text-primary"></i>

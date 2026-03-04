@@ -9,7 +9,7 @@ class TypeApplicationController extends Controller
 {
   public function index(Request $request)
   {
-    $typeApplications = TypeApplication::query();
+    $typeApplications = TypeApplication::with('creator');
     if ($request->filled('search')) {
       $search = $request->search;
       $typeApplications->where(function ($q) use ($search) {
@@ -39,16 +39,19 @@ class TypeApplicationController extends Controller
   }
 
   public function store(Request $request)
-  {
-    $request->validate([
-      'type_application' => 'required|string|max:50',
-      'name_application' => 'required|string|max:100',
+{
+    $validated = $request->validate([
+        'type_application' => 'required|string|max:50',
+        'name_application' => 'required|string|max:100',
     ]);
-    TypeApplication::create($request->all());
+
+    $validated['created_by'] = auth()->id();
+    TypeApplication::create($validated);
+
     return redirect()
-      ->route('type-applications.index')
-      ->with('success', 'Tipo de aplicación creado correctamente');
-  }
+        ->route('type-applications.index')
+        ->with('success', 'Tipo de aplicación creado correctamente');
+}
 
   public function edit($id)
   {

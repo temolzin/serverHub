@@ -16,6 +16,13 @@
           </label>
           <input type="text" class="form-control" value="{{ $type->type_application }}" disabled>
         </div>
+       <div class="col-md-12 mb-3">
+            <label class="form-label fw-semibold">
+                <i class="bx bx-user-check me-1 text-primary"></i>
+                Creado por
+            </label>
+            <input type="text" class="form-control" value="{{ $type->creator->name ?? 'N/A' }}" disabled>
+        </div>
         <div class="mb-3">
           <label class="form-label fw-semibold">
             <i class="bx bx-rename me-1 text-primary"></i>

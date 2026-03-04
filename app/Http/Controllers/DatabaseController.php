@@ -12,7 +12,7 @@ class DatabaseController extends Controller
 {
   public function index(Request $request)
   {
-    $databases = Database::with('instance.server', 'owner');
+    $databases = Database::with('instance.server', 'owner', 'creator');
 
       if ($request->filled('search')) {
             $search = $request->search;
@@ -61,6 +61,7 @@ class DatabaseController extends Controller
             'last_update' => 'nullable|date',
         ]);
 
+        $validated['created_by'] = auth()->id();
         Database::create($validated);
 
           return redirect()
@@ -82,6 +83,7 @@ class DatabaseController extends Controller
             'last_update' => 'nullable|date',
         ]);
 
+        $validated['created_by'] = auth()->id();
         $database->update($validated);
 
         return redirect()

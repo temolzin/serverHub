@@ -27,7 +27,7 @@ class GcpMachineController extends Controller
 
     public function index(Request $request)
     {
-        $gcpMachines = GcpMachine::with(['owner', 'application']);
+        $gcpMachines = GcpMachine::with(['owner', 'application', 'creator']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -90,6 +90,7 @@ class GcpMachineController extends Controller
             'kernel_version' => 'nullable|string|max:255',
         ]);
 
+        $validated['created_by'] = auth()->id();
         GcpMachine::create($this->normalizeMachinePayload($validated));
 
         return redirect()

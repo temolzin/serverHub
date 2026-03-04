@@ -23,7 +23,7 @@ class OwnerController extends Controller
   }
   public function index(Request $request)
   {
-    $owners = Owner::query();
+    $owners = Owner::with('creator');
     if ($request->filled('search')) {
       $search = $request->search;
       $owners->where(function ($q) use ($search) {
@@ -54,27 +54,29 @@ class OwnerController extends Controller
     return view('content.table-owner.create');
   }
 
-  public function store(Request $request)
-  {
-    $request->validate([
-      'name' => 'required|string|max:20',
-      'last_name' => 'required|string|max:50',
-      'email' => 'required|email|unique:owners,email',
-      'number_phone' => 'required|digits:10',
-    ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:20',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|email|unique:owners,email',
+            'number_phone' => 'required|digits:10',
+        ]);
 
-    try {
-      Owner::create($request->all());
-      return redirect()
-        ->route('owners.index')
-        ->with('success', 'Propietario creado correctamente');
-    } catch (\Illuminate\Database\QueryException $e) {
-      return redirect()
-        ->back()
-        ->withInput()
-        ->with('error', 'El correo ya existe, por favor ingresa uno diferente.');
+        $validated['created_by'] = auth()->id();
+
+        try {
+            Owner::create($validated);
+                return redirect()
+                    ->route('owners.index')
+                    ->with('success', 'Propietario creado correctamente');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'El correo ya existe, por favor ingresa uno diferente.');
+        }
     }
-  }
 
   public function edit($id)
   {
