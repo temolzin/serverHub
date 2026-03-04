@@ -106,6 +106,6 @@ class Server extends Model
 
     public function database()
     {
-    return $this->belongsTo(Database::class);
+        return $this->belongsTo(Database::class);
     }
 }
