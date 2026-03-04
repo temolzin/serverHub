@@ -8,9 +8,10 @@
     <td>{{ $database->port }}</td>
     <td>{{ $database->version ?? '—' }}</td>
     <td>
-      <span class="badge bg-label-info">
+    <span class="badge
+        {{ strtolower($database->status ?? '') === 'inactive' ? 'bg-label-danger' : 'bg-label-info' }}">
         {{ $database->status ?? '—' }}
-      </span>
+    </span>
     </td>
     <td>{{ $database->last_update ?? '—' }}</td>
     <td class="text-end">

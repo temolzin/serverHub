@@ -95,6 +95,21 @@ class ServerController extends Controller
     {
         $server->update(['state' => $state]);
 
+        if ($server->database) {
+
+            if ($state === 'poweredOff') {
+                $server->database->update([
+                    'status' => 'inactive'
+                ]);
+            }
+
+            if ($state === 'poweredOn') {
+                $server->database->update([
+                    'status' => 'active'
+                ]);
+            }
+        }
+
         return back()->with(
             'success',
             $state === 'poweredOn'
