@@ -7,6 +7,7 @@ use App\Models\Server;
 use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\Models\Database;
 
 class ServerController extends Controller
 {
@@ -104,7 +105,7 @@ class ServerController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $servers = Server::with(['owner', 'typeApplication']);
+        $servers = Server::with(['owner', 'typeApplication', 'database']);
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($servers);
         $servers->when(
@@ -120,16 +121,18 @@ class ServerController extends Controller
         $view = $off ? 'serversOff' : 'servers';
         $owners = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
+        $databases = Database::orderBy('name')->get();
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications'))->render(),
+                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
             : view("$view.index", [
                 'servers' => $servers,
                 'owners' => $owners,
                 'typeApplications' => $typeApplications,
+                'databases' => $databases,
             ]);
     }
 
@@ -184,6 +187,7 @@ class ServerController extends Controller
         return $request->validate([
             'owner_id' => 'required|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
+            'database_id' => 'nullable|exists:databases,id',
             'vm_according_to_the_vmware' => 'required|string|max:255',
             'state' => 'required|in:poweredOn,poweredOff',
             'primary_ip_address' => 'nullable|string|max:255',
@@ -212,6 +216,7 @@ class ServerController extends Controller
         return $request->validate([
             'owner_id' => 'required|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
+            'database_id' => 'nullable|exists:databases,id',
             'vm_according_to_the_vmware' => 'required|string|max:255',
             'state' => 'required|in:poweredOn,poweredOff',
             'primary_ip_address' => 'nullable|string|max:255',

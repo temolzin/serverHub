@@ -10,7 +10,7 @@
         <div class="modal-body">
           <div class="mb-4">
             <label class="form-label">Instancia</label>
-            <select name="instance_id" class="form-select" required>
+            <select name="instance_id" class="form-select">
               <option value="" disabled selected>Selecciona una instancia</option>
               @foreach ($instances as $instance)
                 <option value="{{ $instance->id }}">

@@ -29,6 +29,11 @@ class Database extends Model
 
     public function owner()
     {
-      return $this->belongsTo(Owner::class);
+        return $this->belongsTo(Owner::class);
+    }
+
+    public function servers()
+    {
+        return $this->hasMany(Server::class);
     }
 }

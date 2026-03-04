@@ -80,6 +80,7 @@
                   <th>ID</th>
                   <th>Aplicación</th>
                   <th>Hostname</th>
+                  <th>Base de datos</th>
                   <th>Entorno</th>
                   <th>IP primaria</th>
                   <th class="text-end">Acciones</th>

@@ -50,8 +50,8 @@ class DatabaseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'instance_id' => 'required|exists:instances,id',
-            'owner_id'     => 'required|exists:owners,id',
+            'instance_id' => 'nullable|exists:instances,id',
+            'owner_id'  => 'required|exists:owners,id',
             'name'      => 'required|string|max:255',
             'type'      => 'required|string|max:255',
             'status'    => 'nullable|string|max:255',

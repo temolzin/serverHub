@@ -6,6 +6,7 @@
     <td>{{ $server->id }}</td>
     <td>{{ filled($applicationName) ? $applicationName : 'N/A' }}</td>
     <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
+    <td>{{ $server->database?->name ?? 'N/A' }}</td>
     <td>
       <span class="badge bg-label-info">
         {{ filled($server->environment) ? $server->environment : 'N/A' }}
@@ -36,9 +37,9 @@
           </a>
         </div>
       </div>
-      @include('servers.show', ['server' => $server])
-      @include('servers.edit', ['server' => $server])
-      @include('servers.delete', ['server' => $server])
+    @include('servers.show', ['server' => $server])
+    @include('servers.edit', ['server' => $server, 'databases' => $databases])
+    @include('servers.delete', ['server' => $server])
     </td>
   </tr>
 @empty
