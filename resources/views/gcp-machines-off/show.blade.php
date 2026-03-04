@@ -1,13 +1,13 @@
 @php($ownerFullName = trim((optional($machine->owner)->name ?? '') . ' ' . (optional($machine->owner)->last_name ?? '')))
 @php($applicationName = optional($machine->application)->name)
 @php($stateLabel = $machine->isPoweredOff() ? 'poweredOff' : 'poweredOn')
-<div class="modal fade" id="showGcpMachineModal{{ $machine->id }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="showGcpOffMachineModal{{ $machine->id }}" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title d-flex align-items-center gap-2">
           <i class="bx bx-cloud text-primary fs-4"></i>
-          Detalle de máquina GCP
+          Detalle de máquina GCP apagada
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -27,16 +27,6 @@
               <input type="text" class="form-control" value="{{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}" disabled>
             </div>
           </div>
-         <div class="col-md-6 mb-4">
-            <label class="form-label fw-semibold">Creado por</label>
-            <div class="input-group">
-                <span class="input-group-text">
-                <i class="bx bx-user-check"></i>
-                </span>
-                <input type="text" class="form-control"
-                value="{{ $machine->creator->name ?? 'N/A' }}" disabled>
-            </div>
-        </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Propietario</label>
             <div class="input-group">
