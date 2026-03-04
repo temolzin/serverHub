@@ -33,10 +33,10 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex align-items-center">
-          <h5 class="mb-0">Maquinas GCP</h5>
+          <h5 class="mb-0">Máquinas GCP</h5>
           <div class="ms-auto d-flex gap-2">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal">
-              <i class="bx bx-plus me-1"></i> Agregar maquina
+              <i class="bx bx-plus me-1"></i> Agregar máquina
             </button>
             <a href="{{ route('export', 'gcp-machines') }}" class="btn btn-primary">
               Exportar Excel
@@ -46,7 +46,7 @@
         <div class="card-body">
           <div class="mb-4">
             <input type="text" id="search-gcp" class="form-control form-control-sm w-50"
-              placeholder="Buscar por proyecto, maquina, aplicacion, UUID o IP">
+              placeholder="Buscar por proyecto, máquinas, aplicación, UUID o IP">
           </div>
           <div class="table-responsive text-nowrap" style="overflow-y: hidden;">
             <table class="table align-middle">
@@ -54,8 +54,8 @@
                 <tr>
                   <th>ID</th>
                   <th>Proyecto</th>
-                  <th>Maquina</th>
-                  <th>Aplicacion</th>
+                  <th>Máquina</th>
+                  <th>Aplicación</th>
                   <th>Entorno</th>
                   <th>Estado</th>
                   <th>IP interna</th>

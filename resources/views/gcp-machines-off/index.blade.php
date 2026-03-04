@@ -33,9 +33,9 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Maquinas GCP apagadas</h5>
+          <h5 class="mb-0">Máquinas GCP apagadas</h5>
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGcpOffMachineModal">
-            <i class="bx bx-plus me-1"></i> Agregar maquina apagada
+            <i class="bx bx-plus me-1"></i> Agregar máquina apagada
           </button>
         </div>
         <div class="card-body">
@@ -49,8 +49,8 @@
                 <tr>
                   <th>ID</th>
                   <th>Proyecto</th>
-                  <th>Maquina</th>
-                  <th>Aplicacion</th>
+                  <th>Máquina</th>
+                  <th>Aplicación</th>
                   <th>Sistema operativo</th>
                   <th>Estado</th>
                   <th class="text-end">Acciones</th>
