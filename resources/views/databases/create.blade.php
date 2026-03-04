@@ -49,10 +49,14 @@
             <label class="form-label">Versión</label>
             <input type="text" name="version" class="form-control" placeholder="Ej: 8.0.36">
           </div>
-          <div class="mb-4">
-            <label class="form-label">Estado</label>
-            <input type="text" name="status" class="form-control" placeholder="Ej: Activa, En mantenimiento">
-          </div>
+            <div class="mb-4">
+                <label class="form-label">Estado</label>
+                <select name="status" class="form-select" required>
+                    <option value="" disabled selected>Selecciona un estado</option>
+                    <option value="active">Activo</option>
+                    <option value="inactive">Inactivo</option>
+                </select>
+            </div>
           <div class="mb-4">
             <label class="form-label">Última actualización</label>
             <input type="date" name="last_update" class="form-control">

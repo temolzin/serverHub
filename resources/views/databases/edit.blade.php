@@ -75,13 +75,16 @@
               value="{{ $database->version }}">
           </div>
           <div class="mb-4">
-            <label class="form-label">
-              <i class="bx bx-check-circle me-1 text-primary"></i>
-              Estado
-            </label>
-            <input type="text" name="status" class="form-control" placeholder="Ej: Activa, En mantenimiento"
-              value="{{ $database->status }}">
-          </div>
+            <label class="form-label">Estado</label>
+            <select name="status" class="form-select" required>
+                <option value="active" {{ $database->status === 'active' ? 'selected' : '' }}>
+                Active
+                </option>
+                <option value="inactive" {{ $database->status === 'inactive' ? 'selected' : '' }}>
+                Inactive
+                </option>
+            </select>
+            </div>
           <div class="mb-4">
             <label class="form-label">
               <i class="bx bx-calendar me-1 text-primary"></i>
