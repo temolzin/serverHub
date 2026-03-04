@@ -1,20 +1,20 @@
-<div class="modal fade" id="createGcpMachineModal" tabindex="-1">
+<div class="modal fade" id="createGcpOffMachineModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
           <i class="bx bx-cloud text-primary me-2"></i>
-          Crear maquina GCP
+          Crear maquina GCP apagada
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form id="createGcpForm" action="{{ route('gcp-machines.store') }}" method="POST">
+      <form id="createGcpOffForm" action="{{ route('gcp-machines-off.store') }}" method="POST">
         @csrf
         <div class="modal-body">
           <div class="row">
             <div class="col-md-6 mb-4">
               <label class="form-label">Propietario (obligatorio)</label>
-              <select name="owner_id" id="ownerSelect" class="form-select gcp-searchable-select"
+              <select name="owner_id" class="form-select gcp-off-searchable-select"
                 data-placeholder="Buscar propietario..." required>
                 <option value="" disabled selected>Selecciona un propietario</option>
                 @foreach ($owners as $owner)
@@ -26,8 +26,7 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Aplicacion</label>
-              <select name="application_id" id="applicationSelect" class="form-select gcp-searchable-select"
-                data-placeholder="Buscar aplicacion...">
+              <select name="application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar aplicacion...">
                 <option value="" selected>Selecciona una aplicacion (opcional)</option>
                 @foreach ($applications as $application)
                   <option value="{{ $application->id }}">
@@ -38,43 +37,34 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre del proyecto (obligatorio)</label>
-              <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-prod"
-                required>
-            </div>
-            <div class="col-md-6 mb-4">
-              <label class="form-label">Entorno (obligatorio)</label>
-              <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo"
-                required>
+              <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-dr" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Estado (obligatorio)</label>
               <select name="state" class="form-select" required>
-                <option value="poweredOn" selected>poweredOn</option>
-                <option value="poweredOff">poweredOff</option>
+                <option value="poweredOn">poweredOn</option>
+                <option value="poweredOff" selected>poweredOff</option>
               </select>
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">Entorno (obligatorio)</label>
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo" required>
+            </div>
+            <div class="col-md-6 mb-4">
               <label class="form-label">Nombre maquina (obligatorio)</label>
-              <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-app-prod-01" required>
+              <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-gcp-off-01" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Nombre interno (obligatorio)</label>
-              <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01"
-                required>
+              <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: gcp-int-off-01" required>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Sistema operativo (obligatorio)</label>
-              <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS"
-                required>
+              <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" required>
             </div>
             <div class="col-md-12 mb-4">
               <label class="form-label">IP interna (obligatorio)</label>
               <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 10.0.0.15" required>
-              @error('internal_ip')
-                <div class="text-danger small">
-                  {{ $message }}
-                </div>
-              @enderror
             </div>
             <div class="col-md-4 mb-4">
               <label class="form-label">Alias IP</label>
@@ -111,7 +101,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" id="cancelCreateGcp" class="btn btn-label-secondary" data-bs-dismiss="modal">
+          <button type="button" id="cancelCreateGcpOff" class="btn btn-label-secondary" data-bs-dismiss="modal">
             Cancelar
           </button>
           <button type="submit" class="btn btn-primary">
