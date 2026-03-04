@@ -4,7 +4,7 @@
       <div class="modal-header">
         <h5 class="modal-title">
           <i class="bx bx-cloud text-primary me-2"></i>
-          Crear maquina GCP apagada
+          Crear máquina GCP apagada
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -25,9 +25,9 @@
               </select>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Aplicacion</label>
-              <select name="application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar aplicacion...">
-                <option value="" selected>Selecciona una aplicacion (opcional)</option>
+              <label class="form-label">Aplicación</label>
+              <select name="application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar aplicación...">
+                <option value="" selected>Selecciona una aplicación (opcional)</option>
                 @foreach ($applications as $application)
                   <option value="{{ $application->id }}">
                     {{ $application->name }}
@@ -48,10 +48,10 @@
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">Entorno (obligatorio)</label>
-              <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo" required>
+              <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo" required>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre maquina (obligatorio)</label>
+              <label class="form-label">Nombre máquina (obligatorio)</label>
               <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-gcp-off-01" required>
             </div>
             <div class="col-md-6 mb-4">
@@ -83,7 +83,7 @@
               <input type="text" name="kernel_version" class="form-control" placeholder="Ej: 5.15.0-91-generic">
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Ultimo parche</label>
+              <label class="form-label">Último parche</label>
               <input type="date" name="latest_security_patch" class="form-control">
             </div>
             <div class="col-md-3 mb-4">

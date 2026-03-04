@@ -7,7 +7,7 @@
       <div class="modal-header">
         <h5 class="modal-title d-flex align-items-center gap-2">
           <i class="bx bx-cloud text-primary fs-4"></i>
-          Detalle de maquina GCP apagada
+          Detalle de máquina GCP apagada
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="col-md-6 mb-4">
-            <label class="form-label fw-semibold">Aplicacion</label>
+            <label class="form-label fw-semibold">Aplicación</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-layer"></i></span>
               <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="col-md-6 mb-4">
-            <label class="form-label fw-semibold">Nombre maquina</label>
+            <label class="form-label fw-semibold">Nombre máquina</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-desktop"></i></span>
               <input type="text" class="form-control" value="{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}" disabled>
@@ -70,7 +70,7 @@
             </div>
           </div>
           <div class="col-md-6 mb-4">
-            <label class="form-label fw-semibold">Version kernel</label>
+            <label class="form-label fw-semibold">Versión kernel</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-data"></i></span>
               <input type="text" class="form-control" value="{{ filled($machine->kernel_version) ? $machine->kernel_version : 'N/A' }}" disabled>
@@ -126,7 +126,7 @@
             </div>
           </div>
           <div class="col-md-12 mb-4">
-            <label class="form-label fw-semibold">Ultimo parche de seguridad</label>
+            <label class="form-label fw-semibold">Último parche de seguridad</label>
             <div class="input-group">
               <span class="input-group-text"><i class="bx bx-shield-quarter"></i></span>
               <input type="text" class="form-control" value="{{ filled($machine->latest_security_patch) ? $machine->latest_security_patch : 'N/A' }}" disabled>

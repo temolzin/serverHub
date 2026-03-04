@@ -5,7 +5,7 @@
       <div class="modal-header">
         <h5 class="modal-title d-flex align-items-center gap-2">
           <i class="bx bx-edit text-primary"></i>
-          Editar maquina GCP apagada
+          Editar máquina GCP apagada
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -31,14 +31,14 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Aplicacion</label>
+              <label class="form-label">Aplicación</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-layer text-primary"></i>
                 </span>
-                <select name="application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar aplicacion...">
+                <select name="application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar aplicación...">
                   <option value="" {{ empty($machine->application_id) ? 'selected' : '' }}>
-                    Sin aplicacion
+                    Sin aplicación
                   </option>
                   @foreach ($applications as $application)
                     <option value="{{ $application->id }}"
@@ -72,12 +72,12 @@
                 <span class="input-group-text">
                   <i class="bx bx-globe text-primary"></i>
                 </span>
-                <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo"
+                <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA, Desarrollo"
                   value="{{ filled($machine->environment) ? $machine->environment : 'N/A' }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre maquina (obligatorio)</label>
+              <label class="form-label">Nombre máquina (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-desktop text-primary"></i>
@@ -157,7 +157,7 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Ultimo parche</label>
+              <label class="form-label">Último parche</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-shield-quarter text-primary"></i>
