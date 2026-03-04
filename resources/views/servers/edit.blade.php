@@ -29,6 +29,21 @@
               </select>
             </div>
             <div class="col-md-6">
+                <label class="form-label text-start w-100">
+                    <i class="bx bx-data me-1 text-primary"></i>
+                    Base de datos
+                </label>
+                <select name="database_id" class="form-select server-searchable-select">
+                    <option value="">Selecciona una base de datos</option>
+                    @foreach($databases as $database)
+                    <option value="{{ $database->id }}"
+                        {{ old('database_id', $server->database_id) == $database->id ? 'selected' : '' }}>
+                        {{ $database->name }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6">
               <label class="form-label text-start w-100">
                 <i class="bx bx-layer me-1 text-primary"></i> Aplicación
               </label>

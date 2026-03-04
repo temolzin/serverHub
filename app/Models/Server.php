@@ -30,6 +30,7 @@ class Server extends Model
         'owner_id',
         'uuid',
         'type_application_id',
+        'database_id',
         'vm_according_to_the_vmware',
         'state',
         'dns_name',
@@ -101,5 +102,10 @@ class Server extends Model
     public function normalizedState(): string
     {
         return $this->isPoweredOff() ? 'poweredOff' : 'poweredOn';
+    }
+
+    public function database()
+    {
+        return $this->belongsTo(Database::class);
     }
 }

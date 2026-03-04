@@ -11,8 +11,8 @@
       <form id="createServerForm" action="{{ route('servers.store') }}" method="POST" onsubmit="this.querySelector('button[type=submit]').disabled=true;">
         @csrf
         <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6 mb-4">
+          <div class="row g-3">
+            <div class="col-md-6">
               <label class="form-label">
                 <i class="bx bx-user me-1 text-primary"></i>
                 Propietario (obligatorio)
@@ -26,7 +26,21 @@
                 @endforeach
               </select>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">
+                <i class="bx bx-data me-1 text-primary"></i>
+                Base de datos
+              </label>
+              <select name="database_id" class="form-select server-searchable-select">
+                <option value="">Selecciona una base de datos</option>
+                @foreach($databases as $database)
+                  <option value="{{ $database->id }}">
+                    {{ $database->name }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6">
               <label class="form-label">
                 <i class="bx bx-layer me-1 text-primary"></i>
                 Aplicación (obligatorio)
@@ -40,11 +54,7 @@
                 @endforeach
               </select>
             </div>
-            <div class="col-md-6 mb-4">
-              <label class="form-label">VM (VMware)</label>
-              <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" required>
-            </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">
                 <i class="bx bx-check-circle me-1 text-primary"></i>
                 Estado (obligatorio)
@@ -54,70 +64,74 @@
                 <option value="poweredOff">poweredOff</option>
               </select>
             </div>
-            <div class="col-md-6 mb-4">
-              <label class="form-label">DNS</label>
-              <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com">
+            <div class="col-md-6">
+              <label class="form-label">VM (VMware)</label>
+              <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" required>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">
                 <i class="bx bx-network-chart me-1 text-primary"></i>
                 IP primaria
               </label>
               <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.10" required>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">DNS</label>
+              <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com">
+            </div>
+            <div class="col-md-6">
               <label class="form-label">
                 <i class="bx bx-user me-1 text-primary"></i>
                 IP usuario
               </label>
               <input type="text" name="ip_user" class="form-control">
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">
                 <i class="bx bx-radar me-1 text-primary"></i>
                 IP monitoreo
               </label>
               <input type="text" name="ip_monitoring" class="form-control">
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">Entorno (obligatorio)</label>
               <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" required>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">Datacenter (obligatorio)</label>
               <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" required>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">Sistema operativo</label>
               <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" required>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">Versión interna</label>
               <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" required>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6">
               <label class="form-label">Hostname interno</label>
               <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" required>
             </div>
-            <div class="col-md-6 mb-4">
-              <label class="form-label">RAM (MB) (obligatorio)</label>
-              <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 16384" required>
+            <div class="col-md-6">
+            <label class="form-label">RAM (MB) (obligatorio)</label>
+                <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 16384" required>
             </div>
-            <div class="col-md-6 mb-4">
-              <label class="form-label">Swap (MB) (obligatorio)</label>
-              <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" required>
+            <div class="col-md-6">
+            <label class="form-label">Swap (MB) (obligatorio)</label>
+                <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" required>
             </div>
-            <div class="col-md-6 mb-4">
-              <label class="form-label">Último parche</label>
-              <input type="date" name="latest_security_patch" class="form-control">
+            <div class="col-md-6">
+            <label class="form-label">Último parche</label>
+                <input type="date" name="latest_security_patch" class="form-control">
             </div>
-            <div class="col-md-12 mb-4">
-              <label class="form-label">Otras IPs</label>
-              <textarea name="other_ips" rows="2" class="form-control" placeholder="IPs separadas por coma"></textarea>
+            <div class="col-md-6">
+                <label class="form-label">Otras IPs</label>
+                    <textarea name="other_ips" rows="2" class="form-control"placeholder="IPs separadas por coma"></textarea>
             </div>
-            <div class="col-md-12 mb-4">
-              <label class="form-label">Comentarios</label>
-              <textarea name="comments" rows="3" class="form-control" placeholder="Información adicional"></textarea>
+            <div class="col-12">
+                <label class="form-label">Comentarios</label>
+                    <textarea name="comments" rows="3" class="form-control" placeholder="Información adicional"></textarea>
             </div>
           </div>
         </div>

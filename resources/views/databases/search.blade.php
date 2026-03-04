@@ -3,7 +3,7 @@
     <td>{{ $database->id }}</td>
     <td>{{ $database->name }}</td>
     <td>{{ $database->type }}</td>
-    <td>{{ optional($database->instance->server)->hostname_internal }}</td>
+    <td>{{ $database->instance?->server?->hostname_internal ?? 'N/A' }}</td>
     <td>{{ optional($database->owner)->name }}{{ optional($database->owner)->last_name }}</td>
     <td>{{ $database->port }}</td>
     <td>{{ $database->version ?? '—' }}</td>
