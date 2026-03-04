@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Maquinas GCP')
+@section('title', 'Maquinas GCP apagadas')
 
 @if (session('success'))
   <script>
@@ -20,7 +20,7 @@
 @if ($errors->any())
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const createModalEl = document.getElementById('createGcpMachineModal');
+      const createModalEl = document.getElementById('createGcpOffMachineModal');
       if (createModalEl) {
         bootstrap.Modal.getOrCreateInstance(createModalEl).show();
       }
@@ -32,23 +32,18 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header d-flex align-items-center">
-          <h5 class="mb-0">Máquinas GCP</h5>
-          <div class="ms-auto d-flex gap-2">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal">
-              <i class="bx bx-plus me-1"></i> Agregar máquina
-            </button>
-            <a href="{{ route('export', 'gcp-machines') }}" class="btn btn-primary">
-              Exportar Excel
-            </a>
-          </div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Máquinas GCP apagadas</h5>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createGcpOffMachineModal">
+            <i class="bx bx-plus me-1"></i> Agregar máquina apagada
+          </button>
         </div>
         <div class="card-body">
           <div class="mb-4">
-            <input type="text" id="search-gcp" class="form-control form-control-sm w-50"
-              placeholder="Buscar por proyecto, máquinas, aplicación, UUID o IP">
+            <input type="text" id="search-gcp-off" class="form-control form-control-sm w-50"
+              placeholder="Buscar por UUID, proyecto, maquina, aplicacion o sistema operativo">
           </div>
-          <div class="table-responsive text-nowrap" style="overflow-y: hidden;">
+          <div class="table-responsive text-nowrap">
             <table class="table align-middle">
               <thead>
                 <tr>
@@ -56,18 +51,17 @@
                   <th>Proyecto</th>
                   <th>Máquina</th>
                   <th>Aplicación</th>
-                  <th>Entorno</th>
+                  <th>Sistema operativo</th>
                   <th>Estado</th>
-                  <th>IP interna</th>
                   <th class="text-end">Acciones</th>
                 </tr>
               </thead>
-              <tbody id="gcp-search">
-                @include('gcp-machines.search', ['gcpMachines' => $gcpMachines])
+              <tbody id="gcp-off-search">
+                @include('gcp-machines-off.search', ['gcpMachines' => $gcpMachines])
               </tbody>
             </table>
-            <div id="gcp-pagination">
-              @include('gcp-machines.pagination', ['gcpMachines' => $gcpMachines])
+            <div id="gcp-off-pagination">
+              @include('gcp-machines-off.pagination', ['gcpMachines' => $gcpMachines])
             </div>
           </div>
         </div>
@@ -75,17 +69,17 @@
     </div>
   </div>
 
-  @include('gcp-machines.create')
+  @include('gcp-machines-off.create')
 @endsection
 
 @push('scripts')
   <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const input = document.getElementById('search-gcp');
-      const table = document.getElementById('gcp-search');
-      const pagination = document.getElementById('gcp-pagination');
-      const baseUrl = `{{ route('gcp-machines.index') }}`;
+      const input = document.getElementById('search-gcp-off');
+      const table = document.getElementById('gcp-off-search');
+      const pagination = document.getElementById('gcp-off-pagination');
+      const baseUrl = `{{ route('gcp-machines-off.index') }}`;
       let timeout = null;
 
       if (!input || !table || !pagination) return;
@@ -98,7 +92,7 @@
       function initSearchableSelects(scope = document) {
         if (typeof TomSelect === 'undefined') return;
 
-        const selects = scope.querySelectorAll('.gcp-searchable-select');
+        const selects = scope.querySelectorAll('.gcp-off-searchable-select');
         selects.forEach(select => {
           if (select.tomselect) return;
 
@@ -113,7 +107,7 @@
         });
       }
 
-      function fetchGcp(url) {
+      function fetchGcpOff(url) {
         fetch(url, {
             headers: {
               'X-Requested-With': 'XMLHttpRequest'
@@ -137,20 +131,20 @@
         timeout = setTimeout(function() {
           const value = input.value.trim();
           const url = value ? `${baseUrl}?search=${encodeURIComponent(value)}` : baseUrl;
-          fetchGcp(url);
+          fetchGcpOff(url);
         }, 300);
       });
 
       document.addEventListener('click', function(e) {
-        const link = e.target.closest('#gcp-pagination a');
+        const link = e.target.closest('#gcp-off-pagination a');
         if (!link) return;
 
         e.preventDefault();
-        fetchGcp(link.href);
+        fetchGcpOff(link.href);
       });
 
-      const createForm = document.getElementById('createGcpForm');
-      const cancelCreateBtn = document.getElementById('cancelCreateGcp');
+      const createForm = document.getElementById('createGcpOffForm');
+      const cancelCreateBtn = document.getElementById('cancelCreateGcpOff');
       if (createForm && cancelCreateBtn) {
         cancelCreateBtn.addEventListener('click', function() {
           createForm.reset();

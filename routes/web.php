@@ -56,8 +56,21 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('permission:viewTypeApplication')
         ->resource('type-applications', TypeApplicationController::class);
-    Route::middleware('permission:viewGcpMachine')
-        ->resource('gcp-machines', GcpMachineController::class);
+    Route::middleware('permission:viewGcpMachine')->group(function () {
+        Route::post('/gcp-machines/{gcp_machine}/power-on', [GcpMachineController::class, 'powerOn'])
+            ->name('gcp-machines.power-on');
+        Route::post('/gcp-machines/{gcp_machine}/power-off', [GcpMachineController::class, 'powerOff'])
+            ->name('gcp-machines.power-off');
+        Route::get('/gcp-machines-off', [GcpMachineController::class, 'offIndex'])
+            ->name('gcp-machines-off.index');
+        Route::post('/gcp-machines-off', [GcpMachineController::class, 'offStore'])
+            ->name('gcp-machines-off.store');
+        Route::put('/gcp-machines-off/{gcp_machine}', [GcpMachineController::class, 'offUpdate'])
+            ->name('gcp-machines-off.update');
+        Route::delete('/gcp-machines-off/{gcp_machine}', [GcpMachineController::class, 'offDestroy'])
+            ->name('gcp-machines-off.destroy');
+        Route::resource('gcp-machines', GcpMachineController::class)->except(['create', 'edit', 'show']);
+    });
     Route::middleware('permission:viewApplication')
         ->resource('applications', ApplicationController::class);
     Route::middleware('permission:viewDatabase')

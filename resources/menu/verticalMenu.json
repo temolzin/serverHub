@@ -23,8 +23,15 @@
         {
             "name": "Máquinas GCP",
             "icon": "menu-icon icon-base bx bx-cloud",
-            "slug": "gcp-machines",
+            "slug": "gcp-machines.",
             "url": "gcp-machines",
+            "permission": "viewGcpMachine"
+        },
+        {
+            "name": "Máquinas GCP Apagadas",
+            "icon": "menu-icon icon-base bx bx-power-off",
+            "slug": "gcp-machines-off.",
+            "url": "gcp-machines-off",
             "permission": "viewGcpMachine"
         },
         {
