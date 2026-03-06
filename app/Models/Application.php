@@ -9,24 +9,23 @@ use App\Models\User;
 
 class Application extends Model
 {
-  use HasFactory, SoftDeletes;
-
-  protected $fillable = [
-    'owner_id',
-    'server_id',
-    'name',
-    'version',
-    'status',
-    'type',
-    'comments',
-    'processes',
-    'assigned_memory',
-    'installation_route',
-    'latest_security_patch',
-    'user_service',
-    'cron_jobs',
-    'created_by'
-  ];
+    use HasFactory, SoftDeletes;
+    protected $fillable = [
+        'owner_id',
+        'server_id',
+        'name',
+        'version',
+        'status',
+        'type',
+        'comments',
+        'processes',
+        'assigned_memory',
+        'installation_route',
+        'latest_security_patch',
+        'user_service',
+        'cron_jobs',
+        'created_by'
+    ];
 
     public function owner()
     {

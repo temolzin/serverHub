@@ -49,17 +49,17 @@ class OwnerController extends Controller
     return view('owners.index', compact('owners'));
   }
 
-  public function create()
-  {
-    return view('content.table-owner.create');
-  }
+    public function create()
+    {
+        return view('content.table-owner.create');
+    }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:20',
-            'last_name' => 'required|string|max:50',
-            'email' => 'required|email|unique:owners,email',
+            'name'         => 'required|string|max:20',
+            'last_name'    => 'required|string|max:50',
+            'email'        => 'required|email|unique:owners,email',
             'number_phone' => 'required|digits:10',
         ]);
 
@@ -67,9 +67,10 @@ class OwnerController extends Controller
 
         try {
             Owner::create($validated);
-                return redirect()
-                    ->route('owners.index')
-                    ->with('success', 'Propietario creado correctamente');
+            return redirect()
+                ->route('owners.index')
+                ->with('success', 'Propietario creado correctamente');
+
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()
                 ->back()

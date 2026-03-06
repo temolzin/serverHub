@@ -16,7 +16,7 @@
           </label>
           <input type="text" class="form-control" value="{{ $type->type_application }}" disabled>
         </div>
-       <div class="col-md-12 mb-3">
+        <div class="col-md-12 mb-3">
             <label class="form-label fw-semibold">
                 <i class="bx bx-user-check me-1 text-primary"></i>
                 Creado por

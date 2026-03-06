@@ -34,8 +34,7 @@
                 <span class="input-group-text">
                 <i class="bx bx-user-check"></i>
                 </span>
-                <input type="text" class="form-control"
-                value="{{ $machine->creator->name ?? 'N/A' }}" disabled>
+                <input type="text" class="form-control" value="{{ $machine->creator->name ?? 'N/A' }}" disabled>
             </div>
         </div>
           <div class="col-md-6 mb-4">

@@ -19,9 +19,9 @@
               value="{{ optional($application->owner)->name }} {{ optional($application->owner)->last_name }}" disabled>
           </div>
         <div class="col-md-6">
-            <label class="form-label">Creado por</label>
+                <label class="form-label">Creado por</label>
             <input type="text" class="form-control" value="{{ $application->creator->name ?? 'N/A' }}" disabled>
-          </div>
+        </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold d-flex align-items-center gap-2">
               <i class="bx bx-server text-primary"></i>
@@ -78,8 +78,7 @@
               <i class="bx bx-calendar text-primary"></i>
               Último parche
             </label>
-            <input type="text" class="form-control" value="{{ $application->latest_security_patch ?? '—' }}"
-              disabled>
+            <input type="text" class="form-control" value="{{ $application->latest_security_patch ?? '—' }}" disabled>
           </div>
           <div class="col-md-6">
             <label class="form-label fw-semibold d-flex align-items-center gap-2">

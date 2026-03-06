@@ -8,15 +8,15 @@ use App\Models\User;
 
 class Owner extends Model
 {
-  use SoftDeletes;
+    use SoftDeletes;
 
-  protected $fillable = [
-    'name',
-    'last_name',
-    'email',
-    'number_phone',
-    'created_by'
-  ];
+    protected $fillable = [
+        'name',
+        'last_name',
+        'email',
+        'number_phone',
+        'created_by'
+    ];
 
     public function gcpMachines()
     {
