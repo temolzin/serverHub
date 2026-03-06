@@ -27,6 +27,15 @@
               <input type="text" class="form-control" value="{{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}" disabled>
             </div>
           </div>
+         <div class="col-md-6 mb-4">
+            <label class="form-label fw-semibold">Creado por</label>
+            <div class="input-group">
+                <span class="input-group-text">
+                <i class="bx bx-user-check"></i>
+                </span>
+                <input type="text" class="form-control" value="{{ $machine->creator->name ?? 'N/A' }}" disabled>
+            </div>
+        </div>
           <div class="col-md-6 mb-4">
             <label class="form-label fw-semibold">Propietario</label>
             <div class="input-group">

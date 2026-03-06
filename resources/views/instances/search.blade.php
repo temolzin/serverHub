@@ -10,20 +10,29 @@
         <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
           <i class="bx bx-dots-vertical-rounded"></i>
         </button>
-        <div class="dropdown-menu dropdown-menu-end">
-          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editInstanceModal{{ $instance->id }}">
+         <div class="dropdown-menu dropdown-menu-end">
+            <a class="dropdown-item"
+            data-bs-toggle="modal"
+            data-bs-target="#showInstanceModal{{ $instance->id }}">
+            <i class="bx bx-show me-1"></i> Ver
+            </a>
+            <a class="dropdown-item"
+            data-bs-toggle="modal"
+            data-bs-target="#editInstanceModal{{ $instance->id }}">
             <i class="bx bx-edit-alt me-1"></i> Editar
-          </a>
-          <a class="dropdown-item text-danger" data-bs-toggle="modal"
+            </a>
+            <a class="dropdown-item text-danger"
+            data-bs-toggle="modal"
             data-bs-target="#deleteInstanceModal{{ $instance->id }}">
             <i class="bx bx-trash me-1"></i> Eliminar
-          </a>
+            </a>
         </div>
-      </div>
+        </div>
     </td>
   </tr>
   @include('instances.edit', ['instance' => $instance, 'servers' => $servers])
   @include('instances.delete', ['instance' => $instance])
+  @include('instances.show', ['instance' => $instance])
 @empty
   <tr>
     <td colspan="6" class="text-center text-muted">

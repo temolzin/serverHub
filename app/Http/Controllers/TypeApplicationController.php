@@ -7,20 +7,23 @@ use App\Models\TypeApplication;
 
 class TypeApplicationController extends Controller
 {
-    public function index(Request $request)
-    {
-        $typeApplications = TypeApplication::query();
-        if ($request->filled('search')) {
-        $search = $request->search;
-        $typeApplications->where(function ($q) use ($search) {
-            $q->where('type_application', 'like', "%{$search}%")
-            ->orWhere('name_application', 'like', "%{$search}%");
-        });
-        }
+  public function index(Request $request)
+  {
+    $typeApplications = TypeApplication::with('creator');
+    if ($request->filled('search')) {
+      $search = $request->search;
+      $typeApplications->where(function ($q) use ($search) {
+        $q->where('type_application', 'like', "%{$search}%")
+          ->orWhere('name_application', 'like', "%{$search}%");
+      });
+    }
 
         $typeApplications = $typeApplications->orderBy('id', 'desc')->get();
 
         return view('type-applications.index', compact('typeApplications'));
+    }
+
+    return view('type-applications.index', compact('typeApplications'));
     }
 
     public function create()
@@ -30,14 +33,17 @@ class TypeApplicationController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-        'type_application' => 'required|string|max:50',
-        'name_application' => 'required|string|max:100',
+        $validated = $request->validate([
+            'type_application' => 'required|string|max:50',
+            'name_application' => 'required|string|max:100',
         ]);
-        TypeApplication::create($request->all());
+
+        $validated['created_by'] = auth()->id();
+        TypeApplication::create($validated);
+
         return redirect()
-        ->route('type-applications.index')
-        ->with('success', 'Tipo de aplicaciÃ³n creado correctamente');
+            ->route('type-applications.index')
+            ->with('success', 'Tipo de aplicación creado correctamente');
     }
 
     public function edit($id)
@@ -54,7 +60,7 @@ class TypeApplicationController extends Controller
         $typeApplication->update($validated);
         return redirect()
         ->route('type-applications.index')
-        ->with('success', 'Tipo de aplicaciÃ³n actualizado correctamente.');
+        ->with('success', 'Tipo de aplicación actualizado correctamente.');
     }
 
     public function show(TypeApplication $typeApplication)
@@ -66,7 +72,7 @@ class TypeApplicationController extends Controller
     {
         $typeApplication->delete();
         return redirect()
-        ->route('type-applications.index')
-        ->with('success', 'Tipo de aplicaciÃ³n eliminado correctamente');
+            ->route('type-applications.index')
+            ->with('success', 'Tipo de aplicación eliminado correctamente');
     }
 }

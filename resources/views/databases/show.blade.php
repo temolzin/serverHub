@@ -20,6 +20,10 @@
             <input type="text" class="form-control" value="{{ optional($database->server)->hostname_internal }}"
               disabled>
           </div>
+            <div class="col-md-6">
+                <label class="form-label">Creado por</label>
+                <input type="text" class="form-control" value="{{ $database->creator->name ?? 'N/A' }}" disabled>
+            </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-data me-1 text-primary"></i>

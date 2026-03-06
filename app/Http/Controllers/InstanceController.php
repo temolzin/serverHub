@@ -11,7 +11,7 @@ class InstanceController extends Controller
 {
     public function index(Request $request)
     {
-        $instances = Instance::with('server');
+      $instances = Instance::with('server', 'creator');
         if ($request->filled('search')) {
             $search = $request->search;
             $instances->where(function ($q) use ($search) {
@@ -35,7 +35,10 @@ class InstanceController extends Controller
             'version'   => 'required|string|max:255',
             'edition'   => 'nullable|string|max:255',
         ]);
+
+        $validated['created_by'] = auth()->id();
         Instance::create($validated);
+
         return redirect()
             ->route('instances.index')
             ->with('success', 'Instancia creada correctamente.');

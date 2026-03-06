@@ -78,6 +78,7 @@ class GcpMachineController extends Controller
 
     private function persist(Request $request, bool $off = false, ?GcpMachine $gcpMachine = null)
     {
+        $gcpMachines = GcpMachine::with(['owner', 'application', 'creator']);
         $validated = $this->validateMachine($request, $off);
         $payload = $this->normalizeMachinePayload($validated);
         $payload['state'] = $this->normalizeState(
@@ -153,6 +154,8 @@ class GcpMachineController extends Controller
                 'environment',
             ];
 
+        $validated['created_by'] = auth()->id();
+        GcpMachine::create($this->normalizeMachinePayload($validated));
         $query->where(function (Builder $subQuery) use ($search, $uuidSearch, $columns) {
             $subQuery
                 ->where('uuid', 'like', "%{$search}%")
