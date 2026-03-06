@@ -1,15 +1,15 @@
 @php($isPoweredOff = $machine->isPoweredOff())
-<div class="modal fade" id="editGcpMachineModal{{ $machine->id }}" tabindex="-1">
+<div class="modal fade" id="editGcpOffMachineModal{{ $machine->id }}" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title d-flex align-items-center gap-2">
           <i class="bx bx-edit text-primary"></i>
-          Editar máquina GCP
+          Editar máquina GCP apagada
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form action="{{ route('gcp-machines.update', $machine) }}" method="POST">
+      <form action="{{ route('gcp-machines-off.update', $machine) }}" method="POST">
         @csrf
         @method('PUT')
         <input type="hidden" name="page" value="{{ request('page') }}">
@@ -21,7 +21,7 @@
                 <span class="input-group-text">
                   <i class="bx bx-user text-primary"></i>
                 </span>
-                <select name="owner_id" class="form-select gcp-searchable-select" data-placeholder="Buscar propietario..." required>
+                <select name="owner_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar propietario..." required>
                   @foreach ($owners as $owner)
                     <option value="{{ $owner->id }}" {{ $machine->owner_id == $owner->id ? 'selected' : '' }}>
                       {{ $owner->name }} {{ $owner->last_name }}
@@ -36,7 +36,7 @@
                 <span class="input-group-text">
                   <i class="bx bx-layer text-primary"></i>
                 </span>
-                <select name="application_id" class="form-select gcp-searchable-select" data-placeholder="Buscar aplicación...">
+                <select name="application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar aplicación...">
                   <option value="" {{ empty($machine->application_id) ? 'selected' : '' }}>
                     Sin aplicación
                   </option>
@@ -60,6 +60,13 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
+              <label class="form-label">Estado (obligatorio)</label>
+              <select name="state" class="form-select" required>
+                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>poweredOn</option>
+                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>poweredOff</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-4">
               <label class="form-label">Entorno (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
@@ -70,20 +77,13 @@
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Estado (obligatorio)</label>
-              <select name="state" class="form-select" required>
-                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>poweredOn</option>
-                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>poweredOff</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-4">
               <label class="form-label">Nombre máquina (obligatorio)</label>
               <div class="input-group">
                 <span class="input-group-text">
                   <i class="bx bx-desktop text-primary"></i>
                 </span>
                 <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-app-prod-01"
-                value="{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}" required>
+                  value="{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
@@ -112,9 +112,8 @@
                 <span class="input-group-text">
                   <i class="bx bx-network-chart text-primary"></i>
                 </span>
-                <input type="text" name="internal_ip" class="form-control ip-check" placeholder="Ej: 10.10.10.15"
-                  value="{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}" required
-                  data-exclude="{{ $machine->id }}" data-error-target="edit-gcp-ip-error-{{ $machine->id }}">
+                <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 10.10.10.15"
+                  value="{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}" required>
               </div>
             </div>
             <div class="col-md-4 mb-4">
@@ -163,7 +162,8 @@
                 <span class="input-group-text">
                   <i class="bx bx-shield-quarter text-primary"></i>
                 </span>
-                <input type="date" name="latest_security_patch" class="form-control" value="{{ $machine->latest_security_patch }}">
+                <input type="date" name="latest_security_patch" class="form-control"
+                  value="{{ $machine->latest_security_patch }}">
               </div>
             </div>
             <div class="col-md-3 mb-4">
