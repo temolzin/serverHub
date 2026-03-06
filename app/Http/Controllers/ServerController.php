@@ -120,35 +120,17 @@ class ServerController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $servers = Server::with(['owner', 'typeApplication', 'database']);
+        $query = Server::with(['owner', 'typeApplication', 'database']);
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
-        $this->{$filterMethod}($servers);
-        $servers->when(
-            $request->filled('search'),
-            fn($query) => $this->applySearch(
-                $query,
-                trim($request->search),
-                $off
-            )
-        );
+        $this->{$filterMethod}($query);
 
-        $servers = $servers->latest()->paginate(10)->withQueryString();
-        $view = $off ? 'serversOff' : 'servers';
-        $owners = Owner::orderBy('name')->get();
+        $servers          = $query->latest()->get();
+        $owners           = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
-        $databases = Database::orderBy('name')->get();
+        $databases        = Database::orderBy('name')->get();
+        $view             = $off ? 'serversOff' : 'servers';
 
-        return $request->ajax()
-            ? response()->json([
-                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases'))->render(),
-                'pagination' => view("$view.pagination", compact('servers'))->render(),
-            ])
-            : view("$view.index", [
-                'servers' => $servers,
-                'owners' => $owners,
-                'typeApplications' => $typeApplications,
-                'databases' => $databases,
-            ]);
+        return view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void

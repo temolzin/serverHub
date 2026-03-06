@@ -10,41 +10,33 @@ use App\Models\Owner;
 
 class DatabaseController extends Controller
 {
-  public function index(Request $request)
-  {
+    public function index(Request $request)
+    {
     $databases = Database::with('instance.server', 'owner');
 
-      if ($request->filled('search')) {
+        if ($request->filled('search')) {
             $search = $request->search;
 
             $databases->where(function ($q) use ($search) {
-              $q->where('name', 'like', "%{$search}%")
-              ->orWhere('type', 'like', "%{$search}%")
-              ->orWhere('status', 'like', "%{$search}%")
-              ->orWhereHas('instance.server', function ($sub) use ($search) {
-              $sub->where('hostname_internal', 'like', "%{$search}%");
-          });
-      });
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('type', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%")
+                ->orWhereHas('instance.server', function ($sub) use ($search) {
+                $sub->where('hostname_internal', 'like', "%{$search}%");
+            });
+        });
     }
 
     $databases = $databases
-      ->orderBy('id', 'desc')
-      ->paginate(10)
-      ->withQueryString();
+        ->orderBy('id', 'desc')
+        ->get();
     $servers = Server::with('instances', 'owner')
-      ->orderBy('hostname_internal')
-      ->get();
+        ->orderBy('hostname_internal')
+        ->get();
     $instances = Instance::with('server')->get();
     $owners = Owner::orderBy('name')->get();
 
-    if ($request->ajax()) {
-        return response()->json([
-            'table' => view('databases.search', compact('databases', 'servers'))->render(),
-            'pagination' => view('databases.pagination', compact('databases'))->render(),
-        ]);
-    }
-
-    return view('databases.index', compact('databases', 'servers', 'instances', 'owners'));
+        return view('databases.index', compact('databases', 'servers', 'instances', 'owners'));
 }
 
     public function store(Request $request)
@@ -63,7 +55,7 @@ class DatabaseController extends Controller
 
         Database::create($validated);
 
-          return redirect()
+            return redirect()
             ->route('databases.index')
             ->with('success', 'Base de datos creada correctamente.');
     }

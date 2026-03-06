@@ -125,20 +125,12 @@ class GcpMachineController extends Controller
             fn($query) => $this->applySearch($query, trim($request->search), $off)
         );
 
-        $gcpMachines = $gcpMachines
-            ->latest('id')
-            ->paginate(10)
-            ->withQueryString();
-        $owners = Owner::orderBy('name')->get();
+        $gcpMachines  = $gcpMachines->latest('id')->get();
+        $owners       = Owner::orderBy('name')->get();
         $applications = Application::orderBy('name')->get();
-        $view = $off ? 'gcp-machines-off' : 'gcp-machines';
+        $view         = $off ? 'gcp-machines-off' : 'gcp-machines';
 
-        return $request->ajax()
-            ? response()->json([
-                'table' => view("$view.search", compact('gcpMachines', 'owners', 'applications'))->render(),
-                'pagination' => view("$view.pagination", compact('gcpMachines'))->render(),
-            ])
-            : view("$view.index", compact('gcpMachines', 'owners', 'applications'));
+        return view("$view.index", compact('gcpMachines', 'owners', 'applications'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void

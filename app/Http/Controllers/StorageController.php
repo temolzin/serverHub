@@ -9,7 +9,7 @@ class StorageController extends Controller
 {
     public function index()
     {
-        $storages = Storage::paginate(10);
+        $storages = Storage::orderBy('id', 'desc')->get();
         return view('storages.index', compact('storages'));
     }
 

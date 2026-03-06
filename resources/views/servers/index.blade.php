@@ -1,416 +1,238 @@
-@extends('layouts/contentNavbarLayout')
+﻿@extends('layouts/contentNavbarLayout')
 
-@section('title', 'Servicios')
+@section('title', 'Servidores')
 
-@if (session('success'))
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const successMessage = @json(session('success'));
-      const importSummary = @json(session('import_summary', []));
-      const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-      } [char]));
-
-      const rows = Array.isArray(importSummary) && importSummary.length ?
-        importSummary.map(item => `
-            <li class="d-flex justify-content-between border-bottom py-1">
-                <span>${escapeHtml(item.label ?? 'Tabla')}</span>
-                <strong>${Number(item.total) || 0}</strong>
-            </li>`).join('') : '';
-      Swal.fire({
-        icon: 'success',
-        title: 'Listo',
-        confirmButtonText: 'Perfecto',
-        ...(rows ? {
-          html: `<div class="text-start mb-3">
-                <p class="mb-2 fw-semibold">Total importado por tabla:</p>
-                <ul class="list-unstyled mb-0">${rows}</ul>
-            </div>
-            <p class="mb-0">${escapeHtml(successMessage)}</p>`
-        } : {
-          text: successMessage
-        })
-      });
-    });
-  </script>
-@endif
-
-@if ($errors->any())
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const modal = document.getElementById('createServerModal');
-      if (modal) {
-        bootstrap.Modal.getOrCreateInstance(modal).show();
-      }
-    });
-  </script>
-@endif
 
 @section('content')
-  <div class="row">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5 class="mb-0">Servidores Activos</h5>
-          <div class="d-flex gap-2">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createServerModal">
-              <i class="bx bx-plus me-1"></i> Agregar servidor
+    <div class="row">
+        <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Servidores Activos</h5>
+            <div class="d-flex gap-2">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createServerModal">
+                <i class="bx bx-plus me-1"></i> Agregar servidor
                 </button>
-                <a href="{{ route('export', 'servers') }}" class="btn btn-primary">
-                    Exportar Excel
-                </a>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
-              Subir Excel
-            </button>
-          </div>
+                <a href="{{ route('export', 'servers') }}" class="btn btn-primary">Exportar Excel</a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">Subir
+                Excel</button>
+            </div>
+            </div>
+            <div class="card-body">
+            <div>
+                <div class="dt-loading">Cargando datos...</div>
+                <table id="dt-servers" class="table align-middle" style="width:100%">
+                <thead>
+                    <tr>
+                    <th>ID</th>
+                    <th>UUID</th>
+                    <th>Aplicacion</th>
+                    <th>Hostname</th>
+                    <th>Base de datos</th>
+                    <th>Entorno</th>
+                    <th>IP primaria</th>
+                    <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @include('servers.search', ['servers' => $servers])
+                </tbody>
+                </table>
+            </div>
+            </div>
         </div>
-        <div class="card-body">
-          <div class="mb-4">
-            <input type="text" id="search-server" class="form-control form-control-sm w-50"
-              placeholder="Buscar por UUID, aplicacion, hostname o IP">
-          </div>
-          <div class="table-responsive text-nowrap">
-            <table class="table align-middle">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Aplicación</th>
-                  <th>Hostname</th>
-                  <th>Base de datos</th>
-                  <th>Entorno</th>
-                  <th>IP primaria</th>
-                  <th class="text-end">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="servers-search">
-                @include('servers.search', ['servers' => $servers])
-              </tbody>
-            </table>
-            <div class="modal fade" id="uploadExcelModal" tabindex="-1">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Subir archivo Excel</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                  </div>
-                  <form action="{{ route('servers.import') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                      <div class="mb-3">
-                        <label class="form-label">Seleccionar archivo</label>
-                        <input type="file" name="file" class="form-control" accept=".xlsx,.xls" required>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cancelar
-                      </button>
-                      <button type="submit" class="btn btn-primary">
-                        Subir Excel
-                      </button>
-                    </div>
-                  </form>
+        </div>
+    </div>
+
+    @include('servers.create')
+
+    <div class="modal fade" id="uploadExcelModal" tabindex="-1">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Subir archivo Excel</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('servers.import') }}" method="POST" enctype="multipart/form-data"
+            id="excelUploadForm">
+            @csrf
+            <div class="modal-body">
+                <div class="mb-3">
+                <label class="form-label">Seleccionar archivo</label>
+                <input type="file" name="file" class="form-control" accept=".xlsx,.xls" required>
                 </div>
-              </div>
             </div>
-            <div id="servers-pagination">
-              @include('servers.pagination', ['servers' => $servers])
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-success">Subir Excel</button>
             </div>
-          </div>
+            </form>
         </div>
-      </div>
-    </div>
-  </div>
-  @include('servers.create')
-
-  <div class="modal fade" id="uploadExcelModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Subir archivo Excel</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <form action="{{ route('servers.import') }}" method="POST" enctype="multipart/form-data">
-          @csrf
-          <div class="modal-body">
-            <div class="mb-3">
-              <label class="form-label">Seleccionar archivo</label>
-              <input type="file" name="file" class="form-control" accept=".xlsx,.xls" required>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              Cancelar
-            </button>
-            <button type="submit" class="btn btn-success">
-              Subir Excel
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
-  </div>
-
 @endsection
 
 @push('scripts')
-  <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      let excelUploadProgressInterval = null;
+    @if (session('success'))
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var successMessage = @json(session('success'));
+            var importSummary = @json(session('import_summary', []));
+            var rows = Array.isArray(importSummary) && importSummary.length ? importSummary.map(function(i) {
+            return '<li class="d-flex justify-content-between border-bottom py-1"><span>' + (i.label || 'Tabla') +
+                '</span><strong>' + (Number(i.total) || 0) + '</strong></li>';
+            }).join('') : '';
+            Swal.fire({
+            icon: 'success',
+            title: 'Listo',
+            confirmButtonText: 'Perfecto',
+            ...(rows ? {
+                html: '<div class="text-start mb-3"><p class="mb-2 fw-semibold">Total importado por tabla:</p><ul class="list-unstyled mb-0">' +
+                rows + '</ul></div><p class="mb-0">' + successMessage + '</p>'
+            } : {
+                text: successMessage
+            })
+            });
+        });
+        </script>
+    @endif
+    @if ($errors->any())
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('createServerModal');
+            if (modal) bootstrap.Modal.getOrCreateInstance(modal).show();
+        });
+        </script>
+    @endif
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        jQuery(function($) {
+        function hydrateBootstrap() {
+            document.querySelectorAll('.dropdown-toggle').forEach(function(el) {
+            bootstrap.Dropdown.getOrCreateInstance(el);
+            });
+        }
 
-      const input = document.getElementById('search-server');
-      const table = document.getElementById('servers-search');
-      const pagination = document.getElementById('servers-pagination');
-      const baseUrl = `{{ route('servers.index') }}`;
-      let timeout = null;
-
-      if (!input || !table || !pagination) return;
-
-      function hydrateBootstrap() {
-        document.querySelectorAll('.dropdown-toggle')
-          .forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
-      }
-
-      function initSearchableSelects(scope = document) {
-        if (typeof TomSelect === 'undefined') return;
-
-        const selects = scope.querySelectorAll('.server-searchable-select');
-        selects.forEach(select => {
-          if (select.tomselect) return;
-
-          const tom = new TomSelect(select, {
-            create: false,
-            sortField: {
-              field: 'text',
-              direction: 'asc'
-            },
-            placeholder: select.dataset.placeholder || 'Buscar...'
-          });
-
-          if (select.closest('[id^="editServerModal"]')) {
-            const alignLeft = () => {
-              tom.control.style.textAlign = 'left';
-              tom.control_input.style.textAlign = 'left';
-              tom.dropdown.style.textAlign = 'left';
-              tom.dropdown_content.style.textAlign = 'left';
-              tom.dropdown
-                .querySelectorAll('.option, .optgroup-header')
-                .forEach(el => {
-                  el.style.textAlign = 'left';
+        function initSearchableSelects(scope) {
+            scope = scope || document;
+            if (typeof TomSelect === 'undefined') return;
+            scope.querySelectorAll('.server-searchable-select').forEach(function(select) {
+            if (select.tomselect) return;
+            var tom = new TomSelect(select, {
+                create: false,
+                sortField: {
+                field: 'text',
+                direction: 'asc'
+                },
+                placeholder: select.dataset.placeholder || 'Buscar...'
+            });
+            if (select.closest('[id^="editServerModal"]')) {
+                var alignLeft = function() {
+                tom.control.style.textAlign = 'left';
+                tom.control_input.style.textAlign = 'left';
+                tom.dropdown.style.textAlign = 'left';
+                tom.dropdown_content.style.textAlign = 'left';
+                tom.dropdown.querySelectorAll('.option, .optgroup-header').forEach(function(el) {
+                    el.style.textAlign = 'left';
                 });
-            };
-
-            alignLeft();
-            tom.on('dropdown_open', alignLeft);
-            tom.on('type', alignLeft);
-          }
-        });
-      }
-
-      function fetchServers(url) {
-        fetch(url, {
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest'
+                };
+                alignLeft();
+                tom.on('dropdown_open', alignLeft);
+                tom.on('type', alignLeft);
             }
-          })
-          .then(res => {
-            if (!res.ok) throw new Error('Error en búsqueda');
-            return res.json();
-          })
-          .then(data => {
-            table.innerHTML = data.table;
-            pagination.innerHTML = data.pagination;
+            });
+        }
+
+        $('#dt-servers').DataTable({
+            pageLength: 10,
+            deferRender: true,
+            dom: '<"dt-top d-flex justify-content-between align-items-center gap-3 mb-2"lf>rt<"dt-bottom d-flex justify-content-end align-items-center mt-2"p>',
+            order: [
+            [0, 'asc']
+            ],
+            columnDefs: [{
+            orderable: false,
+            searchable: false,
+            targets: -1
+            }, {
+            visible: false,
+            targets: 1
+            }],
+            language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json',
+            paginate: {
+                previous: '&#8249;',
+                next: '&#8250;'
+            }
+            },
+            drawCallback: function() {
             hydrateBootstrap();
-            initSearchableSelects(table);
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      }
-
-      input.addEventListener('keyup', function() {
-        clearTimeout(timeout);
-        timeout = setTimeout(function() {
-          const value = input.value.trim();
-          const url = value ?
-            `${baseUrl}?search=${encodeURIComponent(value)}` :
-            baseUrl;
-          fetchServers(url);
-        }, 300);
-      });
-
-      document.addEventListener('click', function(e) {
-        const link = e.target.closest('#servers-pagination a');
-        if (!link) return;
-
-        e.preventDefault();
-        fetchServers(link.href);
-      });
-
-      function ensureExcelAlertOnTop() {
-        if (document.getElementById('excel-upload-alert-zindex')) return;
-
-        const style = document.createElement('style');
-        style.id = 'excel-upload-alert-zindex';
-        style.textContent = `
-        .swal2-container.excel-upload-alert-top {
-            z-index: 20000 !important;
-        }
-        .swal2-container.excel-upload-alert-top .swal2-actions {
-            width: 100%;
-            display: flex !important;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 0.75rem;
-        }
-        .excel-upload-progress {
-            width: min(320px, 85%);
-            margin: 0.75rem auto 0;
-        }
-        .excel-upload-progress .progress {
-            height: 8px;
-        }
-        .excel-upload-progress .progress-bar {
-            width: 0%;
-            transition: width 260ms ease;
-        }`;
-        document.head.appendChild(style);
-      }
-
-      function showExcelLoadingAlert() {
-        if (typeof Swal === 'undefined') return;
-
-        ensureExcelAlertOnTop();
-
-        const createProgressBar = () => {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'excel-upload-progress';
-          wrapper.innerHTML = `
-            <div class="progress">
-                <div
-                    class="progress-bar progress-bar-striped progress-bar-animated bg-primary"
-                    role="progressbar"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    aria-valuenow="0">
-                </div>
-            </div>`;
-          return wrapper;
-        };
-
-        const calculateIncrement = progress =>
-          progress < 55 ? Math.random() * 7 + 3 :
-          progress < 80 ? Math.random() * 4 + 1.5 :
-          progress < 95 ? Math.random() * 1.6 + 0.4 :
-          0;
-
-        Swal.fire({
-          title: 'Subiendo Excel',
-          html: '<p class="mb-0">Procesando archivo, por favor espera...</p>',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          showConfirmButton: false,
-          customClass: {
-            container: 'excel-upload-alert-top'
-          },
-
-          didOpen: () => {
-            Swal.showLoading();
-
-            const loader = Swal.getLoader();
-            const actions = Swal.getActions();
-            if (!loader || !actions) return;
-
-            actions.querySelector('.excel-upload-progress')?.remove();
-
-            const progressWrapper = createProgressBar();
-            actions.appendChild(progressWrapper);
-
-            const progressBar = progressWrapper.querySelector('.progress-bar');
-            if (!progressBar) return;
-
-            let currentProgress = 6;
-
-            const updateProgress = value => {
-              progressBar.style.width = `${value}%`;
-              progressBar.setAttribute('aria-valuenow', String(Math.round(value)));
-            };
-
-            updateProgress(currentProgress);
-
-            clearInterval(excelUploadProgressInterval);
-
-            excelUploadProgressInterval = setInterval(() => {
-              currentProgress = Math.min(
-                95,
-                currentProgress + calculateIncrement(currentProgress)
-              );
-
-              updateProgress(Number(currentProgress.toFixed(1)));
-            }, 320);
-          },
-
-          willClose: () => {
-            clearInterval(excelUploadProgressInterval);
-            excelUploadProgressInterval = null;
-          }
+            initSearchableSelects(this.api().table().body());
+            }
         });
-      }
-
-      document
-        .querySelectorAll('form[action="{{ route('servers.import') }}"]')
-        .forEach(form => {
-          form.addEventListener('submit', function() {
-
-            const modalEl = form.closest('.modal');
-            if (modalEl) {
-              bootstrap.Modal.getOrCreateInstance(modalEl).hide();
-            }
-
-            const submitBtn = form.querySelector('button[type="submit"]');
-            if (submitBtn) {
-              submitBtn.disabled = true;
-            }
-
-            showExcelLoadingAlert();
-          });
+        document.querySelectorAll('.dt-loading').forEach(function(el) {
+            el.remove();
         });
 
-      const createForm = document.getElementById('createServerForm');
-      const cancelCreateBtn = document.getElementById('cancelCreateServer');
-      if (createForm && cancelCreateBtn) {
-        cancelCreateBtn.addEventListener('click', function() {
-          createForm.reset();
+        hydrateBootstrap();
+        initSearchableSelects(document);
 
-          createForm.querySelectorAll('input, textarea, select').forEach(el => {
-            el.classList.remove('is-invalid');
-            el.setCustomValidity('');
-
-            if (el.tomselect) {
-              const defaultOption = el.querySelector('option[selected]');
-              const defaultValue = defaultOption ? defaultOption.value : '';
-              el.tomselect.setValue(defaultValue, true);
-            }
-          });
-
-          createForm.querySelectorAll('.text-danger, .invalid-feedback').forEach(el => {
-            el.classList.add('d-none');
-            el.textContent = '';
-          });
-
-          const submitBtn = createForm.querySelector('button[type="submit"]');
-          if (submitBtn) {
-            submitBtn.disabled = false;
-          }
+        document.getElementById('excelUploadForm').addEventListener('submit', function() {
+            var modalEl = this.closest('.modal');
+            if (modalEl) bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+            var btn = this.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
+            if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Subiendo Excel',
+                html: 'Procesando archivo...',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: function(popup) {
+                    Swal.showLoading();
+                    var wrapper = document.createElement('div');
+                    wrapper.style.cssText = 'padding:0 2rem 1.5rem;width:100%';
+                    wrapper.innerHTML = '<div style="width:100%;height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden;margin-top:.75rem"><div id="swalProgressBar" style="width:0%;height:100%;background:linear-gradient(90deg,#696cff,#8b8eff);border-radius:3px;transition:width .4s ease"></div></div><div id="swalProgressText" style="margin-top:.4rem;font-size:.75rem;color:#697a8d;text-align:center">0%</div>';
+                    popup.appendChild(wrapper);
+                    var progress = 0;
+                    var bar = document.getElementById('swalProgressBar');
+                    var txt = document.getElementById('swalProgressText');
+                    var interval = setInterval(function() {
+                    if (progress < 70) { progress += Math.random() * 5 + 2; }
+                    else if (progress < 90) { progress += Math.random() * 1.5 + 0.3; }
+                    else if (progress < 95) { progress += Math.random() * 0.3; }
+                    progress = Math.min(progress, 95);
+                    if (bar) bar.style.width = progress + '%';
+                    if (txt) txt.textContent = Math.round(progress) + '%';
+                    if (progress >= 95) clearInterval(interval);
+                    }, 500);
+                }
+            });
+        }
         });
-      }
 
-      initSearchableSelects(document);
-    });
-  </script>
+        var createForm = document.getElementById('createServerForm');
+        var cancelBtn = document.getElementById('cancelCreateServer');
+        if (createForm && cancelBtn) {
+            cancelBtn.addEventListener('click', function() {
+            createForm.reset();
+            createForm.querySelectorAll('input, textarea, select').forEach(function(el) {
+                el.classList.remove('is-invalid');
+                el.setCustomValidity('');
+                if (el.tomselect) {
+                var d = el.querySelector('option[selected]');
+                el.tomselect.setValue(d ? d.value : '', true);
+                }
+            });
+            createForm.querySelectorAll('.text-danger, .invalid-feedback').forEach(function(el) {
+                el.classList.add('d-none');
+                el.textContent = '';
+            });
+            var btn = createForm.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = false;
+            });
+        }
+        });
+    </script>
 @endpush

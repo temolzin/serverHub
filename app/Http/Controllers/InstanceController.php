@@ -9,30 +9,21 @@ use App\Models\Server;
 
 class InstanceController extends Controller
 {
-  public function index(Request $request)
+    public function index(Request $request)
     {
-      $instances = Instance::with('server');
+        $instances = Instance::with('server');
         if ($request->filled('search')) {
             $search = $request->search;
             $instances->where(function ($q) use ($search) {
                 $q->where('version', 'like', "%{$search}%")
-                  ->orWhere('edition', 'like', "%{$search}%")
-                  ->orWhereHas('server', function ($sub) use ($search) {
-                      $sub->where('hostname_internal', 'like', "%{$search}%");
-                  });
+                    ->orWhere('edition', 'like', "%{$search}%")
+                    ->orWhereHas('server', function ($sub) use ($search) {
+                        $sub->where('hostname_internal', 'like', "%{$search}%");
+                    });
             });
         }
-        $instances = $instances
-            ->orderBy('id', 'desc')
-            ->paginate(10)
-            ->withQueryString();
+        $instances = $instances->orderBy('id', 'desc')->get();
         $servers = Server::orderBy('hostname_internal')->get();
-        if ($request->ajax()) {
-            return response()->json([
-                'table' => view('instances.search', compact('instances', 'servers'))->render(),
-                'pagination' => view('instances.pagination', compact('instances'))->render(),
-            ]);
-        }
         return view('instances.index', compact('instances', 'servers'));
     }
 
@@ -46,8 +37,8 @@ class InstanceController extends Controller
         ]);
         Instance::create($validated);
         return redirect()
-          ->route('instances.index')
-          ->with('success', 'Instancia creada correctamente.');
+            ->route('instances.index')
+            ->with('success', 'Instancia creada correctamente.');
     }
 
     public function update(Request $request, Instance $instance)
