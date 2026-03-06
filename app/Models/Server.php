@@ -31,6 +31,7 @@ class Server extends Model
         'uuid',
         'type_application_id',
         'database_id',
+        'created_by',
         'vm_according_to_the_vmware',
         'state',
         'dns_name',
@@ -102,5 +103,9 @@ class Server extends Model
     public function database()
     {
         return $this->belongsTo(Database::class);
+    }
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

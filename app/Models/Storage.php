@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Storage extends Model
 {
@@ -15,6 +16,12 @@ class Storage extends Model
         'operations_system',
         'internal_ip',
         'environment',
-        'datacenter'
+        'datacenter',
+        'created_by'
     ];
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

@@ -11,7 +11,7 @@ class ApplicationController extends Controller
 {
   public function index(Request $request)
   {
-    $query = Application::with(['owner', 'server']);
+    $query = Application::with(['owner', 'server', 'creator']);
 
     if ($request->filled('search')) {
       $search = trim($request->search);
@@ -60,6 +60,7 @@ class ApplicationController extends Controller
       'cron_jobs' => 'nullable|string',
     ]);
 
+    $validated['created_by'] = auth()->id();
     Application::create($validated);
 
     return redirect()

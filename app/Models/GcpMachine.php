@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class GcpMachine extends Model
 {
@@ -45,6 +46,7 @@ class GcpMachine extends Model
     'ram_memory',
     'swap_memory',
     'owner_id',
+    'created_by'
   ];
 
   protected static function booted()
@@ -56,15 +58,20 @@ class GcpMachine extends Model
     });
   }
 
-  public function owner()
-  {
-    return $this->belongsTo(Owner::class);
-  }
+    public function owner()
+    {
+        return $this->belongsTo(Owner::class);
+    }
 
-  public function application()
-  {
-    return $this->belongsTo(Application::class);
-  }
+    public function application()
+    {
+        return $this->belongsTo(Application::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
   public function isPoweredOff(): bool
   {

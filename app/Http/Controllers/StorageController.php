@@ -9,7 +9,7 @@ class StorageController extends Controller
 {
     public function index()
     {
-        $storages = Storage::paginate(10);
+        $storages = Storage::with(['creator'])->paginate(10);
         return view('storages.index', compact('storages'));
     }
 
@@ -32,6 +32,7 @@ class StorageController extends Controller
             'datacenter' => 'nullable|string|max:255',
         ]);
 
+        $validated['created_by'] = auth()->id();
         Storage::create($validated);
 
         return redirect()->route('storages.index')

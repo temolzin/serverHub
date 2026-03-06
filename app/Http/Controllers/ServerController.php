@@ -55,6 +55,8 @@ class ServerController extends Controller
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
         );
 
+        $payload['created_by'] = auth()->id();
+
         $server ? $server->update($payload) : Server::create($payload);
 
         return redirect()
@@ -120,7 +122,7 @@ class ServerController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $servers = Server::with(['owner', 'typeApplication', 'database']);
+        $servers = Server::with(['owner', 'typeApplication', 'database', 'creator']);
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($servers);
         $servers->when(

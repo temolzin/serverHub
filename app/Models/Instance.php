@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\User;
 
 class Instance extends Model
 {
@@ -15,6 +16,7 @@ class Instance extends Model
         'memory',
         'version',
         'edition',
+        'created_by'
     ];
 
     public function server()
@@ -30,5 +32,10 @@ class Instance extends Model
     public function getServerHostnameAttribute()
     {
         return $this->server?->hostname_internal;
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

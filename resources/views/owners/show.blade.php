@@ -37,10 +37,18 @@
           </label>
           <input type="text" class="form-control" value="{{ $owner->number_phone ?? '—' }}" disabled>
         </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">
+            <i class="bx bx-user-check me-1 text-primary"></i>
+            Creado por
+          </label>
+          <input type="text" class="form-control" value="{{ $owner->creator->name ?? 'N/A' }}" disabled >
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-          <i class="bx bx-x-circle me-1"></i> Cerrar
+          <i class="bx bx-x-circle me-1"></i>
+          Cerrar
         </button>
       </div>
     </div>
