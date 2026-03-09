@@ -14,15 +14,14 @@
         <div class="modal-body text-start">
           <div class="mb-4">
             <label class="form-label">Tipo de aplicación</label>
-            <div class="input-group">
-              <span class="input-group-text">
-                <i class="bx bx-category text-primary"></i>
-              </span>
-              <input type="text" name="type_application" class="form-control"
-                placeholder="Ej: Web, API, Servicio Windows" maxlength="50" value="{{ $type->type_application }}"
-                required>
-            </div>
-            <small class="text-muted">Máximo 50 caracteres</small>
+            <select name="type_application" class="form-control" required>
+                <option value="">Selecciona un tipo</option>
+                <option value="BD">BD</option>
+                <option value="Aplicacion">Aplicación</option>
+                <option value="Appliance">Apliance</option>
+                <option value="Unknown">Unknown</option>
+            </select>
+            <small class="text-muted">Selecciona el tipo de aplicación</small>
           </div>
           <div class="mb-4">
             <label class="form-label">Nombre de la aplicación</label>
