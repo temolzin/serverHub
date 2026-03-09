@@ -14,8 +14,8 @@
                     <option value="">Selecciona un tipo</option>
                     <option value="BD">BD</option>
                     <option value="Aplicacion">Aplicación</option>
-                    <option value="Appliance">Apliance</option>
-                    <option value="Unknown">Unknown</option>
+                    <option value="Appliance">Aparato</option>
+                    <option value="Unknown">Desconocido</option>
                 </select>
             <small class="text-muted">Selecciona el tipo de aplicación</small>
           </div>
