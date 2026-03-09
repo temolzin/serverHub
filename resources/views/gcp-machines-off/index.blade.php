@@ -59,61 +59,61 @@
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
         jQuery(function($) {
-        function hydrateBootstrap() {
-            document.querySelectorAll('.dropdown-toggle').forEach(function(el) {
-            bootstrap.Dropdown.getOrCreateInstance(el);
-            });
-        }
+            function hydrateBootstrap() {
+                document.querySelectorAll('.dropdown-toggle').forEach(function(el) {
+                bootstrap.Dropdown.getOrCreateInstance(el);
+                });
+            }
 
-        function initSearchableSelects(scope) {
-            scope = scope || document;
-            if (typeof TomSelect === 'undefined') return;
-            scope.querySelectorAll('.gcp-off-searchable-select').forEach(function(select) {
-            if (select.tomselect) return;
-            new TomSelect(select, {
-                create: false,
-                sortField: {
-                field: 'text',
-                direction: 'asc'
+            function initSearchableSelects(scope) {
+                scope = scope || document;
+                if (typeof TomSelect === 'undefined') return;
+                scope.querySelectorAll('.gcp-off-searchable-select').forEach(function(select) {
+                if (select.tomselect) return;
+                new TomSelect(select, {
+                    create: false,
+                    sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                    },
+                    placeholder: select.dataset.placeholder || 'Buscar...'
+                });
+                });
+            }
+
+            $('#dt-gcp-off').DataTable({
+                pageLength: 10,
+                deferRender: true,
+                dom: '<"dt-top d-flex justify-content-between align-items-center gap-3 mb-2"lf>rt<"dt-bottom d-flex justify-content-end align-items-center mt-2"p>',
+                order: [
+                [0, 'asc']
+                ],
+                columnDefs: [{
+                orderable: false,
+                searchable: false,
+                targets: -1
+                }, {
+                visible: false,
+                targets: 1
+                }],
+                language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json',
+                paginate: {
+                    previous: '&#8249;',
+                    next: '&#8250;'
+                }
                 },
-                placeholder: select.dataset.placeholder || 'Buscar...'
+                drawCallback: function() {
+                hydrateBootstrap();
+                initSearchableSelects(this.api().table().body());
+                }
             });
+            document.querySelectorAll('.dt-loading').forEach(function(el) {
+                el.remove();
             });
-        }
 
-        $('#dt-gcp-off').DataTable({
-            pageLength: 10,
-            deferRender: true,
-            dom: '<"dt-top d-flex justify-content-between align-items-center gap-3 mb-2"lf>rt<"dt-bottom d-flex justify-content-end align-items-center mt-2"p>',
-            order: [
-            [0, 'asc']
-            ],
-            columnDefs: [{
-            orderable: false,
-            searchable: false,
-            targets: -1
-            }, {
-            visible: false,
-            targets: 1
-            }],
-            language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json',
-            paginate: {
-                previous: '&#8249;',
-                next: '&#8250;'
-            }
-            },
-            drawCallback: function() {
             hydrateBootstrap();
-            initSearchableSelects(this.api().table().body());
-            }
-        });
-        document.querySelectorAll('.dt-loading').forEach(function(el) {
-            el.remove();
-        });
-
-        hydrateBootstrap();
-        initSearchableSelects(document);
+            initSearchableSelects(document);
         });
     </script>
 @endpush

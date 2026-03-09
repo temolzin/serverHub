@@ -7,23 +7,22 @@ use App\Models\TypeApplication;
 
 class TypeApplicationController extends Controller
 {
-  public function index(Request $request)
-  {
-    $typeApplications = TypeApplication::with('creator');
-    if ($request->filled('search')) {
-      $search = $request->search;
-      $typeApplications->where(function ($q) use ($search) {
-        $q->where('type_application', 'like', "%{$search}%")
-          ->orWhere('name_application', 'like', "%{$search}%");
-      });
-    }
+    public function index(Request $request)
+    {
+        $query = TypeApplication::with('creator');
 
-        $typeApplications = $typeApplications->orderBy('id', 'desc')->get();
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('type_application', 'like', "%{$search}%")
+                ->orWhere('name_application', 'like', "%{$search}%");
+            });
+        }
+
+        $typeApplications = $query->orderBy('id', 'desc')->get();
 
         return view('type-applications.index', compact('typeApplications'));
-    }
-
-    return view('type-applications.index', compact('typeApplications'));
     }
 
     public function create()
@@ -40,32 +39,32 @@ class TypeApplicationController extends Controller
 
         $validated['created_by'] = auth()->id();
         TypeApplication::create($validated);
-
-        return redirect()
-            ->route('type-applications.index')
-            ->with('success', 'Tipo de aplicación creado correctamente');
-    }
-
-    public function edit($id)
-    {
-        return view('type-applications.edit');
-    }
-
-    public function update(Request $request, TypeApplication $typeApplication)
-    {
-        $validated = $request->validate([
-        'type_application' => 'required|string|max:50',
-        'name_application' => 'required|string|max:100',
-        ]);
-        $typeApplication->update($validated);
         return redirect()
         ->route('type-applications.index')
-        ->with('success', 'Tipo de aplicación actualizado correctamente.');
+        ->with('success', 'Tipo de aplicación creado correctamente');
     }
 
     public function show(TypeApplication $typeApplication)
     {
         return view('type-applications.show', compact('typeApplication'));
+    }
+
+    public function edit(TypeApplication $typeApplication)
+    {
+        return view('type-applications.edit', compact('typeApplication'));
+    }
+
+    public function update(Request $request, TypeApplication $typeApplication)
+    {
+        $validated = $request->validate([
+            'type_application' => 'required|string|max:50',
+            'name_application' => 'required|string|max:100',
+        ]);
+
+        $typeApplication->update($validated);
+        return redirect()
+            ->route('type-applications.index')
+            ->with('success', 'Tipo de aplicación actualizado correctamente.');
     }
 
     public function destroy(TypeApplication $typeApplication)

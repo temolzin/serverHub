@@ -58,37 +58,37 @@
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
         jQuery(function($) {
-        $('#dt-applications').DataTable({
-            pageLength: 10, deferRender: true,
-            dom: '<"dt-top d-flex justify-content-between align-items-center gap-3 mb-2"lf>rt<"dt-bottom d-flex justify-content-end align-items-center mt-2"p>',
-            order: [[0, 'asc']],
-            columnDefs: [{ orderable: false, searchable: false, targets: -1 }],
-            language: { url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json', paginate: { previous: '&#8249;', next: '&#8250;' }
-        }
-        });
-
-        if (document.querySelector("#ownerSelect")) {
-            new TomSelect("#ownerSelect", { create: false, sortField: { field: "text", direction: "asc" }, placeholder: "Buscar propietario..." });
-        }
-        if (document.querySelector("#serverSelect")) {
-            new TomSelect("#serverSelect", { create: false, sortField: { field: "text", direction: "asc" }, placeholder: "Buscar servidor..." });
-        }
-        document.querySelectorAll('.ownerSelectEdit').forEach(el => {
-            new TomSelect(el, { create: false, sortField: { field: "text", direction: "asc" }, render: { option: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>`, item: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>` }});
-        });
-        document.querySelectorAll('.serverSelectEdit').forEach(el => {
-            new TomSelect(el, { create: false, sortField: { field: "text", direction: "asc" }, render: { option: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>`, item: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>` }});
-        });
-
-        const createModal = document.getElementById('createApplicationModal');
-        const createForm = document.getElementById('createApplicationForm');
-        if (createModal) {
-            createModal.addEventListener('hidden.bs.modal', function() {
-            createForm.reset();
-            if (createForm.querySelector('#ownerSelect')?.tomselect) createForm.querySelector('#ownerSelect').tomselect.clear();
-            if (createForm.querySelector('#serverSelect')?.tomselect) createForm.querySelector('#serverSelect').tomselect.clear();
+            $('#dt-applications').DataTable({
+                pageLength: 10, deferRender: true,
+                dom: '<"dt-top d-flex justify-content-between align-items-center gap-3 mb-2"lf>rt<"dt-bottom d-flex justify-content-end align-items-center mt-2"p>',
+                order: [[0, 'asc']],
+                columnDefs: [{ orderable: false, searchable: false, targets: -1 }],
+                language: { url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json', paginate: { previous: '&#8249;', next: '&#8250;' }
+                }
             });
-        }
+
+            if (document.querySelector("#ownerSelect")) {
+                new TomSelect("#ownerSelect", { create: false, sortField: { field: "text", direction: "asc" }, placeholder: "Buscar propietario..." });
+            }
+            if (document.querySelector("#serverSelect")) {
+                new TomSelect("#serverSelect", { create: false, sortField: { field: "text", direction: "asc" }, placeholder: "Buscar servidor..." });
+            }
+            document.querySelectorAll('.ownerSelectEdit').forEach(el => {
+                new TomSelect(el, { create: false, sortField: { field: "text", direction: "asc" }, render: { option: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>`, item: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>` }});
+            });
+            document.querySelectorAll('.serverSelectEdit').forEach(el => {
+                new TomSelect(el, { create: false, sortField: { field: "text", direction: "asc" }, render: { option: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>`, item: (d, e) => `<div style="text-align:left;">${e(d.text)}</div>` }});
+            });
+
+            const createModal = document.getElementById('createApplicationModal');
+            const createForm = document.getElementById('createApplicationForm');
+            if (createModal) {
+                createModal.addEventListener('hidden.bs.modal', function() {
+                    createForm.reset();
+                    if (createForm.querySelector('#ownerSelect')?.tomselect) createForm.querySelector('#ownerSelect').tomselect.clear();
+                    if (createForm.querySelector('#serverSelect')?.tomselect) createForm.querySelector('#serverSelect').tomselect.clear();
+                });
+            }
         });
     </script>
 @endpush

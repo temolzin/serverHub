@@ -9,21 +9,21 @@ use App\Models\Server;
 
 class ApplicationController extends Controller
 {
-  public function index(Request $request)
-  {
-    $query = Application::with(['owner', 'server', 'creator']);
+    public function index(Request $request)
+    {
+        $query = Application::with(['owner', 'server', 'creator']);
 
         if ($request->filled('search')) {
-        $search = trim($request->search);
-        $query->where(function ($q) use ($search) {
-            $q->where('name', 'like', "%{$search}%")
-            ->orWhereHas('server', function ($sub) use ($search) {
-                $sub->where('hostname_internal', 'like', "%{$search}%");
-            })
-            ->orWhereHas('owner', function ($sub) use ($search) {
-                $sub->where('name', 'like', "%{$search}%");
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhereHas('server', function ($sub) use ($search) {
+                    $sub->where('hostname_internal', 'like', "%{$search}%");
+                })
+                ->orWhereHas('owner', function ($sub) use ($search) {
+                    $sub->where('name', 'like', "%{$search}%");
+                });
             });
-        });
         }
 
         $applications = $query
@@ -52,8 +52,8 @@ class ApplicationController extends Controller
         'cron_jobs' => 'nullable|string',
         ]);
 
-    $validated['created_by'] = auth()->id();
-    Application::create($validated);
+        $validated['created_by'] = auth()->id();
+        Application::create($validated);
 
         return redirect()
         ->route('applications.index')

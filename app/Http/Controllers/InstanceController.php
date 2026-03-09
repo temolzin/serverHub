@@ -11,7 +11,7 @@ class InstanceController extends Controller
 {
     public function index(Request $request)
     {
-      $instances = Instance::with('server', 'creator');
+        $instances = Instance::with('server', 'creator');
         if ($request->filled('search')) {
             $search = $request->search;
             $instances->where(function ($q) use ($search) {

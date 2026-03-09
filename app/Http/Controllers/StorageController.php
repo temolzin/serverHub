@@ -67,7 +67,6 @@ class StorageController extends Controller
     public function destroy(Storage $storage)
     {
         $storage->delete();
-
         return redirect()->route('storages.index')
             ->with('success', 'Almacenamiento eliminado correctamente');
     }

@@ -12,32 +12,32 @@
         </span>
         </td>
         <td class="text-end">
-        <div class="dropdown">
-            <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-            <i class="bx bx-dots-vertical-rounded"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
-            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showServerOffModal{{ $server->id }}">
-                <i class="bx bx-show me-1"></i> Ver
-            </a>
-            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editServerOffModal{{ $server->id }}">
-                <i class="bx bx-edit-alt me-1"></i> Editar
-            </a>
-            <form action="{{ route('servers.power-on', $server) }}" method="POST" class="d-inline">
-                @csrf
-                <button type="submit" class="dropdown-item text-success">
-                <i class="bx bx-power-off me-1"></i> Encender
+            <div class="dropdown">
+                <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                <i class="bx bx-dots-vertical-rounded"></i>
                 </button>
-            </form>
-            <a class="dropdown-item text-danger" data-bs-toggle="modal"
-                data-bs-target="#deleteServerOffModal{{ $server->id }}">
-                <i class="bx bx-trash me-1"></i> Eliminar
-            </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showServerOffModal{{ $server->id }}">
+                        <i class="bx bx-show me-1"></i> Ver
+                    </a>
+                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editServerOffModal{{ $server->id }}">
+                        <i class="bx bx-edit-alt me-1"></i> Editar
+                    </a>
+                    <form action="{{ route('servers.power-on', $server) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="dropdown-item text-success">
+                        <i class="bx bx-power-off me-1"></i> Encender
+                        </button>
+                    </form>
+                    <a class="dropdown-item text-danger" data-bs-toggle="modal"
+                        data-bs-target="#deleteServerOffModal{{ $server->id }}">
+                        <i class="bx bx-trash me-1"></i> Eliminar
+                    </a>
+                </div>
             </div>
-        </div>
-        @include('serversOff.show', ['server' => $server])
-        @include('serversOff.edit', ['server' => $server])
-        @include('serversOff.delete', ['server' => $server])
+            @include('serversOff.show', ['server' => $server])
+            @include('serversOff.edit', ['server' => $server])
+            @include('serversOff.delete', ['server' => $server])
         </td>
     </tr>
     @empty

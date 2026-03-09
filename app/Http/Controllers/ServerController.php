@@ -122,11 +122,10 @@ class ServerController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $servers = Server::with(['owner', 'typeApplication', 'database', 'creator']);
+        $query = Server::with(['owner', 'typeApplication', 'database', 'creator']);
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($query);
-
-        $servers          = $query->latest()->get();
+        $servers = $query->latest()->get();
         $owners           = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
         $databases        = Database::orderBy('name')->get();

@@ -38,9 +38,9 @@
             </a>
             </div>
         </div>
-        @include('servers.show', ['server' => $server])
-        @include('servers.edit', ['server' => $server, 'databases' => $databases])
-        @include('servers.delete', ['server' => $server])
+        @include('servers.show')
+        @include('servers.edit')
+        @include('servers.delete')
         </td>
     </tr>
 @empty

@@ -23,21 +23,21 @@ class DatabaseController extends Controller
                 ->orWhere('status', 'like', "%{$search}%")
                 ->orWhereHas('instance.server', function ($sub) use ($search) {
                 $sub->where('hostname_internal', 'like', "%{$search}%");
+                });
             });
-        });
+        }
+
+        $databases = $databases
+            ->orderBy('id', 'desc')
+            ->get();
+        $servers = Server::with('instances', 'owner')
+            ->orderBy('hostname_internal')
+            ->get();
+        $instances = Instance::with('server')->get();
+        $owners = Owner::orderBy('name')->get();
+
+            return view('databases.index', compact('databases', 'servers', 'instances', 'owners'));
     }
-
-    $databases = $databases
-        ->orderBy('id', 'desc')
-        ->get();
-    $servers = Server::with('instances', 'owner')
-        ->orderBy('hostname_internal')
-        ->get();
-    $instances = Instance::with('server')->get();
-    $owners = Owner::orderBy('name')->get();
-
-        return view('databases.index', compact('databases', 'servers', 'instances', 'owners'));
-}
 
     public function store(Request $request)
     {
@@ -86,7 +86,6 @@ class DatabaseController extends Controller
     public function destroy(Database $database)
     {
         $database->delete();
-
         return redirect()
             ->route('databases.index')
             ->with('success', 'Base de datos eliminada correctamente.');

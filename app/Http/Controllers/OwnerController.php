@@ -14,38 +14,31 @@ class OwnerController extends Controller
         $query = Owner::where('email', $email);
 
         if ($exclude) {
-        $query->where('id', '!=', $exclude);
+            $query->where('id', '!=', $exclude);
         }
 
         return response()->json([
-        'exists' => $query->exists()
+            'exists' => $query->exists()
         ]);
     }
 
-    return response()->json([
-      'exists' => $query->exists()
-    ]);
-  }
-  public function index(Request $request)
-  {
-    $owners = Owner::with('creator');
-    if ($request->filled('search')) {
-      $search = $request->search;
-      $owners->where(function ($q) use ($search) {
-        $q->where('name', 'like', "%{$search}%")
-          ->orWhere('last_name', 'like', "%{$search}%")
-          ->orWhere('email', 'like', "%{$search}%")
-          ->orWhere('number_phone', 'like', "%{$search}%");
-      });
-    }
-
-    public function create()
+    public function index(Request $request)
     {
-        return view('content.table-owner.create');
-    }
+        $owners = Owner::with('creator');
 
-    return view('owners.index', compact('owners'));
-  }
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $owners->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('number_phone', 'like', "%{$search}%");
+            });
+        }
+        $owners = $owners->get();
+        return view('owners.index', compact('owners'));
+    }
 
     public function create()
     {
@@ -68,7 +61,6 @@ class OwnerController extends Controller
             return redirect()
                 ->route('owners.index')
                 ->with('success', 'Propietario creado correctamente');
-
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()
                 ->back()
@@ -85,8 +77,9 @@ class OwnerController extends Controller
     public function destroy(Owner $owner)
     {
         $owner->delete();
+
         return redirect()
-        ->route('owners.index')
-        ->with('success', 'Propietario eliminado correctamente');
+            ->route('owners.index')
+            ->with('success', 'Propietario eliminado correctamente');
     }
 }
