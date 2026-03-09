@@ -92,22 +92,22 @@
                 deferRender: true,
                 dom: '<"dt-top d-flex justify-content-between align-items-center gap-3 mb-2"lf>rt<"dt-bottom d-flex justify-content-end align-items-center mt-2"p>',
                 order: [
-                [0, 'asc']
+                    [0, 'asc']
                 ],
                 columnDefs: [{
-                orderable: false,
-                searchable: false,
-                targets: -1
+                    orderable: false,
+                    searchable: false,
+                    targets: -1
                 }, {
-                visible: false,
-                targets: 1
+                    visible: false,
+                    targets: 1
                 }],
                 language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json',
-                paginate: {
-                    previous: '&#8249;',
-                    next: '&#8250;'
-                }
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json',
+                    paginate: {
+                        previous: '&#8249;',
+                        next: '&#8250;'
+                    }
                 },
                 drawCallback: function() {
                     hydrateBootstrap();

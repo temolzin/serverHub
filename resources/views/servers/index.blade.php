@@ -175,33 +175,33 @@
             var btn = this.querySelector('button[type="submit"]');
             if (btn) btn.disabled = true;
             if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                title: 'Subiendo Excel',
-                html: 'Procesando archivo...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                showConfirmButton: false,
-                didOpen: function(popup) {
-                    Swal.showLoading();
-                    var wrapper = document.createElement('div');
-                    wrapper.style.cssText = 'padding:0 2rem 1.5rem;width:100%';
-                    wrapper.innerHTML = '<div style="width:100%;height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden;margin-top:.75rem"><div id="swalProgressBar" style="width:0%;height:100%;background:linear-gradient(90deg,#696cff,#8b8eff);border-radius:3px;transition:width .4s ease"></div></div><div id="swalProgressText" style="margin-top:.4rem;font-size:.75rem;color:#697a8d;text-align:center">0%</div>';
-                    popup.appendChild(wrapper);
-                    var progress = 0;
-                    var bar = document.getElementById('swalProgressBar');
-                    var txt = document.getElementById('swalProgressText');
-                    var interval = setInterval(function() {
-                        if (progress < 70) { progress += Math.random() * 5 + 2; }
-                        else if (progress < 90) { progress += Math.random() * 1.5 + 0.3; }
-                        else if (progress < 95) { progress += Math.random() * 0.3; }
-                        progress = Math.min(progress, 95);
-                        if (bar) bar.style.width = progress + '%';
-                        if (txt) txt.textContent = Math.round(progress) + '%';
-                        if (progress >= 95) clearInterval(interval);
-                    }, 500);
-                }
-            });
-        }
+                Swal.fire({
+                    title: 'Subiendo Excel',
+                    html: 'Procesando archivo...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: function(popup) {
+                        Swal.showLoading();
+                        var wrapper = document.createElement('div');
+                        wrapper.style.cssText = 'padding:0 2rem 1.5rem;width:100%';
+                        wrapper.innerHTML = '<div style="width:100%;height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden;margin-top:.75rem"><div id="swalProgressBar" style="width:0%;height:100%;background:linear-gradient(90deg,#696cff,#8b8eff);border-radius:3px;transition:width .4s ease"></div></div><div id="swalProgressText" style="margin-top:.4rem;font-size:.75rem;color:#697a8d;text-align:center">0%</div>';
+                        popup.appendChild(wrapper);
+                        var progress = 0;
+                        var bar = document.getElementById('swalProgressBar');
+                        var txt = document.getElementById('swalProgressText');
+                        var interval = setInterval(function() {
+                            if (progress < 70) { progress += Math.random() * 5 + 2; }
+                            else if (progress < 90) { progress += Math.random() * 1.5 + 0.3; }
+                            else if (progress < 95) { progress += Math.random() * 0.3; }
+                            progress = Math.min(progress, 95);
+                            if (bar) bar.style.width = progress + '%';
+                            if (txt) txt.textContent = Math.round(progress) + '%';
+                            if (progress >= 95) clearInterval(interval);
+                        }, 500);
+                    }
+                });
+            }
         });
 
         var createForm = document.getElementById('createServerForm');

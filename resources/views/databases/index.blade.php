@@ -47,7 +47,7 @@
     @if (session('success'))
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-        Swal.fire({ icon: 'success', title: 'Listo!', text: @json(session('success')), confirmButtonText: 'Perfecto', timer: 5000, timerProgressBar: true });
+            Swal.fire({ icon: 'success', title: 'Listo!', text: @json(session('success')), confirmButtonText: 'Perfecto', timer: 5000, timerProgressBar: true });
         });
     </script>
     @endif
