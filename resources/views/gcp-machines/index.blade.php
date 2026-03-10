@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Maquinas GCP')
+@section('title', 'GCP')
 
 @if (session('success'))
   <script>

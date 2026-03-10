@@ -36,11 +36,16 @@
             <label class="form-label">Nombre</label>
             <input type="text" name="name" class="form-control" placeholder="Ej: db_produccion" required>
           </div>
-          <div class="mb-4">
-            <label class="form-label">Tipo</label>
-            <input type="text" name="type" class="form-control" placeholder="Ej: MySQL, PostgreSQL, SQL Server"
-              required>
-          </div>
+            <div class="mb-3">
+                <label class="form-label">Tipo</label>
+                    <select name="type" class="form-control" required>
+                        <option value="">Selecciona un tipo</option>
+                        <option value="Oracle">Oracle</option>
+                        <option value="MSSQL">MSSQL</option>
+                        <option value="MySQL">MySQL</option>
+                        <option value="DB2">DB2</option>
+                    </select>
+            </div>
           <div class="mb-4">
             <label class="form-label">Puerto</label>
             <input type="number" name="port" class="form-control" placeholder="Ej: 3306">

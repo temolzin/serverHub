@@ -10,9 +10,14 @@
         <div class="modal-body">
           <div class="mb-4">
             <label class="form-label">Tipo de aplicación</label>
-            <input type="text" name="type_application" class="form-control" placeholder="Ej: Web, Mobile, API"
-              maxlength="50" required>
-            <small class="text-muted">Máximo 50 caracteres</small>
+                <select name="type_application" class="form-control" required>
+                    <option value="">Selecciona un tipo</option>
+                    <option value="BD">BD</option>
+                    <option value="Aplicacion">Aplicación</option>
+                    <option value="Appliance">Aparato</option>
+                    <option value="Unknown">Desconocido</option>
+                </select>
+            <small class="text-muted">Selecciona el tipo de aplicación</small>
           </div>
           <div class="mb-4">
             <label class="form-label">Nombre de la aplicación</label>

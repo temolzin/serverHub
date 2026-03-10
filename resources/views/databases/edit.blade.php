@@ -52,12 +52,29 @@
           </div>
           <div class="mb-4">
             <label class="form-label">
-              <i class="bx bx-category me-1 text-primary"></i>
-              Tipo
+                <i class="bx bx-category me-1 text-primary"></i>
+                Tipo
             </label>
-            <input type="text" name="type" class="form-control" placeholder="Ej: MySQL, PostgreSQL, SQL Server"
-              value="{{ $database->type }}" required>
-          </div>
+                <select name="type" class="form-control" required>
+                    <option value="">Selecciona un tipo</option>
+                        <option value="Oracle"
+                            {{ old('type', $database->type ?? '') == 'Oracle' ? 'selected' : '' }}>
+                                Oracle
+                        </option>
+                        <option value="MSSQL"
+                            {{ old('type', $database->type ?? '') == 'MSSQL' ? 'selected' : '' }}>
+                                MSSQL
+                        </option>
+                        <option value="MySQL"
+                            {{ old('type', $database->type ?? '') == 'MySQL' ? 'selected' : '' }}>
+                                MySQL
+                        </option>
+                        <option value="DB2"
+                            {{ old('type', $database->type ?? '') == 'DB2' ? 'selected' : '' }}>
+                                DB2
+                    </option>
+                </select>
+            </div>
           <div class="mb-4">
             <label class="form-label">
               <i class="bx bx-network-chart me-1 text-primary"></i>
