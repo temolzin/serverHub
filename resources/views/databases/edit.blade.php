@@ -57,21 +57,21 @@
             </label>
                 <select name="type" class="form-control" required>
                     <option value="">Selecciona un tipo</option>
-                    <option value="Oracle"
-                    {{ old('type', $database->type ?? '') == 'Oracle' ? 'selected' : '' }}>
-                    Oracle
-                    </option>
-                    <option value="MSSQL"
-                    {{ old('type', $database->type ?? '') == 'MSSQL' ? 'selected' : '' }}>
-                    MSSQL
-                    </option>
-                    <option value="MySQL"
-                    {{ old('type', $database->type ?? '') == 'MySQL' ? 'selected' : '' }}>
-                    MySQL
-                    </option>
-                    <option value="DB2"
-                    {{ old('type', $database->type ?? '') == 'DB2' ? 'selected' : '' }}>
-                    DB2
+                        <option value="Oracle"
+                            {{ old('type', $database->type ?? '') == 'Oracle' ? 'selected' : '' }}>
+                                Oracle
+                        </option>
+                        <option value="MSSQL"
+                            {{ old('type', $database->type ?? '') == 'MSSQL' ? 'selected' : '' }}>
+                                MSSQL
+                        </option>
+                        <option value="MySQL"
+                            {{ old('type', $database->type ?? '') == 'MySQL' ? 'selected' : '' }}>
+                                MySQL
+                        </option>
+                        <option value="DB2"
+                            {{ old('type', $database->type ?? '') == 'DB2' ? 'selected' : '' }}>
+                                DB2
                     </option>
                 </select>
             </div>
