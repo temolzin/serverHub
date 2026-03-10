@@ -3,40 +3,40 @@
 @section('title', 'Dashboard')
 
 @section('vendor-style')
-  @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
+    @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
 @endsection
 @section('vendor-script')
-  @vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
+    @vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
 @endsection
-    @section('content')
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <h4 class="card-title text-primary">
-                            Bienvenido {{ auth()->user()->name }}
-                        </h4>
-                        <p class="mb-0">
-                            Panel general del sistema donde puedes visualizar los recursos registrados.
-                        </p>
+@section('content')
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="card-title text-primary">
+                        Bienvenido {{ auth()->user()->name }}
+                    </h4>
+                    <p class="mb-0">
+                        Panel general del sistema donde puedes visualizar los recursos registrados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 mb-4">
+            <div class="card dashboard-card shadow-sm border-0 h-100">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Servidores</p>
+                        <h3 class="fw-bold">{{ $servers }}</h3>
+                    </div>
+                    <div class="bg-label-primary rounded p-3">
+                        <i class="bx bx-server fs-3"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3 col-sm-6 mb-4">
-                <div class="card dashboard-card shadow-sm border-0 h-100">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                        <div>
-                            <p class="text-muted mb-1">Servidores</p>
-                            <h3 class="fw-bold">{{ $servers }}</h3>
-                        </div>
-                        <div class="bg-label-primary rounded p-3">
-                            <i class="bx bx-server fs-3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
         <div class="col-md-3 col-sm-6 mb-4">
             <div class="card dashboard-card shadow-sm border-0 h-100">
                 <div class="card-body d-flex justify-content-between align-items-center">
@@ -122,20 +122,20 @@
                         <p class="text-muted mb-1">Usuarios</p>
                         <h3 class="fw-bold">{{ $users }}</h3>
                     </div>
-                        <div class="bg-label-dark rounded p-3">
-                            <i class="bx bx-group fs-3"></i>
-                        </div>
+                    <div class="bg-label-dark rounded p-3">
+                        <i class="bx bx-group fs-3"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header border-0">
-                        <h5 class="fw-semibold">Estado de Servidores</h5>
-                    </div>
-                        <div class="card-body">
+    </div>
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header border-0">
+                    <h5 class="fw-semibold">Estado de Servidores</h5>
+                </div>
+                <div class="card-body">
                     <div id="serversStatusChart"></div>
                 </div>
             </div>
@@ -144,20 +144,20 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header border-0">
                     <h5 class="fw-semibold">Estado de Máquinas</h5>
-                    </div>
-                        <div class="card-body">
-                        <div id="machinesStatusChart"></div>
-                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="machinesStatusChart"></div>
                 </div>
             </div>
         </div>
-        <div class="row">
+    </div>
+    <div class="row">
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0">
                 <div class="card-header border-0">
                     <h5 class="fw-semibold">Servidores por Tipo de Aplicación</h5>
-                    </div>
-                    <div class="card-body">
+                </div>
+                <div class="card-body">
                     <div id="serversByAppChart"></div>
                 </div>
             </div>
@@ -166,14 +166,13 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header border-0">
                     <h5 class="fw-semibold">Bases de Datos por Tipo</h5>
-                    </div>
-                        <div class="card-body">
-                        <div id="databaseTypeChart"></div>
-                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="databaseTypeChart"></div>
                 </div>
             </div>
         </div>
-
+    </div>
 
     <style>
         .dashboard-card {
@@ -194,11 +193,10 @@
         }
     </style>
 
-
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
 
-        var serversOptions = {
+            var serversOptions = {
                 series: [{{ $serversOn }}, {{ $serversOff }}],
                 chart: {
                     type: 'donut',
@@ -213,21 +211,20 @@
                     width: 0
                 },
                 plotOptions: {
-                pie: {
-                    donut: {
-                        size: '70%'
+                    pie: {
+                        donut: {
+                            size: '70%'
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        new ApexCharts(
-            document.querySelector("#serversStatusChart"),
-            serversOptions
-        ).render();
+            new ApexCharts(
+                document.querySelector("#serversStatusChart"),
+                serversOptions
+            ).render();
 
-
-        var machinesOptions = {
+            var machinesOptions = {
                 series: [{{ $machinesOn }}, {{ $machinesOff }}],
                 chart: {
                     type: 'donut',
@@ -242,100 +239,97 @@
                     width: 0
                 },
                 plotOptions: {
-                pie: {
-                    donut: {
-                        size: '70%'
+                    pie: {
+                        donut: {
+                            size: '70%'
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        new ApexCharts(
-            document.querySelector("#machinesStatusChart"),
-            machinesOptions
-        ).render();
+            new ApexCharts(
+                document.querySelector("#machinesStatusChart"),
+                machinesOptions
+            ).render();
 
+            var appOptions = {
+                series: [{
+                    name: 'Servidores',
+                    data: {!! json_encode($appCounts) !!}
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 12,
+                        columnWidth: '35%'
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                grid: {
+                    borderColor: '#f1f1f1',
+                    strokeDashArray: 4
+                },
+                legend: {
+                    position: 'top'
+                },
+                xaxis: {
+                    categories: {!! json_encode($appNames) !!}
+                },
+                colors: ['#7367f0']
+            };
 
-        var appOptions = {
-            series: [{
-            name: 'Servidores',
-            data: {!! json_encode($appCounts) !!}
-            }],
-            chart: {
-                type: 'bar',
-                height: 350,
-            toolbar: {
-                show: false
-            }
-            },
-            plotOptions: {
-            bar: {
-                borderRadius: 12,
-                columnWidth: '35%'
-            }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            grid: {
-                borderColor: '#f1f1f1',
-                strokeDashArray: 4
-            },
-            legend: {
-                position: 'top'
-            },
-            xaxis: {
-                categories: {!! json_encode($appNames) !!}
-            },
-            colors: ['#7367f0']
-        };
+            new ApexCharts(
+                document.querySelector("#serversByAppChart"),
+                appOptions
+            ).render();
 
-        new ApexCharts(
-            document.querySelector("#serversByAppChart"),
-            appOptions
-        ).render();
+            var dbOptions = {
+                series: [{
+                    name: 'Bases de Datos',
+                    data: {!! json_encode($dbCounts) !!}
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    toolbar: {
+                        show: false
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 12,
+                        columnWidth: '35%'
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                grid: {
+                    borderColor: '#f1f1f1',
+                    strokeDashArray: 4
+                },
+                legend: {
+                    position: 'top'
+                },
+                xaxis: {
+                    categories: {!! json_encode($dbNames) !!}
+                },
+                colors: ['#00cfe8']
+            };
 
-
-        var dbOptions = {
-            series: [{
-            name: 'Bases de Datos',
-            data: {!! json_encode($dbCounts) !!}
-            }],
-            chart: {
-                type: 'bar',
-                height: 350,
-            toolbar: {
-                show: false
-            }
-            },
-            plotOptions: {
-            bar: {
-                borderRadius: 12,
-                columnWidth: '35%'
-            }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            grid: {
-                borderColor: '#f1f1f1',
-                strokeDashArray: 4
-            },
-            legend: {
-                position: 'top'
-            },
-            xaxis: {
-                categories: {!! json_encode($dbNames) !!}
-            },
-            colors: ['#00cfe8']
-        };
-
-        new ApexCharts(
-            document.querySelector("#databaseTypeChart"),
-            dbOptions
-        ).render();
+            new ApexCharts(
+                document.querySelector("#databaseTypeChart"),
+                dbOptions
+            ).render();
 
         });
     </script>
-
 @endsection
