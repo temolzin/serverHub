@@ -42,6 +42,9 @@
         </div>
     </div>
     @include('gcp-machines.create')
+    @include('gcp-machines.show')
+    @include('gcp-machines.edit')
+    @include('gcp-machines.delete')
 @endsection
 
 @push('scripts')

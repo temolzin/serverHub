@@ -1,9 +1,6 @@
 @php($stateLabel = $server->isPoweredOff() ? 'poweredOff' : 'poweredOn')
 @php($ownerFullName = trim((optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')))
 @php($applicationName = optional($server->typeApplication)->name_application)
-<div class="modal fade" id="showServerModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title d-flex align-items-center gap-2">
           <i class="bx bx-server text-primary fs-4"></i>
@@ -157,6 +154,3 @@
           <i class="bx bx-x-circle me-1"></i> Cerrar
         </button>
       </div>
-    </div>
-  </div>
-</div>

@@ -57,7 +57,7 @@ class ApplicationController extends Controller
 
         return redirect()
         ->route('applications.index')
-        ->with('success', 'AplicaciÃ³n creada con Ã©xito');
+        ->with('success', 'Aplicación creada con éxito');
     }
 
     public function update(Request $request, Application $application)
@@ -80,7 +80,7 @@ class ApplicationController extends Controller
         $application->update($validated);
         return redirect()
         ->route('applications.index')
-        ->with('success', 'AplicaciÃ³n actualizada con Ã©xito');
+        ->with('success', 'Aplicación actualizada con éxito');
     }
 
     public function destroy(Application $application)
@@ -89,6 +89,6 @@ class ApplicationController extends Controller
 
         return redirect()
         ->route('applications.index')
-        ->with('success', 'AplicaciÃ³n eliminada con Ã©xito');
+        ->with('success', 'Aplicación eliminada con éxito');
     }
 }

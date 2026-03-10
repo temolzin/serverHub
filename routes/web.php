@@ -52,6 +52,12 @@ Route::middleware('auth')->group(function () {
             ->name('servers.import');
         Route::post('/servers-off/import', [ImportController::class, 'importPoweredOff'])
             ->name('servers-off.import');
+            Route::get('/servers/data', [ServerController::class, 'data'])->name('servers.data');
+            Route::get('/servers/{server}/edit', [ServerController::class, 'edit'])
+    ->name('servers.edit');
+    Route::get('/servers/{server}/show',[ServerController::class,'show'])->name('servers.show');
+    Route::post('/servers/{server}/power-off', [ServerController::class, 'powerOff'])
+    ->name('servers.power-off');
     });
 
     Route::middleware('permission:viewTypeApplication')

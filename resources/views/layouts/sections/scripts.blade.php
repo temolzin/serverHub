@@ -1,17 +1,21 @@
-﻿<!-- BEGIN: Vendor JS-->
+﻿{{-- BEGIN: Vendor JS --}}
 
-@vite(['resources/assets/vendor/libs/jquery/jquery.js', 'resources/assets/vendor/libs/popper/popper.js', 'resources/assets/vendor/js/bootstrap.js'])
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-@vite(['resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js', 'resources/assets/vendor/js/menu.js'])
+<!-- DataTables -->
+<link rel="stylesheet"
+href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
 
-@yield('vendor-script')
-<!-- END: Page Vendor JS-->
-<!-- BEGIN: Theme JS-->
-@vite(['resources/assets/js/main.js'])
-<!-- END: Theme JS-->
-@stack('pricing-script')
-@yield('page-script')
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- app JS -->
-@vite(['resources/js/app.js'])
-<!-- END: app JS-->
+@vite([
+'resources/assets/vendor/libs/popper/popper.js',
+'resources/assets/vendor/js/bootstrap.js'
+])
+
+@vite([
+'resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js',
+'resources/assets/vendor/js/menu.js'
+])

@@ -42,9 +42,9 @@
             </button>
             </div>
         </div>
-        @include('gcp-machines.show', ['machine' => $machine])
-        @include('gcp-machines.edit', ['machine' => $machine])
-        @include('gcp-machines.delete', ['machine' => $machine])
+        @include('gcp-machines.show')
+        @include('gcp-machines.edit')
+        @include('gcp-machines.delete')
         </td>
     </tr>
     @empty

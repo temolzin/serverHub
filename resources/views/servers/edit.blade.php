@@ -1,8 +1,5 @@
 @php($isPoweredOff = $server->isPoweredOff())
 
-<div class="modal fade" id="editServerModal{{ $server->id }}" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title d-flex align-items-center gap-2">
           <i class="bx bx-edit text-primary"></i>
@@ -152,7 +149,4 @@
             Actualizar
           </button>
         </div>
-      </form>
-    </div>
-  </div>
-</div>
+</form>

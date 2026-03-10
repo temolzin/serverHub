@@ -89,43 +89,40 @@ class ServerController extends Controller
     }
 
     public function powerOff(Server $server)
-    {
-        return $this->changeState($server, 'poweredOff');
-    }
+{
+    $this->changeState($server, 'poweredOff');
 
-    private function changeState(Server $server, string $state)
-    {
-        $server->update(['state' => $state]);
+    return response()->json([
+        'success' => true
+    ]);
+}
 
-        if ($server->database) {
+   private function changeState(Server $server, string $state)
+{
+    $server->update(['state' => $state]);
 
-            if ($state === 'poweredOff') {
-                $server->database->update([
-                    'status' => 'inactive'
-                ]);
-            }
+    if ($server->database) {
 
-            if ($state === 'poweredOn') {
-                $server->database->update([
-                    'status' => 'active'
-                ]);
-            }
+        if ($state === 'poweredOff') {
+            $server->database->update([
+                'status' => 'inactive'
+            ]);
         }
 
-        return back()->with(
-            'success',
-            $state === 'poweredOn'
-                ? 'Servidor encendido correctamente'
-                : 'Servidor apagado correctamente'
-        );
+        if ($state === 'poweredOn') {
+            $server->database->update([
+                'status' => 'active'
+            ]);
+        }
     }
+}
 
     private function renderIndex(Request $request, bool $off = false)
     {
         $query = Server::with(['owner', 'typeApplication', 'database', 'creator']);
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($query);
-        $servers = $query->latest()->get();
+        $servers = $query->latest()->paginate(15);
         $owners           = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
         $databases        = Database::orderBy('name')->get();
@@ -273,4 +270,110 @@ class ServerController extends Controller
                 ->orWhereRaw("{$expression} NOT IN ({$placeholders})", Server::POWERED_OFF_VALUES);
         });
     }
+public function data(Request $request)
+{
+    $draw   = intval($request->input('draw'));
+    $start  = intval($request->input('start', 0));
+    $length = intval($request->input('length', 10));
+    $search = $request->input('search.value');
+
+    $query = Server::with([
+        'typeApplication:id,name_application',
+        'database:id,name'
+    ]);
+
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('hostname_internal', 'like', "%{$search}%")
+              ->orWhere('primary_ip_address', 'like', "%{$search}%");
+        });
+    }
+
+    $recordsTotal = Server::count();
+    $recordsFiltered = $query->count();
+
+    $servers = $query
+    ->latest()
+    ->offset($start)
+    ->limit($length)
+    ->get();
+
+    $data = [];
+
+    foreach ($servers as $server) {
+
+        $data[] = [
+            'id' => $server->id,
+            'application' => $server->typeApplication->name_application ?? 'N/A',
+            'hostname' => $server->hostname_internal ?? 'N/A',
+            'database' => $server->database->name ?? 'N/A',
+            'ip' => $server->primary_ip_address ?? 'N/A',
+            'state' => $server->state === 'poweredOn'
+                ? '<span class="badge bg-success">poweredOn</span>'
+                : '<span class="badge bg-danger">poweredOff</span>',
+            'actions' => '
+
+<div class="dropdown text-end">
+
+<button class="btn p-0 dropdown-toggle hide-arrow"
+type="button"
+data-bs-toggle="dropdown">
+<i class="bx bx-dots-vertical-rounded"></i>
+</button>
+
+<div class="dropdown-menu dropdown-menu-end">
+
+<button class="dropdown-item view-server-btn"
+data-id="'.$server->id.'">
+<i class="bx bx-show me-1"></i> Ver
+</button>
+
+<button class="dropdown-item edit-server-btn"
+data-id="'.$server->id.'">
+<i class="bx bx-edit-alt me-1"></i> Editar
+</button>
+
+<button class="dropdown-item text-warning poweroff-server-btn"
+data-id="'.$server->id.'">
+<i class="bx bx-power-off me-1"></i> Apagar
+</button>
+
+<button class="dropdown-item text-danger delete-server-btn"
+data-id="'.$server->id.'">
+<i class="bx bx-trash me-1"></i> Eliminar
+</button>
+
+</div>
+</div>
+'
+        ];
+    }
+
+    return response()->json([
+        "draw"=>$draw,
+        "recordsTotal"=>$recordsTotal,
+        "recordsFiltered"=>$recordsFiltered,
+        "data"=>$data
+    ]);
+}
+public function edit(Server $server)
+{
+    $owners = Owner::orderBy('name')->get();
+    $typeApplications = TypeApplication::orderBy('name_application')->get();
+    $databases = Database::orderBy('name')->get();
+
+    return view('servers.edit', compact(
+        'server',
+        'owners',
+        'typeApplications',
+        'databases'
+    ));
+}
+
+public function show(Server $server)
+{
+    $server->load(['owner','typeApplication','database','creator']);
+
+    return view('servers.show', compact('server'));
+}
 }
