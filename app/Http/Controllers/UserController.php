@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -16,15 +17,15 @@ class UserController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
-            });
-        })
-        ->paginate(10)
-        ->withQueryString();
+                });
+            })
+            ->paginate(10)
+            ->withQueryString();
         $permissions = Permission::all()->groupBy(function ($permission) {
             return explode(' ', $permission->name)[1] ?? 'General';
         });
-    return view('users.index', compact('users', 'permissions'));
-}
+        return view('users.index', compact('users', 'permissions'));
+    }
 
 
     public function store(Request $request)
@@ -33,6 +34,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
+        ], [
+            // Opcional: Personalizar el mensaje de error en español
+            'password.min' => 'La contraseña es demasiado corta (mínimo 6 caracteres).',
+            'email.unique' => 'Este correo ya está registrado.',
         ]);
 
         $user = User::create($validated);
@@ -66,7 +71,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if ($user->id === auth()->id()) {
+        if ($user->id === Auth::id()) {
             return back()->with('error', 'No puedes eliminar tu propio usuario.');
         }
         $user->delete();

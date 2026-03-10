@@ -21,14 +21,14 @@
             "permission": "viewOwner"
         },
         {
-            "name": "Máquinas GCP",
+            "name": "GCP",
             "icon": "menu-icon icon-base bx bx-cloud",
             "slug": "gcp-machines.",
             "url": "gcp-machines",
             "permission": "viewGcpMachine"
         },
         {
-            "name": "Máquinas GCP Apagadas",
+            "name": "GCP Apagadas",
             "icon": "menu-icon icon-base bx bx-power-off",
             "slug": "gcp-machines-off.",
             "url": "gcp-machines-off",
@@ -42,14 +42,14 @@
             "permission": "viewTypeApplication"
         },
         {
-            "name": "Servidores",
+            "name": "On-Premises",
             "icon": "menu-icon icon-base bx bx-server",
             "slug": "servers.",
             "url": "servers",
             "permission": "viewServer"
         },
         {
-            "name": "Servidores Apagados",
+            "name": "Off-Premises",
             "icon": "menu-icon icon-base bx bx-power-off",
             "slug": "servers-off.",
             "url": "servers-off",
