@@ -21,6 +21,7 @@ return new class extends Migration
             ->update([
                 'primary_ip_address' => ''
             ]);
+
         DB::table('servers')
             ->whereRaw("LOWER(TRIM(state)) IN ('poweredoff','off','false','0')")
             ->update(['state' => 0]);
@@ -49,6 +50,9 @@ return new class extends Migration
             ->whereNull('os_according_to_the_vmware')
             ->update(['os_according_to_the_vmware' => 'N/A']);
 
+        DB::table('gcp_machines')
+            ->whereNull('owner_id')
+            ->update(['owner_id' => 1]);
         Schema::table('servers', function (Blueprint $table) {
             $table->unsignedBigInteger('owner_id')->nullable(false)->change();
             $table->unsignedBigInteger('type_application_id')->nullable(false)->change();
@@ -57,13 +61,11 @@ return new class extends Migration
             $table->string('os_version_internal')->nullable(false)->change();
             $table->string('os_according_to_the_vmware')->nullable(false)->change();
             $table->boolean('state')->default(true)->change();
+            $table->string('primary_ip_address', 45)->nullable(false)->change();
         });
 
         Schema::table('gcp_machines', function (Blueprint $table) {
             $table->unsignedBigInteger('owner_id')->nullable(false)->change();
-        });
-        Schema::table('servers', function (Blueprint $table) {
-            $table->string('primary_ip_address', 45)->nullable(false)->change();
         });
     }
 };
