@@ -35,7 +35,6 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
         ], [
-            // Opcional: Personalizar el mensaje de error en español
             'password.min' => 'La contraseña es demasiado corta (mínimo 6 caracteres).',
             'email.unique' => 'Este correo ya está registrado.',
         ]);
