@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Application;
+use App\Models\GcpMachine;
 use App\Models\Owner;
 use App\Models\Server;
 
@@ -13,6 +14,7 @@ class ApplicationSeeder extends Seeder
   {
     $owner = Owner::first();
     $server = Server::first();
+    $gcpMachine = GcpMachine::first();
 
     if (!$owner || !$server) {
       return;
@@ -21,9 +23,10 @@ class ApplicationSeeder extends Seeder
     Application::create([
       'owner_id' => $owner->id,
       'server_id' => $server->id,
+      'gcp_machine_id' => $gcpMachine?->id,
       'name' => 'ServerHub API',
       'version' => '1.0.0',
-      'status' => 'active',
+      'status' => 'production',
       'type' => 'api',
       'comments' => 'Main backend application',
       'processes' => 'php-fpm, nginx',

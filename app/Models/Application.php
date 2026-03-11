@@ -13,6 +13,7 @@ class Application extends Model
     protected $fillable = [
         'owner_id',
         'server_id',
+        'gcp_machine_id',
         'name',
         'version',
         'status',
@@ -37,9 +38,9 @@ class Application extends Model
         return $this->belongsTo(Server::class);
     }
 
-    public function gcpMachines()
+    public function gcpMachine()
     {
-        return $this->hasMany(GcpMachine::class);
+        return $this->belongsTo(GcpMachine::class);
     }
 
     public function creator()
