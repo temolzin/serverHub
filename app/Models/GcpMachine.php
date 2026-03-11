@@ -74,9 +74,9 @@ class GcpMachine extends Model
 
     public function isPoweredOff(): bool
     {
-    $state = strtolower(trim((string) $this->state));
+        $state = strtolower(trim((string) $this->state));
 
-    return in_array($state, self::POWERED_OFF_VALUES, true);
+        return in_array($state, self::POWERED_OFF_VALUES, true);
     }
 
     public function isPoweredOn(): bool
@@ -84,11 +84,11 @@ class GcpMachine extends Model
         $state = strtolower(trim((string) $this->state));
 
         if ($state === '') {
-        return true;
+            return true;
         }
 
         if (in_array($state, self::POWERED_ON_VALUES, true)) {
-        return true;
+            return true;
         }
 
         return !in_array($state, self::POWERED_OFF_VALUES, true);

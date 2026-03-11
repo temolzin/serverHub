@@ -47,8 +47,6 @@
     </tr>
     @empty
     <tr>
-        <td colspan="8" class="text-center text-muted">
-        No se encontraron registros
-        </td>
+        <td colspan="8" class="text-center text-muted">No se encontraron registros</td>
     </tr>
 @endforelse

@@ -13,38 +13,34 @@
         </span>
         </td>
         <td class="text-end">
-        <div class="dropdown">
-            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-            <i class="bx bx-dots-vertical-rounded"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
-                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showGcpOffMachineModal{{ $machine->id }}">
-                    <i class="bx bx-show me-1"></i> Ver
+            <div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                <i class="bx bx-dots-vertical-rounded"></i>
                 </button>
-                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editGcpOffMachineModal{{ $machine->id }}">
-                    <i class="bx bx-edit-alt me-1"></i> Editar
-                </button>
-                <form action="{{ route('gcp-machines.power-on', $machine) }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="dropdown-item text-success">
-                    <i class="bx bx-power-off me-1"></i> Encender
+                <div class="dropdown-menu dropdown-menu-end">
+                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showGcpOffMachineModal{{ $machine->id }}">
+                        <i class="bx bx-show me-1"></i> Ver
                     </button>
-                </form>
-                <button class="dropdown-item text-danger" data-bs-toggle="modal"
-                    data-bs-target="#deleteGcpOffMachineModal{{ $machine->id }}">
-                    <i class="bx bx-trash me-1"></i> Eliminar
-                </button>
+                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editGcpOffMachineModal{{ $machine->id }}">
+                        <i class="bx bx-edit-alt me-1"></i> Editar
+                    </button>
+                    <form action="{{ route('gcp-machines.power-on', $machine) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="dropdown-item text-success"><i class="bx bx-power-off me-1"></i> Encender</button>
+                    </form>
+                    <button class="dropdown-item text-danger" data-bs-toggle="modal"
+                        data-bs-target="#deleteGcpOffMachineModal{{ $machine->id }}">
+                        <i class="bx bx-trash me-1"></i> Eliminar
+                    </button>
+                </div>
             </div>
-        </div>
-        @include('gcp-machines-off.show', ['machine' => $machine])
-        @include('gcp-machines-off.edit', ['machine' => $machine])
-        @include('gcp-machines-off.delete', ['machine' => $machine])
+            @include('gcp-machines-off.show', ['machine' => $machine])
+            @include('gcp-machines-off.edit', ['machine' => $machine])
+            @include('gcp-machines-off.delete', ['machine' => $machine])
         </td>
     </tr>
     @empty
     <tr>
-        <td colspan="7" class="text-center text-muted">
-        No se encontraron maquinas GCP apagadas
-        </td>
+        <td colspan="7" class="text-center text-muted">No se encontraron maquinas GCP apagadas</td>
     </tr>
 @endforelse

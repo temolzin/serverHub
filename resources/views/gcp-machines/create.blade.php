@@ -2,10 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">
-                <i class="bx bx-cloud text-primary me-2"></i>
-                Crear máquina GCP
-                </h5>
+                <h5 class="modal-title"><i class="bx bx-cloud text-primary me-2"></i>Crear máquina GCP</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="createGcpForm" action="{{ route('gcp-machines.store') }}" method="POST">
@@ -95,12 +92,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="cancelCreateGcp" class="btn btn-label-secondary" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Guardar
-                    </button>
+                    <button type="button" id="cancelCreateGcp" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>

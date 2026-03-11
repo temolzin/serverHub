@@ -2,19 +2,10 @@
     <tr>
         <td>{{ $application->id }}</td>
         <td>{{ $application->name }}</td>
-        <td>
-        {{ $application->server?->hostname_internal ?? '-' }}
-        </td>
-        <td>
-        {{ $application->gcpMachine?->machine_name ?? '-' }}
-        </td>
-        <td>
-        {{ $application->owner?->name ?? '-' }}
-        {{ $application->owner?->last_name ?? '' }}
-        </td>
-        <td>
-        {{ $application->version ?? '-' }}
-        </td>
+        <td>{{ $application->server?->hostname_internal ?? '-' }}</td>
+        <td>{{ $application->gcpMachine?->machine_name ?? '-' }}</td>
+        <td>{{ $application->owner?->name ?? '-' }}{{ $application->owner?->last_name ?? '' }}</td>
+        <td>{{ $application->version ?? '-' }}</td>
         <td>
             @php
                 $statusColors = [
@@ -52,8 +43,6 @@
 
     @empty
     <tr>
-        <td colspan="9" class="text-center text-muted">
-        No se encontraron registros
-        </td>
+        <td colspan="9" class="text-center text-muted">No se encontraron registros</td>
     </tr>
 @endforelse
