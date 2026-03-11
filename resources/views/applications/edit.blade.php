@@ -80,7 +80,7 @@
                             <label class="form-label fw-semibold"><i class="bx bx-shield me-1 text-primary"></i> Último parche</label>
                             <input type="date" name="latest_security_patch" class="form-control" value="{{ $application->latest_security_patch }}">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label fw-semibold"><i class="bx bx-id-card me-1 text-primary"></i> Usuario servicio</label>
                             <input type="text" name="user_service" class="form-control" placeholder="Ej: svc_app_prod" value="{{ $application->user_service }}">
                         </div>
