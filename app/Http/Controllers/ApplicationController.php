@@ -52,8 +52,8 @@ class ApplicationController extends Controller
     {
         $validated = $request->validate([
             'owner_id' => 'required|exists:owners,id',
-            'server_id' => 'required|exists:servers,id',
-            'gcp_machine_id' => 'nullable|exists:gcp_machines,id',
+            'server_id' => 'nullable|exists:servers,id|required_without:gcp_machine_id',
+            'gcp_machine_id' => 'nullable|exists:gcp_machines,id|required_without:server_id',
             'name' => 'required|string|max:255',
             'version' => 'nullable|string|max:255',
             'status' => 'required|in:production,staging,development,inactive',
@@ -79,8 +79,8 @@ class ApplicationController extends Controller
     {
         $validated = $request->validate([
             'owner_id' => 'required|exists:owners,id',
-            'server_id' => 'required|exists:servers,id',
-            'gcp_machine_id' => 'nullable|exists:gcp_machines,id',
+            'server_id' => 'nullable|exists:servers,id|required_without:gcp_machine_id',
+            'gcp_machine_id' => 'nullable|exists:gcp_machines,id|required_without:server_id',
             'name' => 'required|string|max:255',
             'version' => 'nullable|string|max:255',
             'status' => 'required|in:production,staging,development,inactive',
