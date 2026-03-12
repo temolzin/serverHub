@@ -47,7 +47,7 @@
                 Nombre
               </label>
               <input type="text" name="name" class="form-control" placeholder="Ej: Sistema de Nómina"
-                value="{{ $application->name }}" required>
+                value="{{ $application->name }}" maxlength="20" required>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">
@@ -55,7 +55,7 @@
                 Versión
               </label>
               <input type="text" name="version" class="form-control" placeholder="Ej: 2.3.1"
-                value="{{ $application->version }}">
+                value="{{ $application->version }}" maxlength="20">
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">
@@ -64,12 +64,18 @@
               </label>
               <select name="status" class="form-select" required>
                 <option value="">Seleccione un estado</option>
-                <option value="production" {{ $application->status == 'production' ? 'selected' : '' }}>Production
+                <option value="production" {{ $application->status == 'production' ? 'selected' : '' }}>
+                  Production
                 </option>
-                <option value="staging" {{ $application->status == 'staging' ? 'selected' : '' }}>Staging</option>
-                <option value="development" {{ $application->status == 'development' ? 'selected' : '' }}>Development
+                <option value="staging" {{ $application->status == 'staging' ? 'selected' : '' }}>
+                  Staging
                 </option>
-                <option value="inactive" {{ $application->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                <option value="development" {{ $application->status == 'development' ? 'selected' : '' }}>
+                  Development
+                </option>
+                <option value="inactive" {{ $application->status == 'inactive' ? 'selected' : '' }}>
+                  Inactive
+                </option>
               </select>
             </div>
             <div class="col-md-6">
@@ -78,7 +84,10 @@
                 Memoria asignada (MB)
               </label>
               <input type="number" name="assigned_memory" class="form-control" placeholder="Ej: 2048"
-                value="{{ $application->assigned_memory }}">
+                value="{{ $application->assigned_memory }}" min="1024" max="32768" step="1">
+              <small class="text-muted">
+                Rango permitido: 1024 MB - 32768 MB
+              </small>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">
@@ -86,7 +95,7 @@
                 Tipo
               </label>
               <input type="text" name="type" class="form-control" placeholder="Ej: Web, API, Servicio Windows"
-                value="{{ $application->type }}">
+                value="{{ $application->type }}" maxlength="20">
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">
@@ -94,7 +103,8 @@
                 Ruta instalación
               </label>
               <input type="text" name="installation_route" class="form-control"
-                placeholder="Ej: /var/www/app o C:\inetpub\app" value="{{ $application->installation_route }}">
+                placeholder="Ej: /var/www/app o C:\inetpub\app" value="{{ $application->installation_route }}"
+                maxlength="100">
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">
@@ -110,21 +120,22 @@
                 Usuario servicio
               </label>
               <input type="text" name="user_service" class="form-control" placeholder="Ej: svc_app_prod"
-                value="{{ $application->user_service }}">
+                value="{{ $application->user_service }}" maxlength="20">
             </div>
             <div class="col-12">
               <label class="form-label fw-semibold">
                 <i class="bx bx-list-ul me-1 text-primary"></i>
                 Procesos
               </label>
-              <textarea name="processes" class="form-control" rows="2" placeholder="Ej: app.exe, worker.js, java -jar app.jar">{{ $application->processes }}</textarea>
+              <textarea name="processes" class="form-control" rows="2" maxlength="500"
+                placeholder="Ej: app.exe, worker.js, java -jar app.jar">{{ $application->processes }}</textarea>
             </div>
             <div class="col-12">
               <label class="form-label fw-semibold">
                 <i class="bx bx-time me-1 text-primary"></i>
                 Tareas programadas
               </label>
-              <textarea name="cron_jobs" class="form-control" rows="2"
+              <textarea name="cron_jobs" class="form-control" rows="2" maxlength="500"
                 placeholder="Ej: 0 2 * * * /usr/bin/php artisan schedule:run">{{ $application->cron_jobs }}</textarea>
             </div>
             <div class="col-12">
@@ -132,7 +143,8 @@
                 <i class="bx bx-comment-detail me-1 text-primary"></i>
                 Comentarios
               </label>
-              <textarea name="comments" class="form-control" rows="2" placeholder="Información adicional relevante de la aplicación">{{ $application->comments }}</textarea>
+              <textarea name="comments" class="form-control" rows="2" maxlength="500"
+                placeholder="Información adicional relevante de la aplicación">{{ $application->comments }}</textarea>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Database;
+use Illuminate\Validation\Rule;
 
 class ServerController extends Controller
 {
@@ -46,18 +47,17 @@ class ServerController extends Controller
         $validated = $off
             ? $this->validateOffServer($request, $server)
             : $this->validateActiveServer($request, $server);
-
-        $payload = $off
-            ? $this->buildOffPayload($validated, $server)
-            : $validated;
-
+        $payload = $validated;
         $payload['state'] = $this->normalizeState(
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
         );
 
-        $payload['created_by'] = auth()->id();
-
-        $server ? $server->update($payload) : Server::create($payload);
+        if (!$server) {
+            $payload['created_by'] = auth()->id();
+            Server::create($payload);
+        } else {
+            $server->update($payload);
+        }
 
         return redirect()
             ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])
@@ -98,18 +98,9 @@ class ServerController extends Controller
         $server->update(['state' => $state]);
 
         if ($server->database) {
-
-            if ($state === 'poweredOff') {
-                $server->database->update([
-                    'status' => 'inactive'
-                ]);
-            }
-
-            if ($state === 'poweredOn') {
-                $server->database->update([
-                    'status' => 'active'
-                ]);
-            }
+            $server->database->update([
+                'status' => $state === 'poweredOn' ? 'active' : 'inactive'
+            ]);
         }
 
         return back()->with(
@@ -127,11 +118,7 @@ class ServerController extends Controller
         $this->{$filterMethod}($servers);
         $servers->when(
             $request->filled('search'),
-            fn($query) => $this->applySearch(
-                $query,
-                trim($request->search),
-                $off
-            )
+            fn($query) => $this->applySearch($query, trim($request->search), $off)
         );
 
         $servers = $servers->latest()->paginate(10)->withQueryString();
@@ -145,53 +132,18 @@ class ServerController extends Controller
                 'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
-            : view("$view.index", [
-                'servers' => $servers,
-                'owners' => $owners,
-                'typeApplications' => $typeApplications,
-                'databases' => $databases,
-            ]);
+            : view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void
     {
-        $uuid = str_replace('-', '', strtolower($search));
-        $columns = $off
-            ? [
-                'vm_according_to_the_vmware',
-                'dns_name',
-                'datacenter',
-                'os_version_internal',
-                'os_according_to_the_vmware',
-                'comments',
-                'primary_ip_address',
-            ]
-            : [
-                'hostname_internal',
-                'primary_ip_address',
-                'environment',
-                'vm_according_to_the_vmware',
-                'dns_name',
-            ];
+        $query->where(function ($q) use ($search) {
 
-        $query->where(function ($q) use ($search, $uuid, $columns, $off) {
-
-            $q->where('uuid', 'like', "%$search%")
-                ->orWhereRaw(
-                    "REPLACE(LOWER(COALESCE(uuid, '')), '-', '') LIKE ?",
-                    ["%$uuid%"]
-                );
-
-            foreach ($columns as $column) {
-                $q->orWhere($column, 'like', "%$search%");
-            }
-
-            if (!$off) {
-                $q->orWhereHas(
-                    'typeApplication',
-                    fn($sub) => $sub->where('name_application', 'like', "%$search%")
-                );
-            }
+            $q->where('hostname_internal', 'like', "%$search%")
+              ->orWhere('primary_ip_address', 'like', "%$search%")
+              ->orWhere('environment', 'like', "%$search%")
+              ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
+              ->orWhere('dns_name', 'like', "%$search%");
         });
     }
 
@@ -205,60 +157,33 @@ class ServerController extends Controller
             'owner_id' => 'required|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
             'database_id' => 'nullable|exists:databases,id',
-            'vm_according_to_the_vmware' => 'required|string|max:255',
+            'vm_according_to_the_vmware' => 'required|string|max:50',
             'state' => 'required|in:poweredOn,poweredOff',
-            'primary_ip_address' => 'nullable|string|max:255',
-            'environment' => 'required|string|max:255',
-            'datacenter' => 'required|string|max:255',
-            'os_according_to_the_vmware' => 'required|string|max:255',
-            'os_version_internal' => 'required|string|max:255',
-            'hostname_internal' => 'required|string|max:255',
-            'ram_memory' => 'required|integer|min:0',
-            'swap_memory' => 'required|integer|min:0',
-            'dns_name' => 'nullable|string|max:255',
-            'ip_user' => 'nullable|string|max:255',
-            'ip_monitoring' => 'nullable|string|max:255',
-            'other_ips' => 'nullable|string',
+            'primary_ip_address' => 'nullable|ip',
+            'environment' => 'required|string|max:20',
+            'datacenter' => 'required|string|max:50',
+            'os_according_to_the_vmware' => 'required|string|max:50',
+            'os_version_internal' => 'required|string|max:50',
+            'hostname_internal' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('servers')->ignore($server?->id)
+            ],
+            'ram_memory' => 'required|integer|min:512|max:262144',
+            'swap_memory' => 'required|integer|min:0|max:65536',
+            'dns_name' => 'nullable|string|max:100',
+            'ip_user' => 'nullable|ip',
+            'ip_monitoring' => 'nullable|ip',
+            'other_ips' => 'nullable|string|max:255',
             'latest_security_patch' => 'nullable|date',
-            'comments' => 'nullable|string',
+            'comments' => 'nullable|string|max:500',
         ]);
     }
 
     private function validateOffServer(Request $request, ?Server $server = null): array
     {
-        $request->merge([
-            'state' => $this->normalizeState($request->state ?? 'poweredOff', 'poweredOff')
-        ]);
-
-        return $request->validate([
-            'owner_id' => 'required|exists:owners,id',
-            'type_application_id' => 'required|exists:type_applications,id',
-            'database_id' => 'nullable|exists:databases,id',
-            'vm_according_to_the_vmware' => 'required|string|max:255',
-            'state' => 'required|in:poweredOn,poweredOff',
-            'primary_ip_address' => 'nullable|string|max:255',
-            'environment' => 'required|string|max:255',
-            'datacenter' => 'required|string|max:255',
-            'os_according_to_the_vmware' => 'required|string|max:255',
-            'os_version_internal' => 'required|string|max:255',
-            'hostname_internal' => 'required|string|max:255',
-            'ram_memory' => 'required|integer|min:0',
-            'swap_memory' => 'required|integer|min:0',
-            'dns_name' => 'nullable|string|max:255',
-            'ip_user' => 'nullable|string|max:255',
-            'ip_monitoring' => 'nullable|string|max:255',
-            'other_ips' => 'nullable|string',
-            'latest_security_patch' => 'nullable|date',
-            'comments' => 'nullable|string',
-        ]);
-    }
-
-    private function buildOffPayload(array $validated, ?Server $server = null): array
-    {
-        $payload = $validated;
-        $payload['state'] = $this->normalizeState($payload['state'] ?? 'poweredOff', 'poweredOff');
-
-        return $payload;
+        return $this->validateActiveServer($request, $server);
     }
 
     private function normalizeState(?string $state, string $default = 'poweredOn'): string
@@ -276,20 +201,11 @@ class ServerController extends Controller
 
     private function applyPoweredOffFilter(Builder $query): void
     {
-        $expression = "LOWER(TRIM(COALESCE(state, '')))";
-        $placeholders = implode(',', array_fill(0, count(Server::POWERED_OFF_VALUES), '?'));
-        $query->whereRaw("{$expression} IN ({$placeholders})", Server::POWERED_OFF_VALUES);
+        $query->where('state', 'poweredOff');
     }
 
     private function applyPoweredOnFilter(Builder $query): void
     {
-        $expression = "LOWER(TRIM(COALESCE(state, '')))";
-        $placeholders = implode(',', array_fill(0, count(Server::POWERED_OFF_VALUES), '?'));
-        $query->where(function (Builder $stateQuery) use ($expression, $placeholders) {
-            $stateQuery
-                ->whereNull('state')
-                ->orWhereRaw("{$expression} = ''")
-                ->orWhereRaw("{$expression} NOT IN ({$placeholders})", Server::POWERED_OFF_VALUES);
-        });
+        $query->where('state', '!=', 'poweredOff');
     }
 }

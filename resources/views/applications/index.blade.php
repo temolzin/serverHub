@@ -16,7 +16,22 @@
     });
   </script>
 @endif
-
+@if ($errors->any())
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error en el formulario',
+        html: `
+            <ul style="text-align:left;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </ul>
+    });
+});
+</script>
+@endif
 @section('content')
   <div class="row">
     <div class="col-12">
