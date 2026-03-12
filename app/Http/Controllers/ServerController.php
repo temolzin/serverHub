@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Models\Owner;
 use App\Models\Server;
 use App\Models\TypeApplication;
@@ -124,10 +125,11 @@ class ServerController extends Controller
         $owners = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
         $databases = Database::orderBy('name')->get();
+        $applications = Application::orderBy('name')->get();
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases'))->render(),
+                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
             : view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases'));
@@ -200,5 +202,22 @@ class ServerController extends Controller
     private function applyPoweredOnFilter(Builder $query): void
     {
         $query->where('state', '!=', 'poweredOff');
+    }
+
+    private function syncApplications(Server $server, array $applicationIds): void
+    {
+        $applicationIds = array_values(array_unique(array_map('intval', $applicationIds)));
+
+        $detachQuery = Application::where('server_id', $server->id);
+        if (!empty($applicationIds)) {
+            $detachQuery->whereNotIn('id', $applicationIds);
+        }
+        $detachQuery->update(['server_id' => null]);
+
+        if (empty($applicationIds)) {
+            return;
+        }
+
+        Application::whereIn('id', $applicationIds)->update(['server_id' => $server->id]);
     }
 }
