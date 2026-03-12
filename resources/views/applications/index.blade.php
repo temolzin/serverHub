@@ -78,150 +78,179 @@ document.addEventListener("DOMContentLoaded", function() {
             <div id="applications-pagination">
               @include('applications.pagination', ['applications' => $applications])
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  @include('applications.create')
-@endsection
+    @include('applications.create')
+    @endsection
 
-@push('scripts')
-  <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-      const searchInput = document.getElementById('search-application');
-      const table = document.getElementById('applications-table');
-      const pagination = document.getElementById('applications-pagination');
+            const searchInput = document.getElementById('search-application');
+            const table = document.getElementById('applications-table');
+            const pagination = document.getElementById('applications-pagination');
 
-      let timeout = null;
+            let timeout = null;
 
-      function fetchApplications(url) {
+            function fetchApplications(url) {
 
-        fetch(url, {
-            headers: {
-              'X-Requested-With': 'XMLHttpRequest'
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('HTTP error:', response.status);
+                        return;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    if (!data) return;
+
+                    table.innerHTML = data.table;
+                    pagination.innerHTML = data.pagination;
+                })
+                .catch(error => {
+                    console.error('AJAX Error:', error);
+                });
             }
-          })
-          .then(response => {
-            if (!response.ok) {
-              console.error('HTTP error:', response.status);
-              return;
-            }
-            return response.json();
-          })
-          .then(data => {
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function() {
 
-            if (!data) return;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        let url = `{{ route('applications.index') }}`;
 
-            table.innerHTML = data.table;
-            pagination.innerHTML = data.pagination;
-          })
-          .catch(error => {
-            console.error('AJAX Error:', error);
-          });
-      }
-      if (searchInput) {
-        searchInput.addEventListener('keyup', function() {
+                        if (this.value.trim() !== '') {
+                        url += `?search=${encodeURIComponent(this.value.trim())}`;
+                        }
 
-          clearTimeout(timeout);
-          timeout = setTimeout(() => {
-            let url = `{{ route('applications.index') }}`;
-
-            if (this.value.trim() !== '') {
-              url += `?search=${encodeURIComponent(this.value.trim())}`;
+                        fetchApplications(url);
+                    }, 300);
+                });
             }
 
-            fetchApplications(url);
-          }, 300);
+            document.addEventListener('click', function(e) {
+
+                const link = e.target.closest('#applications-pagination a');
+                if (!link) return;
+
+                e.preventDefault();
+
+                fetchApplications(link.href);
+            });
+
         });
-      }
 
-      document.addEventListener('click', function(e) {
-
-        const link = e.target.closest('#applications-pagination a');
-        if (!link) return;
-
-        e.preventDefault();
-
-        fetchApplications(link.href);
-      });
-
-    });
-
-    if (document.querySelector("#ownerSelect")) {
-      new TomSelect("#ownerSelect", {
-        create: false,
-        sortField: {
-          field: "text",
-          direction: "asc"
-        },
-        placeholder: "Buscar propietario..."
-      });
-    }
-
-    if (document.querySelector("#serverSelect")) {
-      new TomSelect("#serverSelect", {
-        create: false,
-        sortField: {
-          field: "text",
-          direction: "asc"
-        },
-        placeholder: "Buscar servidor..."
-      });
-    }
-
-    document.querySelectorAll('.ownerSelectEdit').forEach(el => {
-      new TomSelect(el, {
-        create: false,
-        sortField: {
-          field: "text",
-          direction: "asc"
-        },
-        render: {
-          option: (data, escape) =>
-            `<div style="text-align:left;">${escape(data.text)}</div>`,
-          item: (data, escape) =>
-            `<div style="text-align:left;">${escape(data.text)}</div>`
+        if (document.querySelector("#ownerSelect")) {
+            new TomSelect("#ownerSelect", {
+                create: false,
+                sortField: {
+                field: "text",
+                direction: "asc"
+                },
+                placeholder: "Buscar propietario..."
+            });
         }
-      });
-    });
 
-    document.querySelectorAll('.serverSelectEdit').forEach(el => {
-      new TomSelect(el, {
-        create: false,
-        sortField: {
-          field: "text",
-          direction: "asc"
-        },
-        render: {
-          option: (data, escape) =>
-            `<div style="text-align:left;">${escape(data.text)}</div>`,
-          item: (data, escape) =>
-            `<div style="text-align:left;">${escape(data.text)}</div>`
+        if (document.querySelector("#serverSelect")) {
+            new TomSelect("#serverSelect", {
+                create: false,
+                sortField: {
+                field: "text",
+                direction: "asc"
+                },
+                placeholder: "Buscar servidor..."
+            });
         }
-      });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
 
-      const createModal = document.getElementById('createApplicationModal');
-      const createForm = document.getElementById('createApplicationForm');
+        if (document.querySelector("#gcpMachineSelect")) {
+            new TomSelect("#gcpMachineSelect", {
+                create: false,
+                sortField: {
+                field: "text",
+                direction: "asc"
+                },
+                placeholder: "Buscar maquina GCP..."
+            });
+        }
 
-      if (createModal) {
-        createModal.addEventListener('hidden.bs.modal', function() {
-          createForm.reset();
-
-          if (createForm.querySelector('#ownerSelect')?.tomselect) {
-            createForm.querySelector('#ownerSelect').tomselect.clear();
-          }
-
-          if (createForm.querySelector('#serverSelect')?.tomselect) {
-            createForm.querySelector('#serverSelect').tomselect.clear();
-          }
+        document.querySelectorAll('.ownerSelectEdit').forEach(el => {
+            new TomSelect(el, {
+                create: false,
+                sortField: {
+                field: "text",
+                direction: "asc"
+                },
+                render: {
+                option: (data, escape) =>
+                    `<div style="text-align:left;">${escape(data.text)}</div>`,
+                item: (data, escape) =>
+                    `<div style="text-align:left;">${escape(data.text)}</div>`
+                }
+            });
         });
-      }
-    });
-  </script>
+
+        document.querySelectorAll('.serverSelectEdit').forEach(el => {
+            new TomSelect(el, {
+                create: false,
+                sortField: {
+                field: "text",
+                direction: "asc"
+                },
+                render: {
+                option: (data, escape) =>
+                    `<div style="text-align:left;">${escape(data.text)}</div>`,
+                item: (data, escape) =>
+                    `<div style="text-align:left;">${escape(data.text)}</div>`
+                }
+            });
+        });
+
+        document.querySelectorAll('.gcpMachineSelectEdit').forEach(el => {
+            new TomSelect(el, {
+                create: false,
+                sortField: {
+                field: "text",
+                direction: "asc"
+                },
+                render: {
+                option: (data, escape) =>
+                    `<div style="text-align:left;">${escape(data.text)}</div>`,
+                item: (data, escape) =>
+                    `<div style="text-align:left;">${escape(data.text)}</div>`
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const createModal = document.getElementById('createApplicationModal');
+            const createForm = document.getElementById('createApplicationForm');
+
+            if (createModal) {
+                createModal.addEventListener('hidden.bs.modal', function() {
+                createForm.reset();
+
+                if (createForm.querySelector('#ownerSelect')?.tomselect) {
+                    createForm.querySelector('#ownerSelect').tomselect.clear();
+                }
+
+                if (createForm.querySelector('#serverSelect')?.tomselect) {
+                    createForm.querySelector('#serverSelect').tomselect.clear();
+                }
+
+                if (createForm.querySelector('#gcpMachineSelect')?.tomselect) {
+                    createForm.querySelector('#gcpMachineSelect').tomselect.clear(true);
+                }
+                });
+            }
+        });
+    </script>
 @endpush

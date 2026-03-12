@@ -9,27 +9,26 @@ use App\Models\User;
 
 class GcpMachine extends Model
 {
-  use SoftDeletes;
+    use SoftDeletes;
 
-  public const POWERED_OFF_VALUES = [
-    '0',
-    'false',
-    'off',
-    'poweredoff',
-  ];
+    public const POWERED_OFF_VALUES = [
+        '0',
+        'false',
+        'off',
+        'poweredoff',
+    ];
 
-  public const POWERED_ON_VALUES = [
-    '1',
-    'true',
-    'on',
-    'poweredon',
-  ];
+    public const POWERED_ON_VALUES = [
+        '1',
+        'true',
+        'on',
+        'poweredon',
+    ];
 
-  protected $table = 'gcp_machines';
+    protected $table = 'gcp_machines';
 
-  protected $fillable = [
+    protected $fillable = [
     'project_name',
-    'application_id',
     'uuid',
     'state',
     'environment',
@@ -47,25 +46,25 @@ class GcpMachine extends Model
     'swap_memory',
     'owner_id',
     'created_by'
-  ];
+    ];
 
-  protected static function booted()
-  {
-    static::creating(function ($machine) {
-      if (empty($machine->uuid)) {
-        $machine->uuid = (string) Str::uuid();
-      }
-    });
-  }
+    protected static function booted()
+    {
+        static::creating(function ($machine) {
+        if (empty($machine->uuid)) {
+            $machine->uuid = (string) Str::uuid();
+        }
+        });
+    }
 
     public function owner()
     {
         return $this->belongsTo(Owner::class);
     }
 
-    public function application()
+    public function applications()
     {
-        return $this->belongsTo(Application::class);
+        return $this->hasMany(Application::class);
     }
 
     public function creator()
@@ -73,30 +72,30 @@ class GcpMachine extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-  public function isPoweredOff(): bool
-  {
-    $state = strtolower(trim((string) $this->state));
+    public function isPoweredOff(): bool
+    {
+        $state = strtolower(trim((string) $this->state));
 
-    return in_array($state, self::POWERED_OFF_VALUES, true);
-  }
-
-  public function isPoweredOn(): bool
-  {
-    $state = strtolower(trim((string) $this->state));
-
-    if ($state === '') {
-      return true;
+        return in_array($state, self::POWERED_OFF_VALUES, true);
     }
 
-    if (in_array($state, self::POWERED_ON_VALUES, true)) {
-      return true;
+    public function isPoweredOn(): bool
+    {
+        $state = strtolower(trim((string) $this->state));
+
+        if ($state === '') {
+            return true;
+        }
+
+        if (in_array($state, self::POWERED_ON_VALUES, true)) {
+            return true;
+        }
+
+        return !in_array($state, self::POWERED_OFF_VALUES, true);
     }
 
-    return !in_array($state, self::POWERED_OFF_VALUES, true);
-  }
-
-  public function normalizedState(): string
-  {
-    return $this->isPoweredOff() ? 'poweredOff' : 'poweredOn';
-  }
+    public function normalizedState(): string
+    {
+        return $this->isPoweredOff() ? 'poweredOff' : 'poweredOn';
+    }
 }

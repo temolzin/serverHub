@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Application;
 use App\Models\GcpMachine;
 use App\Models\Owner;
 use Illuminate\Database\Eloquent\Builder;
@@ -78,7 +77,6 @@ class GcpMachineController extends Controller
 
     private function persist(Request $request, bool $off = false, ?GcpMachine $gcpMachine = null)
     {
-        $gcpMachines = GcpMachine::with(['owner', 'application', 'creator']);
         $validated = $this->validateMachine($request, $off);
         $payload = $this->normalizeMachinePayload($validated);
         $payload['state'] = $this->normalizeState(
@@ -118,7 +116,7 @@ class GcpMachineController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $gcpMachines = GcpMachine::with(['owner', 'application']);
+        $gcpMachines = GcpMachine::with(['owner', 'applications', 'creator']);
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($gcpMachines);
         $gcpMachines->when(
@@ -131,15 +129,14 @@ class GcpMachineController extends Controller
             ->paginate(10)
             ->withQueryString();
         $owners = Owner::orderBy('name')->get();
-        $applications = Application::orderBy('name')->get();
         $view = $off ? 'gcp-machines-off' : 'gcp-machines';
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('gcpMachines', 'owners', 'applications'))->render(),
+                'table' => view("$view.search", compact('gcpMachines', 'owners'))->render(),
                 'pagination' => view("$view.pagination", compact('gcpMachines'))->render(),
             ])
-            : view("$view.index", compact('gcpMachines', 'owners', 'applications'));
+            : view("$view.index", compact('gcpMachines', 'owners'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void
@@ -162,8 +159,6 @@ class GcpMachineController extends Controller
                 'environment',
             ];
 
-        $validated['created_by'] = auth()->id();
-        GcpMachine::create($this->normalizeMachinePayload($validated));
         $query->where(function (Builder $subQuery) use ($search, $uuidSearch, $columns) {
             $subQuery
                 ->where('uuid', 'like', "%{$search}%")
@@ -177,7 +172,7 @@ class GcpMachineController extends Controller
             }
 
             $subQuery->orWhereHas(
-                'application',
+                'applications',
                 fn(Builder $applicationQuery) => $applicationQuery->where('name', 'like', "%{$search}%")
             );
         });
@@ -194,7 +189,6 @@ class GcpMachineController extends Controller
 
         return $request->validate([
             'owner_id' => 'required|exists:owners,id',
-            'application_id' => 'nullable|exists:applications,id',
             'project_name' => 'required|string|max:255',
             'state' => 'required|in:poweredOn,poweredOff',
             'environment' => 'required|string|max:255',

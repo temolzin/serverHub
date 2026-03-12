@@ -1,31 +1,11 @@
 <div class="modal fade" id="editApplicationModal{{ $application->id }}" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title d-flex align-items-center gap-2">
-          <i class="bx bx-edit text-primary"></i>
-          Editar Aplicación
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <form action="{{ route('applications.update', $application) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">
-                <i class="bx bx-user me-1 text-primary"></i>
-                Propietario
-              </label>
-              <select name="owner_id" class="form-select ownerSelectEdit" required>
-                <option disabled>Seleccione un propietario</option>
-                @foreach ($owners as $owner)
-                  <option value="{{ $owner->id }}" {{ $application->owner_id == $owner->id ? 'selected' : '' }}>
-                    {{ $owner->name }} {{ $owner->last_name }}
-                  </option>
-                @endforeach
-              </select>
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2"><i class="bx bx-edit text-primary"></i>
+                Editar Aplicación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-semibold">
@@ -157,7 +137,5 @@
             Actualizar
           </button>
         </div>
-      </form>
     </div>
-  </div>
 </div>
