@@ -72,11 +72,7 @@ class InstanceController extends Controller
         $validated = $request->validate([
             'server_id' => 'required|exists:servers,id',
             'memory' => 'required|integer|min:1024|max:32768',
-            'version' => [
-                'required',
-                'string',
-                'max:50',
-
+            'version' => ['required', 'string','max:50',
                 Rule::unique('instances')
                     ->where(function ($query) use ($request) {
                         return $query->where('server_id', $request->server_id);

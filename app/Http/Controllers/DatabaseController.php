@@ -51,13 +51,13 @@ class DatabaseController extends Controller
     {
         $validated = $request->validate([
             'instance_id' => 'required|exists:instances,id',
-            'owner_id'    => 'required|exists:owners,id',
-            'name'        => 'required|string|max:50',
-            'type'        => 'required|in:Oracle,MSSQL,MySQL,DB2',
-            'status'      => 'required|in:active,inactive',
-            'port'        => 'nullable|integer|min:1|max:65535',
-            'version'     => 'nullable|string|max:20',
-            'comments'    => 'nullable|string|max:500',
+            'owner_id' => 'required|exists:owners,id',
+            'name' => 'required|string|max:50',
+            'type' => 'required|in:Oracle,MSSQL,MySQL,DB2',
+            'status' => 'required|in:active,inactive',
+            'port' => 'nullable|integer|min:1|max:65535',
+            'version' => 'nullable|string|max:20',
+            'comments' => 'nullable|string|max:500',
             'last_update' => 'nullable|date',
         ]);
 
@@ -73,13 +73,13 @@ class DatabaseController extends Controller
     {
         $validated = $request->validate([
             'instance_id' => 'required|exists:instances,id',
-            'owner_id'    => 'required|exists:owners,id',
-            'name'        => 'required|string|max:50',
-            'type'        => 'required|in:Oracle,MSSQL,MySQL,DB2',
-            'status'      => 'required|in:active,inactive',
-            'port'        => 'nullable|integer|min:1|max:65535',
-            'version'     => 'nullable|string|max:20',
-            'comments'    => 'nullable|string|max:500',
+            'owner_id' => 'required|exists:owners,id',
+            'name' => 'required|string|max:50',
+            'type' => 'required|in:Oracle,MSSQL,MySQL,DB2',
+            'status' => 'required|in:active,inactive',
+            'port' => 'nullable|integer|min:1|max:65535',
+            'version' => 'nullable|string|max:20',
+            'comments' => 'nullable|string|max:500',
             'last_update' => 'nullable|date',
         ]);
 

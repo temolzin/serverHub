@@ -44,20 +44,16 @@ class ServerController extends Controller
 
     private function persist(Request $request, bool $off = false, ?Server $server = null)
     {
-        $validated = $off
-            ? $this->validateOffServer($request, $server)
-            : $this->validateActiveServer($request, $server);
+        $validated = $request->all();
         $payload = $validated;
+
         $payload['state'] = $this->normalizeState(
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
         );
 
-        if (!$server) {
-            $payload['created_by'] = auth()->id();
-            Server::create($payload);
-        } else {
-            $server->update($payload);
-        }
+        $server
+            ? $server->update($payload)
+            : Server::create($payload + ['created_by' => auth()->id()]);
 
         return redirect()
             ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])
@@ -97,11 +93,9 @@ class ServerController extends Controller
     {
         $server->update(['state' => $state]);
 
-        if ($server->database) {
-            $server->database->update([
-                'status' => $state === 'poweredOn' ? 'active' : 'inactive'
-            ]);
-        }
+        optional($server->database)->update([
+            'status' => $state === 'poweredOn' ? 'active' : 'inactive'
+        ]);
 
         return back()->with(
             'success',
@@ -114,15 +108,19 @@ class ServerController extends Controller
     private function renderIndex(Request $request, bool $off = false)
     {
         $servers = Server::with(['owner', 'typeApplication', 'database', 'creator']);
-        $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
-        $this->{$filterMethod}($servers);
+
+        ($off ? fn($q) => $this->applyPoweredOffFilter($q)
+              : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+
         $servers->when(
             $request->filled('search'),
             fn($query) => $this->applySearch($query, trim($request->search), $off)
         );
 
         $servers = $servers->latest()->paginate(10)->withQueryString();
+
         $view = $off ? 'serversOff' : 'servers';
+
         $owners = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
         $databases = Database::orderBy('name')->get();
@@ -164,11 +162,8 @@ class ServerController extends Controller
             'datacenter' => 'required|string|max:50',
             'os_according_to_the_vmware' => 'required|string|max:50',
             'os_version_internal' => 'required|string|max:50',
-            'hostname_internal' => [
-                'required',
-                'string',
-                'max:50',
-                Rule::unique('servers')->ignore($server?->id)
+            'hostname_internal' => ['required','string',
+            'max:50',Rule::unique('servers')->ignore($server?->id)
             ],
             'ram_memory' => 'required|integer|min:512|max:262144',
             'swap_memory' => 'required|integer|min:0|max:65536',
@@ -190,13 +185,11 @@ class ServerController extends Controller
     {
         $value = strtolower(trim((string) $state));
 
-        if ($value === '') {
-            return $default;
-        }
-
-        return in_array($value, Server::POWERED_OFF_VALUES, true)
-            ? 'poweredOff'
-            : 'poweredOn';
+        return $value === ''
+            ? $default
+            : (in_array($value, Server::POWERED_OFF_VALUES, true)
+                ? 'poweredOff'
+                : 'poweredOn');
     }
 
     private function applyPoweredOffFilter(Builder $query): void
