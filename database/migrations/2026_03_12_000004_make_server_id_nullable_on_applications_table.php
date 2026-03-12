@@ -15,13 +15,11 @@ return new class extends Migration
 
         Schema::table('applications', function (Blueprint $table) {
             $table->dropForeign(['server_id']);
-        });
 
-        Schema::table('applications', function (Blueprint $table) {
-            $table->unsignedBigInteger('server_id')->nullable()->change();
-        });
+            $table->unsignedBigInteger('server_id')
+                ->nullable()
+                ->change();
 
-        Schema::table('applications', function (Blueprint $table) {
             $table->foreign('server_id')
                 ->references('id')
                 ->on('servers')
@@ -37,23 +35,21 @@ return new class extends Migration
 
         $defaultServerId = DB::table('servers')->orderBy('id')->value('id');
 
-        if ($defaultServerId === null) {
-            DB::table('applications')->whereNull('server_id')->delete();
-        } else {
-            DB::table('applications')
-                ->whereNull('server_id')
-                ->update(['server_id' => $defaultServerId]);
-        }
+        DB::table('applications')
+            ->whereNull('server_id')
+            ->when(
+                $defaultServerId === null,
+                fn ($query) => $query->delete(),
+                fn ($query) => $query->update(['server_id' => $defaultServerId])
+            );
 
         Schema::table('applications', function (Blueprint $table) {
             $table->dropForeign(['server_id']);
-        });
 
-        Schema::table('applications', function (Blueprint $table) {
-            $table->unsignedBigInteger('server_id')->nullable(false)->change();
-        });
+            $table->unsignedBigInteger('server_id')
+                ->nullable(false)
+                ->change();
 
-        Schema::table('applications', function (Blueprint $table) {
             $table->foreign('server_id')
                 ->references('id')
                 ->on('servers')

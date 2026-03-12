@@ -62,11 +62,9 @@ class ServerController extends Controller
 
         $payload['created_by'] = auth()->id();
 
-        if ($server) {
-            $server->update($payload);
-        } else {
-            $server = Server::create($payload);
-        }
+        $server = $server
+            ? tap($server)->update($payload)
+            : Server::create($payload);
 
         $this->syncApplications($server, $selectedApplicationIds);
 
