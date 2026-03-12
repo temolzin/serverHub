@@ -1,30 +1,9 @@
 <div class="modal fade" id="createApplicationModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          <i class="bx bx-layer-plus text-primary me-2"></i>
-          Crear aplicación
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <form action="{{ route('applications.store') }}" method="POST" id="createApplicationForm">
-        @csrf
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6 mb-4">
-              <label class="form-label">
-                <i class="bx bx-user me-1 text-primary"></i>
-                Propietario
-              </label>
-              <select name="owner_id" id="ownerSelect" class="form-select" required>
-                <option value="" disabled selected>Selecciona un propietario</option>
-                @foreach ($owners as $owner)
-                  <option value="{{ $owner->id }}">
-                    {{ $owner->name }} {{ $owner->last_name }}
-                  </option>
-                @endforeach
-              </select>
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bx bx-layer-plus text-primary me-2"></i>Crear aplicación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="col-md-6 mb-4">
               <label class="form-label">
@@ -143,7 +122,5 @@
             Guardar
           </button>
         </div>
-      </form>
     </div>
-  </div>
 </div>
