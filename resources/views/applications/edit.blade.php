@@ -25,8 +25,8 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold"><i class="bx bx-server me-1 text-primary"></i>Servidor</label>
-                            <select name="server_id" class="form-select serverSelectEdit" required>
-                                <option disabled>Seleccione un servidor</option>
+                            <select name="server_id" class="form-select serverSelectEdit">
+                                <option value="" {{ empty($application->server_id) ? 'selected' : '' }}>Sin servidor (opcional)</option>
                                 @foreach ($servers as $server)
                                     <option value="{{ $server->id }}" {{ $application->server_id == $server->id ? 'selected' : '' }}>
                                         {{ $server->hostname_internal }}

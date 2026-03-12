@@ -74,6 +74,11 @@ class Server extends Model
         return $this->hasMany(Instance::class);
     }
 
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
     public function isPoweredOff(): bool
     {
         $state = strtolower(trim((string) $this->state));

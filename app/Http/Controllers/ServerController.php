@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Models\Owner;
 use App\Models\Server;
 use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Database;
+use Illuminate\Validation\Rule;
 
 class ServerController extends Controller
 {
@@ -47,6 +49,9 @@ class ServerController extends Controller
             ? $this->validateOffServer($request, $server)
             : $this->validateActiveServer($request, $server);
 
+        $selectedApplicationIds = $validated['application_ids'] ?? [];
+        unset($validated['application_ids']);
+
         $payload = $off
             ? $this->buildOffPayload($validated, $server)
             : $validated;
@@ -57,7 +62,11 @@ class ServerController extends Controller
 
         $payload['created_by'] = auth()->id();
 
-        $server ? $server->update($payload) : Server::create($payload);
+        $server = $server
+            ? tap($server)->update($payload)
+            : Server::create($payload);
+
+        $this->syncApplications($server, $selectedApplicationIds);
 
         return redirect()
             ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])
@@ -122,7 +131,7 @@ class ServerController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $servers = Server::with(['owner', 'typeApplication', 'database', 'creator']);
+        $servers = Server::with(['owner', 'typeApplication', 'applications', 'database', 'creator']);
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($servers);
         $servers->when(
@@ -139,10 +148,11 @@ class ServerController extends Controller
         $owners = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
         $databases = Database::orderBy('name')->get();
+        $applications = Application::orderBy('name')->get();
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases'))->render(),
+                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
             : view("$view.index", [
@@ -150,6 +160,7 @@ class ServerController extends Controller
                 'owners' => $owners,
                 'typeApplications' => $typeApplications,
                 'databases' => $databases,
+                'applications' => $applications,
             ]);
     }
 
@@ -192,6 +203,11 @@ class ServerController extends Controller
                     fn($sub) => $sub->where('name_application', 'like', "%$search%")
                 );
             }
+
+            $q->orWhereHas(
+                'applications',
+                fn($sub) => $sub->where('name', 'like', "%$search%")
+            );
         });
     }
 
@@ -205,6 +221,11 @@ class ServerController extends Controller
             'owner_id' => 'required|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
             'database_id' => 'nullable|exists:databases,id',
+            'application_ids' => 'nullable|array',
+            'application_ids.*' => [
+                'integer',
+                Rule::exists('applications', 'id')->whereNull('deleted_at'),
+            ],
             'vm_according_to_the_vmware' => 'required|string|max:255',
             'state' => 'required|in:poweredOn,poweredOff',
             'primary_ip_address' => 'nullable|string|max:255',
@@ -234,6 +255,11 @@ class ServerController extends Controller
             'owner_id' => 'required|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
             'database_id' => 'nullable|exists:databases,id',
+            'application_ids' => 'nullable|array',
+            'application_ids.*' => [
+                'integer',
+                Rule::exists('applications', 'id')->whereNull('deleted_at'),
+            ],
             'vm_according_to_the_vmware' => 'required|string|max:255',
             'state' => 'required|in:poweredOn,poweredOff',
             'primary_ip_address' => 'nullable|string|max:255',
@@ -291,5 +317,22 @@ class ServerController extends Controller
                 ->orWhereRaw("{$expression} = ''")
                 ->orWhereRaw("{$expression} NOT IN ({$placeholders})", Server::POWERED_OFF_VALUES);
         });
+    }
+
+    private function syncApplications(Server $server, array $applicationIds): void
+    {
+        $applicationIds = array_values(array_unique(array_map('intval', $applicationIds)));
+
+        $detachQuery = Application::where('server_id', $server->id);
+        if (!empty($applicationIds)) {
+            $detachQuery->whereNotIn('id', $applicationIds);
+        }
+        $detachQuery->update(['server_id' => null]);
+
+        if (empty($applicationIds)) {
+            return;
+        }
+
+        Application::whereIn('id', $applicationIds)->update(['server_id' => $server->id]);
     }
 }
