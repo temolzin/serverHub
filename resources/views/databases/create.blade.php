@@ -10,7 +10,7 @@
         <div class="modal-body">
           <div class="mb-4">
             <label class="form-label">Instancia</label>
-            <select name="instance_id" class="form-select">
+            <select name="instance_id" class="form-select" required>
               <option value="" disabled selected>Selecciona una instancia</option>
               @foreach ($instances as $instance)
                 <option value="{{ $instance->id }}">
@@ -34,41 +34,47 @@
           </div>
           <div class="mb-4">
             <label class="form-label">Nombre</label>
-            <input type="text" name="name" class="form-control" placeholder="Ej: db_produccion" required>
+            <input type="text" name="name" class="form-control" placeholder="Ej: db_produccion" maxlength="50"
+              required>
           </div>
-            <div class="mb-3">
-                <label class="form-label">Tipo</label>
-                    <select name="type" class="form-control" required>
-                        <option value="">Selecciona un tipo</option>
-                        <option value="Oracle">Oracle</option>
-                        <option value="MSSQL">MSSQL</option>
-                        <option value="MySQL">MySQL</option>
-                        <option value="DB2">DB2</option>
-                    </select>
-            </div>
+          <div class="mb-4">
+            <label class="form-label">Tipo</label>
+            <select name="type" class="form-select" required>
+              <option value="" disabled selected>Selecciona un tipo</option>
+              <option value="Oracle">Oracle</option>
+              <option value="MSSQL">MSSQL</option>
+              <option value="MySQL">MySQL</option>
+              <option value="DB2">DB2</option>
+            </select>
+          </div>
           <div class="mb-4">
             <label class="form-label">Puerto</label>
-            <input type="number" name="port" class="form-control" placeholder="Ej: 3306">
+            <input type="number" name="port" class="form-control" placeholder="Ej: 3306" min="1"
+              max="65535">
+            <small class="text-muted">
+              Rango permitido: 1 - 65535
+            </small>
           </div>
           <div class="mb-4">
             <label class="form-label">Versión</label>
-            <input type="text" name="version" class="form-control" placeholder="Ej: 8.0.36">
+            <input type="text" name="version" class="form-control" placeholder="Ej: 8.0.36" maxlength="20">
           </div>
-            <div class="mb-4">
-                <label class="form-label">Estado</label>
-                <select name="status" class="form-select" required>
-                    <option value="" disabled selected>Selecciona un estado</option>
-                    <option value="active">Activo</option>
-                    <option value="inactive">Inactivo</option>
-                </select>
-            </div>
+          <div class="mb-4">
+            <label class="form-label">Estado</label>
+            <select name="status" class="form-select" required>
+              <option value="" disabled selected>Selecciona un estado</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
+            </select>
+          </div>
           <div class="mb-4">
             <label class="form-label">Última actualización</label>
             <input type="date" name="last_update" class="form-control">
           </div>
           <div class="mb-4">
             <label class="form-label">Comentarios</label>
-            <textarea name="comments" class="form-control" placeholder="Información adicional relevante"></textarea>
+            <textarea name="comments" class="form-control" rows="3" maxlength="500"
+              placeholder="Información adicional relevante"></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -83,31 +89,3 @@
     </div>
   </div>
 </div>
-@push('scripts')
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const serverSelect = document.getElementById('server-select');
-      const instanceSelect = document.getElementById('instance-select');
-      const ownerInput = document.getElementById('owner-id');
-      if (!serverSelect || !instanceSelect || !ownerInput) return;
-      Array.from(instanceSelect.options).forEach(option => {
-        if (option.value) option.style.display = 'none';
-      });
-      serverSelect.addEventListener('change', function() {
-        const serverId = this.value;
-        const selectedOption = this.options[this.selectedIndex];
-        const ownerId = selectedOption?.dataset.owner;
-        ownerInput.value = ownerId ?? '';
-        Array.from(instanceSelect.options).forEach(option => {
-          if (!option.value) return;
-          if (option.dataset.server == serverId) {
-            option.style.display = 'block';
-          } else {
-            option.style.display = 'none';
-          }
-        });
-        instanceSelect.value = '';
-      });
-    });
-  </script>
-@endpush

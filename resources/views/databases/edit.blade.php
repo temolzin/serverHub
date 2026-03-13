@@ -48,40 +48,39 @@
               Nombre
             </label>
             <input type="text" name="name" class="form-control" placeholder="Ej: db_produccion_principal"
-              value="{{ $database->name }}" required>
+              value="{{ $database->name }}" maxlength="50" required>
           </div>
           <div class="mb-4">
             <label class="form-label">
-                <i class="bx bx-category me-1 text-primary"></i>
-                Tipo
+              <i class="bx bx-category me-1 text-primary"></i>
+              Tipo
             </label>
-                <select name="type" class="form-control" required>
-                    <option value="">Selecciona un tipo</option>
-                        <option value="Oracle"
-                            {{ old('type', $database->type ?? '') == 'Oracle' ? 'selected' : '' }}>
-                                Oracle
-                        </option>
-                        <option value="MSSQL"
-                            {{ old('type', $database->type ?? '') == 'MSSQL' ? 'selected' : '' }}>
-                                MSSQL
-                        </option>
-                        <option value="MySQL"
-                            {{ old('type', $database->type ?? '') == 'MySQL' ? 'selected' : '' }}>
-                                MySQL
-                        </option>
-                        <option value="DB2"
-                            {{ old('type', $database->type ?? '') == 'DB2' ? 'selected' : '' }}>
-                                DB2
-                    </option>
-                </select>
-            </div>
+            <select name="type" class="form-select" required>
+              <option value="">Selecciona un tipo</option>
+              <option value="Oracle" {{ $database->type == 'Oracle' ? 'selected' : '' }}>
+                Oracle
+              </option>
+              <option value="MSSQL" {{ $database->type == 'MSSQL' ? 'selected' : '' }}>
+                MSSQL
+              </option>
+              <option value="MySQL" {{ $database->type == 'MySQL' ? 'selected' : '' }}>
+                MySQL
+              </option>
+              <option value="DB2" {{ $database->type == 'DB2' ? 'selected' : '' }}>
+                DB2
+              </option>
+            </select>
+          </div>
           <div class="mb-4">
             <label class="form-label">
               <i class="bx bx-network-chart me-1 text-primary"></i>
               Puerto
             </label>
             <input type="number" name="port" class="form-control" placeholder="Ej: 3306"
-              value="{{ $database->port }}">
+              value="{{ $database->port }}" min="1" max="65535">
+            <small class="text-muted">
+              Rango permitido: 1 - 65535
+            </small>
           </div>
           <div class="mb-4">
             <label class="form-label">
@@ -89,19 +88,19 @@
               Versión
             </label>
             <input type="text" name="version" class="form-control" placeholder="Ej: 8.0.36"
-              value="{{ $database->version }}">
+              value="{{ $database->version }}" maxlength="20">
           </div>
           <div class="mb-4">
             <label class="form-label">Estado</label>
             <select name="status" class="form-select" required>
-                <option value="active" {{ $database->status === 'active' ? 'selected' : '' }}>
+              <option value="active" {{ $database->status === 'active' ? 'selected' : '' }}>
                 Active
-                </option>
-                <option value="inactive" {{ $database->status === 'inactive' ? 'selected' : '' }}>
+              </option>
+              <option value="inactive" {{ $database->status === 'inactive' ? 'selected' : '' }}>
                 Inactive
-                </option>
+              </option>
             </select>
-            </div>
+          </div>
           <div class="mb-4">
             <label class="form-label">
               <i class="bx bx-calendar me-1 text-primary"></i>
@@ -115,7 +114,7 @@
               <i class="bx bx-comment-detail me-1 text-primary"></i>
               Comentarios
             </label>
-            <textarea name="comments" class="form-control" rows="3"
+            <textarea name="comments" class="form-control" rows="3" maxlength="500"
               placeholder="Información adicional sobre la base de datos">{{ $database->comments }}</textarea>
           </div>
         </div>

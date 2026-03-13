@@ -3,69 +3,80 @@
 @section('title', 'Aplicaciones')
 
 @if (session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                icon: 'success',
-                title: 'Listo!',
-                text: '{{ session('success') }}',
-                confirmButtonText: 'OK',
-                timer: 5000,
-                timerProgressBar: true
-            });
-        });
-    </script>
-    @endif
-
-    @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex align-items-center">
-                    <h5 class="mb-0">Aplicaciones</h5>
-                    <div class="ms-auto d-flex gap-2">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createApplicationModal">
-                        <i class="bx bx-plus me-1"></i> Agregar Aplicación
-                        </button>
-                        <a href="{{ route('export', 'applications') }}" class="btn btn-primary">
-                            Exportar Excel
-                        </a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="mb-4">
-                        <input type="text" id="search-application" class="form-control form-control-sm w-50"
-                        placeholder="Buscar por nombre, servidor, maquina GCP o propietario">
-                    </div>
-                    <div class="table-responsive text-nowrap" style="overflow-y:hidden;">
-                        <table class="table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
-                                    <th>Servidor</th>
-                                    <th>Maquina GCP</th>
-                                    <th>Propietario</th>
-                                    <th>Version</th>
-                                    <th>Estado</th>
-                                    <th>Memoria (MB)</th>
-                                    <th class="text-end">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="applications-table">
-                                @include('applications.search', ['applications' => $applications])
-                            </tbody>
-                        </table>
-                        @foreach ($applications as $application)
-                            @include('applications.show', ['application' => $application])
-                            @include('applications.edit', ['application' => $application])
-                            @include('applications.delete', ['application' => $application])
-                        @endforeach
-                        <div id="applications-pagination">
-                            @include('applications.pagination', ['applications' => $applications])
-                        </div>
-                    </div>
-                </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      Swal.fire({
+        icon: 'success',
+        title: 'Listo!',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'OK',
+        timer: 5000,
+        timerProgressBar: true
+      });
+    });
+  </script>
+@endif
+@if ($errors->any())
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error en el formulario',
+        html: `
+            <ul style="text-align:left;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+            </ul>
+    });
+});
+</script>
+@endif
+@section('content')
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header d-flex align-items-center">
+        <h5 class="mb-0">Aplicaciones</h5>
+            <div class="ms-auto d-flex gap-2">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createApplicationModal">
+                <i class="bx bx-plus me-1"></i> Agregar Aplicación
+                </button>
+                <a href="{{ route('export', 'applications') }}" class="btn btn-primary">
+                    Exportar Excel
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <input type="text" id="search-application" class="form-control form-control-sm w-50"
+              placeholder="Buscar por nombre, servidor, propietario">
+          </div>
+          <div class="table-responsive text-nowrap" style="overflow-y:hidden;">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Servidor</th>
+                  <th>Propietario</th>
+                  <th>Version</th>
+                  <th>Estado</th>
+                  <th>Memoria (MB)</th>
+                  <th class="text-end">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="applications-table">
+                @include('applications.search', ['applications' => $applications])
+              </tbody>
+            </table>
+            @foreach ($applications as $application)
+              @include('applications.show', ['application' => $application])
+              @include('applications.edit', ['application' => $application])
+              @include('applications.delete', ['application' => $application])
+            @endforeach
+            <div id="applications-pagination">
+              @include('applications.pagination', ['applications' => $applications])
             </div>
         </div>
     </div>
