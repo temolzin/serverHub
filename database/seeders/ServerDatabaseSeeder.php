@@ -8,9 +8,14 @@ use App\Models\Instance;
 
 class ServerDatabaseSeeder extends Seeder
 {
+    private const MAX_SEEDED_DATABASES = 3;
+
     public function run(): void
     {
-        $instances = Instance::with('server:id,owner_id')->get();
+        $instances = Instance::with('server:id,owner_id')
+            ->orderBy('id')
+            ->limit(self::MAX_SEEDED_DATABASES)
+            ->get();
 
         foreach ($instances as $instance) {
             if (!$instance->server?->owner_id) {

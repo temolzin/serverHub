@@ -111,7 +111,7 @@ class ServerController extends Controller
         $servers = Server::with(['owner', 'typeApplication', 'database', 'creator']);
 
         ($off ? fn($q) => $this->applyPoweredOffFilter($q)
-              : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+        : fn($q) => $this->applyPoweredOnFilter($q))($servers);
 
         $servers->when(
             $request->filled('search'),
@@ -146,10 +146,10 @@ class ServerController extends Controller
         $query->where(function ($q) use ($search) {
 
             $q->where('hostname_internal', 'like', "%$search%")
-              ->orWhere('primary_ip_address', 'like', "%$search%")
-              ->orWhere('environment', 'like', "%$search%")
-              ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
-              ->orWhere('dns_name', 'like', "%$search%");
+                ->orWhere('primary_ip_address', 'like', "%$search%")
+                ->orWhere('environment', 'like', "%$search%")
+                ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
+                ->orWhere('dns_name', 'like', "%$search%");
         });
     }
 

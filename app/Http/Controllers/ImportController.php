@@ -242,6 +242,9 @@ class ImportController extends Controller
                 'environment' => $data['entorno'] ?? 'N/A',
                 'machine_name' => $data['nombre de maquina'] ?? 'N/A',
                 'machine_internal_name' => $data['nombre de maquina interna'] ?? 'N/A',
+                'state' => $this->normalizeState(
+                    $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
+                ),
                 'operations_system' => $data['sistema operativo'] ?? 'N/A',
                 'kernel_version' => $data['version de kernel'] ?? 'N/A',
                 'alias_ip'  => $aliases[0] ?? 'N/A',

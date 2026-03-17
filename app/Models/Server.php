@@ -105,6 +105,11 @@ class Server extends Model
         return $this->isPoweredOff() ? 'poweredOff' : 'poweredOn';
     }
 
+    public function stateLabel(): string
+    {
+        return $this->isPoweredOff() ? 'Apagado' : 'Encendido';
+    }
+
     public function database()
     {
         return $this->belongsTo(Database::class);

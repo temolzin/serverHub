@@ -98,4 +98,9 @@ class GcpMachine extends Model
     {
         return $this->isPoweredOff() ? 'poweredOff' : 'poweredOn';
     }
+
+    public function stateLabel(): string
+    {
+        return $this->isPoweredOff() ? 'Apagado' : 'Encendido';
+    }
 }

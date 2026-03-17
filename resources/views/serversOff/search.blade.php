@@ -6,7 +6,7 @@
         <td>{{ filled($server->dns_name) ? $server->dns_name : 'N/A' }}</td>
         <td>{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}</td>
         <td>
-            <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}">{{ $isOff ? 'poweredOff' : 'poweredOn' }}</span>
+            <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}">{{ $server->stateLabel() }}</span>
         </td>
         <td class="text-end">
             <div class="dropdown">

@@ -1,4 +1,4 @@
-@php($stateLabel = $server->isPoweredOff() ? 'poweredOff' : 'poweredOn')
+@php($stateLabel = $server->stateLabel())
 @php($ownerFullName = trim((optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')))
 @php($applicationName = optional($server->typeApplication)->name_application)
 @php($applicationNames = $server->applications->pluck('name')->filter()->implode(', '))

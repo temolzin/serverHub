@@ -8,14 +8,12 @@
         <td>{{ filled($applicationNames) ? $applicationNames : 'N/A' }}</td>
         <td>{{ filled($machine->operations_system) ? $machine->operations_system : 'N/A' }}</td>
         <td>
-        <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}">
-            {{ $isOff ? 'poweredOff' : 'poweredOn' }}
-        </span>
+            <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}"> {{ $machine->stateLabel() }}</span>
         </td>
         <td class="text-end">
             <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                <i class="bx bx-dots-vertical-rounded"></i>
+                    <i class="bx bx-dots-vertical-rounded"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showGcpOffMachineModal{{ $machine->id }}">
@@ -28,8 +26,7 @@
                         @csrf
                         <button type="submit" class="dropdown-item text-success"><i class="bx bx-power-off me-1"></i> Encender</button>
                     </form>
-                    <button class="dropdown-item text-danger" data-bs-toggle="modal"
-                        data-bs-target="#deleteGcpOffMachineModal{{ $machine->id }}">
+                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteGcpOffMachineModal{{ $machine->id }}">
                         <i class="bx bx-trash me-1"></i> Eliminar
                     </button>
                 </div>
