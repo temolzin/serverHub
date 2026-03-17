@@ -132,7 +132,13 @@ class ServerController extends Controller
                 'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
-            : view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases'));
+            : view("$view.index", compact(
+                'servers',
+                'owners',
+                'typeApplications',
+                'databases',
+                'applications'
+            ));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void
@@ -164,8 +170,8 @@ class ServerController extends Controller
             'datacenter' => 'required|string|max:50',
             'os_according_to_the_vmware' => 'required|string|max:50',
             'os_version_internal' => 'required|string|max:50',
-            'hostname_internal' => ['required','string',
-            'max:50',Rule::unique('servers')->ignore($server?->id)
+            'hostname_internal' => ['required', 'string', 'max:50',
+                Rule::unique('servers')->ignore($server?->id)
             ],
             'ram_memory' => 'required|integer|min:512|max:262144',
             'swap_memory' => 'required|integer|min:0|max:65536',

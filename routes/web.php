@@ -32,6 +32,10 @@ Route::post('/logout', function (Request $request) {
 Route::middleware('auth')->group(function () {
     Route::get('/', [Analytics::class, 'index'])
         ->name('dashboard-analytics');
+    Route::get('/dashboard/filter', [Analytics::class, 'filter'])
+        ->name('dashboard.filter');
+    Route::get('/export/{module}', [ExportController::class, 'export'])
+        ->name('export');
     Route::middleware('permission:viewOwner')
         ->resource('owners', OwnerController::class);
     Route::middleware('permission:viewServer')->group(function () {
@@ -86,7 +90,5 @@ Route::middleware('auth')->group(function () {
             [UserController::class, 'editPermissions']
         )->name('users.permissions.edit');
         Route::resource('users', UserController::class);
-        Route::get('/export/{module}', [ExportController::class, 'export'])
-            ->name('export');
     });
 });

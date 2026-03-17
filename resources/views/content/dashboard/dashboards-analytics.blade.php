@@ -3,12 +3,26 @@
 @section('title', 'Dashboard')
 
 @section('vendor-style')
-    @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
+@vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
 @endsection
+
 @section('vendor-script')
-    @vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
+@vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
 @endsection
+
 @section('content')
+<style>
+    .chart-container {
+        height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chart-container > div {
+        width: 100%;
+    }
+</style>
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0">
@@ -24,106 +38,101 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">Servidores</p>
-                        <h3 class="fw-bold">{{ $servers }}</h3>
+        @foreach ([
+            ['Servidores', $servers, 'bx-server', 'primary'],
+            ['Bases de Datos', $databases, 'bx-data', 'success'],
+            ['Aplicaciones', $applications, 'bx-layer', 'info'],
+            ['Propietarios', $owners, 'bx-user', 'warning'],
+            ['Instancias', $instances, 'bx-cube', 'secondary'],
+            ['Storage', $storages, 'bx-hdd', 'danger'],
+            ['GCP Machines', $machines, 'bx-cloud', 'primary'],
+            ['Usuarios', $users, 'bx-group', 'dark'],
+        ] as [$label, $value, $icon, $color])
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card dashboard-card shadow-sm border-0 h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">{{ $label }}</p>
+                            <h3 class="fw-bold">{{ $value }}</h3>
+                        </div>
+                        <div class="bg-label-{{ $color }} rounded p-3">
+                            <i class="bx {{ $icon }} fs-3"></i>
+                        </div>
                     </div>
-                    <div class="bg-label-primary rounded p-3">
-                        <i class="bx bx-server fs-3"></i>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header">
+                    <h5 class="fw-semibold">Filtro de parcheo por fechas</h5>
+                </div>
+                <div class="card-body">
+                    <form id="filterForm" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha inicial</label>
+                            <input type="date" name="start_date" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha final</label>
+                            <input type="date" name="end_date" class="form-control">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button class="btn btn-primary w-100 shadow-sm">
+                                <i class="bx bx-search me-1"></i> Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card shadow-sm border-0">
+                <div class="card-header">
+                    <h5 class="fw-semibold">Máquinas parcheadas</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Maquina</th>
+                                <th>Sistema operativo</th>
+                                <th>Kernel</th>
+                                <th>Ultimo Parche</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patchedTable">
+                            @foreach ($patchedMachines as $machine)
+                                <tr>
+                                    <td>{{ $machine->machine_name }}</td>
+                                    <td>{{ $machine->operations_system }}</td>
+                                    <td>{{ $machine->kernel_version }}</td>
+                                    <td>{{ $machine->latest_security_patch }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header"><h5>Estado de Servidores</h5></div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div id="serversStatusChart"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">Bases de Datos</p>
-                        <h3 class="fw-bold">{{ $databases }}</h3>
-                    </div>
-                    <div class="bg-label-success rounded p-3">
-                        <i class="bx bx-data fs-3"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">Aplicaciones</p>
-                        <h3 class="fw-bold">{{ $applications }}</h3>
-                    </div>
-                    <div class="bg-label-info rounded p-3">
-                        <i class="bx bx-layer fs-3"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">Propietarios</p>
-                        <h3 class="fw-bold">{{ $owners }}</h3>
-                    </div>
-                    <div class="bg-label-warning rounded p-3">
-                        <i class="bx bx-user fs-3"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">Instancias</p>
-                        <h3 class="fw-bold">{{ $instances }}</h3>
-                    </div>
-                    <div class="bg-label-secondary rounded p-3">
-                        <i class="bx bx-cube fs-3"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">Storage</p>
-                        <h3 class="fw-bold">{{ $storages }}</h3>
-                    </div>
-                    <div class="bg-label-danger rounded p-3">
-                        <i class="bx bx-hdd fs-3"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">GCP Machines</p>
-                        <h3 class="fw-bold">{{ $machines }}</h3>
-                    </div>
-                    <div class="bg-label-primary rounded p-3">
-                        <i class="bx bx-cloud fs-3"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6 mb-4">
-            <div class="card dashboard-card shadow-sm border-0 h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <p class="text-muted mb-1">Usuarios</p>
-                        <h3 class="fw-bold">{{ $users }}</h3>
-                    </div>
-                    <div class="bg-label-dark rounded p-3">
-                        <i class="bx bx-group fs-3"></i>
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header"><h5>Estado de Máquinas</h5></div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div id="machinesStatusChart"></div>
                     </div>
                 </div>
             </div>
@@ -131,84 +140,103 @@
     </div>
     <div class="row">
         <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header border-0">
-                    <h5 class="fw-semibold">Estado de Servidores</h5>
-                </div>
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header"><h5>Servidores por Tipo</h5></div>
                 <div class="card-body">
-                    <div id="serversStatusChart"></div>
+                    <div class="chart-container">
+                        <div id="serversByAppChart"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header border-0">
-                    <h5 class="fw-semibold">Estado de Máquinas</h5>
-                </div>
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header"><h5>Bases de Datos por Tipo</h5></div>
                 <div class="card-body">
-                    <div id="machinesStatusChart"></div>
+                    <div class="chart-container">
+                        <div id="databaseTypeChart"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header border-0">
-                    <h5 class="fw-semibold">Servidores por Tipo de Aplicación</h5>
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header">
+                    <h5>GCP Machines por Kernel Version</h5>
                 </div>
                 <div class="card-body">
-                    <div id="serversByAppChart"></div>
+                    <div class="chart-container">
+                        <div id="redhatChart"></div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header border-0">
-                    <h5 class="fw-semibold">Bases de Datos por Tipo</h5>
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header">
+                    <h5>GCP Machines por Sistema Operativo</h5>
                 </div>
                 <div class="card-body">
-                    <div id="databaseTypeChart"></div>
+                    <div class="chart-container">
+                        <div id="osChart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header">
+                    <h5>Servidores por Sistema Operativo</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div id="serversOSChart"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <style>
-        .dashboard-card {
-            transition: all 0.3s ease;
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        function groupTopData(labels, data, limit = 5) {
+            let combined = labels.map((label, i) => ({
+                label: label,
+                value: data[i]
+            }));
+
+            combined.sort((a, b) => b.value - a.value);
+
+            let top = combined.slice(0, limit);
+            let rest = combined.slice(limit);
+
+            let otherSum = rest.reduce((sum, item) => sum + item.value, 0);
+
+            if (otherSum > 0) {
+                top.push({ label: 'Otros', value: otherSum });
+            }
+
+            return {
+                labels: top.map(i => i.label),
+                data: top.map(i => i.value)
+            };
         }
 
-        .dashboard-card:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .dashboard-card i {
-            transition: transform 0.3s ease;
-        }
-
-        .dashboard-card:hover i {
-            transform: scale(1.2);
-        }
-    </style>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            var serversOptions = {
-                series: [{{ $serversOn }}, {{ $serversOff }}],
+        function createDonut(el, labels, data, colors) {
+            return new ApexCharts(document.querySelector(el), {
+                series: data,
                 chart: {
                     type: 'donut',
-                    height: 350
+                    height: 300
                 },
-                labels: ['Encendidos', 'Apagados'],
-                colors: ['#28c76f', '#ea5455'],
+                labels: labels,
+                colors: colors,
                 legend: {
-                    position: 'top'
-                },
-                stroke: {
-                    width: 0
+                    position: 'bottom',
+                    fontSize: '13px'
                 },
                 plotOptions: {
                     pie: {
@@ -216,120 +244,106 @@
                             size: '70%'
                         }
                     }
-                }
-            };
-
-            new ApexCharts(
-                document.querySelector("#serversStatusChart"),
-                serversOptions
-            ).render();
-
-            var machinesOptions = {
-                series: [{{ $machinesOn }}, {{ $machinesOff }}],
-                chart: {
-                    type: 'donut',
-                    height: 350
-                },
-                labels: ['Encendidas', 'Apagadas'],
-                colors: ['#28c76f', '#ea5455'],
-                legend: {
-                    position: 'top'
-                },
-                stroke: {
-                    width: 0
-                },
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            size: '70%'
-                        }
-                    }
-                }
-            };
-
-            new ApexCharts(
-                document.querySelector("#machinesStatusChart"),
-                machinesOptions
-            ).render();
-
-            var appOptions = {
-                series: [{
-                    name: 'Servidores',
-                    data: {!! json_encode($appCounts) !!}
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 350,
-                    toolbar: {
-                        show: false
-                    }
-                },
-                plotOptions: {
-                    bar: {
-                        borderRadius: 12,
-                        columnWidth: '35%'
-                    }
                 },
                 dataLabels: {
-                    enabled: false
-                },
-                grid: {
-                    borderColor: '#f1f1f1',
-                    strokeDashArray: 4
-                },
-                legend: {
-                    position: 'top'
-                },
-                xaxis: {
-                    categories: {!! json_encode($appNames) !!}
-                },
-                colors: ['#7367f0']
-            };
-
-            new ApexCharts(
-                document.querySelector("#serversByAppChart"),
-                appOptions
-            ).render();
-
-            var dbOptions = {
-                series: [{
-                    name: 'Bases de Datos',
-                    data: {!! json_encode($dbCounts) !!}
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 350,
-                    toolbar: {
-                        show: false
+                    formatter: function(val) {
+                        return val.toFixed(1) + "%";
                     }
-                },
-                plotOptions: {
-                    bar: {
-                        borderRadius: 12,
-                        columnWidth: '35%'
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                grid: {
-                    borderColor: '#f1f1f1',
-                    strokeDashArray: 4
-                },
-                legend: {
-                    position: 'top'
-                },
-                xaxis: {
-                    categories: {!! json_encode($dbNames) !!}
-                },
-                colors: ['#00cfe8']
-            };
+                }
+            }).render();
+        }
 
-            new ApexCharts(
-                document.querySelector("#databaseTypeChart"),
-                dbOptions
-            ).render();
+        createDonut("#serversStatusChart",
+            ['Encendidos', 'Apagados'],
+            [{{ $serversOn }}, {{ $serversOff }}],
+            ['#28c76f', '#ea5455']
+        );
 
+        createDonut("#machinesStatusChart",
+            ['Encendidas', 'Apagadas'],
+            [{{ $machinesOn }}, {{ $machinesOff }}],
+            ['#28c76f', '#ea5455']
+        );
+
+        createDonut("#serversByAppChart",
+            {!! json_encode($appNames) !!},
+            {!! json_encode($appCounts) !!},
+            ['#7367f0', '#00cfe8', '#ff9f43', '#28c76f']
+        );
+
+        createDonut("#databaseTypeChart",
+            {!! json_encode($dbNames) !!},
+            {!! json_encode($dbCounts) !!},
+            ['#00cfe8', '#ff9f43', '#7367f0']
+        );
+
+        let kernelData = groupTopData(
+            {!! json_encode($redhatLabels) !!},
+            {!! json_encode($redhatCounts) !!}
+        );
+
+        createDonut("#redhatChart",
+            kernelData.labels,
+            kernelData.data,
+            ['#ff9f43', '#7367f0', '#00cfe8', '#28c76f', '#ea5455', '#999']
+        );
+
+        let osData = groupTopData(
+            {!! json_encode($osLabels) !!},
+            {!! json_encode($osCounts) !!}
+        );
+
+        createDonut("#osChart",
+            osData.labels,
+            osData.data,
+            ['#00cfe8', '#7367f0', '#ff9f43', '#28c76f', '#ea5455', '#999']
+        );
+
+        let serversOSData = groupTopData(
+            {!! json_encode($serverOSLabels) !!},
+            {!! json_encode($serverOSCounts) !!}
+        );
+
+        createDonut("#serversOSChart",
+            serversOSData.labels,
+            serversOSData.data,
+            ['#7367f0', '#00cfe8', '#ff9f43', '#28c76f', '#ea5455', '#999']
+        );
+
+        document.getElementById("filterForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            fetch("{{ route('dashboard.filter') }}?" + new URLSearchParams(formData), {
+                method: "GET"
+            })
+            .then(res => res.json())
+            .then(data => {
+                let tbody = document.getElementById("patchedTable");
+                tbody.innerHTML = "";
+
+                if (data.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                No se encontraron resultados
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                data.forEach(machine => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${machine.machine_name}</td>
+                            <td>${machine.operations_system}</td>
+                            <td>${machine.kernel_version}</td>
+                            <td>${machine.latest_security_patch}</td>
+                        </tr>`;
+                });
+            });
         });
-    </script>
+    });
+</script>
 @endsection
