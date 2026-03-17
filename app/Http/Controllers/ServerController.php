@@ -137,7 +137,7 @@ class ServerController extends Controller
                 'owners',
                 'typeApplications',
                 'databases',
-                'applications' // ✅ AQUÍ ESTABA EL ERROR
+                'applications'
             ));
     }
 

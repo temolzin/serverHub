@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Server;
 use App\Models\Database;
 use App\Models\Application;
@@ -65,6 +66,13 @@ class Analytics extends Controller
                 [$start, $end]
             )->orderBy('latest_security_patch', 'desc')->get();
         }
+        $serversByOS = Server::select('os_according_to_the_vmware')
+            ->selectRaw('count(*) as total')
+            ->groupBy('os_according_to_the_vmware')
+            ->orderByDesc('total')
+            ->get();
+        $serverOSLabels = $serversByOS->pluck('os_according_to_the_vmware');
+        $serverOSCounts = $serversByOS->pluck('total');
 
         return view('content.dashboard.dashboards-analytics', compact(
             'servers',
@@ -87,7 +95,23 @@ class Analytics extends Controller
             'redhatCounts',
             'osLabels',
             'osCounts',
-            'patchedMachines'
+            'patchedMachines',
+            'serverOSLabels',
+            'serverOSCounts'
         ));
+    }
+
+    public function filter(Request $request)
+    {
+        $query = GcpMachine::query();
+        if ($request->start_date && $request->end_date) {
+            $query->whereBetween('latest_security_patch', [
+                $request->start_date,
+                $request->end_date
+            ]);
+        }
+        $machines = $query->orderBy('latest_security_patch', 'desc')->get();
+
+        return response()->json($machines);
     }
 }

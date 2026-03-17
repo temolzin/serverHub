@@ -18,6 +18,8 @@ use App\Http\Controllers\InstanceController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ExportController;
 
+
+Route::get('/dashboard/filter', [Analytics::class, 'filter'])->name('dashboard.filter');
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
