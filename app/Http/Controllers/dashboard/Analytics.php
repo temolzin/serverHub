@@ -103,6 +103,12 @@ class Analytics extends Controller
 
     public function filter(Request $request)
     {
+        if (!$request->start_date && !$request->end_date) {
+            return response()->json([
+                'data' => [],
+                'message' => 'Debes seleccionar al menos una fecha'
+            ]);
+        }
         $query = GcpMachine::query();
         if ($request->start_date && $request->end_date) {
             $query->whereBetween('latest_security_patch', [
@@ -110,8 +116,7 @@ class Analytics extends Controller
                 $request->end_date
             ]);
         }
-        $machines = $query->orderBy('latest_security_patch', 'desc')->get();
-
+            $machines = $query->orderBy('latest_security_patch', 'desc')->get();
         return response()->json($machines);
     }
 }

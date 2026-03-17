@@ -18,8 +18,6 @@ use App\Http\Controllers\InstanceController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ExportController;
 
-
-Route::get('/dashboard/filter', [Analytics::class, 'filter'])->name('dashboard.filter');
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
@@ -34,6 +32,10 @@ Route::post('/logout', function (Request $request) {
 Route::middleware('auth')->group(function () {
     Route::get('/', [Analytics::class, 'index'])
         ->name('dashboard-analytics');
+    Route::get('/dashboard/filter', [Analytics::class, 'filter'])
+        ->name('dashboard.filter');
+    Route::get('/export/{module}', [ExportController::class, 'export'])
+        ->name('export');
     Route::middleware('permission:viewOwner')
         ->resource('owners', OwnerController::class);
     Route::middleware('permission:viewServer')->group(function () {
@@ -88,7 +90,5 @@ Route::middleware('auth')->group(function () {
             [UserController::class, 'editPermissions']
         )->name('users.permissions.edit');
         Route::resource('users', UserController::class);
-        Route::get('/export/{module}', [ExportController::class, 'export'])
-            ->name('export');
     });
 });
