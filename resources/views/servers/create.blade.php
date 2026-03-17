@@ -61,8 +61,8 @@
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-check-circle me-1 text-primary"></i>Estado (obligatorio)</label>
                             <select name="state" class="form-select" required>
-                                <option value="poweredOn">poweredOn</option>
-                                <option value="poweredOff">poweredOff</option>
+                                <option value="poweredOn">Encendido</option>
+                                <option value="poweredOff">Apagado</option>
                             </select>
                         </div>
                         <div class="col-md-6">

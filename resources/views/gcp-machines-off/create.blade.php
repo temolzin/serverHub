@@ -28,8 +28,8 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label">Estado (obligatorio)</label>
                             <select name="state" class="form-select" required>
-                                <option value="poweredOn">poweredOn</option>
-                                <option value="poweredOff" selected>poweredOff</option>
+                                <option value="poweredOn">Encendido</option>
+                                <option value="poweredOff" selected>Apagado</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-4">

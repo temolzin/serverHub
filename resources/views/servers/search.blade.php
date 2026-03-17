@@ -1,6 +1,7 @@
 @forelse ($servers as $server)
     @php
         $applicationName = optional($server->typeApplication)->name_application;
+        $isOff = $server->isPoweredOff();
     @endphp
     <tr>
         <td>{{ $server->id }}</td>
@@ -10,6 +11,11 @@
         <td>
             <span class="badge bg-label-info">
                 {{ filled($server->environment) ? $server->environment : 'N/A' }}
+            </span>
+        </td>
+        <td>
+            <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}">
+                {{ $server->stateLabel() }}
             </span>
         </td>
         <td>{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}</td>
@@ -33,6 +39,6 @@
     </tr>
     @empty
     <tr>
-        <td colspan="6" class="text-center text-muted">No se encontraron servidores activos</td>
+        <td colspan="8" class="text-center text-muted">No se encontraron servidores activos</td>
     </tr>
 @endforelse

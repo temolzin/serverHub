@@ -13,7 +13,7 @@
         </td>
         <td>
             <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}">
-                {{ $isOff ? 'poweredOff' : 'poweredOn' }}
+                {{ $machine->stateLabel() }}
             </span>
         </td>
         <td>{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}</td>

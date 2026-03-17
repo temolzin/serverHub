@@ -111,7 +111,7 @@ class ServerController extends Controller
         $servers = Server::with(['owner', 'typeApplication', 'database', 'creator']);
 
         ($off ? fn($q) => $this->applyPoweredOffFilter($q)
-              : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+        : fn($q) => $this->applyPoweredOnFilter($q))($servers);
 
         $servers->when(
             $request->filled('search'),
@@ -132,7 +132,7 @@ class ServerController extends Controller
                 'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
-            : view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases'));
+            : view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void
@@ -140,10 +140,10 @@ class ServerController extends Controller
         $query->where(function ($q) use ($search) {
 
             $q->where('hostname_internal', 'like', "%$search%")
-              ->orWhere('primary_ip_address', 'like', "%$search%")
-              ->orWhere('environment', 'like', "%$search%")
-              ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
-              ->orWhere('dns_name', 'like', "%$search%");
+                ->orWhere('primary_ip_address', 'like', "%$search%")
+                ->orWhere('environment', 'like', "%$search%")
+                ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
+                ->orWhere('dns_name', 'like', "%$search%");
         });
     }
 

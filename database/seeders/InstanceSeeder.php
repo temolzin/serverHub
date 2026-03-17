@@ -8,9 +8,16 @@ use App\Models\Server;
 
 class InstanceSeeder extends Seeder
 {
+    private const MAX_SEEDED_INSTANCES = 3;
+
     public function run(): void
     {
-        $servers = Server::query()->select('id')->get();
+        $servers = Server::query()
+            ->select('id')
+            ->orderBy('id')
+            ->limit(self::MAX_SEEDED_INSTANCES)
+            ->get();
+
         foreach ($servers as $server) {
             $instance = Instance::updateOrCreate(
                 [

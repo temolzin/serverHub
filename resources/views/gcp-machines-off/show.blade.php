@@ -1,6 +1,6 @@
 @php($ownerFullName = trim((optional($machine->owner)->name ?? '') . ' ' . (optional($machine->owner)->last_name ?? '')))
 @php($applicationName = $machine->applications->pluck('name')->filter()->implode(', '))
-@php($stateLabel = $machine->isPoweredOff() ? 'poweredOff' : 'poweredOn')
+@php($stateLabel = $machine->stateLabel())
 <div class="modal fade" id="showGcpOffMachineModal{{ $machine->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">

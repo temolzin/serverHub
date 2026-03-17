@@ -63,8 +63,8 @@
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-check-circle me-1 text-primary"></i>Estado</label>
                             <select name="state" class="form-select text-start" required>
-                                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>poweredOn</option>
-                                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>poweredOff</option>
+                                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>Encendido</option>
+                                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>Apagado</option>
                             </select>
                         </div>
                         <div class="col-md-6">
