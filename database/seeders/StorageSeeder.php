@@ -22,8 +22,17 @@ class StorageSeeder extends Seeder
                 'datacenter' => 'DC-MEX-01',
             ]
         ];
+
         foreach ($storages as $storage) {
-            Storage::create($storage);
+            $record = Storage::updateOrCreate(
+                ['hostname' => $storage['hostname']],
+                $storage
+            );
+
+            Storage::query()
+                ->where('hostname', $storage['hostname'])
+                ->whereKeyNot($record->id)
+                ->delete();
         }
     }
 }

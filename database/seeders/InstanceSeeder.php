@@ -2,26 +2,35 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Instance;
 use App\Models\Server;
 
 class InstanceSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-      $servers = Server::all();
+        $servers = Server::query()->select('id')->get();
         foreach ($servers as $server) {
-            Instance::create([
-                'server_id' => $server->id,
-                'memory'    => 4096,
-                'version'   => '8.0',
-                'edition'   => 'Enterprise',
-            ]);
+            $instance = Instance::updateOrCreate(
+                [
+                    'server_id' => $server->id,
+                    'version'   => '8.0',
+                    'edition'   => 'Enterprise',
+                ],
+                [
+                    'memory' => 4096,
+                ]
+            );
+
+            Instance::withTrashed()
+                ->where('server_id', $server->id)
+                ->where('version', '8.0')
+                ->where('edition', 'Enterprise')
+                ->whereKeyNot($instance->id)
+                ->get()
+                ->each
+                ->forceDelete();
         }
     }
 }
