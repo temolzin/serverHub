@@ -42,11 +42,11 @@
                             </div>
                         </div>
                         <div class="col-md-6 mb-4">
-                        <label class="form-label">Estado (obligatorio)</label>
-                        <select name="state" class="form-select" required>
-                            <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>Encendido</option>
-                            <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>Apagado</option>
-                        </select>
+                            <label class="form-label">Estado (obligatorio)</label>
+                            <select name="state" class="form-select" required>
+                                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>Encendido</option>
+                                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>Apagado</option>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label">Nombre máquina (obligatorio)</label>
