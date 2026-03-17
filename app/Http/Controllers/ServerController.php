@@ -132,7 +132,7 @@ class ServerController extends Controller
                 'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
-            : view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'));
+            : view("$view.index", compact('servers', 'owners', 'typeApplications', 'databases'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void
