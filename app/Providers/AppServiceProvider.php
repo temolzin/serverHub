@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        View::composer('*', function ($view) {
+        View::composer(['layouts.sections.menu.verticalMenu', 'layouts/sections/menu/verticalMenu'], function ($view) {
 
             if (!Auth::check()) {
                 return;

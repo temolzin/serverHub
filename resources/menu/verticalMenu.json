@@ -23,16 +23,25 @@
         {
             "name": "GCP",
             "icon": "menu-icon icon-base bx bx-cloud",
-            "slug": "gcp-machines.",
-            "url": "gcp-machines",
-            "permission": "viewGcpMachine"
-        },
-        {
-            "name": "GCP Apagadas",
-            "icon": "menu-icon icon-base bx bx-power-off",
-            "slug": "gcp-machines-off.",
-            "url": "gcp-machines-off",
-            "permission": "viewGcpMachine"
+            "slug": [
+                "gcp-machines.",
+                "gcp-machines-off."
+            ],
+            "permission": "viewGcpMachine",
+            "submenu": [
+                {
+                    "name": "Encendido",
+                    "icon": "menu-icon icon-base bx bx-play-circle",
+                    "slug": "gcp-machines.index",
+                    "url": "gcp-machines"
+                },
+                {
+                    "name": "Apagado",
+                    "icon": "menu-icon icon-base bx bx-power-off",
+                    "slug": "gcp-machines-off.index",
+                    "url": "gcp-machines-off"
+                }
+            ]
         },
         {
             "name": "Tipo de aplicación",
@@ -42,18 +51,27 @@
             "permission": "viewTypeApplication"
         },
         {
-            "name": "On-Premise Encendidas",
+            "name": "One-premises",
             "icon": "menu-icon icon-base bx bx-server",
-            "slug": "servers.",
-            "url": "servers",
-            "permission": "viewServer"
-        },
-        {
-            "name": "On-Premise Apagadas",
-            "icon": "menu-icon icon-base bx bx-power-off",
-            "slug": "servers-off.",
-            "url": "servers-off",
-            "permission": "viewServer"
+            "slug": [
+                "servers.",
+                "servers-off."
+            ],
+            "permission": "viewServer",
+            "submenu": [
+                {
+                    "name": "Encendido",
+                    "icon": "menu-icon icon-base bx bx-play-circle",
+                    "slug": "servers.index",
+                    "url": "servers"
+                },
+                {
+                    "name": "Apagado",
+                    "icon": "menu-icon icon-base bx bx-power-off",
+                    "slug": "servers-off.index",
+                    "url": "servers-off"
+                }
+            ]
         },
         {
             "name": "Aplicaciones",
