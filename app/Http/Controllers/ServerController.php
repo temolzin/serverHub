@@ -108,7 +108,7 @@ class ServerController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $servers = Server::with(['owner', 'typeApplication', 'database', 'creator']);
+        $servers = Server::with(['owner', 'typeApplication', 'database', 'creator', 'applications']);
 
         ($off ? fn($q) => $this->applyPoweredOffFilter($q)
         : fn($q) => $this->applyPoweredOnFilter($q))($servers);
@@ -119,6 +119,7 @@ class ServerController extends Controller
         );
 
         $servers = $servers->latest()->paginate(10)->withQueryString();
+        $this->hydrateServerPresentationData($servers);
 
         $view = $off ? 'serversOff' : 'servers';
 
@@ -139,6 +140,26 @@ class ServerController extends Controller
                 'databases',
                 'applications'
             ));
+    }
+
+    private function hydrateServerPresentationData($servers): void
+    {
+        $servers->getCollection()->transform(function (Server $server) {
+            $ownerFullName = trim(
+                (optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')
+            );
+
+            $server->setAttribute('display_state_label', $server->stateLabel());
+            $server->setAttribute('display_owner_full_name', $ownerFullName);
+            $server->setAttribute('display_application_name', optional($server->typeApplication)->name_application);
+            $server->setAttribute(
+                'display_application_names',
+                $server->applications->pluck('name')->filter()->implode(', ')
+            );
+            $server->setAttribute('display_database_name', optional($server->database)->name);
+
+            return $server;
+        });
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void
