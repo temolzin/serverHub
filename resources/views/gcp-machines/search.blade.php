@@ -5,7 +5,6 @@
         <td>{{ $machine->id }}</td>
         <td>{{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}</td>
         <td>{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}</td>
-        <td>{{ filled($applicationNames) ? $applicationNames : 'N/A' }}</td>
         <td>
             <span class="badge bg-label-primary">
                 {{ filled($machine->environment) ? $machine->environment : 'N/A' }}

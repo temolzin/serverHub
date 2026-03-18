@@ -22,6 +22,15 @@
                         <label class="form-label d-block text-start">Creado por</label>
                         <input type="text" class="form-control" value="{{ $server->creator->name ?? 'N/A' }}" disabled>
                     </div>
+                    <div class="col-md-6 mb-3 text-start">
+                        <label class="form-label fw-semibold">
+                            <i class="bx bx-calendar-plus me-1 text-primary"></i>
+                            Fecha de creación
+                        </label>
+                        <input type="text" class="form-control"
+                            value="{{ $server->created_at ? $server->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : 'N/A' }}"
+                            disabled>
+                        </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-layer me-1 text-primary"></i>Aplicación</label>
                         <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>

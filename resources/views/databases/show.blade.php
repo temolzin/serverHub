@@ -24,6 +24,15 @@
                 <label class="form-label">Creado por</label>
                 <input type="text" class="form-control" value="{{ $database->creator->name ?? 'N/A' }}" disabled>
             </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">
+                    <i class="bx bx-calendar-plus me-1 text-primary"></i>
+                    Fecha de creación
+                </label>
+                <input type="text" class="form-control"
+                    value="{{ $database->created_at ? $database->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}"
+                    disabled>
+            </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
               <i class="bx bx-data me-1 text-primary"></i>

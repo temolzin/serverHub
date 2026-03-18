@@ -16,6 +16,14 @@
                             <input type="text" class="form-control" value="{{ $application->creator->name ?? 'N/A' }}" disabled>
                         </div>
                         <div class="col-md-6">
+                            <label class="form-label fw-semibold d-flex align-items-center gap-2">
+                                <i class="bx bx-calendar-plus text-primary"></i>Fecha de creación
+                            </label>
+                            <input type="text" class="form-control"
+                                value="{{ $application->created_at ? $application->created_at->format('Y-m-d H:i') : '-' }}"
+                                disabled>
+                        </div>
+                        <div class="col-md-6">
                             <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-server text-primary"></i>Servidor</label>
                             <input type="text" class="form-control" value="{{ optional($application->server)->hostname_internal ?? '-' }}" disabled>
                         </div>

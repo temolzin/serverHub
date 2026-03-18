@@ -27,6 +27,15 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
+                <i class="bx bx-calendar-plus me-1 text-primary"></i>
+                Fecha de creación
+            </label>
+            <input type="text" class="form-control"
+                value="{{ $instance->created_at ? $instance->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : 'N/A' }}"
+                disabled>
+            </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
               <i class="bx bx-memory-card me-1 text-primary"></i>
               Memoria asignada (MB)
             </label>

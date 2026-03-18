@@ -34,6 +34,15 @@
                             <input type="text" class="form-control" value="{{ $machine->creator->name ?? 'N/A' }}" disabled>
                         </div>
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i me-1 text-primary"></i>
+                            Fecha de creación
+                        </label>
+                        <input type="text" class="form-control"
+                            value="{{ $machine->created_at ? $machine->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}"
+                            disabled>
+                    </div>
                     <div class="col-md-6 mb-4">
                         <label class="form-label fw-semibold">Propietario</label>
                         <div class="input-group">
