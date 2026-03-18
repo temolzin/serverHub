@@ -59,7 +59,7 @@ $menu = $menu ?? [];
                         @endisset
                     </a>
                     @isset($item['submenu'])
-                        @include('layouts.sections.menu.submenu', ['menu' => $item['submenu']])
+                        @include('layouts.sections.menu.submenu', ['menu' => $item['submenu'], 'depth' => 1])
                     @endisset
                 </li>
             @endif
