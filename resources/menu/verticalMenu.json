@@ -42,14 +42,14 @@
             "permission": "viewTypeApplication"
         },
         {
-            "name": "On-Premise",
+            "name": "On-Premise Encendidas",
             "icon": "menu-icon icon-base bx bx-server",
             "slug": "servers.",
             "url": "servers",
             "permission": "viewServer"
         },
         {
-            "name": "Off-Premise",
+            "name": "On-Premise Apagadas",
             "icon": "menu-icon icon-base bx bx-power-off",
             "slug": "servers-off.",
             "url": "servers-off",

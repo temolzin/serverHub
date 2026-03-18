@@ -60,10 +60,29 @@
     </div>
     @include('databases.create')
     @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const input = document.getElementById('search-database');
                 let timeout = null;
+
+                function initSearchableSelects(scope = document) {
+                    if (typeof TomSelect === 'undefined') return;
+
+                    const selects = scope.querySelectorAll('.server-searchable-select');
+                    selects.forEach(select => {
+                        if (select.tomselect) return;
+
+                        new TomSelect(select, {
+                            create: false,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                            placeholder: select.dataset.placeholder || 'Buscar...'
+                        });
+                    });
+                }
 
                 function fetchDatabases(url) {
                     fetch(url, {
@@ -81,25 +100,32 @@
                         }
                         document.getElementById('databases-search').innerHTML = data.table;
                         document.getElementById('databases-pagination').innerHTML = data.pagination;
+                        initSearchableSelects(document);
                     })
                     .catch(err => console.error(err));
                 }
-                input.addEventListener('keyup', function() {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        let url = `{{ route('databases.index') }}`;
-                        if (input.value.trim() !== '') {
-                            url += `?search=${encodeURIComponent(input.value)}`;
-                        }
-                        fetchDatabases(url);
-                    }, 300);
-                });
+
+                if (input) {
+                    input.addEventListener('keyup', function() {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => {
+                            let url = `{{ route('databases.index') }}`;
+                            if (input.value.trim() !== '') {
+                                url += `?search=${encodeURIComponent(input.value)}`;
+                            }
+                            fetchDatabases(url);
+                        }, 300);
+                    });
+                }
+
                 document.addEventListener('click', function(e) {
                     const link = e.target.closest('#databases-pagination a');
                     if (!link) return;
                     e.preventDefault();
                     fetchDatabases(link.href);
                 });
+
+                initSearchableSelects(document);
             });
         </script>
     @endpush

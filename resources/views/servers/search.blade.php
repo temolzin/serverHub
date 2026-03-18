@@ -1,22 +1,14 @@
 @forelse ($servers as $server)
-    @php
-        $applicationName = optional($server->typeApplication)->name_application;
-        $isOff = $server->isPoweredOff();
-    @endphp
     <tr>
         <td>{{ $server->id }}</td>
-        <td>{{ filled($applicationName) ? $applicationName : 'N/A' }}</td>
+        <td>{{ filled($server->display_application_name) ? $server->display_application_name : 'N/A' }}</td>
         <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
         <td>{{ $server->database?->name ?? 'N/A' }}</td>
         <td>
-            <span class="badge bg-label-info">
-                {{ filled($server->environment) ? $server->environment : 'N/A' }}
-            </span>
+            {{ strtoupper(filled($server->environment) ? $server->environment : 'N/A') }}
         </td>
         <td>
-            <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}">
-                {{ $server->stateLabel() }}
-            </span>
+            {{ strtoupper($server->stateLabel()) }}
         </td>
         <td>{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}</td>
         <td class="text-end">

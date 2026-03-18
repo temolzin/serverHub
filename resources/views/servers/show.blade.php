@@ -1,7 +1,3 @@
-@php($stateLabel = $server->stateLabel())
-@php($ownerFullName = trim((optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')))
-@php($applicationName = optional($server->typeApplication)->name_application)
-@php($applicationNames = $server->applications->pluck('name')->filter()->implode(', '))
 <div class="modal fade" id="showServerModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
@@ -16,19 +12,23 @@
                         <input type="text" class="form-control" value="{{ filled($server->uuid) ? $server->uuid : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3"><label class="form-label fw-semibold d-block text-start"><i class="bx bx-user me-1 text-primary"></i>Propietario</label>
-                        <input type="text" class="form-control" value="{{ filled($ownerFullName) ? $ownerFullName : 'N/A' }}" disabled>
+                        <input type="text" class="form-control" value="{{ filled($server->display_owner_full_name) ? $server->display_owner_full_name : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 text-start">
                         <label class="form-label d-block text-start">Creado por</label>
                         <input type="text" class="form-control" value="{{ $server->creator->name ?? 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-layer me-1 text-primary"></i>Aplicación</label>
-                        <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-layer me-1 text-primary"></i>Tipo de Aplicación</label>
+                        <input type="text" class="form-control" value="{{ filled($server->display_application_name) ? $server->display_application_name : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicaciones asociadas</label>
-                        <input type="text" class="form-control" value="{{ filled($applicationNames) ? $applicationNames : 'N/A' }}" disabled>
+                        <input type="text" class="form-control" value="{{ filled($server->display_application_names) ? $server->display_application_names : 'N/A' }}" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-database me-1 text-primary"></i>Base de datos</label>
+                        <input type="text" class="form-control" value="{{ filled($server->display_database_name) ? $server->display_database_name : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-server me-1 text-primary"></i>VM (VMware)</label>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-check-circle me-1 text-primary"></i>Estado</label>
-                        <input type="text" class="form-control" value="{{ $stateLabel }}" disabled>
+                        <input type="text" class="form-control" value="{{ $server->display_state_label }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-globe me-1 text-primary"></i>DNS</label>
