@@ -36,7 +36,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label text-start w-100"><i class="bx bx-layer me-1 text-primary"></i>Aplicación</label>
+                            <label class="form-label text-start w-100"><i class="bx bx-layer me-1 text-primary"></i>Tipo de Aplicación</label>
                             <select name="type_application_id" class="form-select text-start" required>
                                 @foreach ($typeApplications as $type)
                                     <option value="{{ $type->id }}" {{ $server->type_application_id == $type->id ? 'selected' : '' }}>

@@ -72,7 +72,7 @@
                                 value="{{ filled($machine->operations_system) ? $machine->operations_system : 'N/A' }}" required>
                             </div>
                         </div>
-                        <div class="col-md-12 mb-4">
+                        <div class="col-md-6 mb-4">
                             <label class="form-label">IP interna (obligatorio)</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bx bx-network-chart text-primary"></i></span>

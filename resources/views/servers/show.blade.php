@@ -2,6 +2,7 @@
 @php($ownerFullName = trim((optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')))
 @php($applicationName = optional($server->typeApplication)->name_application)
 @php($applicationNames = $server->applications->pluck('name')->filter()->implode(', '))
+@php($databaseName = optional($server->database)->name)
 <div class="modal fade" id="showServerModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
@@ -23,12 +24,16 @@
                         <input type="text" class="form-control" value="{{ $server->creator->name ?? 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-layer me-1 text-primary"></i>Aplicación</label>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-layer me-1 text-primary"></i>Tipo de Aplicación</label>
                         <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicaciones asociadas</label>
                         <input type="text" class="form-control" value="{{ filled($applicationNames) ? $applicationNames : 'N/A' }}" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-database me-1 text-primary"></i>Base de datos</label>
+                        <input type="text" class="form-control" value="{{ filled($databaseName) ? $databaseName : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-server me-1 text-primary"></i>VM (VMware)</label>

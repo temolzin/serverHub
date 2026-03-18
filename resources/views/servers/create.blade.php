@@ -46,10 +46,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="bx bx-grid-alt me-1 text-primary"></i>
-                                Aplicaciones
-                            </label>
+                            <label class="form-label"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicaciones</label>
                             <select name="application_ids[]" class="form-select server-searchable-select" data-placeholder="Buscar aplicaciones..." multiple>
                                 @foreach ($applications as $application)
                                     <option value="{{ $application->id }}" @selected(collect(old('application_ids', []))->contains($application->id))>
@@ -70,10 +67,7 @@
                             <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">
-                                <i class="bx bx-network-chart me-1 text-primary"></i>
-                                IP primaria
-                            </label>
+                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria</label>
                             <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.10" required>
                         </div>
                         <div class="col-md-6">
