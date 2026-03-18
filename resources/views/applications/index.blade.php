@@ -16,59 +16,45 @@
         });
     </script>
 @endif
-
 @if ($errors->any())
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
                 icon: 'error',
                 title: 'Error en el formulario',
-                html: `
+                html:
                     <ul style="text-align:left;">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
-                `
             });
         });
     </script>
 @endif
-
 @section('content')
 <div class="row">
     <div class="col-12">
         <div class="card">
-
-            {{-- HEADER --}}
             <div class="card-header d-flex align-items-center">
                 <h5 class="mb-0">Aplicaciones</h5>
-
                 <div class="ms-auto d-flex gap-2">
                     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createApplicationModal">
                         <i class="bx bx-plus me-1"></i> Agregar Aplicación
                     </button>
-
                     <a href="{{ route('export', 'applications') }}" class="btn btn-primary">
                         Exportar Excel
                     </a>
                 </div>
             </div>
-
-            {{-- BODY --}}
             <div class="card-body">
-
-                {{-- SEARCH --}}
                 <div class="mb-4">
                     <input
                         type="text"
                         id="search-application"
                         class="form-control form-control-sm w-50"
-                        placeholder="Buscar por nombre, servidor, propietario"
-                    >
+                        placeholder="Buscar por nombre, servidor, propietario">
                 </div>
-
-                {{-- TABLE --}}
                 <div class="table-responsive text-nowrap" style="overflow-y:hidden;">
                     <table class="table align-middle">
                         <thead>
@@ -84,24 +70,18 @@
                                 <th class="text-end">Acciones</th>
                             </tr>
                         </thead>
-
                         <tbody id="applications-table">
                             @include('applications.search', ['applications' => $applications])
                         </tbody>
                     </table>
-
-                    {{-- PAGINATION --}}
                     <div id="applications-pagination">
                         @include('applications.pagination', ['applications' => $applications])
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-{{-- MODALES FUERA DEL TABLE (MEJOR PRÁCTICA) --}}
 <div id="modals-container">
     @foreach ($applications as $application)
         @include('applications.show', ['application' => $application])
@@ -119,16 +99,11 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
     const searchInput = document.getElementById('search-application');
     const table = document.getElementById('applications-table');
     const pagination = document.getElementById('applications-pagination');
-
     let timeout = null;
-
     function initTomSelect() {
-
-        // CREATE
         if (document.querySelector("#ownerSelect") && !document.querySelector("#ownerSelect").tomselect) {
             new TomSelect("#ownerSelect", { create: false });
         }
@@ -141,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function () {
             new TomSelect("#gcpMachineSelect", { create: false });
         }
 
-        // EDIT
         document.querySelectorAll('.ownerSelectEdit').forEach(el => {
             if (!el.tomselect) new TomSelect(el, { create: false });
         });
@@ -166,43 +140,33 @@ document.addEventListener('DOMContentLoaded', function () {
             table.innerHTML = data.table;
             pagination.innerHTML = data.pagination;
 
-            // ⚠️ IMPORTANTE: reinit
             initTomSelect();
         })
         .catch(err => console.error(err));
     }
 
-    // SEARCH
     if (searchInput) {
         searchInput.addEventListener('keyup', function () {
-
             clearTimeout(timeout);
 
             timeout = setTimeout(() => {
-
                 let url = `{{ route('applications.index') }}`;
 
                 if (this.value.trim() !== '') {
                     url += `?search=${encodeURIComponent(this.value.trim())}`;
                 }
-
                 fetchApplications(url);
-
             }, 300);
         });
     }
 
-    // PAGINATION
     document.addEventListener('click', function (e) {
-
         const link = e.target.closest('#applications-pagination a');
         if (!link) return;
-
         e.preventDefault();
         fetchApplications(link.href);
     });
 
-    // RESET CREATE
     const createModal = document.getElementById('createApplicationModal');
     const createForm = document.getElementById('createApplicationForm');
 
@@ -216,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-
     initTomSelect();
 });
 </script>

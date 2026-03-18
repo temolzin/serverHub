@@ -52,7 +52,6 @@
                                 value="{{ $application->name }}"
                                 placeholder="Ej: Sistema de Nómina" required>
                         </div>
-
                         <div class="col-md-6 mb-4">
                             <label class="form-label">Versión</label>
                             <input type="text" name="version" class="form-control"
