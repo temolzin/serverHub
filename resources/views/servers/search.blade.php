@@ -1,11 +1,7 @@
 @forelse ($servers as $server)
-    @php
-        $applicationName = optional($server->typeApplication)->name_application;
-        $isOff = $server->isPoweredOff();
-    @endphp
     <tr>
         <td>{{ $server->id }}</td>
-        <td>{{ filled($applicationName) ? $applicationName : 'N/A' }}</td>
+        <td>{{ filled($server->display_application_name) ? $server->display_application_name : 'N/A' }}</td>
         <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
         <td>{{ $server->database?->name ?? 'N/A' }}</td>
         <td>
