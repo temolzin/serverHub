@@ -62,7 +62,7 @@
             <div class="col-md-6 mb-4">
               <label class="form-label">IP interna (obligatorio)</label>
               <div class="input-group">
-                <span class="input-group-text"><i class="bx bx-network-chart text-primary"></i></span>
+                <span class="input-group-text"><i class="text-primary"></i></span>
                 <input type="text" name="internal_ip" class="form-control ip-check" placeholder="Ej: 10.10.10.15"
                   value="{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}" required
                   data-exclude="{{ $machine->id }}" data-error-target="edit-gcp-ip-error-{{ $machine->id }}">
