@@ -20,22 +20,6 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
-              <i class="bx bx-user-check me-1 text-primary"></i>
-              Creado por
-            </label>
-            <input type="text" class="form-control" value="{{ $instance->creator->name ?? 'N/A' }}" disabled>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">
-                <i class="bx bx-calendar-plus me-1 text-primary"></i>
-                Fecha de creación
-            </label>
-            <input type="text" class="form-control"
-                value="{{ $instance->created_at ? $instance->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : 'N/A' }}"
-                disabled>
-            </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">
               <i class="bx bx-memory-card me-1 text-primary"></i>
               Memoria asignada (MB)
             </label>
@@ -55,14 +39,22 @@
             </label>
             <input type="text" class="form-control" value="{{ $instance->edition ?? 'N/A' }}" disabled>
           </div>
+            <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+              <i class="bx bx-user-check me-1 text-primary"></i>
+              Creado por
+            </label>
+            <input type="text" class="form-control" value="{{ $instance->creator->name ?? 'N/A' }}" disabled>
+          </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
-              <i class="bx bx-calendar me-1 text-primary"></i>
-              Fecha de creación
+                <i class="bx bx-calendar-plus me-1 text-primary"></i>
+                Fecha de creación
             </label>
-            <input type="text" class="form-control" value="{{ $instance->created_at?->format('Y-m-d') ?? 'N/A' }}"
-              disabled>
-          </div>
+            <input type="text" class="form-control"
+                value="{{ $instance->created_at ? $instance->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : 'N/A' }}"
+                disabled>
+            </div>
         </div>
       </div>
       <div class="modal-footer">

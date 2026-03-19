@@ -28,33 +28,10 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label class="form-label fw-semibold">Creado por</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bx bx-user-check"></i></span>
-                            <input type="text" class="form-control" value="{{ $machine->creator->name ?? 'N/A' }}" disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold">
-                            <i me-1 text-primary"></i>
-                            Fecha de creación
-                        </label>
-                        <input type="text" class="form-control"
-                            value="{{ $machine->created_at ? $machine->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}"
-                            disabled>
-                    </div>
-                    <div class="col-md-6 mb-4">
                         <label class="form-label fw-semibold">Propietario</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bx bx-user"></i></span>
                             <input type="text" class="form-control" value="{{ filled($ownerFullName) ? $ownerFullName : 'N/A' }}" disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label fw-semibold">Aplicación</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="bx bx-layer"></i></span>
-                            <input type="text" class="form-control" value="{{ filled($applicationName) ? $applicationName : 'N/A' }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
@@ -154,6 +131,22 @@
                             <span class="input-group-text"><i class="bx bx-list-ul"></i></span>
                             <textarea class="form-control" rows="2" disabled>{{ filled($machine->other_ips) ? $machine->other_ips : 'N/A' }}</textarea>
                         </div>
+                    </div>
+                     <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold">Creado por</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-user-check"></i></span>
+                            <input type="text" class="form-control" value="{{ $machine->creator->name ?? 'N/A' }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i me-1 text-primary"></i>
+                            Fecha de creación
+                        </label>
+                        <input type="text" class="form-control"
+                            value="{{ $machine->created_at ? $machine->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}"
+                            disabled>
                     </div>
                 </div>
             </div>

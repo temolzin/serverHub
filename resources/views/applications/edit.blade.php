@@ -90,7 +90,7 @@
                             <input type="date" name="latest_security_patch" class="form-control"
                                 value="{{ $application->latest_security_patch }}">
                         </div>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-12 mb-4">
                             <label class="form-label">Usuario servicio</label>
                             <input type="text" name="user_service" class="form-control"
                                 value="{{ $application->user_service }}"
