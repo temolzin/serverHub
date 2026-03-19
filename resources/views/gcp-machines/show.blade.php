@@ -132,7 +132,7 @@
                             <textarea class="form-control" rows="2" disabled>{{ filled($machine->other_ips) ? $machine->other_ips : 'N/A' }}</textarea>
                         </div>
                     </div>
-                     <div class="col-md-6 mb-4">
+                    <div class="col-md-6 mb-4">
                         <label class="form-label fw-semibold">Creado por</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bx bx-user-check"></i></span>
@@ -141,12 +141,9 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">
-                            <i me-1 text-primary"></i>
-                            Fecha de creación
+                            <i class="bx bx-link" me-1 text-primary"></i> Fecha de creación
                         </label>
-                        <input type="text" class="form-control"
-                            value="{{ $machine->created_at ? $machine->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}"
-                            disabled>
+                        <input type="text" class="form-control" value="{{ $machine->created_at ? $machine->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}" disabled>
                     </div>
                 </div>
             </div>
