@@ -6,6 +6,7 @@ use App\Models\GcpMachine;
 use App\Models\Owner;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\Models\Application;
 
 class GcpMachineController extends Controller
 {
@@ -84,6 +85,10 @@ class GcpMachineController extends Controller
             $off ? 'poweredOff' : 'poweredOn'
         );
 
+        if (!$gcpMachine) {
+            $payload['created_by'] = auth()->id();
+        }
+
         $gcpMachine
             ? $gcpMachine->update($payload)
             : GcpMachine::create($payload);
@@ -117,8 +122,10 @@ class GcpMachineController extends Controller
     private function renderIndex(Request $request, bool $off = false)
     {
         $gcpMachines = GcpMachine::with(['owner', 'applications', 'creator']);
+
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($gcpMachines);
+
         $gcpMachines->when(
             $request->filled('search'),
             fn($query) => $this->applySearch($query, trim($request->search), $off)
@@ -128,15 +135,17 @@ class GcpMachineController extends Controller
             ->latest('id')
             ->paginate(10)
             ->withQueryString();
+
         $owners = Owner::orderBy('name')->get();
+        $applications = Application::orderBy('name')->get();
         $view = $off ? 'gcp-machines-off' : 'gcp-machines';
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('gcpMachines', 'owners'))->render(),
+                'table' => view("$view.search", compact('gcpMachines', 'owners', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('gcpMachines'))->render(),
             ])
-            : view("$view.index", compact('gcpMachines', 'owners'));
+            : view("$view.index", compact('gcpMachines', 'owners', 'applications'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void

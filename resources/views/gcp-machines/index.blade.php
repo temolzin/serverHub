@@ -55,7 +55,6 @@
                   <th>ID</th>
                   <th>Proyecto</th>
                   <th>Máquina</th>
-                  <th>Aplicación</th>
                   <th>Entorno</th>
                   <th>Estado</th>
                   <th>IP interna</th>
@@ -74,7 +73,6 @@
       </div>
     </div>
   </div>
-
   @include('gcp-machines.create')
 @endsection
 

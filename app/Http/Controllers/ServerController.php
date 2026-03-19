@@ -52,9 +52,14 @@ class ServerController extends Controller
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
         );
 
-        $server
-            ? $server->update($payload)
+        $server = $server
+            ? tap($server)->update($payload)
             : Server::create($payload + ['created_by' => auth()->id()]);
+
+        $this->syncApplications(
+            $server,
+            $request->input('application_ids', [])
+        );
 
         return redirect()
             ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])

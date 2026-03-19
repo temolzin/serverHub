@@ -12,10 +12,6 @@
                             <input type="text" class="form-control"value="{{ optional($application->owner)->name }} {{ optional($application->owner)->last_name }}" disabled>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Creado por</label>
-                            <input type="text" class="form-control" value="{{ $application->creator->name ?? 'N/A' }}" disabled>
-                        </div>
-                        <div class="col-md-6">
                             <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-server text-primary"></i>Servidor</label>
                             <input type="text" class="form-control" value="{{ optional($application->server)->hostname_internal ?? '-' }}" disabled>
                         </div>
@@ -51,7 +47,7 @@
                             <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-calendar text-primary"></i>Ultimo parche</label>
                             <input type="text" class="form-control" value="{{ $application->latest_security_patch ?? '-' }}" disabled>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-id-card text-primary"></i>Usuario servicio</label>
                             <input type="text" class="form-control" value="{{ $application->user_service ?? '-' }}" disabled>
                         </div>
@@ -66,6 +62,16 @@
                         <div class="col-12">
                             <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-comment-detail text-primary"></i>Comentarios</label>
                             <textarea class="form-control" rows="3" disabled>{{ $application->comments ?? '-' }}</textarea>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label">Creado por</label>
+                            <input type="text" class="form-control" value="{{ $application->creator->name ?? 'N/A' }}" disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold d-flex align-items-center gap-2">
+                                <i class="bx bx-calendar-plus text-primary"></i>Fecha de creación
+                            </label>
+                            <input type="text" class="form-control" value="{{ $application->created_at ? $application->created_at->format('Y-m-d H:i') : '-' }}" disabled>
                         </div>
                     </div>
                 </div>

@@ -15,15 +15,7 @@
               <i class="bx bx-server me-1 text-primary"></i>
               Servidor
             </label>
-            <input type="text" class="form-control" value="{{ $instance->server->hostname_internal ?? 'N/A' }}"
-              disabled>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-semibold">
-              <i class="bx bx-user-check me-1 text-primary"></i>
-              Creado por
-            </label>
-            <input type="text" class="form-control" value="{{ $instance->creator->name ?? 'N/A' }}" disabled>
+            <input type="text" class="form-control" value="{{ $instance->server->hostname_internal ?? 'N/A' }}" disabled>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
@@ -46,20 +38,23 @@
             </label>
             <input type="text" class="form-control" value="{{ $instance->edition ?? 'N/A' }}" disabled>
           </div>
+            <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">
+              <i class="bx bx-user-check me-1 text-primary"></i>
+              Creado por
+            </label>
+            <input type="text" class="form-control" value="{{ $instance->creator->name ?? 'N/A' }}" disabled>
+          </div>
           <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">
-              <i class="bx bx-calendar me-1 text-primary"></i>
-              Fecha de creación
+                <i class="bx bx-calendar-plus me-1 text-primary"></i>Fecha de creación
             </label>
-            <input type="text" class="form-control" value="{{ $instance->created_at?->format('Y-m-d') ?? 'N/A' }}"
-              disabled>
-          </div>
+            <input type="text" class="form-control" value="{{ $instance->created_at ? $instance->created_at->format('d/m/Y h:i A') : 'N/A' }}" disabled>
+            </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-          <i class="bx bx-x-circle me-1"></i> Cerrar
-        </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> <i class="bx bx-x-circle me-1"></i> Cerrar</button>
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@
         <td>{{ $application->name }}</td>
         <td>{{ $application->server?->hostname_internal ?? '-' }}</td>
         <td>{{ $application->gcpMachine?->machine_name ?? '-' }}</td>
-        <td>{{ $application->owner?->name ?? '-' }}{{ $application->owner?->last_name ?? '' }}</td>
+        <td>{{ $application->owner?->name ?? '-' }} {{ $application->owner?->last_name ?? '' }}</td>
         <td>{{ $application->version ?? '-' }}</td>
         <td>
             @php
