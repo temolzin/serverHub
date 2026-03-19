@@ -29,6 +29,9 @@ class GcpMachine extends Model
 
     protected $fillable = [
         'project_name',
+        'type_application_id',
+        'application_id',
+        'database_id',
         'uuid',
         'state',
         'environment',
@@ -65,6 +68,21 @@ class GcpMachine extends Model
     public function applications()
     {
         return $this->hasMany(Application::class, 'gcp_machine_id');
+    }
+
+    public function typeApplication()
+    {
+        return $this->belongsTo(TypeApplication::class, 'type_application_id');
+    }
+
+    public function selectedApplication()
+    {
+        return $this->belongsTo(Application::class, 'application_id');
+    }
+
+    public function database()
+    {
+        return $this->belongsTo(Database::class, 'database_id');
     }
 
     public function creator()
