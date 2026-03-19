@@ -70,7 +70,7 @@
                             <i class="bx bx-calendar me-1 text-primary"></i> Fecha de creación
                         </label>
                         <input type="text" class="form-control"
-                            value="{{ $database->created_at ? $database->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}" disabled>
+                            value="{{ $database->created_at ? $database->created_at->format('d/m/Y h:i A') : '—' }}" disabled>
                     </div>
                 </div>
             </div>

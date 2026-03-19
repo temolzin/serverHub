@@ -32,7 +32,7 @@
                 <i class="bx bx-calendar-plus me-1 text-primary"></i> Fecha de creación
             </label>
             <input type="text" class="form-control"
-                value="{{ $type->created_at ? $type->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : 'N/A' }}" disabled>
+                value="{{ $type->created_at ? $type->created_at->format('d/m/Y h:i A') : 'N/A' }}" disabled>
         </div>
       </div>
       <div class="modal-footer">

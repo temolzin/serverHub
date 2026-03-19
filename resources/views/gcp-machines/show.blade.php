@@ -143,7 +143,7 @@
                         <label class="form-label fw-semibold">
                             <i class="bx bx-link" me-1 text-primary"></i> Fecha de creación
                         </label>
-                        <input type="text" class="form-control" value="{{ $machine->created_at ? $machine->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : '—' }}" disabled>
+                        <input type="text" class="form-control" value="{{ $machine->created_at ? $machine->created_at->format('d/m/Y h:i A') : '—' }}" disabled>
                     </div>
                 </div>
             </div>

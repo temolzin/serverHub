@@ -85,7 +85,7 @@
                 <i class="bx bx-calendar-plus me-1 text-primary"></i> Fecha de creación
             </label>
             <input type="text" class="form-control"
-                value="{{ $storage->created_at ? $storage->created_at->timezone('America/Mexico_City')->format('d/m/Y h:i A') : 'N/A' }}" disabled>
+                value="{{ $storage->created_at ? $storage->created_at->format('d/m/Y h:i A') : 'N/A' }}" disabled>
             </div>
         </div>
       </div>
