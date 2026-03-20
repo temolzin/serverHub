@@ -33,8 +33,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">
-                                <i class="bx bx-layer me-1 text-primary"></i>
-                                Tipo  de Aplicación (obligatorio)
+                                <i class="bx bx-layer me-1 text-primary"></i>Tipo  de Aplicación (obligatorio)
                             </label>
                             <select name="type_application_id" class="form-select server-searchable-select" required>
                                 <option value="">Seleccionar aplicación</option>
@@ -63,7 +62,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">VM (VMware)</label>
+                            <label class="form-label fw-semibold"><i class="bx bx-desktop me-1 text-primary"></i> VM (VMware) </label>
                             <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" required>
                         </div>
                         <div class="col-md-6">
@@ -71,7 +70,7 @@
                             <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.10" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">DNS</label>
+                            <label class="form-label fw-semibold"> <i class="bx bx-globe me-1 text-primary"></i> DNS </label>
                             <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com">
                         </div>
                         <div class="col-md-6">

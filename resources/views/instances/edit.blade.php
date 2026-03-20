@@ -25,13 +25,11 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><i class="bx bx-code me-1 text-primary"></i>Versión</label>
-                        <input type="text" name="version" class="form-control" placeholder="Ej: SQL Server 2019"
-                        value="{{ $instance->version }}" required>
+                        <input type="text" name="version" class="form-control" placeholder="Ej: SQL Server 2019" value="{{ $instance->version }}" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><i class="bx bx-layer me-1 text-primary"></i>Edición</label>
-                        <input type="text" name="edition" class="form-control" placeholder="Ej: Enterprise, Standard"
-                        value="{{ $instance->edition }}">
+                        <input type="text" name="edition" class="form-control" placeholder="Ej: Enterprise, Standard" value="{{ $instance->edition }}">
                     </div>
                 </div>
                 <div class="modal-footer">

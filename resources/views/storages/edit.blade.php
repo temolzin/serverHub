@@ -14,91 +14,91 @@
         <div class="modal-body text-start">
           <div class="row">
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre del servidor</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-server me-1 text-primary"></i>
+                Nombre del servidor
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-server text-primary"></i>
-                </span>
                 <input type="text" name="hostname" class="form-control" placeholder="Ej: storage-prod-01"
                   value="{{ $storage->hostname }}" required>
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">IP de datos</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-network-chart me-1 text-primary"></i>
+                IP de datos
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-network-chart text-primary"></i>
-                </span>
                 <input type="text" name="data_ip" class="form-control" placeholder="Ej: 192.168.10.50"
                   value="{{ $storage->data_ip }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Plataforma</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-chip me-1 text-primary"></i>
+                Plataforma
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-layer text-primary"></i>
-                </span>
                 <input type="text" name="platform" class="form-control" placeholder="Ej: VMware / Físico"
                   value="{{ $storage->platform }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Nombre del sistema operativo</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-desktop me-1 text-primary"></i>
+                Nombre del sistema operativo
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-chip text-primary"></i>
-                </span>
                 <input type="text" name="os_name" class="form-control" placeholder="Ej: Red Hat Enterprise Linux"
                   value="{{ $storage->os_name }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Sistema operativo interno</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-code-block me-1 text-primary"></i>
+                Sistema operativo interno
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-code text-primary"></i>
-                </span>
                 <input type="text" name="os_internal" class="form-control" placeholder="Ej: 8.8 (Ootpa)"
                   value="{{ $storage->os_internal }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Sistema operativo (general)</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-layer me-1 text-primary"></i>
+                Sistema operativo (general)
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-desktop text-primary"></i>
-                </span>
                 <input type="text" name="operations_system" class="form-control" placeholder="Ej: Linux / Windows"
                   value="{{ $storage->operations_system }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">IP interna</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-lan me-1 text-primary"></i>
+                IP interna
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-network-chart text-primary"></i>
-                </span>
                 <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 10.10.10.15"
                   value="{{ $storage->internal_ip }}">
               </div>
             </div>
             <div class="col-md-6 mb-4">
-              <label class="form-label">Entorno</label>
+              <label class="form-label fw-semibold">
+                <i class="bx bx-globe me-1 text-primary"></i>
+                Entorno
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-code-alt text-primary"></i>
-                </span>
                 <input type="text" name="environment" class="form-control" placeholder="Ej: Producción / Desarrollo"
                   value="{{ $storage->environment }}">
               </div>
             </div>
-            <div class="col-md-6 mb-4">
-              <label class="form-label">Datacenter</label>
+            <div class="col-md-12 mb-4">
+              <label class="form-label fw-semibold">
+                <i class="bx bx-building-house me-1 text-primary"></i>
+                Centro de datos
+              </label>
               <div class="input-group">
-                <span class="input-group-text">
-                  <i class="bx bx-building text-primary"></i>
-                </span>
                 <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-México-01"
                   value="{{ $storage->datacenter }}">
               </div>

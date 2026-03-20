@@ -7,8 +7,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title d-flex align-items-center gap-2">
-                    <i class="bx bx-data text-primary fs-4"></i>
-                    Detalle de la base de datos
+                    <i class="bx bx-data text-primary fs-4"></i>Detalle de la base de datos
                 </h5>
             </div>
             <div class="modal-body">
@@ -62,15 +61,16 @@
                         <textarea class="form-control" rows="3" disabled>{{ $database->comments ?? '—' }}</textarea>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Creado por</label>
+                        <label class="form-label fw-semibold">
+                            <i class="bx bx-user-plus me-1 text-primary"></i>Creado por
+                        </label>
                         <input type="text" class="form-control" value="{{ $database->creator->name ?? 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">
                             <i class="bx bx-calendar me-1 text-primary"></i> Fecha de creación
                         </label>
-                        <input type="text" class="form-control"
-                            value="{{ $database->created_at ? $database->created_at->format('d/m/Y h:i A') : '—' }}" disabled>
+                        <input type="text" class="form-control" value="{{ $database->created_at ? $database->created_at->format('d/m/Y h:i A') : '—' }}" disabled>
                     </div>
                 </div>
             </div>
