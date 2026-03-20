@@ -90,7 +90,7 @@
                         <textarea class="form-control" rows="3" disabled>{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
                     </div>
                     <div class="col-md-6 text-start">
-                        <label class="form-label d-block text-start fw-semibold"> <i class="bx bx-user-check me-1 text-primary"></i>Creado por </label>
+                        <label class="form-label d-block text-start fw-semibold"><i class="bx bx-user-check me-1 text-primary"></i>Creado por </label>
                         <input type="text" class="form-control" value="{{ $server->creator->name ?? 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3 text-start">

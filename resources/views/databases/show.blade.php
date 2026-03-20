@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"> <i class="bx bx-x-circle me-1"></i>Cerrar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"><i class="bx bx-x-circle me-1"></i>Cerrar</button>
             </div>
         </div>
     </div>

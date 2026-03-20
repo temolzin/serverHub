@@ -33,7 +33,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary"> <i class="bx bx-save me-1"></i> Crear </button>
+                    <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Crear </button>
                 </div>
             </form>
         </div>

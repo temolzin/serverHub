@@ -104,7 +104,7 @@
                             </label>
                             <input type="date" name="latest_security_patch" class="form-control">
                         </div>
-                       <div class="col-12 mb-4">
+                        <div class="col-12 mb-4">
                             <label class="form-label fw-semibold">
                                 <i class="bx bx-cog me-1 text-primary"></i>Procesos
                             </label>

@@ -87,7 +87,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-server me-1 text-primary"></i>Datacenter (obligatorio)</label>
-                        <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" required>
+                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo</label>
