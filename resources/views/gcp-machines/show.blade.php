@@ -2,14 +2,11 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center gap-2">
-                <i class="bx bx-cloud text-primary fs-4"></i>
-                Detalle de máquina GCP
-                </h5>
+                <h5 class="modal-title d-flex align-items-center gap-2"><i class="bx bx-cloud text-primary fs-4"></i>Detalle de máquina GCP</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-                <div class="modal-body text-start">
-                    <div class="row">
+            <div class="modal-body text-start">
+                <div class="row">
                     <div class="col-md-6 mb-4">
                         <label class="form-label fw-semibold"><i class="bx bx-fingerprint me-1 text-primary"></i>UUID</label>
                         <div class="input-group">

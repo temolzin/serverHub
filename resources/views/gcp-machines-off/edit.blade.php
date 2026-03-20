@@ -37,8 +37,7 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-layer me-1 text-primary"></i>Tipo de aplicacion</label>
                             <div class="input-group">
-                                <select name="type_application_id" class="form-select gcp-off-searchable-select"
-                                    data-placeholder="Buscar tipo de aplicacion...">
+                                <select name="type_application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar tipo de aplicacion...">
                                     <option value="">Selecciona un tipo de aplicacion</option>
                                     @foreach ($typeApplications as $typeApplication)
                                         <option value="{{ $typeApplication->id }}" {{ (int) $machine->type_application_id === (int) $typeApplication->id ? 'selected' : '' }}>
@@ -51,8 +50,7 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicacion</label>
                             <div class="input-group">
-                                <select name="application_id" class="form-select gcp-off-searchable-select"
-                                    data-placeholder="Buscar aplicacion...">
+                                <select name="application_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar aplicacion...">
                                     <option value="">Selecciona una aplicacion</option>
                                     @foreach ($applications as $application)
                                         <option value="{{ $application->id }}" {{ (int) $machine->application_id === (int) $application->id ? 'selected' : '' }}>
@@ -65,8 +63,7 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-data me-1 text-primary"></i>Base de datos</label>
                             <div class="input-group">
-                                <select name="database_id" class="form-select gcp-off-searchable-select"
-                                    data-placeholder="Buscar base de datos...">
+                                <select name="database_id" class="form-select gcp-off-searchable-select" data-placeholder="Buscar base de datos...">
                                     <option value="">Selecciona una base de datos</option>
                                     @foreach ($databases as $database)
                                         <option value="{{ $database->id }}" {{ (int) $machine->database_id === (int) $database->id ? 'selected' : '' }}>
@@ -176,13 +173,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
-                    Cancelar
-                </button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="bx bx-save me-1"></i>
-                    Actualizar
-                </button>
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal"> Cancelar</button>
+                <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i>Actualizar</button>
                 </div>
             </form>
         </div>

@@ -13,9 +13,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-user me-1 text-primary"></i>Propietario (obligatorio)</label>
-                            <select name="owner_id"
-                                class="form-select gcp-searchable-select"
-                                data-placeholder="Buscar propietario..." required>
+                            <select name="owner_id" class="form-select gcp-searchable-select" data-placeholder="Buscar propietario..." required>
                                 <option value="" disabled selected>Selecciona un propietario</option>
                                 @foreach ($owners as $owner)
                                     <option value="{{ $owner->id }}">
@@ -30,8 +28,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-layer me-1 text-primary"></i>Tipo de aplicacion</label>
-                            <select name="type_application_id" class="form-select gcp-searchable-select"
-                                data-placeholder="Buscar tipo de aplicacion...">
+                            <select name="type_application_id" class="form-select gcp-searchable-select" data-placeholder="Buscar tipo de aplicacion...">
                                 <option value="" selected>Selecciona un tipo de aplicacion</option>
                                 @foreach ($typeApplications as $typeApplication)
                                     <option value="{{ $typeApplication->id }}">
@@ -42,8 +39,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicacion</label>
-                            <select name="application_id" class="form-select gcp-searchable-select"
-                                data-placeholder="Buscar aplicacion...">
+                            <select name="application_id" class="form-select gcp-searchable-select" data-placeholder="Buscar aplicacion...">
                                 <option value="" selected>Selecciona una aplicacion</option>
                                 @foreach ($applications as $application)
                                     <option value="{{ $application->id }}">
@@ -54,8 +50,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-data me-1 text-primary"></i>Base de datos</label>
-                            <select name="database_id" class="form-select gcp-searchable-select"
-                                data-placeholder="Buscar base de datos...">
+                            <select name="database_id" class="form-select gcp-searchable-select" data-placeholder="Buscar base de datos...">
                                 <option value="" selected>Selecciona una base de datos</option>
                                 @foreach ($databases as $database)
                                     <option value="{{ $database->id }}">
@@ -129,12 +124,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        Guardar
-                    </button>
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>
