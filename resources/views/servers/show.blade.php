@@ -19,11 +19,11 @@
                         <input type="text" class="form-control" value="{{ filled($server->display_application_name) ? $server->display_application_name : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicaciones asociadas</label>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Aplicaciones asociadas</label>
                         <input type="text" class="form-control" value="{{ filled($server->display_application_names) ? $server->display_application_names : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-database me-1 text-primary"></i>Base de datos</label>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Base de datos</label>
                         <input type="text" class="form-control" value="{{ filled($server->display_database_name) ? $server->display_database_name : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -90,7 +90,7 @@
                         <textarea class="form-control" rows="3" disabled>{{ filled($server->comments) ? $server->comments : 'N/A' }}</textarea>
                     </div>
                     <div class="col-md-6 text-start">
-                        <label class="form-label d-block text-start">Creado por</label>
+                        <label class="form-label d-block text-start fw-semibold"><i class="bx bx-user-check me-1 text-primary"></i>Creado por </label>
                         <input type="text" class="form-control" value="{{ $server->creator->name ?? 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3 text-start">
