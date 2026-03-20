@@ -1,14 +1,12 @@
 @forelse ($gcpMachines as $machine)
-    @php($isOff = $machine->isPoweredOff())
-    @php($applicationNames = $machine->applications->pluck('name')->filter()->implode(', '))
     <tr>
         <td>{{ $machine->id }}</td>
         <td>{{ filled($machine->project_name) ? $machine->project_name : 'N/A' }}</td>
         <td>{{ filled($machine->machine_name) ? $machine->machine_name : 'N/A' }}</td>
-        <td>{{ filled($applicationNames) ? $applicationNames : 'N/A' }}</td>
+        <td>{{ filled($machine->display_application_name) ? $machine->display_application_name : 'N/A' }}</td>
         <td>{{ filled($machine->operations_system) ? $machine->operations_system : 'N/A' }}</td>
         <td>
-            <span class="badge {{ $isOff ? 'bg-label-danger' : 'bg-label-success' }}"> {{ $machine->stateLabel() }}</span>
+            <span class="badge {{ $machine->is_powered_off ? 'bg-label-danger' : 'bg-label-success' }}"> {{ $machine->display_state_label }}</span>
         </td>
         <td class="text-end">
             <div class="dropdown">

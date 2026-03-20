@@ -7,6 +7,8 @@ use App\Models\Owner;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Application;
+use App\Models\TypeApplication;
+use App\Models\Database as DatabaseModel;
 
 class GcpMachineController extends Controller
 {
@@ -89,9 +91,16 @@ class GcpMachineController extends Controller
             $payload['created_by'] = auth()->id();
         }
 
-        $gcpMachine
-            ? $gcpMachine->update($payload)
+        $machine = $gcpMachine
+            ? tap($gcpMachine)->update($payload)
             : GcpMachine::create($payload);
+
+        $this->syncSelectedApplication(
+            $machine,
+            isset($payload['application_id']) && $payload['application_id'] !== null
+                ? (int) $payload['application_id']
+                : null
+        );
 
         return redirect()
             ->route($off ? 'gcp-machines-off.index' : 'gcp-machines.index', ['page' => $request->page])
@@ -121,7 +130,14 @@ class GcpMachineController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $gcpMachines = GcpMachine::with(['owner', 'applications', 'creator']);
+        $gcpMachines = GcpMachine::with([
+            'owner',
+            'applications',
+            'typeApplication',
+            'selectedApplication',
+            'database',
+            'creator'
+        ]);
 
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($gcpMachines);
@@ -136,16 +152,20 @@ class GcpMachineController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $this->decorateMachinesForView($gcpMachines);
+
         $owners = Owner::orderBy('name')->get();
+        $typeApplications = TypeApplication::orderBy('name_application')->get();
         $applications = Application::orderBy('name')->get();
+        $databases = DatabaseModel::orderBy('name')->get();
         $view = $off ? 'gcp-machines-off' : 'gcp-machines';
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('gcpMachines', 'owners', 'applications'))->render(),
+                'table' => view("$view.search", compact('gcpMachines', 'owners', 'typeApplications', 'applications', 'databases'))->render(),
                 'pagination' => view("$view.pagination", compact('gcpMachines'))->render(),
             ])
-            : view("$view.index", compact('gcpMachines', 'owners', 'applications'));
+            : view("$view.index", compact('gcpMachines', 'owners', 'typeApplications', 'applications', 'databases'));
     }
 
     private function applySearch(Builder $query, string $search, bool $off): void
@@ -180,6 +200,22 @@ class GcpMachineController extends Controller
                 $subQuery->orWhere($column, 'like', "%{$search}%");
             }
 
+            $subQuery->orWhereHas('typeApplication', function (Builder $typeQuery) use ($search) {
+                $typeQuery
+                    ->where('name_application', 'like', "%{$search}%")
+                    ->orWhere('type_application', 'like', "%{$search}%");
+            });
+
+            $subQuery->orWhereHas(
+                'selectedApplication',
+                fn(Builder $selectedApplicationQuery) => $selectedApplicationQuery->where('name', 'like', "%{$search}%")
+            );
+
+            $subQuery->orWhereHas(
+                'database',
+                fn(Builder $databaseQuery) => $databaseQuery->where('name', 'like', "%{$search}%")
+            );
+
             $subQuery->orWhereHas(
                 'applications',
                 fn(Builder $applicationQuery) => $applicationQuery->where('name', 'like', "%{$search}%")
@@ -199,6 +235,9 @@ class GcpMachineController extends Controller
         return $request->validate([
             'owner_id' => 'required|exists:owners,id',
             'project_name' => 'required|string|max:255',
+            'type_application_id' => 'nullable|exists:type_applications,id',
+            'application_id' => 'nullable|exists:applications,id',
+            'database_id' => 'nullable|exists:databases,id',
             'state' => 'required|in:poweredOn,poweredOff',
             'environment' => 'required|string|max:255',
             'machine_name' => 'required|string|max:255',
@@ -250,6 +289,19 @@ class GcpMachineController extends Controller
 
     private function normalizeMachinePayload(array $payload): array
     {
+        $foreignKeyFields = [
+            'type_application_id',
+            'application_id',
+            'database_id',
+        ];
+
+        foreach ($foreignKeyFields as $field) {
+            $value = $payload[$field] ?? null;
+            $payload[$field] = ($value === null || $value === '')
+                ? null
+                : (int) $value;
+        }
+
         $fieldsWithNaFallback = [
             'project_name',
             'environment',
@@ -272,5 +324,49 @@ class GcpMachineController extends Controller
         }
 
         return $payload;
+    }
+
+    private function syncSelectedApplication(GcpMachine $gcpMachine, ?int $applicationId): void
+    {
+        $detachQuery = Application::where('gcp_machine_id', $gcpMachine->id);
+
+        if ($applicationId) {
+            $detachQuery->where('id', '!=', $applicationId);
+        }
+
+        $detachQuery->update(['gcp_machine_id' => null]);
+
+        if (!$applicationId) {
+            return;
+        }
+
+        GcpMachine::where('application_id', $applicationId)
+            ->where('id', '!=', $gcpMachine->id)
+            ->update(['application_id' => null]);
+
+        Application::whereKey($applicationId)->update(['gcp_machine_id' => $gcpMachine->id]);
+    }
+
+    private function decorateMachinesForView($gcpMachines): void
+    {
+        $gcpMachines->getCollection()->transform(function (GcpMachine $machine) {
+            $ownerFullName = trim((optional($machine->owner)->name ?? '') . ' ' . (optional($machine->owner)->last_name ?? ''));
+            $relatedApplicationNames = $machine->applications->pluck('name')->filter()->implode(', ');
+            $selectedApplicationName = optional($machine->selectedApplication)->name;
+            $applicationType = optional($machine->typeApplication)->name_application
+                ?? optional($machine->typeApplication)->type_application;
+
+            $machine->setAttribute('display_owner_full_name', $ownerFullName);
+            $machine->setAttribute('display_application_type', $applicationType);
+            $machine->setAttribute(
+                'display_application_name',
+                filled($selectedApplicationName) ? $selectedApplicationName : $relatedApplicationNames
+            );
+            $machine->setAttribute('display_database_name', optional($machine->database)->name);
+            $machine->setAttribute('display_state_label', $machine->stateLabel());
+            $machine->setAttribute('is_powered_off', $machine->isPoweredOff());
+
+            return $machine;
+        });
     }
 }
