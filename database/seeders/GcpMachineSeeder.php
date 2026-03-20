@@ -29,6 +29,8 @@ class GcpMachineSeeder extends Seeder
             ['internal_ip' => '10.128.0.2'],
             [
                 'uuid' => '9f7a2f9a-2a80-4e11-8c57-6af2a93b1001',
+                'created_by' => 1,
+                'created_at' => now(),
                 'project_name' => 'serverhub-prod',
                 'type_application_id' => $apiType?->id,
                 'application_id' => $serverHubApi?->id,
@@ -58,6 +60,8 @@ class GcpMachineSeeder extends Seeder
             ['internal_ip' => '10.128.0.3'],
             [
                 'uuid' => '9f7a2f9a-2a80-4e11-8c57-6af2a93b1002',
+                'created_by' => 1,
+                'created_at' => now(),
                 'project_name' => 'serverhub-staging',
                 'type_application_id' => $workerType?->id,
                 'application_id' => $serverHubWeb?->id,

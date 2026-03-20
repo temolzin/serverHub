@@ -11,9 +11,9 @@ class UserSeeder extends Seeder
   public function run(): void
   {
     $user = User::updateOrCreate(
-      ['email' => 'jose@gmail.com'],
+      ['email' => 'Jose@gmail.com'],
       [
-        'name' => 'jose',
+        'name' => 'Jose',
         'password' => Hash::make('12345'),
         'email_verified_at' => now(),
       ]

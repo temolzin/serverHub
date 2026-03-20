@@ -12,17 +12,29 @@ class TypeApplicationSeeder extends Seeder
   {
     TypeApplication::updateOrCreate(
       ['type_application' => 'web'],
-      ['name_application' => 'Web Application']
+      [
+        'name_application' => 'Web Application',
+        'created_by' => 1,
+        'created_at' => now(),
+      ]
     );
 
     TypeApplication::updateOrCreate(
       ['type_application' => 'api'],
-      ['name_application' => 'API Service']
+      [
+        'name_application' => 'API Service',
+        'created_by' => 1,
+        'created_at' => now(),
+      ]
     );
 
     TypeApplication::updateOrCreate(
       ['type_application' => 'worker'],
-      ['name_application' => 'Background Worker']
+      [
+        'name_application' => 'Background Worker',
+        'created_by' => 1,
+        'created_at' => now(),
+      ]
     );
   }
 }

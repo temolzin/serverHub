@@ -27,6 +27,8 @@ class ApplicationSeeder extends Seeder
       'name' => 'ServerHub API',
     ], [
       'owner_id' => $owner->id,
+      'created_by' => 1,         
+      'created_at' => now(),  
       'server_id' => $primaryServer?->id,
       'gcp_machine_id' => $gcpMachine?->id,
       'name' => 'ServerHub API',
@@ -46,6 +48,8 @@ class ApplicationSeeder extends Seeder
       'name' => 'ServerHub Web',
     ], [
       'owner_id' => $owner->id,
+      'created_by' => 1,
+      'created_at' => now(),  
       'server_id' => $secondaryServer?->id ?? $primaryServer?->id,
       'gcp_machine_id' => null,
       'name' => 'ServerHub Web',
@@ -66,6 +70,8 @@ class ApplicationSeeder extends Seeder
         'name' => 'Monitoring Agent',
       ], [
         'owner_id' => $owner->id,
+        'created_by' => 1,    
+        'created_at' => now(),  
         'server_id' => null,
         'gcp_machine_id' => $gcpMachine->id,
         'name' => 'Monitoring Agent',

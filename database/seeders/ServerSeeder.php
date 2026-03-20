@@ -13,6 +13,8 @@ class ServerSeeder extends Seeder
             ['vm_according_to_the_vmware' => 'VM-001'],
             [
                 'owner_id' => 1,
+                'created_by' => 1,
+                'created_at' => now(),
                 'uuid' => 'd3fbc31d-7a4a-4fcb-9c58-2a20e9aa0001',
                 'type_application_id' => 1,
                 'state' => true,

@@ -12,6 +12,8 @@ class StorageSeeder extends Seeder
         $storages = [
             [
                 'hostname' => 'storage-dev-01',
+                'created_by' => 1,
+                'created_at' => now(),
                 'data_ip' => '10.10.1.10',
                 'platform' => 'VMware',
                 'os_name' => 'Ubuntu 22.04',

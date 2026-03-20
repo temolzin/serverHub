@@ -22,6 +22,8 @@ class InstanceSeeder extends Seeder
             $instance = Instance::updateOrCreate(
                 [
                     'server_id' => $server->id,
+                    'created_by' => 1,
+                    'created_at' => now(),
                     'version'   => '8.0',
                     'edition'   => 'Enterprise',
                 ],
