@@ -86,6 +86,7 @@ class GcpMachineController extends Controller
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn'),
             $off ? 'poweredOff' : 'poweredOn'
         );
+        $previousDatabaseId = $gcpMachine?->database_id;
 
         if (!$gcpMachine) {
             $payload['created_by'] = auth()->id();
@@ -101,6 +102,11 @@ class GcpMachineController extends Controller
                 ? (int) $payload['application_id']
                 : null
         );
+        $this->syncLinkedDatabaseStatus($machine->database_id);
+
+        if ($previousDatabaseId && (int) $previousDatabaseId !== (int) $machine->database_id) {
+            $this->syncLinkedDatabaseStatus((int) $previousDatabaseId);
+        }
 
         return redirect()
             ->route($off ? 'gcp-machines-off.index' : 'gcp-machines.index', ['page' => $request->page])
@@ -109,7 +115,9 @@ class GcpMachineController extends Controller
 
     private function remove(Request $request, GcpMachine $gcpMachine, bool $off = false)
     {
+        $databaseId = $gcpMachine->database_id;
         $gcpMachine->delete();
+        $this->syncLinkedDatabaseStatus($databaseId ? (int) $databaseId : null);
 
         return redirect()
             ->route($off ? 'gcp-machines-off.index' : 'gcp-machines.index', ['page' => $request->page])
@@ -119,6 +127,7 @@ class GcpMachineController extends Controller
     private function changeState(GcpMachine $gcpMachine, string $state)
     {
         $gcpMachine->update(['state' => $this->normalizeState($state)]);
+        $this->syncLinkedDatabaseStatus($gcpMachine->database_id ? (int) $gcpMachine->database_id : null);
 
         return back()->with(
             'success',
@@ -345,6 +354,27 @@ class GcpMachineController extends Controller
             ->update(['application_id' => null]);
 
         Application::whereKey($applicationId)->update(['gcp_machine_id' => $gcpMachine->id]);
+    }
+
+    private function syncLinkedDatabaseStatus(?int $databaseId): void
+    {
+        if (!$databaseId) {
+            return;
+        }
+
+        $states = GcpMachine::where('database_id', $databaseId)->pluck('state');
+
+        if ($states->isEmpty()) {
+            return;
+        }
+
+        $hasPoweredOnMachine = $states->contains(
+            fn($state) => $this->normalizeState($state) === 'poweredOn'
+        );
+
+        DatabaseModel::whereKey($databaseId)->update([
+            'status' => $hasPoweredOnMachine ? 'active' : 'inactive',
+        ]);
     }
 
     private function decorateMachinesForView($gcpMachines): void

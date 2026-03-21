@@ -21,8 +21,8 @@
                             <label class="form-label fw-semibold">
                                 <i class="bx bx-server me-1 text-primary"></i>Instancia
                             </label>
-                            <select name="instance_id" class="form-select server-searchable-select" data-placeholder="Buscar instancia..." required>
-                                <option value="" disabled selected>Selecciona una instancia</option>
+                            <select name="instance_id" class="form-select server-searchable-select" data-placeholder="Buscar instancia...">
+                                <option value="" selected>Sin instancia (opcional)</option>
                                 @foreach ($instances as $instance)
                                     <option value="{{ $instance->id }}">
                                         {{ $instance->server->hostname_internal }}

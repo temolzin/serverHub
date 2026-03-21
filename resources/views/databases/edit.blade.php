@@ -12,8 +12,8 @@
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-layer me-1 text-primary"></i>Instancia</label>
-                            <select name="instance_id" class="form-select server-searchable-select" data-placeholder="Buscar instancia..." required>
-                                <option disabled>Seleccione una instancia</option>
+                            <select name="instance_id" class="form-select server-searchable-select" data-placeholder="Buscar instancia...">
+                                <option value="" {{ $database->instance_id ? '' : 'selected' }}>Sin instancia (opcional)</option>
                                 @foreach ($instances as $instance)
                                     <option value="{{ $instance->id }}" {{ $database->instance_id == $instance->id ? 'selected' : '' }}>
                                         {{ $instance->server->hostname_internal }}
