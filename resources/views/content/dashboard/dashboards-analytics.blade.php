@@ -39,13 +39,13 @@
     </div>
     <div class="row">
         @foreach ([
-            ['Servidores', $servers, 'bx-server', 'primary'],
+            ['On-premis', $servers, 'bx-server', 'primary'],
             ['Bases de Datos', $databases, 'bx-data', 'success'],
             ['Aplicaciones', $applications, 'bx-layer', 'info'],
             ['Propietarios', $owners, 'bx-user', 'warning'],
             ['Instancias', $instances, 'bx-cube', 'secondary'],
             ['Storage', $storages, 'bx-hdd', 'danger'],
-            ['GCP Machines', $machines, 'bx-cloud', 'primary'],
+            ['GCP Máquinas', $machines, 'bx-cloud', 'primary'],
             ['Usuarios', $users, 'bx-group', 'dark'],
         ] as [$label, $value, $icon, $color])
             <div class="col-md-3 col-sm-6 mb-4">
@@ -121,7 +121,7 @@
     <div class="row">
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Estado de Servidores</h5></div>
+                <div class="card-header"><h5>Estado de On-premis</h5></div>
                 <div class="card-body">
                     <div class="chart-container">
                         <div id="serversStatusChart"></div>
@@ -131,7 +131,7 @@
         </div>
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Estado de Máquinas</h5></div>
+                <div class="card-header"><h5>Estado de GCP Máquinas</h5></div>
                 <div class="card-body">
                     <div class="chart-container">
                         <div id="machinesStatusChart"></div>
@@ -143,7 +143,7 @@
     <div class="row">
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Servidores por Tipo</h5></div>
+                <div class="card-header"><h5>On-premis por Tipo de Aplicación</h5></div>
                 <div class="card-body">
                     <div class="chart-container">
                         <div id="serversByAppChart"></div>
@@ -166,7 +166,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header">
-                    <h5>GCP Machines por Kernel Version</h5>
+                    <h5>GCP Máquinas por Kernel Version</h5>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -178,7 +178,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header">
-                    <h5>GCP Machines por Sistema Operativo</h5>
+                    <h5>GCP Máquinas por Sistema Operativo</h5>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
@@ -190,7 +190,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header">
-                    <h5>Servidores por Sistema Operativo</h5>
+                    <h5>On-premis por Sistema Operativo</h5>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
