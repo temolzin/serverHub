@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard-analytics');
     Route::get('/dashboard/filter', [Analytics::class, 'filter'])
         ->name('dashboard.filter');
+    Route::get('/dashboard/patched-machines/export', [Analytics::class, 'exportPatchedMachines'])
+        ->name('dashboard.patched.export');
     Route::get('/export/{module}', [ExportController::class, 'export'])
         ->name('export');
     Route::middleware('permission:viewOwner')
