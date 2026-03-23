@@ -39,7 +39,7 @@
     </div>
     <div class="row">
         @foreach ([
-            ['On-premis', $servers, 'bx-server', 'primary'],
+            ['On-Premise', $servers, 'bx-server', 'primary'],
             ['Bases de Datos', $databases, 'bx-data', 'success'],
             ['Aplicaciones', $applications, 'bx-layer', 'info'],
             ['Propietarios', $owners, 'bx-user', 'warning'],
@@ -124,7 +124,7 @@
     <div class="row">
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Estado de On-premis</h5></div>
+                <div class="card-header"><h5>Estado de On-Premise</h5></div>
                 <div class="card-body">
                     <div class="chart-container">
                         <div id="serversStatusChart"></div>
@@ -146,7 +146,7 @@
     <div class="row">
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>On-premis por Tipo de Aplicación</h5></div>
+                <div class="card-header"><h5>On-Premise por Tipo de Aplicación</h5></div>
                 <div class="card-body">
                     <div class="chart-container">
                         <div id="serversByAppChart"></div>
@@ -193,7 +193,7 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header">
-                    <h5>On-premis por Sistema Operativo</h5>
+                    <h5>On-Premise por Sistema Operativo</h5>
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
