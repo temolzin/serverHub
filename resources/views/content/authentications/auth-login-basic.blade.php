@@ -17,7 +17,7 @@
                 <span class="app-brand-text demo text-heading fw-bold">{{ config('variables.templateName') }}</span>
               </a>
             </div>
-            <h4 class="mb-1">Bienvenido a{{ config('variables.templateName') }}! 👋</h4>
+            <h4 class="mb-1">Bienvenido a {{ config('variables.templateName') }}! 👋</h4>
             <p class="mb-6">Inicie sesión en su cuenta y comience la aventura</p>
             <form id="formAuthentication" class="mb-6" action="{{ route('login.post') }}" method="POST">
               @csrf

@@ -29,6 +29,8 @@ class ServerDatabaseSeeder extends Seeder
                 ],
                 [
                     'owner_id' => $instance->server->owner_id,
+                    'created_by' => 1,
+                    'created_at' => now(),
                     'type' => 'MySQL',
                     'status' => 'Active',
                     'port' => 3306,
