@@ -17,13 +17,17 @@ class PowerLogController extends Controller
 
                 $query->where(function ($q) use ($search) {
 
-                    $q->where('motive', 'like', "%$search%")
+                    $q->where('motive', 'like', "%{$search}%");
 
-                    ->orWhereHas('user', function ($q2) use ($search) {
-                        $q2->where('name', 'like', "%$search%");
-                    })
+                    if (is_numeric($search)) {
+                        $q->orWhere('id', $search);
+                    }
 
-                    ->orWhereHasMorph(
+                    $q->orWhereHas('user', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%{$search}%");
+                    });
+
+                    $q->orWhereHasMorph(
                         'powerable',
                         [
                             GcpMachine::class,
@@ -32,14 +36,27 @@ class PowerLogController extends Controller
                         function ($q3, $type) use ($search) {
 
                             if ($type === GcpMachine::class) {
-                                $q3->where('machine_name', 'like', "%$search%");
+                                $q3->where('machine_name', 'like', "%{$search}%");
                             }
 
                             if ($type === Server::class) {
-                                $q3->where('hostname_internal', 'like', "%$search%");
+                                $q3->where('hostname_internal', 'like', "%{$search}%");
                             }
                         }
                     );
+
+                    if (is_numeric($search)) {
+                        $q->orWhereHasMorph(
+                            'powerable',
+                            [
+                                GcpMachine::class,
+                                Server::class
+                            ],
+                            function ($q3) use ($search) {
+                                $q3->where('id', $search);
+                            }
+                        );
+                    }
 
                 });
             })
