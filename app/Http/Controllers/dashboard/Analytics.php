@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Exports\PatchedMachinesExport;
 use Illuminate\Http\Request;
 use App\Models\Server;
 use App\Models\Database;
@@ -13,6 +14,8 @@ use App\Models\Storage;
 use App\Models\GcpMachine;
 use App\Models\User;
 use App\Models\TypeApplication;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Analytics extends Controller
 {
@@ -31,8 +34,18 @@ class Analytics extends Controller
         $machinesOff = GcpMachine::where('state', 'poweredOff')->count();
         $users = User::count();
         $typeApps = TypeApplication::withCount('servers')
-            ->orderBy('servers_count', 'desc')
-            ->get();
+            ->get()
+            ->groupBy(function ($typeApp) {
+                return Str::upper(trim((string) $typeApp->type_application));
+            })
+            ->map(function ($items, $type) {
+                return [
+                    'type_application' => $type !== '' ? $type : 'SIN TIPO',
+                    'servers_count' => $items->sum('servers_count'),
+                ];
+            })
+            ->sortByDesc('servers_count')
+            ->values();
         $appNames = $typeApps->pluck('type_application');
         $appCounts = $typeApps->pluck('servers_count');
         $dbTypes = Database::selectRaw('type, COUNT(*) as total')
@@ -118,5 +131,30 @@ class Analytics extends Controller
         }
             $machines = $query->orderBy('latest_security_patch', 'desc')->get();
         return response()->json($machines);
+    }
+
+    public function exportPatchedMachines(Request $request)
+    {
+        $validated = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $machines = GcpMachine::whereBetween('latest_security_patch', [
+                $validated['start_date'],
+                $validated['end_date'],
+            ])
+            ->orderBy('latest_security_patch', 'desc')
+            ->get([
+                'machine_name',
+                'internal_ip',
+                'operations_system',
+                'kernel_version',
+                'latest_security_patch',
+            ]);
+
+        $filename = 'patched-machines-' . $validated['start_date'] . '-to-' . $validated['end_date'] . '.xlsx';
+
+        return Excel::download(new PatchedMachinesExport($machines), $filename);
     }
 }

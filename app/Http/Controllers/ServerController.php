@@ -154,7 +154,13 @@ class ServerController extends Controller
                 (optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')
             );
 
+            $isPoweredOff = $server->isPoweredOff();
+
             $server->setAttribute('display_state_label', $server->stateLabel());
+            $server->setAttribute(
+                'display_state_badge_class',
+                $isPoweredOff ? 'bg-label-danger' : 'bg-label-success'
+            );
             $server->setAttribute('display_owner_full_name', $ownerFullName);
             $server->setAttribute('display_application_name', optional($server->typeApplication)->name_application);
             $server->setAttribute(

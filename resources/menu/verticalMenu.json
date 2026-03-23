@@ -51,7 +51,7 @@
             "permission": "viewTypeApplication"
         },
         {
-            "name": "One-premise",
+            "name": "On-Premise",
             "icon": "menu-icon icon-base bx bx-server",
             "slug": [
                 "servers.",
