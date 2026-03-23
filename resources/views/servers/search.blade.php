@@ -8,7 +8,9 @@
             {{ strtoupper(filled($server->environment) ? $server->environment : 'N/A') }}
         </td>
         <td>
-            {{ strtoupper($server->stateLabel()) }}
+            <span class="badge {{ $server->display_state_badge_class }}">
+                {{ $server->display_state_label }}
+            </span>
         </td>
         <td>{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}</td>
         <td class="text-end">

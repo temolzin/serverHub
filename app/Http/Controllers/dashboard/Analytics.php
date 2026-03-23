@@ -13,6 +13,7 @@ use App\Models\Storage;
 use App\Models\GcpMachine;
 use App\Models\User;
 use App\Models\TypeApplication;
+use Illuminate\Support\Str;
 
 class Analytics extends Controller
 {
@@ -31,8 +32,18 @@ class Analytics extends Controller
         $machinesOff = GcpMachine::where('state', 'poweredOff')->count();
         $users = User::count();
         $typeApps = TypeApplication::withCount('servers')
-            ->orderBy('servers_count', 'desc')
-            ->get();
+            ->get()
+            ->groupBy(function ($typeApp) {
+                return Str::upper(trim((string) $typeApp->type_application));
+            })
+            ->map(function ($items, $type) {
+                return [
+                    'type_application' => $type !== '' ? $type : 'SIN TIPO',
+                    'servers_count' => $items->sum('servers_count'),
+                ];
+            })
+            ->sortByDesc('servers_count')
+            ->values();
         $appNames = $typeApps->pluck('type_application');
         $appCounts = $typeApps->pluck('servers_count');
         $dbTypes = Database::selectRaw('type, COUNT(*) as total')

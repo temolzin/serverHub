@@ -96,6 +96,7 @@
                         <thead>
                             <tr>
                                 <th>Maquina</th>
+                                <th>IP</th>
                                 <th>Sistema operativo</th>
                                 <th>Kernel</th>
                                 <th>Ultimo Parche</th>
@@ -105,6 +106,7 @@
                             @foreach ($patchedMachines as $machine)
                                 <tr>
                                     <td>{{ $machine->machine_name }}</td>
+                                    <td>{{ filled($machine->internal_ip) ? $machine->internal_ip : 'N/A' }}</td>
                                     <td>{{ $machine->operations_system }}</td>
                                     <td>{{ $machine->kernel_version }}</td>
                                     <td>{{ $machine->latest_security_patch }}</td>
@@ -326,7 +328,7 @@
                 if (data.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="4" class="text-center text-muted">
+                            <td colspan="5" class="text-center text-muted">
                                 No se encontraron resultados
                             </td>
                         </tr>`;
@@ -337,6 +339,7 @@
                     tbody.innerHTML += `
                         <tr>
                             <td>${machine.machine_name}</td>
+                            <td>${machine.internal_ip ?? 'N/A'}</td>
                             <td>${machine.operations_system}</td>
                             <td>${machine.kernel_version}</td>
                             <td>${machine.latest_security_patch}</td>
