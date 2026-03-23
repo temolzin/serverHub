@@ -17,16 +17,16 @@
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showServerModal{{ $server->id }}"><i class="bx bx-show me-1"></i> Ver</a>
                     <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editServerModal{{ $server->id }}"><i class="bx bx-edit-alt me-1"></i> Editar</a>
-                    <form action="{{ route('servers.power-off', $server) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="dropdown-item text-warning"><i class="bx bx-power-off me-1"></i> Apagar</button>
-                    </form>
+                    <button class="dropdown-item text-warning" data-bs-toggle="modal" data-bs-target="#powerOffServerModal{{ $server->id }}">
+                        <i class="bx bx-power-off me-1"></i> Apagar
+                    </button>
                     <a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteServerModal{{ $server->id }}"><i class="bx bx-trash me-1"></i> Eliminar</a>
                 </div>
             </div>
             @include('servers.show', ['server' => $server])
             @include('servers.edit', ['server' => $server, 'databases' => $databases, 'applications' => $applications])
             @include('servers.delete', ['server' => $server])
+            @include('servers.power-off', ['server' => $server])
         </td>
     </tr>
     @empty

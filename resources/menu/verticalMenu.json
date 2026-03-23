@@ -100,6 +100,13 @@
             "slug": "storages",
             "url": "storages",
             "permission": "viewStorage"
+        },
+        {
+            "name": "Historial de apagado",
+            "icon": "menu-icon icon-base bx bx-history",
+            "slug": "power-logs",
+            "url": "power-logs",
+            "permission": "viewPowerLogs"
         }
     ]
 }

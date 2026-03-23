@@ -90,9 +90,27 @@ class ServerController extends Controller
         return $this->changeState($server, 'poweredOn');
     }
 
-    public function powerOff(Server $server)
+    public function powerOff(Request $request, Server $server)
     {
-        return $this->changeState($server, 'poweredOff');
+        $request->validate([
+            'motive' => 'required|string|min:5'
+        ]);
+
+        $server->update([
+            'state' => 'poweredOff'
+        ]);
+
+        $server->powerLogs()->create([
+            'action' => 'off',
+            'motive' => $request->motive,
+            'created_by' => auth()->id(),
+        ]);
+
+        optional($server->database)->update([
+            'status' => 'inactive'
+        ]);
+
+        return back()->with('success', 'Servidor apagado correctamente');
     }
 
     private function changeState(Server $server, string $state)
@@ -251,5 +269,10 @@ class ServerController extends Controller
         }
 
         Application::whereIn('id', $applicationIds)->update(['server_id' => $server->id]);
+    }
+
+    public function powerLogs()
+    {
+        return $this->morphMany(PowerLog::class, 'powerable');
     }
 }

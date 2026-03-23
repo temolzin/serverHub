@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use App\Models\PowerLog;
 
 class Server extends Model
 {
@@ -117,5 +118,10 @@ class Server extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function powerLogs()
+    {
+        return $this->morphMany(PowerLog::class, 'powerable');
     }
 }

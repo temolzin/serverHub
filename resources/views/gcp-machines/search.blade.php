@@ -22,12 +22,11 @@
                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editGcpMachineModal{{ $machine->id }}">
                         <i class="bx bx-edit-alt me-1"></i> Editar
                     </button>
-                    <form action="{{ route('gcp-machines.power-off', $machine) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="dropdown-item text-warning">
-                            <i class="bx bx-power-off me-1"></i> Apagar
-                        </button>
-                    </form>
+                    <button class="dropdown-item text-warning"
+                        data-bs-toggle="modal"
+                        data-bs-target="#powerOffMachineModal{{ $machine->id }}">
+                        <i class="bx bx-power-off me-1"></i> Apagar
+                    </button>
                     <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteGcpMachineModal{{ $machine->id }}">
                         <i class="bx bx-trash me-1"></i> Eliminar
                     </button>
@@ -36,6 +35,7 @@
             @include('gcp-machines.show', ['machine' => $machine])
             @include('gcp-machines.edit', ['machine' => $machine])
             @include('gcp-machines.delete', ['machine' => $machine])
+            @include('gcp-machines.power-off', ['machine' => $machine])
         </td>
     </tr>
     @empty

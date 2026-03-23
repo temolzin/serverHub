@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\PowerLog;
 
 class GcpMachine extends Model
 {
@@ -120,5 +121,10 @@ class GcpMachine extends Model
     public function stateLabel(): string
     {
         return $this->isPoweredOff() ? 'Apagado' : 'Encendido';
+    }
+
+    public function powerLogs()
+    {
+        return $this->morphMany(PowerLog::class, 'powerable');
     }
 }

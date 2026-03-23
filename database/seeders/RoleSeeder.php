@@ -49,9 +49,13 @@ class RoleSeeder extends Seeder
                 'name' => 'viewInstance',
                 'description' => 'Permite ver las instancias.',
             ],
-            [  
+            [
                 'name' => 'viewStorage',
                 'description' => 'Permite ver los almacenamientos.',
+            ],
+            [
+                'name' => 'viewPowerLogs',
+                'description' => 'Permite ver el historial de encendidos y apagados.',
             ],
         ];
 
