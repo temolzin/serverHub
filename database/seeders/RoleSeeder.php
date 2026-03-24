@@ -57,6 +57,10 @@ class RoleSeeder extends Seeder
                 'name' => 'viewPowerLogs',
                 'description' => 'Permite ver el historial de encendidos y apagados.',
             ],
+            [
+                'name' => 'viewAuditLogs',
+                'description' => 'Permite ver el historial de auditoría del sistema.',
+            ],
         ];
 
         foreach ($permissions as $perm) {

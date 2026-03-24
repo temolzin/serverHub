@@ -265,16 +265,26 @@ class ServerController extends Controller
         $applicationIds = array_values(array_unique(array_map('intval', $applicationIds)));
 
         $detachQuery = Application::where('server_id', $server->id);
+
         if (!empty($applicationIds)) {
             $detachQuery->whereNotIn('id', $applicationIds);
         }
-        $detachQuery->update(['server_id' => null]);
+
+        $appsToDetach = $detachQuery->get();
+
+        foreach ($appsToDetach as $app) {
+            $app->update(['server_id' => null]);
+        }
 
         if (empty($applicationIds)) {
             return;
         }
 
-        Application::whereIn('id', $applicationIds)->update(['server_id' => $server->id]);
+        $apps = Application::whereIn('id', $applicationIds)->get();
+
+        foreach ($apps as $app) {
+            $app->update(['server_id' => $server->id]);
+        }
     }
 
     public function powerLogs()

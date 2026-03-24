@@ -5,6 +5,15 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Server;
+use App\Observers\ServerObserver;
+use App\Models\GcpMachine;
+use App\Observers\GcpMachineObserver;
+use App\Models\Database;
+use App\Observers\DatabaseObserver;
+use App\Models\Application;
+use App\Observers\ApplicationObserver;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Paginator::useBootstrapFive();
     }
 
     /**
@@ -31,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
             $menuPath = resource_path('menu/verticalMenu.json');
             $menuData = json_decode(file_get_contents($menuPath), true);
             $user = Auth::user();
+
             $filteredMenu = collect($menuData['menu'])
                 ->filter(function ($item) use ($user) {
 
@@ -53,5 +63,10 @@ class AppServiceProvider extends ServiceProvider
 
             $view->with('menu', $filteredMenu);
         });
+
+        Server::observe(ServerObserver::class);
+        GcpMachine::observe(GcpMachineObserver::class);
+        Database::observe(DatabaseObserver::class);
+        Application::observe(ApplicationObserver::class);
     }
 }
