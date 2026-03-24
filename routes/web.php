@@ -10,6 +10,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\GcpMachineController;
 use App\Http\Controllers\TypeApplicationController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\ApplianceController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImportController;
@@ -58,6 +59,24 @@ Route::middleware('auth')->group(function () {
             ->name('servers.import');
         Route::post('/servers-off/import', [ImportController::class, 'importPoweredOff'])
             ->name('servers-off.import');
+    });
+
+    Route::middleware('permission:viewServer')->group(function () {
+        Route::post('/appliances/{server}/power-on', [ApplianceController::class, 'powerOn'])
+            ->name('appliances.power-on');
+        Route::post('/appliances/{server}/power-off', [ApplianceController::class, 'powerOff'])
+            ->name('appliances.power-off');
+        Route::get('/appliances-off', [ApplianceController::class, 'offIndex'])
+            ->name('appliances-off.index');
+        Route::post('/appliances-off', [ApplianceController::class, 'offStore'])
+            ->name('appliances-off.store');
+        Route::put('/appliances-off/{server}', [ApplianceController::class, 'offUpdate'])
+            ->name('appliances-off.update');
+        Route::delete('/appliances-off/{server}', [ApplianceController::class, 'offDestroy'])
+            ->name('appliances-off.destroy');
+        Route::post('/appliances/import', [ImportController::class, 'import'])
+            ->name('appliances.import');
+        Route::resource('appliances', ApplianceController::class)->except(['create', 'edit', 'show']);
     });
 
     Route::middleware('permission:viewTypeApplication')

@@ -9,10 +9,25 @@ use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Database;
-use Illuminate\Validation\Rule;
 
-class ServerController extends Controller
+class ApplianceController extends Controller
 {
+    private const APPLIANCE_SHEETS = ['tulapliance', 'qroapliance'];
+
+    public static function getApplianceTypeApplicationId(): int
+    {
+        $type = TypeApplication::firstOrCreate(
+            ['name_application' => 'Apliance'],
+            ['type_application' => 'Apliance']
+        );
+        return $type->id;
+    }
+
+    public static function isApplianceSheet(?string $sheetName): bool
+    {
+        return in_array(strtolower(trim((string) $sheetName)), self::APPLIANCE_SHEETS, true);
+    }
+
     public function index(Request $request)
     {
         return $this->renderIndex($request, false);
@@ -45,12 +60,13 @@ class ServerController extends Controller
 
     private function persist(Request $request, bool $off = false, ?Server $server = null)
     {
-        $validated = $request->all();
-        $payload = $validated;
+        $payload = $request->all();
 
         $payload['state'] = $this->normalizeState(
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
         );
+
+        $payload['type_application_id'] = self::getApplianceTypeApplicationId();
 
         $server = $server
             ? tap($server)->update($payload)
@@ -62,8 +78,8 @@ class ServerController extends Controller
         );
 
         return redirect()
-            ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])
-            ->with('success', 'Servidor guardado correctamente');
+            ->route($off ? 'appliances-off.index' : 'appliances.index', ['page' => $request->page])
+            ->with('success', 'Apliance guardado correctamente');
     }
 
     public function destroy(Request $request, Server $server)
@@ -81,8 +97,8 @@ class ServerController extends Controller
         $server->delete();
 
         return redirect()
-            ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])
-            ->with('success', 'Servidor eliminado correctamente');
+            ->route($off ? 'appliances-off.index' : 'appliances.index', ['page' => $request->page])
+            ->with('success', 'Apliance eliminado correctamente');
     }
 
     public function powerOn(Server $server)
@@ -106,40 +122,39 @@ class ServerController extends Controller
         return back()->with(
             'success',
             $state === 'poweredOn'
-                ? 'Servidor encendido correctamente'
-                : 'Servidor apagado correctamente'
+                ? 'Apliance encendido correctamente'
+                : 'Apliance apagado correctamente'
         );
     }
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $applianceType = \App\Models\TypeApplication::where('name_application', 'Apliance')->first();
-        $applianceTypeId = $applianceType?->id;
+        $applianceTypeId = self::getApplianceTypeApplicationId();
 
         $servers = Server::with(['owner', 'typeApplication', 'database', 'creator', 'applications'])
-            ->when($applianceTypeId, fn($q) => $q->where('type_application_id', '!=', $applianceTypeId));
+            ->where('type_application_id', $applianceTypeId);
 
         ($off ? fn($q) => $this->applyPoweredOffFilter($q)
-        : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+            : fn($q) => $this->applyPoweredOnFilter($q))($servers);
 
         $servers->when(
             $request->filled('search'),
-            fn($query) => $this->applySearch($query, trim($request->search), $off)
+            fn($query) => $this->applySearch($query, trim($request->search))
         );
 
         $servers = $servers->latest()->paginate(10)->withQueryString();
         $this->hydrateServerPresentationData($servers);
 
-        $view = $off ? 'serversOff' : 'servers';
+        $view = $off ? 'appliancesOff' : 'appliances';
 
-        $owners = Owner::orderBy('name')->get();
+        $owners          = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
-        $databases = Database::orderBy('name')->get();
-        $applications = Application::orderBy('name')->get();
+        $databases       = Database::orderBy('name')->get();
+        $applications    = Application::orderBy('name')->get();
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
+                'table'      => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
             : view("$view.index", compact(
@@ -177,52 +192,15 @@ class ServerController extends Controller
         });
     }
 
-    private function applySearch(Builder $query, string $search, bool $off): void
+    private function applySearch(Builder $query, string $search): void
     {
         $query->where(function ($q) use ($search) {
-
             $q->where('hostname_internal', 'like', "%$search%")
                 ->orWhere('primary_ip_address', 'like', "%$search%")
                 ->orWhere('environment', 'like', "%$search%")
                 ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
                 ->orWhere('dns_name', 'like', "%$search%");
         });
-    }
-
-    private function validateActiveServer(Request $request, ?Server $server = null): array
-    {
-        $request->merge([
-            'state' => $this->normalizeState($request->state)
-        ]);
-
-        return $request->validate([
-            'owner_id' => 'required|exists:owners,id',
-            'type_application_id' => 'required|exists:type_applications,id',
-            'database_id' => 'nullable|exists:databases,id',
-            'vm_according_to_the_vmware' => 'required|string|max:50',
-            'state' => 'required|in:poweredOn,poweredOff',
-            'primary_ip_address' => 'nullable|ip',
-            'environment' => 'required|string|max:20',
-            'datacenter' => 'required|string|max:50',
-            'os_according_to_the_vmware' => 'required|string|max:50',
-            'os_version_internal' => 'required|string|max:50',
-            'hostname_internal' => ['required', 'string', 'max:50',
-                Rule::unique('servers')->ignore($server?->id)
-            ],
-            'ram_memory' => 'required|integer|min:512|max:262144',
-            'swap_memory' => 'required|integer|min:0|max:65536',
-            'dns_name' => 'nullable|string|max:100',
-            'ip_user' => 'nullable|ip',
-            'ip_monitoring' => 'nullable|ip',
-            'other_ips' => 'nullable|string|max:255',
-            'latest_security_patch' => 'nullable|date',
-            'comments' => 'nullable|string|max:500',
-        ]);
-    }
-
-    private function validateOffServer(Request $request, ?Server $server = null): array
-    {
-        return $this->validateActiveServer($request, $server);
     }
 
     private function normalizeState(?string $state, string $default = 'poweredOn'): string

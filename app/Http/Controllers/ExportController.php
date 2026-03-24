@@ -28,6 +28,7 @@ class ExportController extends Controller
             'gcp-machines' => GcpMachine::class,
             'applications' => Application::class,
             'users' => User::class,
+            'appliances' => Server::class,
         ];
 
         if (!array_key_exists($module, $map)) {

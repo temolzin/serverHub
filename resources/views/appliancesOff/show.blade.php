@@ -1,8 +1,8 @@
-<div class="modal fade" id="showServerOffModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="showApplianceOffModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center gap-2"><i class="bx bx-server text-primary fs-4"></i>Detalle servidor apagado</h5>
+                <h5 class="modal-title d-flex align-items-center gap-2"><i class="bx bx-chip text-primary fs-4"></i>Detalle del apliance apagado</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -16,11 +16,11 @@
                         <input type="text" class="form-control" value="{{ filled($server->display_owner_full_name) ? $server->display_owner_full_name : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-layer me-1 text-primary"></i>Aplicación</label>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-layer me-1 text-primary"></i>Tipo de Aplicación</label>
                         <input type="text" class="form-control" value="{{ filled($server->display_application_name) ? $server->display_application_name : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicaciones asociadas</label>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Aplicaciones asociadas</label>
                         <input type="text" class="form-control" value="{{ filled($server->display_application_names) ? $server->display_application_names : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -43,7 +43,8 @@
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria</label>
                         <input type="text" class="form-control" value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" disabled>
                     </div>
-                    <div class="col-md-6 mb-3"><label class="form-label fw-semibold d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno</label>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno</label>
                         <input type="text" class="form-control" value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">

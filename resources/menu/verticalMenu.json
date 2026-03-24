@@ -55,7 +55,9 @@
             "icon": "menu-icon icon-base bx bx-server",
             "slug": [
                 "servers.",
-                "servers-off."
+                "servers-off.",
+                "appliances.",
+                "appliances-off."
             ],
             "permission": "viewServer",
             "submenu": [
@@ -70,6 +72,28 @@
                     "icon": "menu-icon icon-base bx bx-power-off",
                     "slug": "servers-off.index",
                     "url": "servers-off"
+                },
+                {
+                    "name": "Apliance",
+                    "icon": "menu-icon icon-base bx bx-chip",
+                    "slug": [
+                        "appliances.",
+                        "appliances-off."
+                    ],
+                    "submenu": [
+                        {
+                            "name": "Encendido",
+                            "icon": "menu-icon icon-base bx bx-play-circle",
+                            "slug": "appliances.index",
+                            "url": "appliances"
+                        },
+                        {
+                            "name": "Apagado",
+                            "icon": "menu-icon icon-base bx bx-power-off",
+                            "slug": "appliances-off.index",
+                            "url": "appliances-off"
+                        }
+                    ]
                 }
             ]
         },
