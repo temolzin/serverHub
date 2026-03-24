@@ -16,7 +16,6 @@ class PowerLogController extends Controller
                 $search = $request->search;
 
                 $query->where(function ($q) use ($search) {
-
                     $q->where('motive', 'like', "%{$search}%");
 
                     if (is_numeric($search)) {
@@ -57,7 +56,6 @@ class PowerLogController extends Controller
                             }
                         );
                     }
-
                 });
             })
             ->latest()

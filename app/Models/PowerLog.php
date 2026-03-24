@@ -24,6 +24,26 @@ class PowerLog extends Model
 
     public function getTypeLabelAttribute()
     {
-        return class_basename($this->powerable_type);
+        return match (class_basename($this->powerable_type)) {
+            'Server' => 'On-Premise',
+            'GcpMachine' => 'GCP Machine',
+            default => 'N/A',
+        };
+    }
+
+    public function getResourceNameAttribute()
+    {
+        $baseType = class_basename($this->powerable_type);
+
+        return match ($baseType) {
+            'Server' => optional($this->powerable)->hostname_internal ?? 'N/A',
+            'GcpMachine' => optional($this->powerable)->machine_name ?? 'N/A',
+            default => 'N/A',
+        };
+    }
+
+    public function getResourceIdAttribute()
+    {
+        return optional($this->powerable)->id ?? 'N/A';
     }
 }

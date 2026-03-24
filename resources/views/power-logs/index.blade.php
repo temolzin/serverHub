@@ -31,35 +31,19 @@
                 </thead>
                 <tbody>
                     @forelse ($logs as $log)
-                        @php
-                            $baseType = class_basename($log->powerable_type);
-                            $type = match ($baseType) {
-                                'Server' => 'On-Premise',
-                                'GcpMachine' => 'GCP Machine',
-                                default => 'N/A',
-                            };
-
-                            $name = match ($baseType) {
-                                'Server' => optional($log->powerable)->hostname_internal ?? 'N/A',
-                                'GcpMachine' => optional($log->powerable)->machine_name ?? 'N/A',
-                                default => 'N/A',
-                            };
-
-                            $resourceId = optional($log->powerable)->id ?? 'N/A';
-                        @endphp
                         <tr>
                             <td>{{ $log->id }}</td>
                             <td>
                                 <span class="fw-semibold text-body">
-                                    {{ $type }}
+                                    {{ $log->type_label }}
                                 </span>
                             </td>
                             <td>
                                 <span class="fw-semibold text-body">
-                                    {{ $resourceId }}
+                                    {{ $log->resource_id }}
                                 </span>
                             </td>
-                            <td>{{ $name }}</td>
+                            <td>{{ $log->resource_name }}</td>
                             <td>
                                 <span class="badge {{ $log->action === 'off' ? 'bg-label-danger' : 'bg-label-success' }}">
                                     {{ $log->action === 'off' ? 'APAGADO' : 'ENCENDIDO' }}
