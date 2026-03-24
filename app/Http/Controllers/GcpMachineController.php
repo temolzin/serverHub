@@ -57,9 +57,27 @@ class GcpMachineController extends Controller
         return $this->changeState($gcp_machine, 'poweredOn');
     }
 
-    public function powerOff(GcpMachine $gcp_machine)
+    public function powerOff(Request $request, GcpMachine $gcp_machine)
     {
-        return $this->changeState($gcp_machine, 'poweredOff');
+        $request->validate([
+            'motive' => 'required|string|min:5'
+        ]);
+
+        $gcp_machine->update([
+            'state' => 'poweredOff'
+        ]);
+
+        $gcp_machine->powerLogs()->create([
+            'action' => 'off',
+            'motive' => $request->motive,
+            'created_by' => auth()->id(),
+        ]);
+
+        $this->syncLinkedDatabaseStatus(
+            $gcp_machine->database_id ? (int) $gcp_machine->database_id : null
+        );
+
+        return back()->with('success', 'Maquina apagada correctamente');
     }
 
     public function checkIp(Request $request)
@@ -398,5 +416,10 @@ class GcpMachineController extends Controller
 
             return $machine;
         });
+    }
+
+    public function powerLogs()
+    {
+        return $this->morphMany(PowerLog::class, 'powerable');
     }
 }

@@ -17,11 +17,13 @@ use App\Http\Controllers\DatabaseController;
 use App\Http\Controllers\InstanceController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\PowerLogController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
 Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('register.store');
+
 Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
@@ -30,6 +32,11 @@ Route::post('/logout', function (Request $request) {
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
+    Route::middleware('permission:viewPowerLogs')->group(function () {
+        Route::get('/power-logs', [PowerLogController::class, 'index'])
+            ->name('power-logs.index');
+    });
+
     Route::get('/', [Analytics::class, 'index'])
         ->name('dashboard-analytics');
     Route::get('/dashboard/filter', [Analytics::class, 'filter'])
@@ -77,6 +84,7 @@ Route::middleware('auth')->group(function () {
             ->name('gcp-machines-off.destroy');
         Route::resource('gcp-machines', GcpMachineController::class)->except(['create', 'edit', 'show']);
     });
+
     Route::middleware('permission:viewApplication')
         ->resource('applications', ApplicationController::class);
     Route::middleware('permission:viewDatabase')
