@@ -30,16 +30,4 @@ class ApplicationObserver
             'current_data' => null,
         ]);
     }
-
-    public function created(Application $application)
-    {
-        AuditLog::create([
-            'alter_by' => auth()->id() ?? 1,
-            'module' => 'application',
-            'action' => 'create',
-            'record_id' => $application->id,
-            'before_data' => null,
-            'current_data' => json_encode($application->toArray()),
-        ]);
-    }
 }

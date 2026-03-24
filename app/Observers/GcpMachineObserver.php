@@ -30,16 +30,4 @@ class GcpMachineObserver
             'current_data' => null,
         ]);
     }
-
-    public function created(GcpMachine $machine)
-    {
-        AuditLog::create([
-            'alter_by' => auth()->id() ?? 1,
-            'module' => 'gcp_machine',
-            'action' => 'create',
-            'record_id' => $machine->id,
-            'before_data' => null,
-            'current_data' => json_encode($machine->toArray()),
-        ]);
-    }
 }

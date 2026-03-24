@@ -124,7 +124,6 @@
             </table>
         </div>
     </div>
-
     @foreach ($logs as $log)
         <div class="modal fade" id="logModal{{ $log->id }}" tabindex="-1">
             <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -159,5 +158,4 @@
             </div>
         </div>
     @endforeach
-
 @endsection

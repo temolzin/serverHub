@@ -30,16 +30,4 @@ class DatabaseObserver
             'current_data' => null,
         ]);
     }
-
-    public function created(Database $database)
-    {
-        AuditLog::create([
-            'alter_by' => auth()->id() ?? 1,
-            'module' => 'database',
-            'action' => 'create',
-            'record_id' => $database->id,
-            'before_data' => null,
-            'current_data' => json_encode($database->toArray()),
-        ]);
-    }
 }

@@ -30,16 +30,4 @@ class ServerObserver
             'current_data' => null,
         ]);
     }
-
-    public function created(Server $server)
-    {
-        AuditLog::create([
-            'alter_by' => auth()->id() ?? 1,
-            'module' => 'server',
-            'action' => 'create',
-            'record_id' => $server->id,
-            'before_data' => null,
-            'current_data' => json_encode($server->toArray()),
-        ]);
-    }
 }
