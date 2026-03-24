@@ -38,13 +38,36 @@ class AuditLog extends Model
         return $map[$this->module] ?? ucfirst(str_replace('_', ' ', $this->module));
     }
 
+    private function decodeJsonSafely($data)
+    {
+        if (is_array($data)) {
+            return $data;
+        }
+
+        if (is_string($data)) {
+            $decoded = json_decode($data, true);
+
+            if (is_string($decoded)) {
+                return json_decode($decoded, true);
+            }
+
+            return $decoded;
+        }
+
+        return $data;
+    }
+
     public function getBeforePrettyAttribute()
     {
-        return json_encode($this->before_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $data = $this->decodeJsonSafely($this->before_data);
+
+        return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 
     public function getAfterPrettyAttribute()
     {
-        return json_encode($this->current_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $data = $this->decodeJsonSafely($this->current_data);
+
+        return json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     }
 }
