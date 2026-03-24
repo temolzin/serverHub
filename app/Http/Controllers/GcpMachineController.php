@@ -390,9 +390,13 @@ class GcpMachineController extends Controller
             fn($state) => $this->normalizeState($state) === 'poweredOn'
         );
 
-        DatabaseModel::whereKey($databaseId)->update([
-            'status' => $hasPoweredOnMachine ? 'active' : 'inactive',
-        ]);
+        $database = DatabaseModel::find($databaseId);
+
+        if ($database) {
+            $database->update([
+                'status' => $hasPoweredOnMachine ? 'active' : 'inactive',
+            ]);
+        }
     }
 
     private function decorateMachinesForView($gcpMachines): void

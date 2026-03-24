@@ -18,6 +18,7 @@ use App\Http\Controllers\InstanceController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\PowerLogController;
+use App\Http\Controllers\AuditLogController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -35,6 +36,11 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:viewPowerLogs')->group(function () {
         Route::get('/power-logs', [PowerLogController::class, 'index'])
             ->name('power-logs.index');
+
+        Route::middleware('permission:viewAuditLogs')->group(function () {
+            Route::get('/audit-logs', [AuditLogController::class, 'index'])
+                ->name('audit-logs.index');
+        });
     });
 
     Route::get('/', [Analytics::class, 'index'])

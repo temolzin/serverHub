@@ -107,6 +107,13 @@
             "slug": "power-logs",
             "url": "power-logs",
             "permission": "viewPowerLogs"
+        },
+        {
+            "name": "Historial de auditoría",
+            "icon": "menu-icon icon-base bx bx-file",
+            "slug": "audit-logs",
+            "url": "audit-logs",
+            "permission": "viewAuditLogs"
         }
     ]
 }
