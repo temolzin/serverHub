@@ -102,11 +102,11 @@
                             <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-memory me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
+                            <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
                             <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 16384" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-hard-drive me-1 text-primary"></i>Swap (MB) (obligatorio)</label>
+                            <label class="form-label"><i class="bx bx-transfer me-1 text-primary"></i>Swap (MB) (obligatorio)</label>
                             <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" required>
                         </div>
                         <div class="col-md-6">

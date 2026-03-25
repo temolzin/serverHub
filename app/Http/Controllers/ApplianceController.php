@@ -176,6 +176,7 @@ class ApplianceController extends Controller
             $isPoweredOff = $server->isPoweredOff();
 
             $server->setAttribute('display_state_label', $server->stateLabel());
+            $server->setAttribute('is_powered_off', $isPoweredOff);
             $server->setAttribute(
                 'display_state_badge_class',
                 $isPoweredOff ? 'bg-label-danger' : 'bg-label-success'

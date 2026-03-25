@@ -1,6 +1,4 @@
-@php($isPoweredOff = $server->isPoweredOff())
-
-<div class="modal fade" id="editApplianceModal{{ $server->id }}" tabindex="-1">
+<div class="modal fade text-start" id="editApplianceModal{{ $server->id }}" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -27,10 +25,8 @@
                             <label class="form-label text-start w-100"><i class="bx bx-data me-1 text-primary"></i>Base de datos</label>
                             <select name="database_id" class="form-select appliance-searchable-select">
                                 <option value="">Selecciona una base de datos</option>
-                                @foreach($databases as $database)
-                                    <option value="{{ $database->id }}" {{ old('database_id', $server->database_id) == $database->id ? 'selected' : '' }}>
-                                        {{ $database->name }}
-                                    </option>
+                                @foreach ($databases as $database)
+                                    <option value="{{ $database->id }}" {{ old('database_id', $server->database_id) == $database->id ? 'selected' : '' }}>{{ $database->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -38,9 +34,7 @@
                             <label class="form-label text-start w-100"><i class="bx bx-layer me-1 text-primary"></i>Tipo de Aplicación</label>
                             <select name="type_application_id" class="form-select text-start" required>
                                 @foreach ($typeApplications as $type)
-                                    <option value="{{ $type->id }}" {{ $server->type_application_id == $type->id ? 'selected' : '' }}>
-                                        {{ $type->name_application }}
-                                    </option>
+                                    <option value="{{ $type->id }}" {{ $server->type_application_id == $type->id ? 'selected' : '' }}>{{ $type->name_application }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -58,8 +52,8 @@
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-check-circle me-1 text-primary"></i>Estado</label>
                             <select name="state" class="form-select" required>
-                                <option value="poweredOn" {{ !$isPoweredOff ? 'selected' : '' }}>Encendido</option>
-                                <option value="poweredOff" {{ $isPoweredOff ? 'selected' : '' }}>Apagado</option>
+                                <option value="poweredOn" {{ !$server->is_powered_off ? 'selected' : '' }}>Encendido</option>
+                                <option value="poweredOff" {{ $server->is_powered_off ? 'selected' : '' }}>Apagado</option>
                             </select>
                         </div>
                         <div class="col-md-6">

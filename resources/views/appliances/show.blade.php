@@ -1,4 +1,4 @@
-<div class="modal fade" id="showApplianceModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
+<div class="modal fade text-start" id="showApplianceModal{{ $server->id }}" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -43,7 +43,8 @@
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria</label>
                         <input type="text" class="form-control" value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" disabled>
                     </div>
-                    <div class="col-md-6 mb-3"><label class="form-label fw-semibold d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno</label>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno</label>
                         <input type="text" class="form-control" value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
