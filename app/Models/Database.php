@@ -43,4 +43,22 @@ class Database extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function getStatusLabelAttribute()
+    {
+        return match (strtolower((string) $this->status)) {
+            '1', 'true', 'active', 'activo' => 'Activo',
+            '0', 'false', 'inactive', 'inactivo' => 'Inactivo',
+            default => 'Desconocido',
+        };
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match (strtolower((string) $this->status)) {
+            '1', 'true', 'active', 'activo' => 'success',
+            '0', 'false', 'inactive', 'inactivo' => 'danger',
+            default => 'secondary',
+        };
+    }
 }
