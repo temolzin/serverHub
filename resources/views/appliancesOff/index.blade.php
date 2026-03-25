@@ -2,30 +2,6 @@
 
 @section('title', 'Apliance - Apagados')
 
-@if (session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Listo!',
-                text: @json(session('success')),
-                confirmButtonText: 'Perfecto',
-                timer: 5000,
-                timerProgressBar: true
-            });
-        });
-    </script>
-@endif
-
-@if ($errors->any())
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('createApplianceOffModal');
-            if (modal) bootstrap.Modal.getOrCreateInstance(modal).show();
-        });
-    </script>
-@endif
-
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -73,6 +49,30 @@
 @endsection
 
 @push('scripts')
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Listo!',
+                    text: @json(session('success')),
+                    confirmButtonText: 'Perfecto',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('createApplianceOffModal');
+                if (modal) bootstrap.Modal.getOrCreateInstance(modal).show();
+            });
+        </script>
+    @endif
+
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

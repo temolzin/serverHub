@@ -2,46 +2,6 @@
 
 @section('title', 'Apliance - Encendidos')
 
-@if (session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const successMessage = @json(session('success'));
-            const importSummary = @json(session('import_summary', []));
-            const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-            }[char]));
-
-            const rows = Array.isArray(importSummary) && importSummary.length ?
-                importSummary.map(item => `
-                    <li class="d-flex justify-content-between border-bottom py-1">
-                        <span>${escapeHtml(item.label ?? 'Tabla')}</span>
-                        <strong>${Number(item.total) || 0}</strong>
-                    </li>`).join('') : '';
-            Swal.fire({
-                icon: 'success',
-                title: 'Listo',
-                confirmButtonText: 'Perfecto',
-                ...(rows ? {
-                    html: `<div class="text-start mb-3">
-                            <p class="mb-2 fw-semibold">Total importado por tabla:</p>
-                            <ul class="list-unstyled mb-0">${rows}</ul>
-                        </div>
-                        <p class="mb-0">${escapeHtml(successMessage)}</p>`
-                } : { text: successMessage })
-            });
-        });
-    </script>
-@endif
-
-@if ($errors->any())
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('createApplianceModal');
-            if (modal) bootstrap.Modal.getOrCreateInstance(modal).show();
-        });
-    </script>
-@endif
-
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -89,6 +49,28 @@
 @endsection
 
 @push('scripts')
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Listo',
+                    text: @json(session('success')),
+                    confirmButtonText: 'Perfecto'
+                });
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = document.getElementById('createApplianceModal');
+                if (modal) bootstrap.Modal.getOrCreateInstance(modal).show();
+            });
+        </script>
+    @endif
+
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
