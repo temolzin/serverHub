@@ -19,28 +19,11 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-data me-1 text-primary"></i>Base de datos</label>
-                            <select name="database_id" class="form-select appliance-off-searchable-select">
-                                <option value="">Selecciona una base de datos</option>
-                                @foreach($databases as $database)
-                                    <option value="{{ $database->id }}">{{ $database->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-layer me-1 text-primary"></i>Tipo de Aplicación (obligatorio)</label>
                             <select name="type_application_id" class="form-select appliance-off-searchable-select" required>
                                 <option value="">Seleccionar aplicación</option>
                                 @foreach ($typeApplications as $type)
                                     <option value="{{ $type->id }}">{{ $type->name_application }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-grid-alt me-1 text-primary"></i>Aplicaciones</label>
-                            <select name="application_ids[]" class="form-select appliance-off-searchable-select" data-placeholder="Buscar aplicaciones..." multiple>
-                                @foreach ($applications as $application)
-                                    <option value="{{ $application->id }}">{{ $application->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -64,18 +47,6 @@
                             <input type="text" name="dns_name" class="form-control" placeholder="Ej: apliance.empresa.com">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-user me-1 text-primary"></i>IP usuario</label>
-                            <input type="text" name="ip_user" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-radar me-1 text-primary"></i>IP monitoreo</label>
-                            <input type="text" name="ip_monitoring" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-cube me-1 text-primary"></i>Entorno (obligatorio)</label>
-                            <input type="text" name="environment" class="form-control" placeholder="Ej: Producción" required>
-                        </div>
-                        <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-server me-1 text-primary"></i>Datacenter (obligatorio)</label>
                             <input type="text" name="datacenter" class="form-control" placeholder="Ej: Tultitlan" required>
                         </div>
@@ -83,29 +54,9 @@
                             <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo</label>
                             <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: CentOS 7" required>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-code-block me-1 text-primary"></i>Versión interna</label>
-                            <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 7.9" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>Hostname interno</label>
-                            <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: apl-off-01" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
-                            <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 4096" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-transfer me-1 text-primary"></i>Swap (MB) (obligatorio)</label>
-                            <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 2048" required>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label"><i class="bx bx-shield-quarter me-1 text-primary"></i>Último parche</label>
                             <input type="date" name="latest_security_patch" class="form-control">
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>Otras IPs</label>
-                            <textarea name="other_ips" rows="2" class="form-control" placeholder="IPs separadas por coma"></textarea>
                         </div>
                         <div class="col-12">
                             <label class="form-label"><i class="bx bx-comment-detail me-1 text-primary"></i>Comentarios</label>

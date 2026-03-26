@@ -48,9 +48,9 @@ class ApplianceController extends Controller
         return $this->persist($request, true);
     }
 
-    public function update(Request $request, Server $server)
+    public function update(Request $request, Server $appliance)
     {
-        return $this->persist($request, false, $server);
+        return $this->persist($request, false, $appliance);
     }
 
     public function offUpdate(Request $request, Server $server)
@@ -61,6 +61,10 @@ class ApplianceController extends Controller
     private function persist(Request $request, bool $off = false, ?Server $server = null)
     {
         $payload = $request->all();
+
+        $payload['environment'] = $payload['environment'] ?? 'N/A';
+        $payload['ram_memory']  = $payload['ram_memory'] ?? 0;
+        $payload['swap_memory'] = $payload['swap_memory'] ?? 0;
 
         $payload['state'] = $this->normalizeState(
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
@@ -82,9 +86,9 @@ class ApplianceController extends Controller
             ->with('success', 'Apliance guardado correctamente');
     }
 
-    public function destroy(Request $request, Server $server)
+    public function destroy(Request $request, Server $appliance)
     {
-        return $this->remove($request, $server);
+        return $this->remove($request, $appliance);
     }
 
     public function offDestroy(Request $request, Server $server)
@@ -200,7 +204,8 @@ class ApplianceController extends Controller
                 ->orWhere('primary_ip_address', 'like', "%$search%")
                 ->orWhere('environment', 'like', "%$search%")
                 ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
-                ->orWhere('dns_name', 'like', "%$search%");
+                ->orWhere('dns_name', 'like', "%$search%")
+                ->orWhere('uuid', 'like', "%$search%");
         });
     }
 
