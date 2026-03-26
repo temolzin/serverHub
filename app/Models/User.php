@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Auth\Notifications\ResetPassword;
 
 class User extends Authenticatable
 {
@@ -51,5 +52,33 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return trim("{$this->name} {$this->last_name}");
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $url = url(route('password.reset', [
+            'token' => $token,
+            'email' => $this->email,
+        ], false));
+
+        $this->notify(new class($url) extends ResetPassword {
+            protected $url;
+
+            public function __construct($url)
+            {
+                $this->url = $url;
+            }
+
+            public function toMail($notifiable)
+            {
+                return (new \Illuminate\Notifications\Messages\MailMessage)
+                    ->subject('Restablecer contraseña - ServerHub')
+                    ->greeting('¡Hola!')
+                    ->line('Recibimos una solicitud para restablecer tu contraseña.')
+                    ->action('Restablecer contraseña', $this->url)
+                    ->line('Este enlace expirará en 60 minutos.')
+                    ->line('Si no solicitaste esto, puedes ignorar este mensaje.');
+            }
+        });
     }
 }

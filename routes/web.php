@@ -3,9 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
+use App\Http\Controllers\authentications\ForgotPasswordBasic;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\GcpMachineController;
 use App\Http\Controllers\TypeApplicationController;
@@ -23,21 +28,70 @@ use App\Http\Controllers\AuditLogController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
+
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
 Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('register.store');
+
+Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])
+    ->name('password.request');
+
+Route::post('/forgot-password', function (Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    return $status === Password::RESET_LINK_SENT
+        ? back()->with('status', __($status))
+        : back()->withErrors(['email' => __($status)]);
+})->name('password.email');
+
+Route::get('/reset-password/{token}', function (string $token) {
+    return view('content.authentications.auth-reset-password-basic', [
+        'token' => $token,
+        'email' => request('email')
+    ]);
+})->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:6|confirmed',
+    ]);
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password)
+            ])->setRememberToken(Str::random(60));
+
+            $user->save();
+
+            event(new PasswordReset($user));
+        }
+    );
+
+    return $status === Password::PASSWORD_RESET
+        ? redirect()->route('login')->with('status', 'Contraseña actualizada correctamente')
+        : back()->withErrors(['email' => [__($status)]]);
+})->name('password.update');
 
 Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
+
     return redirect('/login');
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
+
     Route::middleware('permission:viewPowerLogs')->group(function () {
         Route::get('/power-logs', [PowerLogController::class, 'index'])
             ->name('power-logs.index');
-
         Route::middleware('permission:viewAuditLogs')->group(function () {
             Route::get('/audit-logs', [AuditLogController::class, 'index'])
                 ->name('audit-logs.index');
@@ -54,6 +108,7 @@ Route::middleware('auth')->group(function () {
         ->name('export');
     Route::middleware('permission:viewOwner')
         ->resource('owners', OwnerController::class);
+
     Route::middleware('permission:viewServer')->group(function () {
         Route::post('/servers/{server}/power-on', [ServerController::class, 'powerOn'])
             ->name('servers.power-on');
@@ -67,7 +122,8 @@ Route::middleware('auth')->group(function () {
             ->name('servers-off.update');
         Route::delete('/servers-off/{server}', [ServerController::class, 'offDestroy'])
             ->name('servers-off.destroy');
-        Route::resource('servers', ServerController::class)->except(['create', 'edit', 'show']);
+        Route::resource('servers', ServerController::class)
+            ->except(['create', 'edit', 'show']);
         Route::post('/servers/import', [ImportController::class, 'import'])
             ->name('servers.import');
         Route::post('/servers-off/import', [ImportController::class, 'importPoweredOff'])
@@ -89,11 +145,13 @@ Route::middleware('auth')->group(function () {
             ->name('appliances-off.destroy');
         Route::post('/appliances/import', [ImportController::class, 'import'])
             ->name('appliances.import');
-        Route::resource('appliances', ApplianceController::class)->except(['create', 'edit', 'show']);
+        Route::resource('appliances', ApplianceController::class)
+            ->except(['create', 'edit', 'show']);
     });
 
     Route::middleware('permission:viewTypeApplication')
         ->resource('type-applications', TypeApplicationController::class);
+
     Route::middleware('permission:viewGcpMachine')->group(function () {
         Route::post('/gcp-machines/{gcp_machine}/power-on', [GcpMachineController::class, 'powerOn'])
             ->name('gcp-machines.power-on');
@@ -107,7 +165,8 @@ Route::middleware('auth')->group(function () {
             ->name('gcp-machines-off.update');
         Route::delete('/gcp-machines-off/{gcp_machine}', [GcpMachineController::class, 'offDestroy'])
             ->name('gcp-machines-off.destroy');
-        Route::resource('gcp-machines', GcpMachineController::class)->except(['create', 'edit', 'show']);
+        Route::resource('gcp-machines', GcpMachineController::class)
+            ->except(['create', 'edit', 'show']);
     });
 
     Route::middleware('permission:viewApplication')
@@ -120,10 +179,8 @@ Route::middleware('auth')->group(function () {
         ->resource('storages', StorageController::class);
 
     Route::middleware('role:Admin')->group(function () {
-        Route::get(
-            '/users/{user}/permissions',
-            [UserController::class, 'editPermissions']
-        )->name('users.permissions.edit');
+        Route::get('/users/{user}/permissions', [UserController::class, 'editPermissions'])
+            ->name('users.permissions.edit');
         Route::resource('users', UserController::class);
     });
 });
