@@ -9,10 +9,25 @@ use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Database;
-use Illuminate\Validation\Rule;
 
-class ServerController extends Controller
+class ApplianceController extends Controller
 {
+    private const APPLIANCE_SHEETS = ['tulapliance', 'qroapliance'];
+
+    public static function getApplianceTypeApplicationId(): int
+    {
+        $type = TypeApplication::firstOrCreate(
+            ['name_application' => 'Apliance'],
+            ['type_application' => 'Apliance']
+        );
+        return $type->id;
+    }
+
+    public static function isApplianceSheet(?string $sheetName): bool
+    {
+        return in_array(strtolower(trim((string) $sheetName)), self::APPLIANCE_SHEETS, true);
+    }
+
     public function index(Request $request)
     {
         return $this->renderIndex($request, false);
@@ -33,9 +48,9 @@ class ServerController extends Controller
         return $this->persist($request, true);
     }
 
-    public function update(Request $request, Server $server)
+    public function update(Request $request, Server $appliance)
     {
-        return $this->persist($request, false, $server);
+        return $this->persist($request, false, $appliance);
     }
 
     public function offUpdate(Request $request, Server $server)
@@ -45,12 +60,17 @@ class ServerController extends Controller
 
     private function persist(Request $request, bool $off = false, ?Server $server = null)
     {
-        $validated = $request->all();
-        $payload = $validated;
+        $payload = $request->all();
+
+        $payload['environment'] = $payload['environment'] ?? 'N/A';
+        $payload['ram_memory']  = $payload['ram_memory'] ?? 0;
+        $payload['swap_memory'] = $payload['swap_memory'] ?? 0;
 
         $payload['state'] = $this->normalizeState(
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
         );
+
+        $payload['type_application_id'] = self::getApplianceTypeApplicationId();
 
         $server = $server
             ? tap($server)->update($payload)
@@ -62,13 +82,13 @@ class ServerController extends Controller
         );
 
         return redirect()
-            ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])
-            ->with('success', 'Servidor guardado correctamente');
+            ->route($off ? 'appliances-off.index' : 'appliances.index', ['page' => $request->page])
+            ->with('success', 'Apliance guardado correctamente');
     }
 
-    public function destroy(Request $request, Server $server)
+    public function destroy(Request $request, Server $appliance)
     {
-        return $this->remove($request, $server);
+        return $this->remove($request, $appliance);
     }
 
     public function offDestroy(Request $request, Server $server)
@@ -81,8 +101,8 @@ class ServerController extends Controller
         $server->delete();
 
         return redirect()
-            ->route($off ? 'servers-off.index' : 'servers.index', ['page' => $request->page])
-            ->with('success', 'Servidor eliminado correctamente');
+            ->route($off ? 'appliances-off.index' : 'appliances.index', ['page' => $request->page])
+            ->with('success', 'Apliance eliminado correctamente');
     }
 
     public function powerOn(Server $server)
@@ -90,27 +110,9 @@ class ServerController extends Controller
         return $this->changeState($server, 'poweredOn');
     }
 
-    public function powerOff(Request $request, Server $server)
+    public function powerOff(Server $server)
     {
-        $request->validate([
-            'motive' => 'required|string|min:5'
-        ]);
-
-        $server->update([
-            'state' => 'poweredOff'
-        ]);
-
-        $server->powerLogs()->create([
-            'action' => 'off',
-            'motive' => $request->motive,
-            'created_by' => auth()->id(),
-        ]);
-
-        optional($server->database)->update([
-            'status' => 'inactive'
-        ]);
-
-        return back()->with('success', 'Servidor apagado correctamente');
+        return $this->changeState($server, 'poweredOff');
     }
 
     private function changeState(Server $server, string $state)
@@ -124,40 +126,39 @@ class ServerController extends Controller
         return back()->with(
             'success',
             $state === 'poweredOn'
-                ? 'Servidor encendido correctamente'
-                : 'Servidor apagado correctamente'
+                ? 'Apliance encendido correctamente'
+                : 'Apliance apagado correctamente'
         );
     }
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $applianceType = \App\Models\TypeApplication::where('name_application', 'Apliance')->first();
-        $applianceTypeId = $applianceType?->id;
+        $applianceTypeId = self::getApplianceTypeApplicationId();
 
         $servers = Server::with(['owner', 'typeApplication', 'database', 'creator', 'applications'])
-            ->when($applianceTypeId, fn($q) => $q->where('type_application_id', '!=', $applianceTypeId));
+            ->where('type_application_id', $applianceTypeId);
 
         ($off ? fn($q) => $this->applyPoweredOffFilter($q)
-        : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+            : fn($q) => $this->applyPoweredOnFilter($q))($servers);
 
         $servers->when(
             $request->filled('search'),
-            fn($query) => $this->applySearch($query, trim($request->search), $off)
+            fn($query) => $this->applySearch($query, trim($request->search))
         );
 
         $servers = $servers->latest()->paginate(10)->withQueryString();
         $this->hydrateServerPresentationData($servers);
 
-        $view = $off ? 'serversOff' : 'servers';
+        $view = $off ? 'appliancesOff' : 'appliances';
 
-        $owners = Owner::orderBy('name')->get();
+        $owners          = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
-        $databases = Database::orderBy('name')->get();
-        $applications = Application::orderBy('name')->get();
+        $databases       = Database::orderBy('name')->get();
+        $applications    = Application::orderBy('name')->get();
 
         return $request->ajax()
             ? response()->json([
-                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
+                'table'      => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
                 'pagination' => view("$view.pagination", compact('servers'))->render(),
             ])
             : view("$view.index", compact(
@@ -179,6 +180,7 @@ class ServerController extends Controller
             $isPoweredOff = $server->isPoweredOff();
 
             $server->setAttribute('display_state_label', $server->stateLabel());
+            $server->setAttribute('is_powered_off', $isPoweredOff);
             $server->setAttribute(
                 'display_state_badge_class',
                 $isPoweredOff ? 'bg-label-danger' : 'bg-label-success'
@@ -195,52 +197,16 @@ class ServerController extends Controller
         });
     }
 
-    private function applySearch(Builder $query, string $search, bool $off): void
+    private function applySearch(Builder $query, string $search): void
     {
         $query->where(function ($q) use ($search) {
-
             $q->where('hostname_internal', 'like', "%$search%")
                 ->orWhere('primary_ip_address', 'like', "%$search%")
                 ->orWhere('environment', 'like', "%$search%")
                 ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
-                ->orWhere('dns_name', 'like', "%$search%");
+                ->orWhere('dns_name', 'like', "%$search%")
+                ->orWhere('uuid', 'like', "%$search%");
         });
-    }
-
-    private function validateActiveServer(Request $request, ?Server $server = null): array
-    {
-        $request->merge([
-            'state' => $this->normalizeState($request->state)
-        ]);
-
-        return $request->validate([
-            'owner_id' => 'required|exists:owners,id',
-            'type_application_id' => 'required|exists:type_applications,id',
-            'database_id' => 'nullable|exists:databases,id',
-            'vm_according_to_the_vmware' => 'required|string|max:50',
-            'state' => 'required|in:poweredOn,poweredOff',
-            'primary_ip_address' => 'nullable|ip',
-            'environment' => 'required|string|max:20',
-            'datacenter' => 'required|string|max:50',
-            'os_according_to_the_vmware' => 'required|string|max:50',
-            'os_version_internal' => 'required|string|max:50',
-            'hostname_internal' => ['required', 'string', 'max:50',
-                Rule::unique('servers')->ignore($server?->id)
-            ],
-            'ram_memory' => 'required|integer|min:512|max:262144',
-            'swap_memory' => 'required|integer|min:0|max:65536',
-            'dns_name' => 'nullable|string|max:100',
-            'ip_user' => 'nullable|ip',
-            'ip_monitoring' => 'nullable|ip',
-            'other_ips' => 'nullable|string|max:255',
-            'latest_security_patch' => 'nullable|date',
-            'comments' => 'nullable|string|max:500',
-        ]);
-    }
-
-    private function validateOffServer(Request $request, ?Server $server = null): array
-    {
-        return $this->validateActiveServer($request, $server);
     }
 
     private function normalizeState(?string $state, string $default = 'poweredOn'): string
@@ -269,30 +235,15 @@ class ServerController extends Controller
         $applicationIds = array_values(array_unique(array_map('intval', $applicationIds)));
 
         $detachQuery = Application::where('server_id', $server->id);
-
         if (!empty($applicationIds)) {
             $detachQuery->whereNotIn('id', $applicationIds);
         }
-
-        $appsToDetach = $detachQuery->get();
-
-        foreach ($appsToDetach as $app) {
-            $app->update(['server_id' => null]);
-        }
+        $detachQuery->update(['server_id' => null]);
 
         if (empty($applicationIds)) {
             return;
         }
 
-        $apps = Application::whereIn('id', $applicationIds)->get();
-
-        foreach ($apps as $app) {
-            $app->update(['server_id' => $server->id]);
-        }
-    }
-
-    public function powerLogs()
-    {
-        return $this->morphMany(PowerLog::class, 'powerable');
+        Application::whereIn('id', $applicationIds)->update(['server_id' => $server->id]);
     }
 }

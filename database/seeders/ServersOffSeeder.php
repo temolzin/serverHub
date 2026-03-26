@@ -103,5 +103,50 @@ class ServersOffSeeder extends Seeder
                 ]
             );
         }
+
+        $applianceTypeId = TypeApplication::where('name_application', 'Apliance')->value('id');
+
+        if ($applianceTypeId) {
+            $appliancesOff = [
+                [
+                    'uuid' => 'd7c7d8d1-0d1a-4a0b-a111-7cc9e8100001',
+                    'vm_according_to_the_vmware' => 'APL-OFF-001',
+                    'dns_name' => 'apl-off-01.empresa.com',
+                    'primary_ip_address' => null,
+                    'environment' => 'N/A',
+                    'datacenter' => 'DC-MEX-01',
+                    'os_according_to_the_vmware' => 'Debian Linux (64-bit)',
+                    'ram_memory' => 0,
+                    'swap_memory' => 0,
+                    'latest_security_patch' => Carbon::parse('2025-12-15')->toDateString(),
+                    'comments' => 'Apliance apagado por inactividad',
+                ],
+                [
+                    'uuid' => 'd7c7d8d1-0d1a-4a0b-a111-7cc9e8100002',
+                    'vm_according_to_the_vmware' => 'APL-OFF-002',
+                    'dns_name' => 'apl-off-02.empresa.com',
+                    'primary_ip_address' => null,
+                    'environment' => 'N/A',
+                    'datacenter' => 'DC-QRO-01',
+                    'os_according_to_the_vmware' => 'CentOS Linux (64-bit)',
+                    'ram_memory' => 0,
+                    'swap_memory' => 0,
+                    'latest_security_patch' => Carbon::parse('2025-11-28')->toDateString(),
+                    'comments' => 'Apliance apagado obsoleto',
+                ],
+            ];
+
+            foreach ($appliancesOff as $data) {
+                Server::updateOrCreate(
+                    ['vm_according_to_the_vmware' => $data['vm_according_to_the_vmware'], 'state' => 'poweredOff'],
+                    array_merge($data, [
+                        'owner_id' => $owner->id,
+                        'created_by' => 1,
+                        'type_application_id' => $applianceTypeId,
+                        'state' => 'poweredOff',
+                    ])
+                );
+            }
+        }
     }
 }

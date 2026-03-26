@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GcpMachine;
 use App\Models\Server;
+use App\Http\Controllers\ApplianceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 class ImportController extends Controller
 {
     private const FORCED_OFF_SHEETS = ['bajatultitlan', 'tuloff', 'qrooff'];
+    private const APPLIANCE_SHEETS  = ['tulapliance', 'qroapliance'];
 
     private function getValue(array $data, array $keys, $default = null)
     {
@@ -105,24 +107,34 @@ class ImportController extends Controller
     private function getBucketLabel(string $bucket): string
     {
         return match ($bucket) {
-            'servers_on' => 'Servidores encendidos',
-            'servers_off' => 'Servidores apagados',
-            'gcp_machines' => 'Maquinas GCP',
-            default => ucwords(str_replace('_', ' ', $bucket)),
+            'servers_on'      => 'Servidores encendidos',
+            'servers_off'     => 'Servidores apagados',
+            'gcp_machines'    => 'Maquinas GCP',
+            'appliances_on'   => 'Apliances encendidos',
+            'appliances_off'  => 'Apliances apagados',
+            default           => ucwords(str_replace('_', ' ', $bucket)),
         };
+    }
+
+    private function isApplianceSheet(?string $sheetName): bool
+    {
+        return in_array(strtolower(trim((string) $sheetName)), self::APPLIANCE_SHEETS, true);
     }
 
     private function buildImportSummary(array $stats): array
     {
+        $hidden = ['appliances_off'];
+
         return collect($stats)
+            ->filter(fn($_, $bucket) => !in_array($bucket, $hidden, true))
             ->map(function (array $bucketStats, string $bucket) {
                 $created = (int) ($bucketStats['created'] ?? 0);
                 $updated = (int) ($bucketStats['updated'] ?? 0);
 
                 return [
-                    'bucket' => $bucket,
-                    'label' => $this->getBucketLabel($bucket),
-                    'total' => $created + $updated,
+                    'bucket'  => $bucket,
+                    'label'   => $this->getBucketLabel($bucket),
+                    'total'   => $created + $updated,
                     'created' => $created,
                     'updated' => $updated,
                 ];
@@ -165,7 +177,7 @@ class ImportController extends Controller
 
         [$sheets, $sheetNames] = $this->readWorkbook($request->file('file'));
 
-        $stats = $this->createStats(['servers_on', 'servers_off', 'gcp_machines']);
+        $stats = $this->createStats(['servers_on', 'servers_off', 'gcp_machines', 'appliances_on', 'appliances_off']);
 
         foreach ($sheets as $i => $rows) {
 
@@ -173,8 +185,10 @@ class ImportController extends Controller
                 continue;
             }
 
-            $headers = $this->normalizeHeaders($rows->first()->toArray());
-            $isForcedOff = $this->isForcedOffSheet($sheetNames[$i] ?? null);
+            $sheetName   = $sheetNames[$i] ?? null;
+            $headers     = $this->normalizeHeaders($rows->first()->toArray());
+            $isForcedOff = $this->isForcedOffSheet($sheetName);
+            $isAppliance = $this->isApplianceSheet($sheetName);
 
             foreach ($rows->skip(1) as $row) {
 
@@ -188,7 +202,7 @@ class ImportController extends Controller
                         'bucket' => 'servers_off',
                         'status' => $this->importForcedOffServerRow($data)
                     ]
-                    : $this->resolveGeneralRowImport($headers, $data);
+                    : $this->resolveGeneralRowImport($headers, $data, $isAppliance);
 
                 $this->incrementStats($stats, $result['bucket'], $result['status']);
             }
@@ -200,7 +214,7 @@ class ImportController extends Controller
         );
     }
 
-    private function resolveGeneralRowImport(array $headers, array $data): array
+    private function resolveGeneralRowImport(array $headers, array $data, bool $isAppliance = false): array
     {
         if ($this->isGcpHeaders($headers)) {
             return [
@@ -209,7 +223,16 @@ class ImportController extends Controller
             ];
         }
 
-        $result = $this->importServerRow($data);
+        $result = $this->importServerRow($data, $isAppliance);
+
+        if ($isAppliance) {
+            return [
+                'bucket' => ($result['state'] ?? null) === 'poweredOff'
+                    ? 'appliances_off'
+                    : 'appliances_on',
+                'status' => $result['status'] ?? null,
+            ];
+        }
 
         return [
             'bucket' => ($result['state'] ?? null) === 'poweredOff'
@@ -258,7 +281,7 @@ class ImportController extends Controller
         return $machine->wasRecentlyCreated ? 'created' : 'updated';
     }
 
-    private function importServerRow(array $data): ?array
+    private function importServerRow(array $data, bool $isAppliance = false): ?array
     {
         $primaryIp = $this->getValue($data, [
             'primary ip address',
@@ -281,9 +304,14 @@ class ImportController extends Controller
             ->unique()
             ->implode(', ');
 
+        $typeApplicationId = $isAppliance
+            ? ApplianceController::getApplianceTypeApplicationId()
+            : 1;
+
         $payload = [
             'owner_id' => Auth::id(),
-            'type_application_id' => 1,
+            'created_by' => Auth::id(),
+            'type_application_id' => $typeApplicationId,
             'vm_according_to_the_vmware' => $vm ?: 'N/A',
             'state' => $this->normalizeState(
                 $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
@@ -351,6 +379,7 @@ class ImportController extends Controller
 
         $payload = [
             'owner_id' => Auth::id(),
+            'created_by' => Auth::id(),
             'type_application_id' => 1,
             'vm_according_to_the_vmware' => $vm,
             'state' => 'poweredOff',
