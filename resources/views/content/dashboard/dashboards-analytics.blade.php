@@ -205,205 +205,205 @@
     </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() {
 
-        function groupTopData(labels, data, limit = 5) {
-            let combined = labels.map((label, i) => ({
-                label: label,
-                value: data[i]
-            }));
+    function groupTopData(labels, data, limit = 5) {
+        let combined = labels.map((label, i) => ({
+            label: label,
+            value: data[i]
+        }));
 
-            combined.sort((a, b) => b.value - a.value);
+        combined.sort((a, b) => b.value - a.value);
 
-            let top = combined.slice(0, limit);
-            let rest = combined.slice(limit);
+        let top = combined.slice(0, limit);
+        let rest = combined.slice(limit);
 
-            let otherSum = rest.reduce((sum, item) => sum + item.value, 0);
+        let otherSum = rest.reduce((sum, item) => sum + item.value, 0);
 
-            if (otherSum > 0) {
-                top.push({ label: 'Otros', value: otherSum });
-            }
-
-            return {
-                labels: top.map(i => i.label),
-                data: top.map(i => i.value)
-            };
+        if (otherSum > 0) {
+            top.push({ label: 'Otros', value: otherSum });
         }
 
-        function createDonut(el, labels, data, colors) {
-            return new ApexCharts(document.querySelector(el), {
-                series: data,
-                chart: {
-                    type: 'donut',
-                    height: 300
-                },
-                labels: labels,
-                colors: colors,
-                legend: {
-                    position: 'bottom',
-                    fontSize: '13px'
-                },
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            size: '70%'
-                        }
-                    }
-                },
-                dataLabels: {
-                    formatter: function(val) {
-                        return val.toFixed(1) + "%";
+        return {
+            labels: top.map(i => i.label),
+            data: top.map(i => i.value)
+        };
+    }
+
+    function createDonut(el, labels, data, colors) {
+        return new ApexCharts(document.querySelector(el), {
+            series: data,
+            chart: {
+                type: 'donut',
+                height: 300
+            },
+            labels: labels,
+            colors: colors,
+            legend: {
+                position: 'bottom',
+                fontSize: '13px'
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '70%'
                     }
                 }
-            }).render();
-        }
-
-        const filterForm = document.getElementById("filterForm");
-        const exportPatchedMachinesBtn = document.getElementById("exportPatchedMachinesBtn");
-        const exportPatchedMachinesBaseUrl = "{{ route('dashboard.patched.export') }}";
-
-        function updatePatchedExportLink(startDate, endDate) {
-            if (!exportPatchedMachinesBtn) return;
-
-            if (startDate && endDate) {
-                const params = new URLSearchParams({
-                    start_date: startDate,
-                    end_date: endDate
-                });
-
-                exportPatchedMachinesBtn.href = `${exportPatchedMachinesBaseUrl}?${params.toString()}`;
-                exportPatchedMachinesBtn.classList.remove("disabled");
-                exportPatchedMachinesBtn.removeAttribute("aria-disabled");
-                return;
-            }
-
-            exportPatchedMachinesBtn.href = exportPatchedMachinesBaseUrl;
-            exportPatchedMachinesBtn.classList.add("disabled");
-            exportPatchedMachinesBtn.setAttribute("aria-disabled", "true");
-        }
-
-        if (exportPatchedMachinesBtn) {
-            exportPatchedMachinesBtn.addEventListener("click", function(e) {
-                if (this.classList.contains("disabled")) {
-                    e.preventDefault();
+            },
+            dataLabels: {
+                formatter: function(val) {
+                    return val.toFixed(1) + "%";
                 }
+            }
+        }).render();
+    }
+
+    const filterForm = document.getElementById("filterForm");
+    const exportBtn = document.getElementById("exportPatchedMachinesBtn");
+    const baseUrl = "{{ route('dashboard.patched.export') }}";
+
+    function disableExport() {
+        exportBtn.classList.add("disabled");
+        exportBtn.setAttribute("aria-disabled", "true");
+    }
+
+    function enableExport() {
+        exportBtn.classList.remove("disabled");
+        exportBtn.removeAttribute("aria-disabled");
+    }
+
+    function updateExportLink(startDate, endDate) {
+        if (!exportBtn) return;
+
+        if (startDate && endDate) {
+            const params = new URLSearchParams({
+                start_date: startDate,
+                end_date: endDate
             });
+
+            exportBtn.href = `${baseUrl}?${params.toString()}`;
+        } else {
+            exportBtn.href = baseUrl;
+            disableExport();
         }
+    }
 
-        if (filterForm) {
-            const startDateInput = filterForm.querySelector('input[name="start_date"]');
-            const endDateInput = filterForm.querySelector('input[name="end_date"]');
-
-            updatePatchedExportLink(startDateInput?.value, endDateInput?.value);
-
-            [startDateInput, endDateInput].forEach(input => {
-                if (!input) return;
-                input.addEventListener("change", function() {
-                    updatePatchedExportLink(startDateInput?.value, endDateInput?.value);
-                });
-            });
-        }
-
-        createDonut("#serversStatusChart",
-            ['Encendidos', 'Apagados'],
-            [{{ $serversOn }}, {{ $serversOff }}],
-            ['#28c76f', '#ea5455']
-        );
-
-        createDonut("#machinesStatusChart",
-            ['Encendidas', 'Apagadas'],
-            [{{ $machinesOn }}, {{ $machinesOff }}],
-            ['#28c76f', '#ea5455']
-        );
-
-        createDonut("#serversByAppChart",
-            {!! json_encode($appNames) !!},
-            {!! json_encode($appCounts) !!},
-            ['#7367f0', '#00cfe8', '#ff9f43', '#28c76f']
-        );
-
-        createDonut("#databaseTypeChart",
-            {!! json_encode($dbNames) !!},
-            {!! json_encode($dbCounts) !!},
-            ['#00cfe8', '#ff9f43', '#7367f0']
-        );
-
-        let kernelData = groupTopData(
-            {!! json_encode($redhatLabels) !!},
-            {!! json_encode($redhatCounts) !!}
-        );
-
-        createDonut("#redhatChart",
-            kernelData.labels,
-            kernelData.data,
-            ['#ff9f43', '#7367f0', '#00cfe8', '#28c76f', '#ea5455', '#999']
-        );
-
-        let osData = groupTopData(
-            {!! json_encode($osLabels) !!},
-            {!! json_encode($osCounts) !!}
-        );
-
-        createDonut("#osChart",
-            osData.labels,
-            osData.data,
-            ['#00cfe8', '#7367f0', '#ff9f43', '#28c76f', '#ea5455', '#999']
-        );
-
-        let serversOSData = groupTopData(
-            {!! json_encode($serverOSLabels) !!},
-            {!! json_encode($serverOSCounts) !!}
-        );
-
-        createDonut("#serversOSChart",
-            serversOSData.labels,
-            serversOSData.data,
-            ['#7367f0', '#00cfe8', '#ff9f43', '#28c76f', '#ea5455', '#999']
-        );
-
-        if (filterForm) {
-            filterForm.addEventListener("submit", function(e) {
+    if (exportBtn) {
+        exportBtn.addEventListener("click", function(e) {
+            if (this.classList.contains("disabled")) {
                 e.preventDefault();
+            }
+        });
+    }
 
-                let formData = new FormData(this);
-                const startDate = formData.get("start_date");
-                const endDate = formData.get("end_date");
+    if (filterForm) {
+        const startDateInput = filterForm.querySelector('input[name="start_date"]');
+        const endDateInput = filterForm.querySelector('input[name="end_date"]');
+        updateExportLink(startDateInput?.value, endDateInput?.value);
+        [startDateInput, endDateInput].forEach(input => {
+            if (!input) return;
+            input.addEventListener("change", function() {
+                updateExportLink(startDateInput?.value, endDateInput?.value);
+            });
+        });
+    }
 
-                updatePatchedExportLink(startDate, endDate);
+    createDonut("#serversStatusChart",
+        ['Encendidos', 'Apagados'],
+        [{{ $serversOn }}, {{ $serversOff }}],
+        ['#28c76f', '#ea5455']
+    );
 
-                fetch("{{ route('dashboard.filter') }}?" + new URLSearchParams(formData), {
-                    method: "GET"
-                })
-                .then(res => res.json())
-                .then(data => {
-                    let tbody = document.getElementById("patchedTable");
-                    tbody.innerHTML = "";
+    createDonut("#machinesStatusChart",
+        ['Encendidas', 'Apagadas'],
+        [{{ $machinesOn }}, {{ $machinesOff }}],
+        ['#28c76f', '#ea5455']
+    );
 
-                    const rows = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+    createDonut("#serversByAppChart",
+        {!! json_encode($appNames) !!},
+        {!! json_encode($appCounts) !!},
+        ['#7367f0', '#00cfe8', '#ff9f43', '#28c76f']
+    );
 
-                    if (rows.length === 0) {
-                        tbody.innerHTML = `
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">
-                                    No se encontraron resultados
-                                </td>
-                            </tr>`;
-                        return;
-                    }
+    createDonut("#databaseTypeChart",
+        {!! json_encode($dbNames) !!},
+        {!! json_encode($dbCounts) !!},
+        ['#00cfe8', '#ff9f43', '#7367f0']
+    );
 
-                    rows.forEach(machine => {
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${machine.machine_name}</td>
-                                <td>${machine.internal_ip ?? 'N/A'}</td>
-                                <td>${machine.operations_system}</td>
-                                <td>${machine.kernel_version}</td>
-                                <td>${machine.latest_security_patch}</td>
-                            </tr>`;
-                    });
+    let kernelData = groupTopData(
+        {!! json_encode($redhatLabels) !!},
+        {!! json_encode($redhatCounts) !!}
+    );
+
+    createDonut("#redhatChart",
+        kernelData.labels,
+        kernelData.data,
+        ['#ff9f43', '#7367f0', '#00cfe8', '#28c76f', '#ea5455', '#999']
+    );
+
+    let osData = groupTopData(
+        {!! json_encode($osLabels) !!},
+        {!! json_encode($osCounts) !!}
+    );
+
+    createDonut("#osChart",
+        osData.labels,
+        osData.data,
+        ['#00cfe8', '#7367f0', '#ff9f43', '#28c76f', '#ea5455', '#999']
+    );
+
+    let serversOSData = groupTopData(
+        {!! json_encode($serverOSLabels) !!},
+        {!! json_encode($serverOSCounts) !!}
+    );
+
+    createDonut("#serversOSChart",
+        serversOSData.labels,
+        serversOSData.data,
+        ['#7367f0', '#00cfe8', '#ff9f43', '#28c76f', '#ea5455', '#999']
+    );
+
+    if (filterForm) {
+        filterForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            const startDate = formData.get("start_date");
+            const endDate = formData.get("end_date");
+            updateExportLink(startDate, endDate);
+            fetch("{{ route('dashboard.filter') }}?" + new URLSearchParams(formData))
+            .then(res => res.json())
+            .then(data => {
+                let tbody = document.getElementById("patchedTable");
+                tbody.innerHTML = "";
+                const rows = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+                if (rows.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No se encontraron resultados
+                            </td>
+                        </tr>
+                    `;
+                    disableExport();
+                    return;
+                }
+                enableExport();
+                rows.forEach(machine => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${machine.machine_name}</td>
+                            <td>${machine.internal_ip ?? 'N/A'}</td>
+                            <td>${machine.operations_system}</td>
+                            <td>${machine.kernel_version}</td>
+                            <td>${machine.latest_security_patch}</td>
+                        </tr>
+                    `;
                 });
             });
-        }
-    });
+        });
+    }
+});
 </script>
 @endsection
