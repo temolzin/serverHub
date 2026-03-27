@@ -31,12 +31,8 @@ Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
     ->name('password.email');
 
-Route::get('/reset-password/{token}', function (string $token) {
-    return view('content.authentications.auth-reset-password-basic', [
-        'token' => $token,
-        'email' => request('email')
-    ]);
-})->name('password.reset');
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
 
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])
     ->name('password.update');

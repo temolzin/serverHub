@@ -49,4 +49,12 @@ class ForgotPasswordController extends Controller
             ? redirect()->route('login')->with('status', 'Contraseña actualizada correctamente')
             : back()->withErrors(['email' => [__($status)]]);
     }
+
+    public function showResetForm(string $token)
+    {
+        return view('content.authentications.auth-reset-password-basic', [
+            'token' => $token,
+            'email' => request('email')
+        ]);
+    }
 }
