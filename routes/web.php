@@ -37,6 +37,7 @@ Route::get('/reset-password/{token}', function (string $token) {
         'email' => request('email')
     ]);
 })->name('password.reset');
+
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])
     ->name('password.update');
 
@@ -44,7 +45,6 @@ Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-
     return redirect('/login');
 })->name('logout');
 
@@ -68,7 +68,6 @@ Route::middleware('auth')->group(function () {
         ->name('export');
     Route::middleware('permission:viewOwner')
         ->resource('owners', OwnerController::class);
-
     Route::middleware('permission:viewServer')->group(function () {
         Route::post('/servers/{server}/power-on', [ServerController::class, 'powerOn'])
             ->name('servers.power-on');
@@ -111,7 +110,6 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('permission:viewTypeApplication')
         ->resource('type-applications', TypeApplicationController::class);
-
     Route::middleware('permission:viewGcpMachine')->group(function () {
         Route::post('/gcp-machines/{gcp_machine}/power-on', [GcpMachineController::class, 'powerOn'])
             ->name('gcp-machines.power-on');
