@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\authentications\LoginBasic;
 use App\Http\Controllers\authentications\RegisterBasic;
+use App\Http\Controllers\authentications\ForgotPasswordBasic;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\GcpMachineController;
 use App\Http\Controllers\TypeApplicationController;
@@ -25,6 +27,15 @@ Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('register.basic');
 Route::post('/auth/register-basic', [RegisterBasic::class, 'store'])->name('register.store');
+Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])
+    ->name('password.update');
 
 Route::post('/logout', function (Request $request) {
     Auth::logout();
@@ -37,7 +48,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:viewPowerLogs')->group(function () {
         Route::get('/power-logs', [PowerLogController::class, 'index'])
             ->name('power-logs.index');
-
         Route::middleware('permission:viewAuditLogs')->group(function () {
             Route::get('/audit-logs', [AuditLogController::class, 'index'])
                 ->name('audit-logs.index');
@@ -67,7 +77,8 @@ Route::middleware('auth')->group(function () {
             ->name('servers-off.update');
         Route::delete('/servers-off/{server}', [ServerController::class, 'offDestroy'])
             ->name('servers-off.destroy');
-        Route::resource('servers', ServerController::class)->except(['create', 'edit', 'show']);
+        Route::resource('servers', ServerController::class)
+            ->except(['create', 'edit', 'show']);
         Route::post('/servers/import', [ImportController::class, 'import'])
             ->name('servers.import');
         Route::post('/servers-off/import', [ImportController::class, 'importPoweredOff'])
@@ -89,7 +100,8 @@ Route::middleware('auth')->group(function () {
             ->name('appliances-off.destroy');
         Route::post('/appliances/import', [ImportController::class, 'import'])
             ->name('appliances.import');
-        Route::resource('appliances', ApplianceController::class)->except(['create', 'edit', 'show']);
+        Route::resource('appliances', ApplianceController::class)
+            ->except(['create', 'edit', 'show']);
     });
 
     Route::middleware('permission:viewTypeApplication')
@@ -107,7 +119,8 @@ Route::middleware('auth')->group(function () {
             ->name('gcp-machines-off.update');
         Route::delete('/gcp-machines-off/{gcp_machine}', [GcpMachineController::class, 'offDestroy'])
             ->name('gcp-machines-off.destroy');
-        Route::resource('gcp-machines', GcpMachineController::class)->except(['create', 'edit', 'show']);
+        Route::resource('gcp-machines', GcpMachineController::class)
+            ->except(['create', 'edit', 'show']);
     });
 
     Route::middleware('permission:viewApplication')
@@ -120,10 +133,8 @@ Route::middleware('auth')->group(function () {
         ->resource('storages', StorageController::class);
 
     Route::middleware('role:Admin')->group(function () {
-        Route::get(
-            '/users/{user}/permissions',
-            [UserController::class, 'editPermissions']
-        )->name('users.permissions.edit');
+        Route::get('/users/{user}/permissions', [UserController::class, 'editPermissions'])
+            ->name('users.permissions.edit');
         Route::resource('users', UserController::class);
     });
 });
