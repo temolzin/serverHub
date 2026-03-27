@@ -21,14 +21,14 @@ $(function () {
                 { responsivePriority: 2, targets: -1, orderable: false }
             ],
             language: {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningún dato disponible",
-                "sSearch":         "Buscar:",
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible",
+                "sSearch": "Buscar:",
                 "sLoadingRecords": "Cargando...",
                 "oPaginate": {
-                    "sNext":     "<i class='bx bx-chevron-right'></i>",
+                    "sNext": "<i class='bx bx-chevron-right'></i>",
                     "sPrevious": "<i class='bx bx-chevron-left'></i>"
                 }
             },
