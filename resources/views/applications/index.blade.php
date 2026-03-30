@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="text-nowrap" style="overflow-y:hidden;">
+                    <div>
                         <table class="table align-middle w-100 datatable">
                             <thead class="table-light">
                                 <tr>
@@ -46,20 +46,14 @@
                                                     'inactivo' => 'secondary',
                                                 ];
                                             @endphp
-                                            <span class="badge bg-label-{{ $statusColors[$application->status] ?? 'secondary' }}">
-                                                {{ ucfirst($application->status) }}
-                                            </span>
+                                            <span class="badge bg-label-{{ $statusColors[$application->status] ?? 'secondary' }}"> {{ ucfirst($application->status) }}</span>
                                         </td>
-                                        <td>
-                                            {{ $application->assigned_memory ?? '-' }} MB
-                                        </td>
+                                        <td>{{ $application->assigned_memory ?? '-' }} MB</td>
                                         <td class="text-end">
                                             <div class="dropdown">
-                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                                </button>
+                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showApplicationModal{{ $application->id }}"><i class="bx bx-show me-1"></i> Ver</button>
+                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showApplicationModal{{ $application->id }}"><i class="bx bx-show me-1"></i>Ver</button>
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editApplicationModal{{ $application->id }}"> <i class="bx bx-edit-alt me-1"></i> Editar</button>
                                                     <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteApplicationModal{{ $application->id }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
                                                 </div>
@@ -85,7 +79,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -101,8 +95,8 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error en el formulario',
-                    html:`<ul style="text-align:left;">
-                            @foreach ($errors->all() as $error)
+                    html: `<ul style="text-align:left;">
+                                @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>`
@@ -111,23 +105,35 @@
 
             function initTomSelect() {
                 if (document.querySelector("#ownerSelect") && !document.querySelector("#ownerSelect").tomselect) {
-                    new TomSelect("#ownerSelect", { create: false });
+                    new TomSelect("#ownerSelect", {
+                        create: false
+                    });
                 }
                 if (document.querySelector("#serverSelect") && !document.querySelector("#serverSelect").tomselect) {
-                    new TomSelect("#serverSelect", { create: false });
+                    new TomSelect("#serverSelect", {
+                        create: false
+                    });
                 }
                 if (document.querySelector("#gcpMachineSelect") && !document.querySelector("#gcpMachineSelect").tomselect) {
-                    new TomSelect("#gcpMachineSelect", { create: false });
+                    new TomSelect("#gcpMachineSelect", {
+                        create: false
+                    });
                 }
 
                 document.querySelectorAll('.ownerSelectEdit').forEach(el => {
-                    if (!el.tomselect) new TomSelect(el, { create: false });
+                    if (!el.tomselect) new TomSelect(el, {
+                        create: false
+                    });
                 });
                 document.querySelectorAll('.serverSelectEdit').forEach(el => {
-                    if (!el.tomselect) new TomSelect(el, { create: false });
+                    if (!el.tomselect) new TomSelect(el, {
+                        create: false
+                    });
                 });
                 document.querySelectorAll('.gcpMachineSelectEdit').forEach(el => {
-                    if (!el.tomselect) new TomSelect(el, { create: false });
+                    if (!el.tomselect) new TomSelect(el, {
+                        create: false
+                    });
                 });
             }
             initTomSelect();
@@ -136,7 +142,7 @@
             const createForm = document.getElementById('createApplicationForm');
 
             if (createModal && createForm) {
-                createModal.addEventListener('hidden.bs.modal', function () {
+                createModal.addEventListener('hidden.bs.modal', function() {
                     createForm.reset();
                     ['#ownerSelect', '#serverSelect', '#gcpMachineSelect'].forEach(sel => {
                         const el = createForm.querySelector(sel);
