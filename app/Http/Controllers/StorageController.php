@@ -12,8 +12,7 @@ class StorageController extends Controller
     {
         $storages = Storage::with('creator')
             ->orderBy('id','desc')
-            ->paginate(10);
-
+            ->get();
         return view('storages.index', compact('storages'));
     }
 
