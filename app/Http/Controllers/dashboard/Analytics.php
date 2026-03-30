@@ -153,6 +153,10 @@ class Analytics extends Controller
                 'latest_security_patch',
             ]);
 
+        if ($machines->isEmpty()) {
+            return back()->with('error', 'No hay datos para exportar');
+        }
+
         $filename = 'patched-machines-' . $validated['start_date'] . '-to-' . $validated['end_date'] . '.xlsx';
 
         return Excel::download(new PatchedMachinesExport($machines), $filename);

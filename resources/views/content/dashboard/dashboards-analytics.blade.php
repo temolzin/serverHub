@@ -3,26 +3,26 @@
 @section('title', 'Dashboard')
 
 @section('vendor-style')
-@vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
+    @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
 @endsection
 
 @section('vendor-script')
-@vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
+    @vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
 @endsection
 
 @section('content')
-<style>
-    .chart-container {
-        height: 320px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    <style>
+        .chart-container {
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .chart-container > div {
-        width: 100%;
-    }
-</style>
+        .chart-container > div {
+            width: 100%;
+        }
+    </style>
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0">
@@ -121,89 +121,6 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Estado de On-Premise</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="serversStatusChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Estado de GCP Máquinas</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="machinesStatusChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>On-Premise por Tipo de Aplicación</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="serversByAppChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Bases de Datos por Tipo</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="databaseTypeChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header">
-                    <h5>GCP Máquinas por Kernel Version</h5>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="redhatChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header">
-                    <h5>GCP Máquinas por Sistema Operativo</h5>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="osChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header">
-                    <h5>On-Premise por Sistema Operativo</h5>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="serversOSChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -259,11 +176,21 @@
         }
 
         const filterForm = document.getElementById("filterForm");
-        const exportPatchedMachinesBtn = document.getElementById("exportPatchedMachinesBtn");
-        const exportPatchedMachinesBaseUrl = "{{ route('dashboard.patched.export') }}";
+        const exportBtn = document.getElementById("exportPatchedMachinesBtn");
+        const baseUrl = "{{ route('dashboard.patched.export') }}";
 
-        function updatePatchedExportLink(startDate, endDate) {
-            if (!exportPatchedMachinesBtn) return;
+        function disableExport() {
+            exportBtn.classList.add("disabled");
+            exportBtn.setAttribute("aria-disabled", "true");
+        }
+
+        function enableExport() {
+            exportBtn.classList.remove("disabled");
+            exportBtn.removeAttribute("aria-disabled");
+        }
+
+        function updateExportLink(startDate, endDate) {
+            if (!exportBtn) return;
 
             if (startDate && endDate) {
                 const params = new URLSearchParams({
@@ -271,19 +198,15 @@
                     end_date: endDate
                 });
 
-                exportPatchedMachinesBtn.href = `${exportPatchedMachinesBaseUrl}?${params.toString()}`;
-                exportPatchedMachinesBtn.classList.remove("disabled");
-                exportPatchedMachinesBtn.removeAttribute("aria-disabled");
-                return;
+                exportBtn.href = `${baseUrl}?${params.toString()}`;
+            } else {
+                exportBtn.href = baseUrl;
+                disableExport();
             }
-
-            exportPatchedMachinesBtn.href = exportPatchedMachinesBaseUrl;
-            exportPatchedMachinesBtn.classList.add("disabled");
-            exportPatchedMachinesBtn.setAttribute("aria-disabled", "true");
         }
 
-        if (exportPatchedMachinesBtn) {
-            exportPatchedMachinesBtn.addEventListener("click", function(e) {
+        if (exportBtn) {
+            exportBtn.addEventListener("click", function(e) {
                 if (this.classList.contains("disabled")) {
                     e.preventDefault();
                 }
@@ -293,13 +216,11 @@
         if (filterForm) {
             const startDateInput = filterForm.querySelector('input[name="start_date"]');
             const endDateInput = filterForm.querySelector('input[name="end_date"]');
-
-            updatePatchedExportLink(startDateInput?.value, endDateInput?.value);
-
+            updateExportLink(startDateInput?.value, endDateInput?.value);
             [startDateInput, endDateInput].forEach(input => {
                 if (!input) return;
                 input.addEventListener("change", function() {
-                    updatePatchedExportLink(startDateInput?.value, endDateInput?.value);
+                    updateExportLink(startDateInput?.value, endDateInput?.value);
                 });
             });
         }
@@ -364,33 +285,28 @@
         if (filterForm) {
             filterForm.addEventListener("submit", function(e) {
                 e.preventDefault();
-
                 let formData = new FormData(this);
                 const startDate = formData.get("start_date");
                 const endDate = formData.get("end_date");
-
-                updatePatchedExportLink(startDate, endDate);
-
-                fetch("{{ route('dashboard.filter') }}?" + new URLSearchParams(formData), {
-                    method: "GET"
-                })
+                updateExportLink(startDate, endDate);
+                fetch("{{ route('dashboard.filter') }}?" + new URLSearchParams(formData))
                 .then(res => res.json())
                 .then(data => {
                     let tbody = document.getElementById("patchedTable");
                     tbody.innerHTML = "";
-
                     const rows = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
-
                     if (rows.length === 0) {
                         tbody.innerHTML = `
                             <tr>
                                 <td colspan="5" class="text-center text-muted">
                                     No se encontraron resultados
                                 </td>
-                            </tr>`;
+                            </tr>
+                        `;
+                        disableExport();
                         return;
                     }
-
+                    enableExport();
                     rows.forEach(machine => {
                         tbody.innerHTML += `
                             <tr>
@@ -399,7 +315,8 @@
                                 <td>${machine.operations_system}</td>
                                 <td>${machine.kernel_version}</td>
                                 <td>${machine.latest_security_patch}</td>
-                            </tr>`;
+                            </tr>
+                        `;
                     });
                 });
             });
