@@ -12,33 +12,12 @@ class InstanceController extends Controller
 {
     public function index(Request $request)
     {
-        $instances = Instance::with('server', 'creator');
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $instances->where(function ($q) use ($search) {
-                $q->where('version', 'like', "%{$search}%")
-                  ->orWhere('edition', 'like', "%{$search}%")
-                  ->orWhereHas('server', function ($sub) use ($search) {
-                      $sub->where('hostname_internal', 'like', "%{$search}%");
-                  });
-
-            });
-        }
-
-        $instances = $instances
+        $instances = Instance::with('server', 'creator')
             ->orderBy('id', 'desc')
-            ->paginate(10)
-            ->withQueryString();
+            ->get();
 
         $servers = Server::orderBy('hostname_internal')->get();
 
-        if ($request->ajax()) {
-
-            return response()->json([
-                'table' => view('instances.search', compact('instances', 'servers'))->render(),
-                'pagination' => view('instances.pagination', compact('instances'))->render(),
-            ]);
-        }
         return view('instances.index', compact('instances', 'servers'));
     }
 
@@ -72,7 +51,10 @@ class InstanceController extends Controller
         $validated = $request->validate([
             'server_id' => 'required|exists:servers,id',
             'memory' => 'required|integer|min:1024|max:32768',
-            'version' => ['required', 'string','max:50',
+            'version' => [
+                'required',
+                'string',
+                'max:50',
                 Rule::unique('instances')
                     ->where(function ($query) use ($request) {
                         return $query->where('server_id', $request->server_id);

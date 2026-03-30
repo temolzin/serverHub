@@ -1,84 +1,97 @@
 @extends('layouts/contentNavbarLayout')
 
 @section('title', 'Instancias')
-    @if (session('success'))
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Listo!',
-                    text: '{{ session('success') }}',
-                    confirmButtonText: 'OK',
-                    timer: 5000,
-                    timerProgressBar: true
-                });
-            });
-        </script>
-    @endif
-    @section('content')
+
+@section('content')
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header d-flex align-items-center">
+                <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                     <h5 class="mb-0">Instancias</h5>
-                    <div class="ms-auto d-flex gap-2">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createInstanceModal"><i class="bx bx-plus me-1"></i> Agregar Instancia</button>
-                        <a href="{{ route('export', 'instances') }}" class="btn btn-primary">Exportar Excel</a>
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createInstanceModal"><i class="bx bx-plus me-1"></i> Agregar Instancia</button>
+                        <a href="{{ route('export', 'instances') }}" class="btn btn-primary text-center">Exportar Excel</a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="mb-4">
-                        <input type="text" id="search-instance" class="form-control form-control-sm w-50" placeholder="Buscar por versión o servidor">
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead>
+                    <div class="text-nowrap">
+                        <table class="table align-middle w-100 datatable">
+                            <thead class="table-light">
                                 <tr>
-                                <th>ID</th>
-                                <th>Servidor</th>
-                                <th>Memoria</th>
-                                <th>Versión</th>
-                                <th>Edición</th>
-                                <th class="text-end">Acciones</th>
+                                    <th>ID</th>
+                                    <th>Servidor</th>
+                                    <th>Memoria</th>
+                                    <th>Versión</th>
+                                    <th>Edición</th>
+                                    <th class="text-end">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="instances-search">
-                                @include('instances.search', ['instances' => $instances, 'servers' => $servers])
+                            <tbody>
+                                @foreach ($instances as $instance)
+                                    <tr>
+                                        <td>{{ $instance->id }}</td>
+                                        <td>{{ $instance->server->hostname_internal ?? 'N/A' }}</td>
+                                        <td>{{ $instance->memory }} MB</td>
+                                        <td>{{ $instance->version }}</td>
+                                        <td>{{ $instance->edition ?? '—' }}</td>
+                                        <td class="text-end">
+                                            <div class="dropdown">
+                                                <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#showInstanceModal{{ $instance->id }}"><i class="bx bx-show me-1"></i> Ver</a>
+                                                    <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#editInstanceModal{{ $instance->id }}"><i class="bx bx-edit-alt me-1"></i>Editar</a>
+                                                    <a class="dropdown-item text-danger" href="javascript:;" data-bs-toggle="modal" data-bs-target="#deleteInstanceModal{{ $instance->id }}"><i class="bx bx-trash me-1"></i>Eliminar</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
-                        <div id="instances-pagination">
-                            @include('instances.pagination', ['instances' => $instances])
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    @foreach ($instances as $instance)
+        @include('instances.show', ['instance' => $instance])
+        @include('instances.edit', ['instance' => $instance, 'servers' => $servers])
+        @include('instances.delete', ['instance' => $instance])
+    @endforeach
     @include('instances.create')
-
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                function initSearchableSelects(scope = document) {
-                    if (typeof TomSelect === 'undefined') return;
-
-                    const selects = scope.querySelectorAll('.server-searchable-select');
-                    selects.forEach(select => {
-                        if (select.tomselect) return;
-                        new TomSelect(select, {
-                            create: false,
-                            sortField: {
-                                field: 'text',
-                                direction: 'asc'
-                            },
-                            placeholder: select.dataset.placeholder || 'Buscar...'
-                        });
-                    });
-                }
-
-                initSearchableSelects(document);
-            });
-        </script>
-    @endpush
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Listo!',
+                    text: '{{ session('success') }}',
+                    confirmButtonText: 'Perfecto',
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            @endif
+
+            function initSearchableSelects(scope = document) {
+                if (typeof TomSelect === 'undefined') return;
+                const selects = scope.querySelectorAll('.server-searchable-select');
+                selects.forEach(select => {
+                    if (select.tomselect) return;
+                    new TomSelect(select, {
+                        create: false,
+                        sortField: {
+                            field: 'text',
+                            direction: 'asc'
+                        },
+                        placeholder: select.dataset.placeholder || 'Buscar...'
+                    });
+                });
+            }
+            initSearchableSelects(document);
+        });
+    </script>
+@endpush
