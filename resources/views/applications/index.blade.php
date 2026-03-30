@@ -96,7 +96,7 @@
                     icon: 'error',
                     title: 'Error en el formulario',
                     html: `<ul style="text-align:left;">
-                                @foreach ($errors->all() as $error)
+                            @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>`
@@ -105,35 +105,23 @@
 
             function initTomSelect() {
                 if (document.querySelector("#ownerSelect") && !document.querySelector("#ownerSelect").tomselect) {
-                    new TomSelect("#ownerSelect", {
-                        create: false
-                    });
+                    new TomSelect("#ownerSelect", {create: false});
                 }
                 if (document.querySelector("#serverSelect") && !document.querySelector("#serverSelect").tomselect) {
-                    new TomSelect("#serverSelect", {
-                        create: false
-                    });
+                    new TomSelect("#serverSelect", {create: false});
                 }
                 if (document.querySelector("#gcpMachineSelect") && !document.querySelector("#gcpMachineSelect").tomselect) {
-                    new TomSelect("#gcpMachineSelect", {
-                        create: false
-                    });
+                    new TomSelect("#gcpMachineSelect", {create: false});
                 }
 
                 document.querySelectorAll('.ownerSelectEdit').forEach(el => {
-                    if (!el.tomselect) new TomSelect(el, {
-                        create: false
-                    });
+                    if (!el.tomselect) new TomSelect(el, {create: false});
                 });
                 document.querySelectorAll('.serverSelectEdit').forEach(el => {
-                    if (!el.tomselect) new TomSelect(el, {
-                        create: false
-                    });
+                    if (!el.tomselect) new TomSelect(el, {create: false});
                 });
                 document.querySelectorAll('.gcpMachineSelectEdit').forEach(el => {
-                    if (!el.tomselect) new TomSelect(el, {
-                        create: false
-                    });
+                    if (!el.tomselect) new TomSelect(el, {create: false});
                 });
             }
             initTomSelect();
