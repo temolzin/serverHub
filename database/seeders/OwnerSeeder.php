@@ -37,7 +37,7 @@ class OwnerSeeder extends Seeder
                 'name' => 'Carlos',
                 'created_by' => 1,
                 'last_name' => 'Ramírez',
-                'number_phone' => '554678124643',
+                'number_phone' => '5546781246',
                 'created_at' => now(),
             ]
         );
