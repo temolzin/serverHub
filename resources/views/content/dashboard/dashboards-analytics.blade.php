@@ -3,26 +3,26 @@
 @section('title', 'Dashboard')
 
 @section('vendor-style')
-@vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
+    @vite('resources/assets/vendor/libs/apex-charts/apex-charts.scss')
 @endsection
 
 @section('vendor-script')
-@vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
+    @vite('resources/assets/vendor/libs/apex-charts/apexcharts.js')
 @endsection
 
 @section('content')
-<style>
-    .chart-container {
-        height: 320px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    <style>
+        .chart-container {
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .chart-container > div {
-        width: 100%;
-    }
-</style>
+        .chart-container > div {
+            width: 100%;
+        }
+    </style>
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0">
@@ -121,89 +121,6 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Estado de On-Premise</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="serversStatusChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Estado de GCP Máquinas</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="machinesStatusChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>On-Premise por Tipo de Aplicación</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="serversByAppChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header"><h5>Bases de Datos por Tipo</h5></div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="databaseTypeChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header">
-                    <h5>GCP Máquinas por Kernel Version</h5>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="redhatChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header">
-                    <h5>GCP Máquinas por Sistema Operativo</h5>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="osChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header">
-                    <h5>On-Premise por Sistema Operativo</h5>
-                </div>
-                <div class="card-body">
-                    <div class="chart-container">
-                        <div id="serversOSChart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
