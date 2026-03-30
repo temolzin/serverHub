@@ -21,32 +21,11 @@ class OwnerController extends Controller
         ]);
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $owners = Owner::with('creator');
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $owners->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('last_name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('number_phone', 'like', "%{$search}%");
-            });
-        }
-
-        $owners = $owners
+        $owners = Owner::with('creator')
             ->orderBy('id', 'desc')
-            ->paginate(10)
-            ->withQueryString();
-
-        if ($request->ajax()) {
-
-            return response()->json([
-                'table' => view('owners.search', compact('owners'))->render(),
-                'pagination' => $owners->links()->render(),
-            ]);
-
-        }
+            ->get();
 
         return view('owners.index', compact('owners'));
     }

@@ -1,0 +1,32 @@
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
+    content: "+";
+    background-color: #696cff;
+    color: #fff;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(105, 108, 255, 0.4);
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-right: 0.75rem;
+    transition: all 0.2s ease-in-out;
+    line-height: 1;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control::before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control::before {
+    content: "-";
+    background-color: #8592a3;
+    box-shadow: 0 0.125rem 0.25rem rgba(133, 146, 163, 0.4);
+    transform: rotate(180deg);
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+    cursor: pointer;
+}
