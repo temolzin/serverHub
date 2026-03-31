@@ -146,10 +146,10 @@ class ApplianceController extends Controller
 
         $view = $off ? 'appliancesOff' : 'appliances';
 
-        $owners           = Owner::orderBy('name')->get();
+        $owners = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
-        $databases        = Database::orderBy('name')->get();
-        $applications     = Application::orderBy('name')->get();
+        $databases = Database::orderBy('name')->get();
+        $applications = Application::orderBy('name')->get();
 
         return view("$view.index", compact(
             'servers',
