@@ -19,8 +19,10 @@
                             @enderror
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold"><i class="bx bx-network-chart me-1 text-primary"></i>IP de Datos (Data IP)</label>
-                            <input type="text" name="data_ip" value="{{ old('data_ip') }}" class="form-control @error('data_ip') is-invalid @enderror" placeholder="Ej: 10.10.10.5" pattern="^((25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9][0-9]?)$" oninvalid="this.setCustomValidity('Ingresa una IP válida')" oninput="this.setCustomValidity('')">
+                            <label class="form-label fw-semibold">
+                                <i class="bx bx-network-chart me-1 text-primary"></i>IP de Datos (Data IP)
+                            </label>
+                            <input type="text" name="data_ip" value="{{ old('data_ip') }}" class="form-control @error('data_ip') is-invalid @enderror" placeholder="Ej: 192.168.0.1" pattern="^(\d{1,3}\.){3}\d{1,3}$" oninvalid="this.setCustomValidity('Ingresa una IP válida')" oninput="this.setCustomValidity('')">
                             @error('data_ip')
                                 <div class="invalid-feedback">La IP no tiene una estructura válida.</div>
                             @enderror
