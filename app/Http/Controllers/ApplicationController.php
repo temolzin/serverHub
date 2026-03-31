@@ -12,36 +12,9 @@ class ApplicationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Application::with(['owner', 'server', 'gcpMachine', 'creator']);
-
-        if ($request->filled('search')) {
-            $search = trim($request->search);
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                ->orWhereHas('server', function ($sub) use ($search) {
-                    $sub->where('hostname_internal', 'like', "%{$search}%");
-                })
-                ->orWhereHas('owner', function ($sub) use ($search) {
-                    $sub->where('name', 'like', "%{$search}%");
-                })
-                ->orWhereHas('gcpMachine', function ($sub) use ($search) {
-                    $sub->where('machine_name', 'like', "%{$search}%")
-                    ->orWhere('machine_internal_name', 'like', "%{$search}%");
-                });
-            });
-        }
-
-        $applications = $query
-        ->orderBy('id', 'desc')
-        ->paginate(10);
-
-        if ($request->ajax()) {
-            return response()->json([
-                'table' => view('applications.search', compact('applications'))->render(),
-                'pagination' => view('applications.pagination', compact('applications'))->render(),
-            ]);
-        }
-
+        $applications = Application::with(['owner', 'server', 'gcpMachine', 'creator'])
+            ->orderBy('id', 'desc')
+            ->get();
         $owners = Owner::orderBy('name')->get();
         $servers = Server::orderBy('hostname_internal')->get();
         $gcpMachines = GcpMachine::orderBy('machine_name')->get();
@@ -106,7 +79,7 @@ class ApplicationController extends Controller
         $application->delete();
 
         return redirect()
-        ->route('applications.index')
-        ->with('success', 'Aplicación eliminada con éxito');
+            ->route('applications.index')
+            ->with('success', 'Aplicación eliminada con éxito');
     }
 }
