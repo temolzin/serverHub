@@ -27,4 +27,15 @@ class TypeApplication extends Model
     {
         return $this->hasMany(Server::class, 'type_application_id');
     }
+
+    public function getTypeLabelAttribute()
+    {
+        return match(strtoupper($this->type_application)) {
+            'WEB' => 'Web',
+            'API' => 'API',
+            'WORKER' => 'Worker',
+            'UNKNOWN' => 'Desconocido',
+            default => ucfirst($this->type_application),
+        };
+    }
 }
