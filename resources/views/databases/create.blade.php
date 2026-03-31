@@ -15,7 +15,7 @@
                             <label class="form-label fw-semibold">
                                 <i class="bx bx-data me-1 text-primary"></i>Nombre
                             </label>
-                            <input type="text" name="name" class="form-control" placeholder="Ej: db_produccion" maxlength="50" required>
+                            <input type="text" name="name" class="form-control" placeholder="Ej: db_produccion" maxlength="30" required>
                         </div>
                         <div  class="col-md-6 mb-4">
                             <label class="form-label fw-semibold">

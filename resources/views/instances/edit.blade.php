@@ -29,7 +29,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><i class="bx bx-layer me-1 text-primary"></i>Edición</label>
-                        <input type="text" name="edition" class="form-control" placeholder="Ej: Enterprise, Standard" value="{{ $instance->edition }}">
+                        <input type="text" name="edition" class="form-control" placeholder="Ej: Enterprise, Standard" value="{{ $instance->edition }}" required>
                     </div>
                 </div>
                 <div class="modal-footer">

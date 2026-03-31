@@ -74,6 +74,10 @@
                     timerProgressBar: true
                 });
             @endif
+            @if ($errors->any())
+                let modal = new bootstrap.Modal(document.getElementById('createStorageModal'));
+                modal.show();
+            @endif
         });
     </script>
 @endpush
