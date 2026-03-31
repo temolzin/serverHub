@@ -140,12 +140,7 @@ class ServerController extends Controller
         ($off ? fn($q) => $this->applyPoweredOffFilter($q)
         : fn($q) => $this->applyPoweredOnFilter($q))($servers);
 
-        $servers->when(
-            $request->filled('search'),
-            fn($query) => $this->applySearch($query, trim($request->search), $off)
-        );
-
-        $servers = $servers->latest()->paginate(10)->withQueryString();
+        $servers = $servers->latest()->get();
         $this->hydrateServerPresentationData($servers);
 
         $view = $off ? 'serversOff' : 'servers';
@@ -155,23 +150,18 @@ class ServerController extends Controller
         $databases = Database::orderBy('name')->get();
         $applications = Application::orderBy('name')->get();
 
-        return $request->ajax()
-            ? response()->json([
-                'table' => view("$view.search", compact('servers', 'owners', 'typeApplications', 'databases', 'applications'))->render(),
-                'pagination' => view("$view.pagination", compact('servers'))->render(),
-            ])
-            : view("$view.index", compact(
-                'servers',
-                'owners',
-                'typeApplications',
-                'databases',
-                'applications'
-            ));
+        return view("$view.index", compact(
+            'servers',
+            'owners',
+            'typeApplications',
+            'databases',
+            'applications'
+        ));
     }
 
     private function hydrateServerPresentationData($servers): void
     {
-        $servers->getCollection()->transform(function (Server $server) {
+        $servers->transform(function (Server $server) {
             $ownerFullName = trim(
                 (optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')
             );
@@ -195,17 +185,6 @@ class ServerController extends Controller
         });
     }
 
-    private function applySearch(Builder $query, string $search, bool $off): void
-    {
-        $query->where(function ($q) use ($search) {
-
-            $q->where('hostname_internal', 'like', "%$search%")
-                ->orWhere('primary_ip_address', 'like', "%$search%")
-                ->orWhere('environment', 'like', "%$search%")
-                ->orWhere('vm_according_to_the_vmware', 'like', "%$search%")
-                ->orWhere('dns_name', 'like', "%$search%");
-        });
-    }
 
     private function validateActiveServer(Request $request, ?Server $server = null): array
     {
@@ -291,8 +270,4 @@ class ServerController extends Controller
         }
     }
 
-    public function powerLogs()
-    {
-        return $this->morphMany(PowerLog::class, 'powerable');
-    }
 }
