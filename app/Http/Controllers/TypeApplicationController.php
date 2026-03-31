@@ -9,29 +9,12 @@ class TypeApplicationController extends Controller
 {
   public function index(Request $request)
   {
-    $typeApplications = TypeApplication::with('creator');
-    if ($request->filled('search')) {
-      $search = $request->search;
-      $typeApplications->where(function ($q) use ($search) {
-        $q->where('type_application', 'like', "%{$search}%")
-          ->orWhere('name_application', 'like', "%{$search}%");
-      });
-    }
-
-    $typeApplications = $typeApplications
+    $typeApplications = TypeApplication::with('creator')
       ->orderBy('id', 'desc')
-      ->paginate(10)
-      ->withQueryString();
-
-    if ($request->ajax()) {
-      return response()->json([
-        'table' => view('type-applications.search', compact('typeApplications'))->render(),
-        'pagination' => $typeApplications->links()->render(),
-      ]);
-    }
+      ->get();
 
     return view('type-applications.index', compact('typeApplications'));
-    }
+  }
 
     public function create()
     {
