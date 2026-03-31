@@ -169,15 +169,9 @@ class GcpMachineController extends Controller
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($gcpMachines);
 
-        $gcpMachines->when(
-            $request->filled('search'),
-            fn($query) => $this->applySearch($query, trim($request->search), $off)
-        );
-
         $gcpMachines = $gcpMachines
             ->latest('id')
-            ->paginate(10)
-            ->withQueryString();
+            ->get();
 
         $this->decorateMachinesForView($gcpMachines);
 
@@ -187,68 +181,9 @@ class GcpMachineController extends Controller
         $databases = DatabaseModel::orderBy('name')->get();
         $view = $off ? 'gcp-machines-off' : 'gcp-machines';
 
-        return $request->ajax()
-            ? response()->json([
-                'table' => view("$view.search", compact('gcpMachines', 'owners', 'typeApplications', 'applications', 'databases'))->render(),
-                'pagination' => view("$view.pagination", compact('gcpMachines'))->render(),
-            ])
-            : view("$view.index", compact('gcpMachines', 'owners', 'typeApplications', 'applications', 'databases'));
+        return view("$view.index", compact('gcpMachines', 'owners', 'typeApplications', 'applications', 'databases'));
     }
 
-    private function applySearch(Builder $query, string $search, bool $off): void
-    {
-        $uuidSearch = str_replace('-', '', strtolower($search));
-        $columns = $off
-            ? [
-                'project_name',
-                'machine_name',
-                'machine_internal_name',
-                'operations_system',
-                'internal_ip',
-                'environment',
-            ]
-            : [
-                'project_name',
-                'machine_name',
-                'machine_internal_name',
-                'internal_ip',
-                'environment',
-            ];
-
-        $query->where(function (Builder $subQuery) use ($search, $uuidSearch, $columns) {
-            $subQuery
-                ->where('uuid', 'like', "%{$search}%")
-                ->orWhereRaw(
-                    "REPLACE(LOWER(COALESCE(uuid, '')), '-', '') LIKE ?",
-                    ["%{$uuidSearch}%"]
-                );
-
-            foreach ($columns as $column) {
-                $subQuery->orWhere($column, 'like', "%{$search}%");
-            }
-
-            $subQuery->orWhereHas('typeApplication', function (Builder $typeQuery) use ($search) {
-                $typeQuery
-                    ->where('name_application', 'like', "%{$search}%")
-                    ->orWhere('type_application', 'like', "%{$search}%");
-            });
-
-            $subQuery->orWhereHas(
-                'selectedApplication',
-                fn(Builder $selectedApplicationQuery) => $selectedApplicationQuery->where('name', 'like', "%{$search}%")
-            );
-
-            $subQuery->orWhereHas(
-                'database',
-                fn(Builder $databaseQuery) => $databaseQuery->where('name', 'like', "%{$search}%")
-            );
-
-            $subQuery->orWhereHas(
-                'applications',
-                fn(Builder $applicationQuery) => $applicationQuery->where('name', 'like', "%{$search}%")
-            );
-        });
-    }
 
     private function validateMachine(Request $request, bool $off = false): array
     {
@@ -401,7 +336,7 @@ class GcpMachineController extends Controller
 
     private function decorateMachinesForView($gcpMachines): void
     {
-        $gcpMachines->getCollection()->transform(function (GcpMachine $machine) {
+        $gcpMachines->transform(function (GcpMachine $machine) {
             $ownerFullName = trim((optional($machine->owner)->name ?? '') . ' ' . (optional($machine->owner)->last_name ?? ''));
             $relatedApplicationNames = $machine->applications->pluck('name')->filter()->implode(', ');
             $selectedApplicationName = optional($machine->selectedApplication)->name;
@@ -422,8 +357,4 @@ class GcpMachineController extends Controller
         });
     }
 
-    public function powerLogs()
-    {
-        return $this->morphMany(PowerLog::class, 'powerable');
-    }
 }
