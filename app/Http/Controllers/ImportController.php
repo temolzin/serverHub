@@ -263,20 +263,20 @@ class ImportController extends Controller
         $machine = GcpMachine::updateOrCreate(
             ['internal_ip' => trim($internalIp)],
             [
-                'project_name'          => $this->getValue($data, ['nombre de proyecto'], 'N/A'),
-                'environment'           => $this->getValue($data, ['entorno'], 'N/A'),
-                'machine_name'          => $this->getValue($data, ['nombre de maquina'], 'N/A'),
+                'project_name' => $this->getValue($data, ['nombre de proyecto'], 'N/A'),
+                'environment' => $this->getValue($data, ['entorno'], 'N/A'),
+                'machine_name' => $this->getValue($data, ['nombre de maquina'], 'N/A'),
                 'machine_internal_name' => $this->getValue($data, ['nombre de maquina interna'], 'N/A'),
-                'state'                 => $this->normalizeState(
+                'state' => $this->normalizeState(
                     $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
                 ),
-                'operations_system'     => $this->getValue($data, ['sistema operativo'], 'N/A'),
-                'kernel_version'        => $this->getValue($data, ['version de kernel'], 'N/A'),
-                'alias_ip'              => $aliases[0] ?? 'N/A',
-                'alias2_ip'             => $aliases[1] ?? 'N/A',
-                'alias3_ip'             => $aliases[2] ?? 'N/A',
-                'ram_memory'            => max(0, (int) $ramRaw),
-                'swap_memory'           => max(0, (int) $swapRaw),
+                'operations_system' => $this->getValue($data, ['sistema operativo'], 'N/A'),
+                'kernel_version' => $this->getValue($data, ['version de kernel'], 'N/A'),
+                'alias_ip' => $aliases[0] ?? 'N/A',
+                'alias2_ip' => $aliases[1] ?? 'N/A',
+                'alias3_ip' => $aliases[2] ?? 'N/A',
+                'ram_memory' => max(0, (int) $ramRaw),
+                'swap_memory' => max(0, (int) $swapRaw),
             ]
         );
 
