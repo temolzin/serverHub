@@ -1,7 +1,7 @@
 <div class="modal fade" id="createApplicationModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
-            <form method="POST" action="{{ route('applications.store') }}">
+            <form id="createApplicationForm" method="POST" action="{{ route('applications.store') }}">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">
@@ -15,7 +15,7 @@
                             <label class="form-label">
                                 <i class="bx bx-server me-1 text-primary"></i>Servidor
                             </label>
-                            <select name="server_id" class="form-select" required oninvalid="this.setCustomValidity('Selecciona un servidor')" oninput="this.setCustomValidity('')">
+                            <select name="server_id" id="serverSelect" class="form-select" required oninvalid="this.setCustomValidity('Selecciona un servidor')" oninput="this.setCustomValidity('')">
                                 <option value="" disabled selected>Selecciona un servidor</option>
                                 @foreach ($servers as $server)
                                     <option value="{{ $server->id }}">{{ $server->hostname_internal }}</option>
@@ -26,7 +26,7 @@
                             <label class="form-label">
                                 <i class="bx bx-user me-1 text-primary"></i>Propietario
                             </label>
-                            <select name="owner_id" class="form-select" required oninvalid="this.setCustomValidity('Selecciona un propietario')" oninput="this.setCustomValidity('')">
+                            <select name="owner_id" id="ownerSelect" class="form-select" required oninvalid="this.setCustomValidity('Selecciona un propietario')" oninput="this.setCustomValidity('')">
                                 <option value="" disabled selected>Seleccionar propietario</option>
                                 @foreach ($owners as $owner)
                                     <option value="{{ $owner->id }}">{{ $owner->name }}</option>
@@ -37,7 +37,7 @@
                             <label class="form-label">
                                 <i class="bx bx-cloud me-1 text-primary"></i>Maquina GCP
                             </label>
-                            <select name="gcp_machine_id" class="form-select" required oninvalid="this.setCustomValidity('Selecciona una máquina')" oninput="this.setCustomValidity('')">
+                            <select name="gcp_machine_id" id="gcpMachineSelect" class="form-select" required oninvalid="this.setCustomValidity('Selecciona una máquina')" oninput="this.setCustomValidity('')">
                                 <option value="" disabled selected>Seleccionar maquina</option>
                                 @foreach ($gcpMachines as $machine)
                                     <option value="{{ $machine->id }}">{{ $machine->machine_name }}</option>
@@ -102,19 +102,19 @@
                             <label class="form-label fw-semibold">
                                 <i class="bx bx-cog me-1 text-primary"></i>Procesos
                             </label>
-                            <textarea name="processes" class="form-control" rows="2" required oninvalid="this.setCustomValidity('Este campo es obligatorio')" oninput="this.setCustomValidity('')"></textarea>
+                            <textarea name="processes" class="form-control" rows="2" placeholder="Ej: app.exe, worker.js, java -jar app.jar" required oninvalid="this.setCustomValidity('Este campo es obligatorio')" oninput="this.setCustomValidity('')"></textarea>
                         </div>
                         <div class="col-12 mb-4">
                             <label class="form-label fw-semibold">
                                 <i class="bx bx-time-five me-1 text-primary"></i>Tareas programadas
                             </label>
-                            <textarea name="cron_jobs" class="form-control" rows="2" required oninvalid="this.setCustomValidity('Este campo es obligatorio')" oninput="this.setCustomValidity('')"></textarea>
+                            <textarea name="cron_jobs" class="form-control" rows="2" placeholder="Ej: 0 2 * * * /usr/bin/php artisan schedule:run" required oninvalid="this.setCustomValidity('Este campo es obligatorio')" oninput="this.setCustomValidity('')"></textarea>
                         </div>
                         <div class="col-12 mb-4">
                             <label class="form-label fw-semibold">
                                 <i class="bx bx-message-square-detail me-1 text-primary"></i>Comentarios
                             </label>
-                            <textarea name="comments" class="form-control" rows="3" required oninvalid="this.setCustomValidity('Este campo es obligatorio')" oninput="this.setCustomValidity('')"></textarea>
+                            <textarea name="comments" class="form-control" rows="3" placeholder="Información adicional relevante de la aplicación" required oninvalid="this.setCustomValidity('Este campo es obligatorio')" oninput="this.setCustomValidity('')"></textarea>
                         </div>
                     </div>
                 </div>
