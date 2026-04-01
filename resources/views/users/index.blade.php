@@ -26,20 +26,20 @@
                             </thead>
                             <tbody>
                                 @foreach ($users as $user)
-                                <tr>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->last_name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td class="text-end">
-                                        <div class="dropdown">
-                                            <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}"><i class="bx bx-edit-alt me-1"></i>Editar</button>
-                                                <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{ $user->id }}"><i class="bx bx-trash me-1"></i>Eliminar</button>
+                                    <tr>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->last_name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td class="text-end">
+                                            <div class="dropdown">
+                                                <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}"><i class="bx bx-edit-alt me-1"></i>Editar</button>
+                                                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{ $user->id }}"><i class="bx bx-trash me-1"></i>Eliminar</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
