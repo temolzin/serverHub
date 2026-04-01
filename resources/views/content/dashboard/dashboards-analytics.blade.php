@@ -15,7 +15,7 @@
         <div class="col-12">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h4 class="card-title text-primary">Bienvenido {{ auth()->user()->name }}</h4>
+                    <h4 class="card-title text-primary">Bienvenido {{ auth()->user()->full_name }}</h4>
                     <p class="mb-0">Panel general del sistema donde puedes visualizar los recursos registrados.</p>
                 </div>
             </div>
@@ -74,10 +74,7 @@
             <div class="card shadow-sm border-0">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="fw-semibold mb-0">Máquinas parcheadas</h5>
-                    <a id="exportPatchedMachinesBtn" href="{{ route('dashboard.patched.export') }}"
-                        class="btn btn-success btn-sm disabled" aria-disabled="true">
-                        <i class="bx bx-export me-1"></i> Exportar Excel
-                    </a>
+                    <a id="exportPatchedMachinesBtn" href="{{ route('dashboard.patched.export') }}"class="btn btn-success btn-sm disabled" aria-disabled="true"><i class="bx bx-export me-1"></i> Exportar Excel</a>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -236,14 +233,10 @@
 
             function updateExportLink(startDate, endDate) {
                 if (!exportBtn) return;
-                if (startDate && endDate) {
-                    const params = new URLSearchParams({ start_date: startDate, end_date: endDate });
-                    exportBtn.href = `${baseUrl}?${params.toString()}`;
-                    enableExport();
-                } else {
-                    exportBtn.href = baseUrl;
-                    disableExport();
-                }
+                const valid = startDate && endDate;
+                const params = valid ? '?' + new URLSearchParams({ start_date: startDate, end_date: endDate }).toString() : '';
+                exportBtn.href = baseUrl + params;
+                valid ? enableExport() : disableExport();
             }
 
             if (exportBtn) {
