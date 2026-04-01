@@ -3,6 +3,10 @@
 @section('title', 'On-Premise')
 
 @section('content')
+    <style>
+        .swal-above-modal { z-index: 9999 !important; }
+        .swal2-container.swal-above-modal { z-index: 9999 !important; }
+    </style>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -152,19 +156,45 @@
 
             let excelUploadProgressInterval = null;
             document.querySelectorAll('form[action="{{ route('servers.import') }}"]').forEach(form => {
-                form.addEventListener('submit', function() {
-                    const modalEl = form.closest('.modal');
-                    if (modalEl) bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
                     const submitBtn = form.querySelector('button[type="submit"]');
                     if (submitBtn) submitBtn.disabled = true;
-                    if (typeof Swal === 'undefined') return;
+                    if (typeof Swal === 'undefined') { form.submit(); return; }
+
+                    let uploadProgress = 0;
                     Swal.fire({
                         title: 'Subiendo Excel',
-                        html: '<p class="mb-0">Procesando archivo, por favor espera...</p>',
+                        html: `
+                            <p class="mb-3">Procesando archivo, por favor espera...</p>
+                            <div class="mb-3">
+                                <div class="spinner-border text-primary" role="status" style="width:3rem;height:3rem;">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                            </div>
+                            <div class="progress" style="height:10px; border-radius:8px; background:#e9ecef;">
+                                <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                    role="progressbar" style="width:0%; background:#696cff; transition:width 0.3s ease;">
+                                </div>
+                            </div>
+                            <small id="uploadProgressText" class="text-muted mt-1 d-block">0%</small>`,
                         allowOutsideClick: false,
                         allowEscapeKey: false,
                         showConfirmButton: false,
-                        didOpen: () => { Swal.showLoading(); },
+                        customClass: { container: 'swal-above-modal' },
+                        didOpen: () => {
+                            excelUploadProgressInterval = setInterval(() => {
+                                if (uploadProgress < 60)      uploadProgress += Math.random() * 10;
+                                else if (uploadProgress < 85) uploadProgress += Math.random() * 4;
+                                else if (uploadProgress < 95) uploadProgress += Math.random() * 1;
+                                if (uploadProgress > 95) uploadProgress = 95;
+                                const bar  = document.getElementById('uploadProgressBar');
+                                const text = document.getElementById('uploadProgressText');
+                                if (bar)  bar.style.width = uploadProgress + '%';
+                                if (text) text.textContent = Math.round(uploadProgress) + '%';
+                            }, 350);
+                            setTimeout(() => form.submit(), 50);
+                        },
                         willClose: () => { clearInterval(excelUploadProgressInterval); excelUploadProgressInterval = null; }
                     });
                 });
