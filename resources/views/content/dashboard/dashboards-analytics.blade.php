@@ -23,14 +23,14 @@
     </div>
     <div class="row">
         @foreach ([
-            ['On-Premise',    $servers,      'bx-server', 'primary'],
-            ['Bases de Datos', $databases,   'bx-data',   'success'],
-            ['Aplicaciones',  $applications, 'bx-layer',  'info'],
-            ['Propietarios',  $owners,       'bx-user',   'warning'],
-            ['Instancias',    $instances,    'bx-cube',   'secondary'],
-            ['Storage',       $storages,     'bx-hdd',    'danger'],
-            ['GCP Máquinas',  $machines,     'bx-cloud',  'primary'],
-            ['Usuarios',      $users,        'bx-group',  'dark'],
+            ['On-Premise',$servers,'bx-server','primary'],
+            ['Bases de Datos',$databases,'bx-data','success'],
+            ['Aplicaciones',$applications,'bx-layer','info'],
+            ['Propietarios',$owners,'bx-user','warning'],
+            ['Instancias',$instances,'bx-cube','secondary'],
+            ['Storage',$storages,'bx-hdd','danger'],
+            ['GCP Máquinas',$machines,'bx-cloud','primary'],
+            ['Usuarios',$users,'bx-group','dark'],
         ] as [$label, $value, $icon, $color])
             <div class="col-md-3 col-sm-6 mb-4">
                 <div class="card dashboard-card shadow-sm border-0 h-100">
