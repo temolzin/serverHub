@@ -28,7 +28,7 @@
                     @csrf
                     @method('PUT')
                     <div class="d-flex align-items-center gap-4 mb-4">
-                        <img src="{{ auth()->user()->avatar ? asset(auth()->user()->avatar) . '?v=' . time() : asset('assets/img/avatars/1.png') }}" class="rounded" width="100">
+                        <img id="avatarPreview" src="{{ auth()->user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/1.png') }}" class="rounded" width="100">
                         <div style="max-width: 300px;">
                             <label class="btn btn-outline-primary mb-0">
                                 <i class="bx bx-upload me-1"></i> Actualizar imagen
@@ -74,6 +74,18 @@
                 timerProgressBar: true
             });
         @endif
+
+        const input = document.querySelector('input[name="avatar"]');
+        const preview = document.getElementById('avatarPreview');
+
+        if (input) {
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    preview.src = URL.createObjectURL(file);
+                }
+            });
+        }
     });
 </script>
 @endsection

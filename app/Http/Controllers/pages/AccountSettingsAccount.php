@@ -29,20 +29,8 @@ class AccountSettingsAccount extends Controller
             'email' => $request->email,
         ]);
 
-        if ($request->hasFile('avatar')) {
-
-            $path = public_path('storage/avatars');
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
-
-            $file = $request->file('avatar');
-            $name = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-            $file->move($path, $name);
-
-            $user->avatar = 'storage/avatars/' . $name;
-            $user->save();
+        if ($request->file('avatar')) {
+            $user->addMediaFromRequest('avatar')->toMediaCollection('avatars');
         }
 
         return back()->with('success', 'Perfil actualizado correctamente');
