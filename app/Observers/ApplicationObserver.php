@@ -9,6 +9,7 @@ class ApplicationObserver
 {
     public function updating(Application $application)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'application',
@@ -21,6 +22,7 @@ class ApplicationObserver
 
     public function deleting(Application $application)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'application',

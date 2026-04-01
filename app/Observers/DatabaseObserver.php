@@ -9,6 +9,7 @@ class DatabaseObserver
 {
     public function updating(Database $database)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'database',
@@ -21,6 +22,7 @@ class DatabaseObserver
 
     public function deleting(Database $database)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'database',

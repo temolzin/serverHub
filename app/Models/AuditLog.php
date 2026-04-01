@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AuditLog extends Model
 {
+    public static bool $suppressed = false;
+
     protected $fillable = [
         'alter_by',
         'module',
