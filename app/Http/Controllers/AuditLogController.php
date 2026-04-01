@@ -12,8 +12,7 @@ class AuditLogController extends Controller
     {
         $logs = AuditLog::whereIn('action', ['update', 'delete'])
             ->latest()
-            ->paginate(10);
-
+            ->get();
         return view('audit_logs.index', compact('logs'));
     }
 }
