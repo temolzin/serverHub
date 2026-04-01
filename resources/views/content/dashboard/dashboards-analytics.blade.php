@@ -121,6 +121,7 @@
             </div>
         </div>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -148,7 +149,13 @@
         }
 
         function createDonut(el, labels, data, colors) {
-            return new ApexCharts(document.querySelector(el), {
+
+            if (typeof ApexCharts === 'undefined') return;
+
+            const element = document.querySelector(el);
+            if (!element) return;
+
+            return new ApexCharts(element, {
                 series: data,
                 chart: {
                     type: 'donut',
@@ -180,11 +187,13 @@
         const baseUrl = "{{ route('dashboard.patched.export') }}";
 
         function disableExport() {
+            if (!exportBtn) return;
             exportBtn.classList.add("disabled");
             exportBtn.setAttribute("aria-disabled", "true");
         }
 
         function enableExport() {
+            if (!exportBtn) return;
             exportBtn.classList.remove("disabled");
             exportBtn.removeAttribute("aria-disabled");
         }
@@ -216,9 +225,12 @@
         if (filterForm) {
             const startDateInput = filterForm.querySelector('input[name="start_date"]');
             const endDateInput = filterForm.querySelector('input[name="end_date"]');
+
             updateExportLink(startDateInput?.value, endDateInput?.value);
+
             [startDateInput, endDateInput].forEach(input => {
                 if (!input) return;
+
                 input.addEventListener("change", function() {
                     updateExportLink(startDateInput?.value, endDateInput?.value);
                 });
@@ -285,40 +297,49 @@
         if (filterForm) {
             filterForm.addEventListener("submit", function(e) {
                 e.preventDefault();
+
                 let formData = new FormData(this);
                 const startDate = formData.get("start_date");
                 const endDate = formData.get("end_date");
+
                 updateExportLink(startDate, endDate);
+
                 fetch("{{ route('dashboard.filter') }}?" + new URLSearchParams(formData))
-                .then(res => res.json())
-                .then(data => {
-                    let tbody = document.getElementById("patchedTable");
-                    tbody.innerHTML = "";
-                    const rows = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
-                    if (rows.length === 0) {
-                        tbody.innerHTML = `
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">
-                                    No se encontraron resultados
-                                </td>
-                            </tr>
-                        `;
-                        disableExport();
-                        return;
-                    }
-                    enableExport();
-                    rows.forEach(machine => {
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${machine.machine_name}</td>
-                                <td>${machine.internal_ip ?? 'N/A'}</td>
-                                <td>${machine.operations_system}</td>
-                                <td>${machine.kernel_version}</td>
-                                <td>${machine.latest_security_patch}</td>
-                            </tr>
-                        `;
+                    .then(res => res.json())
+                    .then(data => {
+                        let tbody = document.getElementById("patchedTable");
+                        if (!tbody) return;
+
+                        tbody.innerHTML = "";
+
+                        const rows = Array.isArray(data)
+                            ? data
+                            : (Array.isArray(data.data) ? data.data : []);
+
+                        if (rows.length === 0) {
+                            tbody.innerHTML = `
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">
+                                        No se encontraron resultados
+                                    </td>
+                                </tr>
+                            `;
+                            disableExport();
+                            return;
+                        }
+                        enableExport();
+                        rows.forEach(machine => {
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${machine.machine_name}</td>
+                                    <td>${machine.internal_ip ?? 'N/A'}</td>
+                                    <td>${machine.operations_system}</td>
+                                    <td>${machine.kernel_version}</td>
+                                    <td>${machine.latest_security_patch}</td>
+                                </tr>
+                            `;
+                        });
                     });
-                });
             });
         }
     });

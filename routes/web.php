@@ -22,6 +22,7 @@ use App\Http\Controllers\StorageController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\PowerLogController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\pages\AccountSettingsAccount;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -45,6 +46,10 @@ Route::post('/logout', function (Request $request) {
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
+    Route::put('/account-settings', [AccountSettingsAccount::class, 'update'])
+        ->name('profile.update');
+    Route::get('/account-settings', [AccountSettingsAccount::class, 'index'])
+        ->name('account.settings');
     Route::middleware('permission:viewPowerLogs')->group(function () {
         Route::get('/power-logs', [PowerLogController::class, 'index'])
             ->name('power-logs.index');
