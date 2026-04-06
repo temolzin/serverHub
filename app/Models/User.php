@@ -48,4 +48,9 @@ class User extends Authenticatable implements HasMedia
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public function getLastNameFormattedAttribute()
+    {
+        return $this->last_name ?: 'N/A';
+    }
 }
