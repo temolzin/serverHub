@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GcpMachine;
 use App\Models\Server;
+use App\Models\AuditLog;
 use App\Http\Controllers\ApplianceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -177,34 +178,39 @@ class ImportController extends Controller
         [$sheets, $sheetNames] = $this->readWorkbook($request->file('file'));
 
         $stats = $this->createStats(['servers_on', 'servers_off', 'gcp_machines', 'appliances_on', 'appliances_off']);
+        AuditLog::$suppressed = true;
 
-        foreach ($sheets as $i => $rows) {
+        try {
+            foreach ($sheets as $i => $rows) {
 
-            if ($rows->isEmpty()) {
-                continue;
-            }
-
-            $sheetName   = $sheetNames[$i] ?? null;
-            $headers     = $this->normalizeHeaders($rows->first()->toArray());
-            $isForcedOff = $this->isForcedOffSheet($sheetName);
-            $isAppliance = $this->isApplianceSheet($sheetName);
-
-            foreach ($rows->skip(1) as $row) {
-
-                $data = $this->buildData($headers, $row->toArray());
-                if (!$data) {
+                if ($rows->isEmpty()) {
                     continue;
                 }
 
-                $result = $isForcedOff
-                    ? [
-                        'bucket' => 'servers_off',
-                        'status' => $this->importForcedOffServerRow($data)
-                    ]
-                    : $this->resolveGeneralRowImport($headers, $data, $isAppliance);
+                $sheetName   = $sheetNames[$i] ?? null;
+                $headers     = $this->normalizeHeaders($rows->first()->toArray());
+                $isForcedOff = $this->isForcedOffSheet($sheetName);
+                $isAppliance = $this->isApplianceSheet($sheetName);
 
-                $this->incrementStats($stats, $result['bucket'], $result['status']);
+                foreach ($rows->skip(1) as $row) {
+
+                    $data = $this->buildData($headers, $row->toArray());
+                    if (!$data) {
+                        continue;
+                    }
+
+                    $result = $isForcedOff
+                        ? [
+                            'bucket' => 'servers_off',
+                            'status' => $this->importForcedOffServerRow($data)
+                        ]
+                        : $this->resolveGeneralRowImport($headers, $data, $isAppliance);
+
+                    $this->incrementStats($stats, $result['bucket'], $result['status']);
+                }
             }
+        } finally {
+            AuditLog::$suppressed = false;
         }
 
         return $this->respondWithImportResult(

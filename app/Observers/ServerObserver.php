@@ -9,6 +9,7 @@ class ServerObserver
 {
     public function updating(Server $server)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'server',
@@ -21,6 +22,7 @@ class ServerObserver
 
     public function deleting(Server $server)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'server',

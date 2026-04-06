@@ -9,6 +9,7 @@ class GcpMachineObserver
 {
     public function updating(GcpMachine $machine)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'gcp_machine',
@@ -21,6 +22,7 @@ class GcpMachineObserver
 
     public function deleting(GcpMachine $machine)
     {
+        if (AuditLog::$suppressed) return;
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'gcp_machine',
