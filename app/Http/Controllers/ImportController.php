@@ -317,7 +317,7 @@ class ImportController extends Controller
             : 1;
 
         $payload = [
-            'owner_id' => Auth::id(),
+            'owner_id' => null,
             'created_by' => Auth::id(),
             'type_application_id' => $typeApplicationId,
             'vm_according_to_the_vmware' => $vm ?: 'N/A',
@@ -386,7 +386,7 @@ class ImportController extends Controller
         ]);
 
         $payload = [
-            'owner_id' => Auth::id(),
+            'owner_id' => null,
             'created_by' => Auth::id(),
             'type_application_id' => 1,
             'vm_according_to_the_vmware' => $vm,
