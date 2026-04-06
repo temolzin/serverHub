@@ -30,7 +30,6 @@
   @include('layouts/sections/styles')
   @include('layouts/sections/scriptsIncludes')
 </head>
-
 <body>
   @yield('layoutContent')
   @if (session('error'))
