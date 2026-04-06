@@ -8,7 +8,9 @@
     <div class="card">
         <div class="card-body">
             <h4 class="mb-1"><i class="bx bx-user-circle text-primary me-2"></i>Mi perfil</h4>
-            <p class="mb-0 text-muted">Bienvenido, <strong>{{ auth()->user()->name }}</strong></p>
+            <p class="mb-0 text-muted">
+                Bienvenido, <strong>{{ auth()->user()->name . ' ' . auth()->user()->last_name }}</strong>
+            </p>
         </div>
     </div>
 </div>
@@ -32,7 +34,7 @@
                         <div style="max-width: 300px;">
                             <label class="btn btn-outline-primary mb-0">
                                 <i class="bx bx-upload me-1"></i> Actualizar imagen
-                                <input type="file" name="avatar" hidden>
+                                <input type="file" name="avatar" accept="image/*" hidden>
                             </label>
                         </div>
                     </div>

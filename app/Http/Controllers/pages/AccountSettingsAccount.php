@@ -20,7 +20,7 @@ class AccountSettingsAccount extends Controller
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'avatar' => 'nullable|image|max:2048'
+            'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048'
         ]);
 
         $user->update([
