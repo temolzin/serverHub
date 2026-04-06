@@ -283,7 +283,7 @@ class ImportController extends Controller
                 'alias3_ip' => $aliases[2] ?? 'N/A',
                 'ram_memory' => max(0, (int) $ramRaw),
                 'swap_memory' => max(0, (int) $swapRaw),
-            ]
+            ] + array_filter(['uuid' => $this->getValue($data, ['uuid'])])
         );
 
         return $machine->wasRecentlyCreated ? 'created' : 'updated';
@@ -353,6 +353,8 @@ class ImportController extends Controller
             'swap_memory' => 0,
         ];
 
+        $payload += array_filter(['uuid' => $this->getValue($data, ['uuid'])]);
+
         $server = $primaryIp
             ? Server::withTrashed()->updateOrCreate(
                 ['primary_ip_address' => $primaryIp],
@@ -413,6 +415,8 @@ class ImportController extends Controller
             'ram_memory' => 0,
             'swap_memory' => 0,
         ];
+
+        $payload += array_filter(['uuid' => $this->getValue($data, ['uuid'])]);
 
         $server = $primaryIp
             ? Server::withTrashed()->updateOrCreate(
