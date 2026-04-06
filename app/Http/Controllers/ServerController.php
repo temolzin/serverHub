@@ -193,7 +193,7 @@ class ServerController extends Controller
         ]);
 
         return $request->validate([
-            'owner_id' => 'required|exists:owners,id',
+            'owner_id' => 'nullable|exists:owners,id',
             'type_application_id' => 'required|exists:type_applications,id',
             'database_id' => 'nullable|exists:databases,id',
             'vm_according_to_the_vmware' => 'required|string|max:50',

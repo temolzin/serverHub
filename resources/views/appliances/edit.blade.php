@@ -13,7 +13,8 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-user me-1 text-primary"></i>Propietario</label>
-                            <select name="owner_id" class="form-select appliance-searchable-select" required>
+                            <select name="owner_id" class="form-select appliance-searchable-select">
+                                <option value="" {{ is_null($server->owner_id) ? 'selected' : '' }}>N/A</option>
                                 @foreach ($owners as $owner)
                                     <option value="{{ $owner->id }}" {{ $server->owner_id == $owner->id ? 'selected' : '' }}>
                                         {{ $owner->name }} {{ $owner->last_name }}

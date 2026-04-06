@@ -15,9 +15,10 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start">
                                 <i class="bx bx-user me-1 text-primary"></i>
-                                Propietario (obligatorio)
+                                Propietario
                             </label>
-                            <select name="owner_id" class="form-select server-searchable-select" data-placeholder="Buscar propietario..." required>
+                            <select name="owner_id" class="form-select server-searchable-select" data-placeholder="Buscar propietario...">
+                                <option value="" {{ is_null($server->owner_id) ? 'selected' : '' }}>N/A</option>
                                 @foreach ($owners as $owner)
                                     <option value="{{ $owner->id }}" {{ $server->owner_id == $owner->id ? 'selected' : '' }}>
                                         {{ $owner->name }} {{ $owner->last_name }}
@@ -134,8 +135,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i>Actualizar</button>
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i>Actualizar</button>
                 </div>
             </form>
         </div>

@@ -195,7 +195,7 @@ class GcpMachineController extends Controller
         ]);
 
         return $request->validate([
-            'owner_id' => 'required|exists:owners,id',
+            'owner_id' => 'nullable|exists:owners,id',
             'project_name' => 'required|string|max:255',
             'type_application_id' => 'nullable|exists:type_applications,id',
             'application_id' => 'nullable|exists:applications,id',

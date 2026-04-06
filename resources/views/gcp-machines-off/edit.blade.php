@@ -16,8 +16,9 @@
                 <div class="modal-body text-start">
                     <div class="row">
                         <div class="col-md-6 mb-4">
-                            <label class="form-label"><i class="bx bx-user me-1 text-primary"></i>Propietario (obligatorio)</label>
-                            <select name="owner_id" class="form-select gcp-off-searchable-select" required>
+                            <label class="form-label"><i class="bx bx-user me-1 text-primary"></i>Propietario</label>
+                            <select name="owner_id" class="form-select gcp-off-searchable-select">
+                                <option value="" {{ is_null($machine->owner_id) ? 'selected' : '' }}>N/A</option>
                                 @foreach ($owners as $owner)
                                     <option value="{{ $owner->id }}" {{ $machine->owner_id == $owner->id ? 'selected' : '' }}>
                                         {{ $owner->name }} {{ $owner->last_name }}
