@@ -20,23 +20,15 @@
                     <h6 class="fw-bold text-primary mb-3 d-flex align-items-center gap-1">
                         <i class="bx bx-lock-alt"></i> Permisos
                     </h6>
-                    <div class="row g-3">
-                        @foreach ($permissions as $group => $groupPermissions)
+                    <div class="row">
+                        @foreach ($permissions as $permission)
                             <div class="col-md-6">
-                                <div class="border rounded-3 p-3 shadow-sm h-100">
-                                    <div class="fw-semibold text-dark mb-2">
-                                        {{ ucfirst($group) }}
-                                    </div>
-                                    @foreach ($groupPermissions as $permission)
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" name="permissions[]"
-                                                value="{{ $permission->name }}" id="perm_edit_{{ $permission->id }}_{{ $role->id }}"
-                                                {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
-                                            <label class="form-check-label small" for="perm_edit_{{ $permission->id }}_{{ $role->id }}">
-                                                {{ $permission->description ?? $permission->name }}
-                                            </label>
-                                        </div>
-                                    @endforeach
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->name }}" id="perm_edit_{{ $permission->id }}_{{ $role->id }}" {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
+                                    <label class="form-check-label small"
+                                        for="perm_edit_{{ $permission->id }}_{{ $role->id }}">
+                                        {{ $permission->description ?? $permission->name }}
+                                    </label>
                                 </div>
                             </div>
                         @endforeach

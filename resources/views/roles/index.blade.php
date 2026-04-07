@@ -41,10 +41,14 @@
                                                     <button class="dropdown-item" data-bs-toggle="modal"
                                                         data-bs-target="#editRoleModal{{ $role->id }}">
                                                         <i class="bx bx-edit-alt me-1"></i> Editar
-                                                    </button>
-                                                    <button class="dropdown-item text-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#deleteRoleModal{{ $role->id }}">
-                                                        <i class="bx bx-trash me-1"></i> Eliminar
+                                                    <button
+                                                        class="dropdown-item {{ $role->users->count() ? 'text-secondary' : 'text-danger' }}"
+                                                        {{ $role->users->count() ? 'disabled' : '' }}
+                                                        data-bs-toggle="{{ $role->users->count() ? '' : 'modal' }}"
+                                                        data-bs-target="{{ $role->users->count() ? '' : '#deleteRoleModal'.$role->id }}"
+                                                        title="{{ $role->users->count() ? 'No se puede eliminar porque está en uso' : 'Eliminar rol' }}">
+                                                        <i class="bx {{ $role->users->count() ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
+                                                        {{ $role->users->count() ? 'En uso' : 'Eliminar' }}
                                                     </button>
                                                 </div>
                                             </div>

@@ -19,33 +19,22 @@
                     <h6 class="fw-bold text-primary mb-3 d-flex align-items-center gap-1">
                         <i class="bx bx-lock-alt"></i> Permisos
                     </h6>
-                    <div class="row g-6">
-                        @foreach ($permissions as $group => $groupPermissions)
-                            <div class="col-md-12">
-                                <div class="border rounded-3 p-3 h-100 shadow-sm">
-                                    <div class="fw-semibold text-dark mb-2">
-                                        {{ $group }}
-                                    </div>
-                                    @foreach ($groupPermissions as $permission)
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->name }}" id="perm_{{ $permission->id }}">
-                                            <label class="form-check-label small" for="perm_{{ $permission->id }}">
-                                                {{ $permission->description ?? $permission->name }}
-                                            </label>
-                                        </div>
-                                    @endforeach
+                    <div class="row">
+                        @foreach ($permissions as $permission)
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->name }}" id="perm_{{ $permission->id }}">
+                                    <label class="form-check-label small" for="perm_{{ $permission->id }}">
+                                        {{ $permission->description ?? $permission->name }}
+                                    </label>
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary d-flex align-items-center gap-1">
-                        <i class="bx bx-save"></i> Guardar Rol
-                    </button>
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary d-flex align-items-center gap-1"><i class="bx bx-save"></i> Guardar Rol</button>
                 </div>
             </form>
         </div>

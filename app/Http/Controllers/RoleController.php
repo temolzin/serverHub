@@ -11,10 +11,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-
-        $permissions = Permission::all()->groupBy(function ($permission) {
-            return explode(' ', $permission->name)[1] ?? 'General';
-        });
+        $permissions = Permission::all();
 
         return view('roles.index', compact('roles', 'permissions'));
     }
@@ -85,8 +82,8 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
-        if ($role->users()->count() > 0) {
-            return redirect()->back()->with('swal_error', 'No puedes eliminar un rol con usuarios asignados.');
+        if ($role->users()->exists()) {
+            return redirect()->back()->with('swal_error', 'Este rol está asignado a uno o más usuarios.');
         }
 
         $role->delete();

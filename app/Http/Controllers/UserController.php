@@ -64,8 +64,7 @@ class UserController extends Controller
 
         $user->syncRoles([$request->role]);
 
-        return redirect()->route('users.index')
-            ->with('success', 'Usuario actualizado correctamente');
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
     public function destroy(User $user)
@@ -76,6 +75,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return back()->with('success', 'Usuario eliminado correctamente');
+        return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente.');
     }
 }
