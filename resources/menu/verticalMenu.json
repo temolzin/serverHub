@@ -11,7 +11,7 @@
             "name": "Usuarios",
             "slug": "users",
             "icon": "menu-icon tf-icons bx bx-user",
-            "role": "Admin"
+            "permission": "viewUser"
         },
         {
             "url": "/roles",
