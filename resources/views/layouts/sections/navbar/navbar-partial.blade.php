@@ -35,7 +35,7 @@
                data-bs-auto-close="outside"
                aria-expanded="false">
                 <div class="avatar avatar-online">
-                    <img src="{{ Auth::user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/logo.jpeg') }}" class="w-px-40 h-auto rounded-circle" style="object-fit: cover;">
+                    <img src="{{ Auth::user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/photoDefault.jpeg') }}" class="w-px-40 h-auto rounded-circle" style="object-fit: cover;">
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
@@ -44,7 +44,7 @@
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar avatar-online">
-                                    <img src="{{ Auth::user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/logo.jpeg') }}" class="w-px-40 h-auto rounded-circle" style="object-fit: cover;">
+                                    <img src="{{ Auth::user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/photoDefault.jpeg') }}" class="w-px-40 h-auto rounded-circle" style="object-fit: cover;">
                                 </div>
                             </div>
                             <div class="flex-grow-1">
