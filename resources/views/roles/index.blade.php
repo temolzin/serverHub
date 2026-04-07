@@ -65,18 +65,25 @@
     @include('roles.create')
 @endsection
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Listo!',
-                    text: '{{ session('success') }}',
-                    confirmButtonText: 'OK',
-                    timer: 4000,
-                    timerProgressBar: true
-                });
-            @endif
-        });
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Listo!',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'Perfecto'
+            });
+        @endif
+
+        @if (session('swal_error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'No se puede eliminar',
+                text: '{{ session('swal_error') }}',
+                confirmButtonText: 'Entendido'
+            });
+        @endif
+    });
+</script>
 @endpush

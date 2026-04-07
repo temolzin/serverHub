@@ -18,7 +18,7 @@
             "name": "Roles",
             "slug": "roles",
             "icon": "menu-icon tf-icons bx bx-shield",
-            "role": "Admin"
+            "permission": "viewRole"
         },
         {
             "name": "Propietarios",

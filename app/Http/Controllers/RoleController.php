@@ -83,13 +83,14 @@ class RoleController extends Controller
             ->with('success', 'Rol actualizado');
     }
 
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        $role = Role::findOrFail($id);
+        if ($role->users()->count() > 0) {
+            return redirect()->back()->with('swal_error', 'No puedes eliminar un rol con usuarios asignados.');
+        }
 
         $role->delete();
 
-        return redirect()->route('roles.index')
-            ->with('success', 'Rol eliminado');
+        return redirect()->back()->with('success', 'Rol eliminado correctamente.');
     }
 }
