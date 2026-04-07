@@ -28,7 +28,7 @@
                                 @foreach ($users as $user)
                                     <tr>
                                         <td>{{ $user->name }}</td>
-                                        <td>{{ $user->last_name }}</td>
+                                        <td>{{ $user->last_name_formatted }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td class="text-end">
                                             <div class="dropdown">

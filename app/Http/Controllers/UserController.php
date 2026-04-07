@@ -10,7 +10,10 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::with('roles')->orderBy('name')->get();
+        $users = User::with('roles')
+            ->where('id', '!=', auth()->id())
+            ->orderBy('name')
+            ->get();
         $permissions = Permission::all()->groupBy(function ($permission) {
             return explode(' ', $permission->name)[1] ?? 'General';
         });
