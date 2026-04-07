@@ -14,8 +14,8 @@ class RoleSeeder extends Seeder
     {
         $roleAdmin = Role::firstOrCreate([
             'name' => 'Admin',
-
             ]);
+
         $permissions = [
             [
                 'name' => 'viewUser',
@@ -61,6 +61,10 @@ class RoleSeeder extends Seeder
                 'name' => 'viewAuditLogs',
                 'description' => 'Permite ver el historial de auditoría del sistema.',
             ],
+            [
+                'name' => 'viewRole',
+                'description' => 'Permite ver los roles.'
+            ]
         ];
 
         foreach ($permissions as $perm) {

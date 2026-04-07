@@ -23,6 +23,7 @@ use App\Http\Controllers\ExportController;
 use App\Http\Controllers\PowerLogController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\pages\AccountSettingsAccount;
+use App\Http\Controllers\RoleController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -136,6 +137,9 @@ Route::middleware('auth')->group(function () {
         ->resource('instances', InstanceController::class);
     Route::middleware('permission:viewStorage')
         ->resource('storages', StorageController::class);
+    Route::middleware('permission:viewRole')->group(function () {
+        Route::resource('roles', RoleController::class);
+    });
 
     Route::middleware('role:Admin')->group(function () {
         Route::get('/users/{user}/permissions', [UserController::class, 'editPermissions'])

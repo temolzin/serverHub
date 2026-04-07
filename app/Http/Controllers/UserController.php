@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -14,12 +14,11 @@ class UserController extends Controller
             ->where('id', '!=', auth()->id())
             ->orderBy('name')
             ->get();
-        $permissions = Permission::all()->groupBy(function ($permission) {
-            return explode(' ', $permission->name)[1] ?? 'General';
-        });
-        return view('users.index', compact('users', 'permissions'));
-    }
 
+        $roles = Role::all();
+
+        return view('users.index', compact('users', 'roles'));
+    }
 
     public function store(Request $request)
     {
@@ -28,10 +27,15 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
+            'role' => 'required'
         ]);
 
+        $validated['password'] = bcrypt($validated['password']);
+
         $user = User::create($validated);
-        $user->syncPermissions($request->permissions ?? []);
+
+        $user->assignRole($request->role);
+
         return redirect()->route('users.index')
             ->with('success', 'Usuario creado correctamente');
     }
@@ -43,6 +47,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6',
+            'role' => 'required'
         ]);
 
         $data = [
@@ -52,11 +57,13 @@ class UserController extends Controller
         ];
 
         if (!empty($validated['password'])) {
-            $data['password'] = $validated['password'];
+            $data['password'] = bcrypt($validated['password']);
         }
 
         $user->update($data);
-        $user->syncPermissions($request->permissions ?? []);
+
+        $user->syncRoles([$request->role]);
+
         return redirect()->route('users.index')
             ->with('success', 'Usuario actualizado correctamente');
     }
@@ -66,7 +73,9 @@ class UserController extends Controller
         if ($user->id === auth()->id()) {
             return back()->with('error', 'No puedes eliminar tu propio usuario.');
         }
+
         $user->delete();
+
         return back()->with('success', 'Usuario eliminado correctamente');
     }
 }

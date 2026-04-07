@@ -14,6 +14,13 @@
             "role": "Admin"
         },
         {
+            "url": "/roles",
+            "name": "Roles",
+            "slug": "roles",
+            "icon": "menu-icon tf-icons bx bx-shield",
+            "role": "Admin"
+        },
+        {
             "name": "Propietarios",
             "icon": "menu-icon icon-base bx bx-id-card",
             "slug": "owners",
