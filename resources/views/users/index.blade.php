@@ -21,6 +21,7 @@
                                     <th>Nombre</th>
                                     <th>Apellido</th>
                                     <th>Correo</th>
+                                    <th>Rol</th>
                                     <th class="text-end">Acciones</th>
                                 </tr>
                             </thead>
@@ -30,6 +31,7 @@
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->last_name_formatted }}</td>
                                         <td>{{ $user->email }}</td>
+                                        <td>{{ $user->roles->pluck('name')->first() ?? 'Sin rol' }}</td>
                                         <td class="text-end">
                                             <div class="dropdown">
                                                 <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>

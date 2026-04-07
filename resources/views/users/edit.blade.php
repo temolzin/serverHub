@@ -1,76 +1,64 @@
-<div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal fade" id="editUserModal{{ $user->id }}" tabindex="-1">
+    <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
             <form action="{{ route('users.update', $user) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-header">
                     <h5 class="modal-title d-flex align-items-center gap-2">
-                        <i class="bx bx-edit text-primary"></i>Editar Usuario
+                        <i class="bx bx-edit text-primary"></i> Editar Usuario
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
+                    <div class="row g-2">
+                        <div class="col-12">
+                            <div class="mb-2">
                                 <label class="form-label">
-                                    <i class="bx bx-user me-1 text-primary"></i>Nombre
+                                    <i class="bx bx-user me-1 text-primary"></i> Nombre
                                 </label>
-                                <input type="text" name="name" class="form-control" placeholder="Ejemplo: Juan" value="{{ old('name', $user->name) }}" required>
+                                <input type="text" name="name" class="form-control"
+                                    value="{{ old('name', $user->name) }}" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-label">
-                                    <i class="bx bx-id-card me-1 text-primary"></i>Apellido
+                                    <i class="bx bx-id-card me-1 text-primary"></i> Apellido
                                 </label>
-                                <input type="text" name="last_name" class="form-control" placeholder="Ejemplo: Perez" value="{{ old('last_name', $user->last_name) }}" required>
+                                <input type="text" name="last_name" class="form-control"
+                                    value="{{ old('last_name', $user->last_name) }}" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-label">
-                                    <i class="bx bx-envelope me-1 text-primary"></i>Correo
+                                    <i class="bx bx-envelope me-1 text-primary"></i> Correo
                                 </label>
-                                <input type="email" name="email" class="form-control" placeholder="Ejemplo: correo@empresa.com" value="{{ old('email', $user->email) }}" required>
+                                <input type="email" name="email" class="form-control"
+                                    value="{{ old('email', $user->email) }}" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label class="form-label">
-                                    <i class="bx bx-lock me-1 text-primary"></i>Nueva Contraseña
+                                    <i class="bx bx-lock me-1 text-primary"></i> Nueva Contraseña
                                 </label>
-                                <input type="password" name="password" class="form-control">
-                                <small class="text-muted">
-                                    Dejar vacío si no deseas cambiarla
-                                </small>
+                                <input type="password" name="password" class="form-control" placeholder="********">
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-primary mb-3">
-                                <i class="bx bx-lock-alt me-1"></i>Permisos
-                            </h6>
-                            <div class="row">
-                                @foreach ($permissions as $group => $groupPermissions)
-                                    <div class="col-6 mb-3">
-                                        <small class="fw-bold text-secondary">
-                                            {{ ucfirst($group) }}
-                                        </small>
-                                        @foreach ($groupPermissions as $permission)
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"name="permissions[]" value="{{ $permission->name }}"
-                                                       {{ $user->hasPermissionTo($permission->name) ? 'checked' : '' }}>
-                                                <label class="form-check-label">
-                                                    {{ $permission->description }}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endforeach
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">
+                                    <i class="bx bx-user-check me-1 text-primary"></i> Rol
+                                </label>
+                                <select name="role" class="form-select" required>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->name }}"
+                                            {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bx bx-save me-1"></i>Actualizar Usuario
-                    </button>
+                    <button type="submit" class="btn btn-primary"><i class="bx bx-save me-1"></i> Actualizar Usuario</button>
                 </div>
             </form>
         </div>
