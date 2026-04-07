@@ -10,7 +10,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $user1 = User::updateOrCreate(
+        $adminJose = User::updateOrCreate(
             ['email' => 'jose@gmail.com'],
             [
                 'name' => 'Jose',
@@ -19,9 +19,9 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-        $user1->syncRoles(['Admin']);
+        $adminJose->syncRoles(['Admin']);
 
-        $user2 = User::updateOrCreate(
+        $adminAna = User::updateOrCreate(
             ['email' => 'ana@gmail.com'],
             [
                 'name' => 'Ana',
@@ -30,6 +30,6 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-        $user2->syncRoles(['Admin']);
+        $adminAna->syncRoles(['Admin']);
     }
 }
