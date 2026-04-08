@@ -48,7 +48,13 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#showDatabaseModal{{ $database->id }}"><i class="bx bx-show me-1"></i> Ver</a>
                                                     <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#editDatabaseModal{{ $database->id }}"><i class="bx bx-edit-alt me-1"></i> Editar</a>
-                                                    <a class="dropdown-item text-danger" href="javascript:;" data-bs-toggle="modal" data-bs-target="#deleteDatabaseModal{{ $database->id }}"><i class="bx bx-trash me-1"></i> Eliminar</a>
+                                                    <a class="dropdown-item {{ $database->is_in_use ? 'text-secondary pe-none' : 'text-danger' }}" href="javascript:;"
+                                                        data-bs-toggle="{{ $database->is_in_use ? '' : 'modal' }}"
+                                                        data-bs-target="{{ $database->is_in_use ? '' : '#deleteDatabaseModal'.$database->id }}"
+                                                        title="{{ $database->is_in_use ? 'No se puede eliminar porque está en uso' : 'Eliminar base de datos' }}">
+                                                        <i class="bx {{ $database->is_in_use ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
+                                                        {{ $database->is_in_use ? 'En uso' : 'Eliminar' }}
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>

@@ -42,9 +42,15 @@
                                                     <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#editOwnerModal{{ $owner->id }}">
                                                         <i class="bx bx-edit-alt me-1"></i> Editar
                                                     </a>
-                                                    <a class="dropdown-item text-danger" href="javascript:;" data-bs-toggle="modal" data-bs-target="#deleteOwnerModal{{ $owner->id }}">
-                                                        <i class="bx bx-trash me-1"></i> Eliminar
-                                                    </a>
+                                                    <button
+                                                        class="dropdown-item {{ $owner->is_in_use ? 'text-secondary' : 'text-danger' }}"
+                                                        {{ $owner->is_in_use ? 'disabled' : '' }}
+                                                        data-bs-toggle="{{ $owner->is_in_use ? '' : 'modal' }}"
+                                                        data-bs-target="{{ $owner->is_in_use ? '' : '#deleteOwnerModal'.$owner->id }}"
+                                                        title="{{ $owner->is_in_use ? 'No se puede eliminar porque está en uso' : 'Eliminar propietario' }}">
+                                                        <i class="bx {{ $owner->is_in_use ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
+                                                        {{ $owner->is_in_use ? 'En uso' : 'Eliminar' }}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </td>

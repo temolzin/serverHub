@@ -38,4 +38,9 @@ class TypeApplication extends Model
             default => ucfirst($this->type_application),
         };
     }
+
+    public function getIsInUseAttribute()
+    {
+        return $this->servers()->exists();
+    }
 }

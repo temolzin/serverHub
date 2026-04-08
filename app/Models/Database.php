@@ -61,4 +61,9 @@ class Database extends Model
             default => 'secondary',
         };
     }
+
+    public function getIsInUseAttribute()
+    {
+        return $this->servers()->exists();
+    }
 }

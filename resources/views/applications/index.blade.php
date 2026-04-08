@@ -55,7 +55,14 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showApplicationModal{{ $application->id }}"><i class="bx bx-show me-1"></i>Ver</button>
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editApplicationModal{{ $application->id }}"> <i class="bx bx-edit-alt me-1"></i> Editar</button>
-                                                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteApplicationModal{{ $application->id }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
+                                                    <button class="dropdown-item {{ $application->is_in_use ? 'text-secondary' : 'text-danger' }}"
+                                                        {{ $application->is_in_use ? 'disabled' : '' }}
+                                                        data-bs-toggle="{{ $application->is_in_use ? '' : 'modal' }}"
+                                                        data-bs-target="{{ $application->is_in_use ? '' : '#deleteApplicationModal'.$application->id }}"
+                                                        title="{{ $application->is_in_use ? 'No se puede eliminar porque está en uso' : 'Eliminar aplicación' }}">
+                                                        <i class="bx {{ $application->is_in_use ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
+                                                        {{ $application->is_in_use ? 'En uso' : 'Eliminar' }}
+                                                    </button>
                                                 </div>
                                             </div>
                                         </td>
