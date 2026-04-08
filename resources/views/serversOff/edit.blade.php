@@ -58,9 +58,9 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-server me-1 text-primary"></i>VM (VMware) (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-server me-1 text-primary"></i>VM (VMware)</label>
                             <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01"
-                                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" required>
+                                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-check-circle me-1 text-primary"></i>Estado (obligatorio)</label>
@@ -77,47 +77,47 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria (opcional)</label>
                             <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.15"
-                                value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" data-exclude="{{ $server->id }}">
+                                value="{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}" data-exclude="{{ $server->id }}" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-user me-1 text-primary"></i>IP usuario</label>
-                            <input type="text" name="ip_user" class="form-control" value="{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}">
+                            <input type="text" name="ip_user" class="form-control" value="{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-radar me-1 text-primary"></i>IP monitoreo</label>
-                            <input type="text" name="ip_monitoring" class="form-control" value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}">
+                            <input type="text" name="ip_monitoring" class="form-control" value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno</label>
                             <input type="text" name="environment" class="form-control" placeholder="Ej: Producción"
-                                value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" required>
+                                value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-building me-1 text-primary"></i>Datacenter (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-building me-1 text-primary"></i>Datacenter</label>
                             <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01"
-                                value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" required>
+                                value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-chip me-1 text-primary"></i>Sistema operativo (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-chip me-1 text-primary"></i>Sistema operativo</label>
                             <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019"
-                                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" required>
+                                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-code me-1 text-primary"></i>Versión interna (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-code me-1 text-primary"></i>Versión interna</label>
                             <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
-                                value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" required>
+                                value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-desktop me-1 text-primary"></i>Hostname interno (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-desktop me-1 text-primary"></i>Hostname interno</label>
                             <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-app-01"
-                                value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" required>
+                                value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>
                             <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8192" value="{{ $server->ram_memory ?? 0 }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (MB) (obligatorio)</label>
+                            <label class="form-label d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (MB)</label>
                             <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" value="{{ $server->swap_memory ?? 0 }}" required>
                         </div>
                         <div class="col-md-6 mb-4">

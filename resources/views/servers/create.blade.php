@@ -52,12 +52,12 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-desktop me-1 text-primary"></i>VM (VMware)</label>
-                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" pattern="[A-Za-z0-9\-]+" maxlength="35" required>
+                            <label class="form-label"><i class="bx bx-desktop me-1 text-primary"></i>VM (VMware) (obligatorio)</label>
+                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria</label>
-                            <input type="text" name="primary_ip_address" class="form-control" placeholder="Ej: 192.168.1.10" pattern="^(\d{1,3}\.){3}\d{1,3}$" required>
+                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria (obligatorio)</label>
+                            <input type="text" name="primary_ip_address" class="form-control" placeholder="Ej: 192.168.1.10" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-globe me-1 text-primary"></i>DNS</label>
@@ -65,31 +65,31 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-user me-1 text-primary"></i>IP usuario</label>
-                            <input type="text" name="ip_user" class="form-control" pattern="^(\d{1,3}\.){3}\d{1,3}$">
+                            <input type="text" name="ip_user" class="form-control" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-radar me-1 text-primary"></i>IP monitoreo</label>
-                            <input type="text" name="ip_monitoring" class="form-control" pattern="^(\d{1,3}\.){3}\d{1,3}$">
+                            <input type="text" name="ip_monitoring" class="form-control" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-cube me-1 text-primary"></i>Entorno (obligatorio)</label>
-                            <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" pattern="[A-Za-z\s]+" maxlength="25" required>
+                            <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-server me-1 text-primary"></i>Datacenter (obligatorio)</label>
-                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" pattern="[A-Za-z0-9\-]+" maxlength="20" required>
+                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo</label>
-                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" pattern="[A-Za-z0-9\.\s]+" maxlength="35" required>
+                            <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo (obligatorio)</label>
+                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-code-block me-1 text-primary"></i>Versión interna</label>
-                            <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" pattern="^[0-9]+(\.[0-9]+)*$" maxlength="20" required>
+                            <label class="form-label"><i class="bx bx-code-block me-1 text-primary"></i>Versión interna (obligatorio)</label>
+                            <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>Hostname interno</label>
-                            <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" pattern="[A-Za-z0-9\-]+" maxlength="35" required>
+                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>Hostname interno (obligatorio)</label>
+                            <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
@@ -107,7 +107,7 @@
                         </div>
                         <div class="col-md-12">
                             <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>Otras IPs</label>
-                            <textarea name="other_ips" rows="2" class="form-control" placeholder="IPs separadas por coma" pattern="^(\s*\d{1,3}(\.\d{1,3}){3}\s*)(,\s*\d{1,3}(\.\d{1,3}){3}\s*)*$"></textarea>
+                            <textarea name="other_ips" rows="2" class="form-control" placeholder="IPs separadas por coma o N/A"></textarea>
                         </div>
                         <div class="col-12">
                             <label class="form-label"><i class="bx bx-comment-detail me-1 text-primary"></i>Comentarios</label>

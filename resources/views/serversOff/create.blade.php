@@ -55,7 +55,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-server me-1 text-primary"></i>VM (VMware) (obligatorio)</label>
-                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" required>
+                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-check-circle me-1 text-primary"></i>Estado (obligatorio)</label>
@@ -66,39 +66,39 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-globe me-1 text-primary"></i>DNS</label>
-                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com">
+                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com" maxlength="100">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria (opcional)</label>
-                            <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.10">
+                            <input type="text" name="primary_ip_address" class="form-control ip-check" placeholder="Ej: 192.168.1.10" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-user me-1 text-primary"></i>IP usuario</label>
-                            <input type="text" name="ip_user" class="form-control">
+                            <input type="text" name="ip_user" class="form-control" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-radar me-1 text-primary"></i>IP monitoreo</label>
-                            <input type="text" name="ip_monitoring" class="form-control">
+                            <input type="text" name="ip_monitoring" class="form-control" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno (obligatorio)</label>
-                            <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" required>
+                            <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-building me-1 text-primary"></i>Datacenter (obligatorio)</label>
-                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" required>
+                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-chip me-1 text-primary"></i>Sistema operativo (obligatorio)</label>
-                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" required>
+                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-code me-1 text-primary"></i>Versión interna (obligatorio)</label>
-                            <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" required>
+                            <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-desktop me-1 text-primary"></i>Hostname interno (obligatorio)</label>
-                            <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" required>
+                            <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>

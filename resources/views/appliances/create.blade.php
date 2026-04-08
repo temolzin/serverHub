@@ -37,24 +37,24 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold"><i class="bx bx-desktop me-1 text-primary"></i>VM (VMware)</label>
-                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: apliance-01" required>
+                            <label class="form-label fw-semibold"><i class="bx bx-desktop me-1 text-primary"></i>VM (VMware) (obligatorio)</label>
+                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: apliance-01" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria</label>
-                            <input type="text" name="primary_ip_address" class="form-control" placeholder="Ej: 192.168.1.10">
+                            <input type="text" name="primary_ip_address" class="form-control" placeholder="Ej: 192.168.1.10" pattern="(\d{1,3}\.){3}\d{1,3}|[Nn]/[Aa]">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold"><i class="bx bx-globe me-1 text-primary"></i>DNS</label>
-                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: apliance.empresa.com">
+                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: apliance.empresa.com" maxlength="100">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-server me-1 text-primary"></i>Datacenter (obligatorio)</label>
-                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: Tultitlan" required>
+                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: Tultitlan" maxlength="100" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo</label>
-                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: CentOS 7" required>
+                            <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo (obligatorio)</label>
+                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: CentOS 7" maxlength="100" required>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label"><i class="bx bx-shield-quarter me-1 text-primary"></i>Último parche</label>
