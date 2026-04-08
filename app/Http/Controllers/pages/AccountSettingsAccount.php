@@ -24,31 +24,38 @@ class AccountSettingsAccount extends Controller
             'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:2048'
         ]);
 
-        $user->name = $request->name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-
-        if ($request->filled('password')) {
-
-            if (!Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors([
-                    'current_password' => 'La contraseña actual es incorrecta'
-                ]);
-            }
-
-            $request->validate([
-                'password' => 'string|min:8|confirmed'
-            ]);
-
-            $user->password = Hash::make($request->password);
-        }
+        $user->update([
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+        ]);
 
         if ($request->file('avatar')) {
             $user->addMediaFromRequest('avatar')->toMediaCollection('avatars');
         }
 
-        $user->save();
-
         return back()->with('success', 'Perfil actualizado correctamente');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors([
+                'current_password' => 'La contraseña actual no es correcta'
+            ]);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return back()->with('success', 'Contraseña actualizada correctamente');
     }
 }
