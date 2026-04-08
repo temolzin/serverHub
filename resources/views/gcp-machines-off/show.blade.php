@@ -133,7 +133,7 @@
                     <div class="col-md-6 mb-4">
                         <label class="form-label fw-semibold"><i class="bx bx-user-check me-1 text-primary"></i>Creado por</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" value="{{ auth()->user()->name ?? '' }} {{ auth()->user()->last_name ?? '' }}" disabled>
+                            <input type="text" class="form-control" value="{{ trim(($machine->creator->name ?? '') . ' ' . ($machine->creator->last_name ?? '')) ?: 'N/A' }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
