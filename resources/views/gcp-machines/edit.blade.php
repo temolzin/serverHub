@@ -87,15 +87,15 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-link me-1 text-primary"></i>Alias IP</label>
-                            <input type="text" name="alias_ip" class="form-control" pattern="(\d{1,3}\.){3}\d{1,3}|N/A|n/a" value="{{ $machine->alias_ip }}">
+                            <input type="text" name="alias_ip" class="form-control" pattern="((\d{1,3}\.){3}\d{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?)|N/A|n/a" value="{{ $machine->alias_ip }}">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-link-alt me-1 text-primary"></i>Alias 2 IP</label>
-                            <input type="text" name="alias2_ip" class="form-control" pattern="(\d{1,3}\.){3}\d{1,3}|N/A|n/a" value="{{ $machine->alias2_ip }}">
+                            <input type="text" name="alias2_ip" class="form-control" pattern="((\d{1,3}\.){3}\d{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?)|N/A|n/a" value="{{ $machine->alias2_ip }}">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-link-alt me-1 text-primary"></i>Alias 3 IP</label>
-                            <input type="text" name="alias3_ip" class="form-control" pattern="(\d{1,3}\.){3}\d{1,3}|N/A|n/a" value="{{ $machine->alias3_ip }}">
+                            <input type="text" name="alias3_ip" class="form-control" pattern="((\d{1,3}\.){3}\d{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?)|N/A|n/a" value="{{ $machine->alias3_ip }}">
                         </div>
                         <div class="col-md-12 mb-4">
                             <label class="form-label"><i class="bx bx-data me-1 text-primary"></i>Kernel</label>
