@@ -90,7 +90,7 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Seleccionar archivo</label>
+                            <label class="form-label">Seleccionar archivo (obligatorio)</label>
                             <input type="file" name="file" class="form-control" accept=".xlsx,.xls" required>
                         </div>
                     </div>

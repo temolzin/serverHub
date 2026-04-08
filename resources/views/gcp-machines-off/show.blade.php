@@ -130,6 +130,16 @@
                             <textarea class="form-control" rows="2" disabled>{{ filled($machine->other_ips) ? $machine->other_ips : 'N/A' }}</textarea>
                         </div>
                     </div>
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold"><i class="bx bx-user-check me-1 text-primary"></i>Creado por</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="{{ trim(($machine->creator->name ?? '') . ' ' . ($machine->creator->last_name ?? '')) ?: 'N/A' }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold"><i class="bx bx-calendar-plus me-1 text-primary"></i>Fecha de creacion</label>
+                        <input type="text" class="form-control" value="{{ $machine->created_at ? $machine->created_at->format('d/m/Y h:i A') : '—' }}" disabled>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

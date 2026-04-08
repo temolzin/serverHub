@@ -27,8 +27,8 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label"><i class="bx bx-folder me-1 text-primary"></i>Nombre del proyecto (obligatorio)</label>
-                            <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-dr" pattern="[A-Za-z0-9\-]+" value="{{ $machine->project_name }}" maxlength="30" required>
+                            <label class="form-label"><i class="bx bx-folder me-1 text-primary"></i>Nombre del proyecto</label>
+                            <input type="text" name="project_name" class="form-control" placeholder="Ej: proyecto-finanzas-dr" value="{{ $machine->project_name }}" maxlength="100" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-layer me-1 text-primary"></i>Tipo de aplicacion</label>
@@ -71,52 +71,52 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label"><i class="bx bx-globe me-1 text-primary"></i>Entorno (obligatorio)</label>
-                            <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo" pattern="[A-Za-z\s]+" maxlength="25" value="{{ $machine->environment }}" required>
+                            <label class="form-label"><i class="bx bx-globe me-1 text-primary"></i>Entorno</label>
+                            <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo" maxlength="50" value="{{ $machine->environment }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label"><i class="bx bx-desktop me-1 text-primary"></i>Nombre máquina (obligatorio)</label>
-                            <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-gcp-off-01" pattern="[A-Za-z0-9\-]+" maxlength="35" value="{{ $machine->machine_name }}" required>
+                            <label class="form-label"><i class="bx bx-desktop me-1 text-primary"></i>Nombre máquina</label>
+                            <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-gcp-off-01" maxlength="50" value="{{ $machine->machine_name }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label"><i class="bx bx-chip me-1 text-primary"></i>Nombre interno (obligatorio)</label>
-                            <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: gcp-int-off-01" maxlength="35" value="{{ $machine->machine_internal_name }}" required>
+                            <label class="form-label"><i class="bx bx-chip me-1 text-primary"></i>Nombre interno</label>
+                            <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: gcp-int-off-01" maxlength="50" value="{{ $machine->machine_internal_name }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label"><i class="bx bx-cog me-1 text-primary"></i>Sistema operativo (obligatorio)</label>
-                            <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" pattern="[A-Za-z0-9\.\s]+" maxlength="35" value="{{ $machine->operations_system }}" required>
+                            <label class="form-label"><i class="bx bx-cog me-1 text-primary"></i>Sistema operativo</label>
+                            <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" maxlength="50" value="{{ $machine->operations_system }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP interna (obligatorio)</label>
-                            <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 10.0.0.15" pattern="^(\d{1,3}\.){3}\d{1,3}$" value="{{ $machine->internal_ip }}" required>
+                            <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP interna</label>
+                            <input type="text" name="internal_ip" class="form-control" placeholder="Ej: 10.0.0.15" pattern="(\d{1,3}\.){3}\d{1,3}|N/A|n/a" value="{{ $machine->internal_ip }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-link me-1 text-primary"></i>Alias IP</label>
-                            <input type="text" name="alias_ip" class="form-control" pattern="^(\d{1,3}\.){3}\d{1,3}$" value="{{ $machine->alias_ip }}">
+                            <input type="text" name="alias_ip" class="form-control" pattern="((\d{1,3}\.){3}\d{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?)|N/A|n/a" value="{{ $machine->alias_ip }}">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-link-alt me-1 text-primary"></i>Alias 2 IP</label>
-                            <input type="text" name="alias2_ip" class="form-control" pattern="^(\d{1,3}\.){3}\d{1,3}$" value="{{ $machine->alias2_ip }}">
+                            <input type="text" name="alias2_ip" class="form-control" pattern="((\d{1,3}\.){3}\d{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?)|N/A|n/a" value="{{ $machine->alias2_ip }}">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-link-alt me-1 text-primary"></i>Alias 3 IP</label>
-                            <input type="text" name="alias3_ip" class="form-control" pattern="^(\d{1,3}\.){3}\d{1,3}$" value="{{ $machine->alias3_ip }}">
+                            <input type="text" name="alias3_ip" class="form-control" pattern="((\d{1,3}\.){3}\d{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?)|N/A|n/a" value="{{ $machine->alias3_ip }}">
                         </div>
                         <div class="col-md-12 mb-4">
                             <label class="form-label"><i class="bx bx-data me-1 text-primary"></i>Kernel</label>
-                            <input type="text" name="kernel_version" class="form-control" placeholder="Ej: 5.15.0-91-generic" pattern="[A-Za-z0-9\.\-]+" maxlength="35" value="{{ $machine->kernel_version }}">
+                            <input type="text" name="kernel_version" class="form-control" placeholder="Ej: 5.15.0-91-generic" maxlength="50" value="{{ $machine->kernel_version }}">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-shield-quarter me-1 text-primary"></i>Ultimo parche</label>
                             <input type="date" name="latest_security_patch" class="form-control" value="{{ $machine->latest_security_patch }}">
                         </div>
                         <div class="col-md-3 mb-4">
-                            <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
+                            <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>
                             <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8192" min="256" max="1048576" value="{{ $machine->ram_memory }}" required>
                             <small class="text-muted">Rango permitido: 256 MB - 1048576 MB</small>
                         </div>
                         <div class="col-md-3 mb-4">
-                            <label class="form-label"><i class="bx bx-transfer me-1 text-primary"></i>Swap (MB) (obligatorio)</label>
+                            <label class="form-label"><i class="bx bx-transfer me-1 text-primary"></i>Swap (MB)</label>
                             <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 2048" min="0" max="1048576" value="{{ $machine->swap_memory }}" required>
                             <small class="text-muted">Rango permitido: 0 MB - 1048576 MB</small>
                         </div>
