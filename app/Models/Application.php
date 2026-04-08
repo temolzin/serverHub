@@ -47,4 +47,9 @@ class Application extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function getIsInUseAttribute()
+    {
+        return $this->server()->exists() || $this->gcpMachine()->exists();
+    }
 }

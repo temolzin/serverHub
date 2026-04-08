@@ -30,7 +30,7 @@
                                 @foreach ($instances as $instance)
                                     <tr>
                                         <td>{{ $instance->id }}</td>
-                                        <td>{{ $instance->server->hostname_internal ?? 'N/A' }}</td>
+                                        <td>{{ $instance->server?->hostname_internal ?? 'N/A' }}</td>
                                         <td>{{ $instance->memory }} MB</td>
                                         <td>{{ $instance->version }}</td>
                                         <td>{{ $instance->edition ?? '—' }}</td>
@@ -40,7 +40,16 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#showInstanceModal{{ $instance->id }}"><i class="bx bx-show me-1"></i> Ver</a>
                                                     <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal" data-bs-target="#editInstanceModal{{ $instance->id }}"><i class="bx bx-edit-alt me-1"></i>Editar</a>
-                                                    <a class="dropdown-item text-danger" href="javascript:;" data-bs-toggle="modal" data-bs-target="#deleteInstanceModal{{ $instance->id }}"><i class="bx bx-trash me-1"></i>Eliminar</a>
+                                                    <a class="dropdown-item {{ $instance->is_in_use ? 'text-secondary pe-none' : 'text-danger' }}"
+                                                        href="javascript:;"
+                                                        data-bs-toggle="{{ $instance->is_in_use ? '' : 'modal' }}"
+                                                        data-bs-target="{{ $instance->is_in_use ? '' : '#deleteInstanceModal'.$instance->id }}"
+                                                        title="{{ $instance->is_in_use ? 'No se puede eliminar porque está en uso' : 'Eliminar instancia' }}">
+
+                                                        <i class="bx {{ $instance->is_in_use ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
+
+                                                        {{ $instance->is_in_use ? 'En uso' : 'Eliminar' }}
+                                                    </a>
                                                 </div>
                                             </div>
                                         </td>

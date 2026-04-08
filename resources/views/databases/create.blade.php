@@ -25,9 +25,7 @@
                                 <option value="" selected>Sin instancia (opcional)</option>
                                 @foreach ($instances as $instance)
                                     <option value="{{ $instance->id }}">
-                                        {{ $instance->server->hostname_internal }}
-                                        {{ $instance->version }}
-                                        ({{ $instance->edition }})
+                                        {{ $instance->server_hostname }} - {{ $instance->version }}
                                     </option>
                                 @endforeach
                             </select>

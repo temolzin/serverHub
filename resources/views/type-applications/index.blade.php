@@ -46,8 +46,13 @@
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editTypeApplicationModal{{ $type->id }}">
                                                         <i class="bx bx-edit-alt me-1"></i> Editar
                                                     </button>
-                                                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteTypeApplicationModal{{ $type->id }}">
-                                                        <i class="bx bx-trash me-1"></i> Eliminar
+                                                    <button class="dropdown-item {{ $type->is_in_use ? 'text-secondary' : 'text-danger' }}"
+                                                        {{ $type->is_in_use ? 'disabled' : '' }}
+                                                        data-bs-toggle="{{ $type->is_in_use ? '' : 'modal' }}"
+                                                        data-bs-target="{{ $type->is_in_use ? '' : '#deleteTypeApplicationModal'.$type->id }}"
+                                                        title="{{ $type->is_in_use ? 'No se puede eliminar porque está en uso' : 'Eliminar tipo de aplicación' }}">
+                                                        <i class="bx {{ $type->is_in_use ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
+                                                        {{ $type->is_in_use ? 'En uso' : 'Eliminar' }}
                                                     </button>
                                                 </div>
                                             </div>
