@@ -4,25 +4,25 @@
 
 @section('content')
 <div class="row">
-<div class="col-12 mb-4">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="mb-1"><i class="bx bx-user-circle text-primary me-2"></i>Mi perfil</h4>
-            <p class="mb-0 text-muted">
-                Bienvenido, <strong>{{ auth()->user()->name . ' ' . auth()->user()->last_name }}</strong>
-            </p>
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="mb-1"><i class="bx bx-user-circle text-primary me-2"></i>Mi perfil</h4>
+                <p class="mb-0 text-muted">
+                    Bienvenido, <strong>{{ auth()->user()->name . ' ' . auth()->user()->last_name }}</strong>
+                </p>
+            </div>
         </div>
     </div>
-</div>
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="col-md-12">
         <div class="card mb-6">
             <div class="card-body pt-4">
@@ -30,7 +30,7 @@
                     @csrf
                     @method('PUT')
                     <div class="d-flex align-items-center gap-4 mb-4">
-                        <img id="avatarPreview" src="{{ auth()->user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/1.png') }}" class="rounded" width="100">
+                        <img id="avatarPreview" src="{{ auth()->user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/photoDefault.jpeg') }}" class="rounded" width="100">
                         <div style="max-width: 300px;">
                             <label class="btn btn-outline-primary mb-0">
                                 <i class="bx bx-upload me-1"></i> Actualizar imagen
@@ -51,14 +51,50 @@
                             </label>
                             <input type="text" name="last_name" class="form-control" value="{{ old('last_name', auth()->user()->last_name) }}">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label class="form-label">
                                 <i class="bx bx-envelope me-1 text-primary"></i>Correo
                             </label>
                             <input type="email" name="email" class="form-control" value="{{ old('email', auth()->user()->email) }}">
                         </div>
                     </div>
-                    <button class="btn btn-primary"><i class="bx bx-save me-1"></i> Guardar cambios</button>
+                    <hr class="my-4">
+                    <h5 class="mb-3">
+                        <i class="bx bx-lock-alt me-1 text-primary"></i>
+                        Cambiar contraseña
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Contraseña actual</label>
+                            <div class="input-group">
+                                <input type="password" name="current_password" class="form-control" id="current_password">
+                                <span class="input-group-text cursor-pointer toggle-password" data-target="current_password">
+                                    <i class="bx bx-hide"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Nueva contraseña</label>
+                            <div class="input-group">
+                                <input type="password" name="password" class="form-control" id="password">
+                                <span class="input-group-text cursor-pointer toggle-password" data-target="password">
+                                    <i class="bx bx-hide"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Confirmar contraseña</label>
+                            <div class="input-group">
+                                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation">
+                                <span class="input-group-text cursor-pointer toggle-password" data-target="password_confirmation">
+                                    <i class="bx bx-hide"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="bx bx-save me-1"></i> Guardar cambios
+                    </button>
                 </form>
             </div>
         </div>
@@ -88,6 +124,24 @@
                 }
             });
         }
+    });
+</script>
+<script>
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function () {
+            const input = document.getElementById(this.dataset.target);
+            const icon = this.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bx-hide');
+                icon.classList.add('bx-show');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bx-show');
+                icon.classList.add('bx-hide');
+            }
+        });
     });
 </script>
 @endsection
