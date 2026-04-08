@@ -84,23 +84,23 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-globe-alt me-1 text-primary"></i>Entorno</label>
-                            <input type="text" name="environment" class="form-control text-start" value="{{ old('environment', $server->environment) }}" maxlength="100" required>
+                            <input type="text" name="environment" class="form-control text-start" value="{{ old('environment', $server->environment) }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-building-house me-1 text-primary"></i>Datacenter</label>
-                            <input type="text" name="datacenter" class="form-control text-start" value="{{ old('datacenter', $server->datacenter) }}" maxlength="100" required>
+                            <input type="text" name="datacenter" class="form-control text-start" value="{{ old('datacenter', $server->datacenter) }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-desktop me-1 text-primary"></i>Sistema operativo</label>
-                            <input type="text" name="os_according_to_the_vmware" class="form-control text-start" value="{{ old('os_according_to_the_vmware', $server->os_according_to_the_vmware) }}" maxlength="100" required>
+                            <input type="text" name="os_according_to_the_vmware" class="form-control text-start" value="{{ old('os_according_to_the_vmware', $server->os_according_to_the_vmware) }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-code-block me-1 text-primary"></i>Versión interna</label>
-                            <input type="text" name="os_version_internal" class="form-control text-start" value="{{ old('os_version_internal', $server->os_version_internal) }}" maxlength="100" required>
+                            <input type="text" name="os_version_internal" class="form-control text-start" value="{{ old('os_version_internal', $server->os_version_internal) }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-server me-1 text-primary"></i>Hostname interno</label>
-                            <input type="text" name="hostname_internal" class="form-control text-start" value="{{ old('hostname_internal', $server->hostname_internal) }}" maxlength="100" required>
+                            <input type="text" name="hostname_internal" class="form-control text-start" value="{{ old('hostname_internal', $server->hostname_internal) }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>

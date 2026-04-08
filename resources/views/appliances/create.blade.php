@@ -38,7 +38,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold"><i class="bx bx-desktop me-1 text-primary"></i>VM (VMware) (obligatorio)</label>
-                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: apliance-01" maxlength="100" required>
+                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: apliance-01" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria</label>
@@ -46,15 +46,15 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold"><i class="bx bx-globe me-1 text-primary"></i>DNS</label>
-                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: apliance.empresa.com" maxlength="100">
+                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: apliance.empresa.com" maxlength="50">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-server me-1 text-primary"></i>Datacenter (obligatorio)</label>
-                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: Tultitlan" maxlength="100" required>
+                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: Tultitlan" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo (obligatorio)</label>
-                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: CentOS 7" maxlength="100" required>
+                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: CentOS 7" maxlength="50" required>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label"><i class="bx bx-shield-quarter me-1 text-primary"></i>Último parche</label>

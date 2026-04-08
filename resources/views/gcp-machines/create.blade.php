@@ -88,19 +88,19 @@
                             <label class="form-label">
                                 <i class="bx bx-desktop me-1 text-primary"></i>Nombre máquina (obligatorio)
                             </label>
-                            <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-app-prod-01" maxlength="100" required>
+                            <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-app-prod-01" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label">
                                 <i class="bx bx-chip me-1 text-primary"></i>Nombre interno (obligatorio)
                             </label>
-                            <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01" maxlength="100" required>
+                            <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: app-internal-01" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label">
                                 <i class="bx bx-cog me-1 text-primary"></i>Sistema operativo (obligatorio)
                             </label>
-                            <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" maxlength="100" required>
+                            <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label">

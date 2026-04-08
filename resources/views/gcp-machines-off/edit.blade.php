@@ -72,19 +72,19 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-globe me-1 text-primary"></i>Entorno</label>
-                            <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo" maxlength="100" value="{{ $machine->environment }}" required>
+                            <input type="text" name="environment" class="form-control" placeholder="Ej: Produccion, QA, Desarrollo" maxlength="50" value="{{ $machine->environment }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-desktop me-1 text-primary"></i>Nombre máquina</label>
-                            <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-gcp-off-01" maxlength="100" value="{{ $machine->machine_name }}" required>
+                            <input type="text" name="machine_name" class="form-control" placeholder="Ej: vm-gcp-off-01" maxlength="50" value="{{ $machine->machine_name }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-chip me-1 text-primary"></i>Nombre interno</label>
-                            <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: gcp-int-off-01" maxlength="100" value="{{ $machine->machine_internal_name }}" required>
+                            <input type="text" name="machine_internal_name" class="form-control" placeholder="Ej: gcp-int-off-01" maxlength="50" value="{{ $machine->machine_internal_name }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-cog me-1 text-primary"></i>Sistema operativo</label>
-                            <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" maxlength="100" value="{{ $machine->operations_system }}" required>
+                            <input type="text" name="operations_system" class="form-control" placeholder="Ej: Ubuntu 22.04 LTS" maxlength="50" value="{{ $machine->operations_system }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP interna</label>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-12 mb-4">
                             <label class="form-label"><i class="bx bx-data me-1 text-primary"></i>Kernel</label>
-                            <input type="text" name="kernel_version" class="form-control" placeholder="Ej: 5.15.0-91-generic" maxlength="100" value="{{ $machine->kernel_version }}">
+                            <input type="text" name="kernel_version" class="form-control" placeholder="Ej: 5.15.0-91-generic" maxlength="50" value="{{ $machine->kernel_version }}">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label"><i class="bx bx-shield-quarter me-1 text-primary"></i>Ultimo parche</label>

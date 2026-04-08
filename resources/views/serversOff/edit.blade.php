@@ -60,7 +60,7 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-server me-1 text-primary"></i>VM (VMware)</label>
                             <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01"
-                                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" maxlength="100" required>
+                                value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-check-circle me-1 text-primary"></i>Estado (obligatorio)</label>
@@ -90,27 +90,27 @@
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-code-alt me-1 text-primary"></i>Entorno</label>
                             <input type="text" name="environment" class="form-control" placeholder="Ej: Producción"
-                                value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" maxlength="100" required>
+                                value="{{ filled($server->environment) ? $server->environment : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-building me-1 text-primary"></i>Datacenter</label>
                             <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01"
-                                value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" maxlength="100" required>
+                                value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-chip me-1 text-primary"></i>Sistema operativo</label>
                             <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019"
-                                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" maxlength="100" required>
+                                value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-code me-1 text-primary"></i>Versión interna</label>
                             <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
-                                value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" maxlength="100" required>
+                                value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-desktop me-1 text-primary"></i>Hostname interno</label>
                             <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-app-01"
-                                value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" maxlength="100" required>
+                                value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>

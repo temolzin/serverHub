@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-desktop me-1 text-primary"></i>VM (VMware) (obligatorio)</label>
-                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" maxlength="100" required>
+                            <input type="text" name="vm_according_to_the_vmware" class="form-control" placeholder="Ej: vm-app-prod-01" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria (obligatorio)</label>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-globe me-1 text-primary"></i>DNS</label>
-                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com" maxlength="100">
+                            <input type="text" name="dns_name" class="form-control" placeholder="Ej: servidor.empresa.com" maxlength="50">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-user me-1 text-primary"></i>IP usuario</label>
@@ -73,23 +73,23 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-cube me-1 text-primary"></i>Entorno (obligatorio)</label>
-                            <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" maxlength="100" required>
+                            <input type="text" name="environment" class="form-control" placeholder="Ej: Producción, QA" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-server me-1 text-primary"></i>Datacenter (obligatorio)</label>
-                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" maxlength="100" required>
+                            <input type="text" name="datacenter" class="form-control" placeholder="Ej: DC-MX-01" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-laptop me-1 text-primary"></i>Sistema operativo (obligatorio)</label>
-                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" maxlength="100" required>
+                            <input type="text" name="os_according_to_the_vmware" class="form-control" placeholder="Ej: Windows Server 2019" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-code-block me-1 text-primary"></i>Versión interna (obligatorio)</label>
-                            <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" maxlength="100" required>
+                            <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-network-chart me-1 text-primary"></i>Hostname interno (obligatorio)</label>
-                            <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" maxlength="100" required>
+                            <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>

@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-desktop me-1 text-primary"></i>VM (VMware)</label>
-                            <input type="text" name="vm_according_to_the_vmware" class="form-control" value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" maxlength="100" required>
+                            <input type="text" name="vm_according_to_the_vmware" class="form-control" value="{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-network-chart me-1 text-primary"></i>IP primaria</label>
@@ -55,11 +55,11 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-building-house me-1 text-primary"></i>Datacenter</label>
-                            <input type="text" name="datacenter" class="form-control" value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" maxlength="100" required>
+                            <input type="text" name="datacenter" class="form-control" value="{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-desktop me-1 text-primary"></i>Sistema operativo</label>
-                            <input type="text" name="os_according_to_the_vmware" class="form-control" value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" maxlength="100" required>
+                            <input type="text" name="os_according_to_the_vmware" class="form-control" value="{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label text-start w-100"><i class="bx bx-shield-quarter me-1 text-primary"></i>Último parche</label>
