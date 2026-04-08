@@ -30,7 +30,7 @@
                     @csrf
                     @method('PUT')
                     <div class="d-flex align-items-center gap-4 mb-4">
-                        <img id="avatarPreview" src="{{ auth()->user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/1.png') }}" class="rounded" width="100">
+                        <img id="avatarPreview" src="{{ auth()->user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/photoDefault.jpeg') }}" class="rounded" width="100">
                         <div style="max-width: 300px;">
                             <label class="btn btn-outline-primary mb-0">
                                 <i class="bx bx-upload me-1"></i> Actualizar imagen
@@ -51,7 +51,7 @@
                             </label>
                             <input type="text" name="last_name" class="form-control" value="{{ old('last_name', auth()->user()->last_name) }}">
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label class="form-label">
                                 <i class="bx bx-envelope me-1 text-primary"></i>Correo
                             </label>
@@ -59,6 +59,9 @@
                         </div>
                     </div>
                     <button class="btn btn-primary"><i class="bx bx-save me-1"></i> Guardar cambios</button>
+                    <button type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                        <i class="bx bx-lock-alt me-1"></i> Actualizar contraseña
+                    </button>
                 </form>
             </div>
         </div>
@@ -89,5 +92,22 @@
             });
         }
     });
+</script>
+@include('content.pages.modals.change-password-modal')
+<script>
+function togglePassword(el) {
+    const input = el.previousElementSibling;
+    const icon = el.querySelector('i');
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove('bx-hide');
+        icon.classList.add('bx-show');
+    } else {
+        input.type = "password";
+        icon.classList.remove('bx-show');
+        icon.classList.add('bx-hide');
+    }
+}
 </script>
 @endsection

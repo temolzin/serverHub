@@ -49,6 +49,7 @@ Route::post('/logout', function (Request $request) {
 Route::middleware('auth')->group(function () {
     Route::put('/account-settings', [AccountSettingsAccount::class, 'update'])
         ->name('profile.update');
+    Route::put('/profile/password', [AccountSettingsAccount::class, 'updatePassword'])->name('profile.password.update');
     Route::get('/account-settings', [AccountSettingsAccount::class, 'index'])
         ->name('account.settings');
     Route::middleware('permission:viewPowerLogs')->group(function () {
