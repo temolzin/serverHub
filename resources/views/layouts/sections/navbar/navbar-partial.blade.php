@@ -92,7 +92,6 @@
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
     const input = document.getElementById('globalSearch');
     const resultsBox = document.getElementById('searchResults');
     const container = document.getElementById('resultsContainer');
@@ -100,6 +99,81 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!input) return;
 
     let timeout = null;
+
+    const sections = [
+        {
+            key: 'servers',
+            label: 'Servidores',
+            icon: '🖥',
+            url: '/servers',
+            getSearchValue: item => item.hostname_internal,
+            getText: item => item.hostname_internal
+        },
+        {
+            key: 'machines',
+            label: 'Máquinas',
+            icon: '☁',
+            url: '/gcp-machines',
+            getSearchValue: item => item.machine_name,
+            getText: item => item.machine_name
+        },
+        {
+            key: 'applications',
+            label: 'Apps',
+            icon: '📦',
+            url: '/applications',
+            getSearchValue: item => item.name,
+            getText: item => item.name
+        },
+        {
+            key: 'databases',
+            label: 'DB',
+            icon: '🗄',
+            url: '/databases',
+            getSearchValue: item => item.name,
+            getText: item => item.name
+        },
+        {
+            key: 'owners',
+            label: 'Propietarios',
+            icon: '👤',
+            url: '/owners',
+            getSearchValue: item => item.name,
+            getText: item => `${item.name} ${item.last_name}`
+        },
+        {
+            key: 'users',
+            label: 'Usuarios',
+            icon: '👤',
+            url: '/users',
+            getSearchValue: item => item.name,
+            getText: item => item.name
+        },
+        {
+            key: 'instances',
+            label: 'Instancias',
+            icon: '📦',
+            url: '/instances',
+            getSearchValue: item => item.id,
+            getText: item => item.id
+        },
+        {
+            key: 'storages',
+            label: 'Storage',
+            icon: '💾',
+            url: '/storages',
+            getSearchValue: item => item.id,
+            getText: item => item.id
+        },
+        {
+            key: 'type_applications',
+            label: 'Tipos de App',
+            icon: '⚙️',
+            url: '/type-applications',
+            getSearchValue: item => item.id,
+            getText: item => item.id
+        }
+    ];
 
     input.addEventListener('keyup', function () {
         clearTimeout(timeout);
@@ -117,108 +191,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(res => res.json())
                 .then(data => {
 
-                    console.log(data);
-
                     let html = '';
 
-                    if (data.servers && data.servers.length) {
-                        html += `<small class="text-muted">Servidores</small>`;
-                        data.servers.forEach(s => {
-                            html += `
-                                <a href="/servers?search=${s.hostname_internal}"
-                                class="d-block p-1 hover-item text-decoration-none text-dark">
-                                🖥 ${s.hostname_internal}
-                                </a>`;
-                        });
-                    }
+                    sections.forEach((section, index) => {
+                        const items = data[section.key];
 
-                    if (data.machines && data.machines.length) {
-                        html += `<small class="text-muted mt-2 d-block">Máquinas</small>`;
-                        data.machines.forEach(m => {
-                            html += `
-                                <a href="/gcp-machines?search=${m.machine_name}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   ☁ ${m.machine_name}
-                                </a>`;
-                        });
-                    }
+                        if (!items || !items.length) return;
 
-                    if (data.applications && data.applications.length) {
-                        html += `<small class="text-muted mt-2 d-block">Apps</small>`;
-                        data.applications.forEach(a => {
-                            html += `
-                                <a href="/applications?search=${a.name}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   📦 ${a.name}
-                                </a>`;
-                        });
-                    }
+                        html += `<small class="text-muted ${index > 0 ? 'mt-2 d-block' : ''}">
+                                    ${section.label}
+                                 </small>`;
 
-                    if (data.databases && data.databases.length) {
-                        html += `<small class="text-muted mt-2 d-block">DB</small>`;
-                        data.databases.forEach(d => {
-                            html += `
-                                <a href="/databases?search=${d.name}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   🗄 ${d.name}
-                                </a>`;
-                        });
-                    }
+                        items.forEach(item => {
+                            const searchValue = encodeURIComponent(section.getSearchValue(item));
+                            const text = section.getText(item);
 
-                    if (data.owners && data.owners.length) {
-                        html += `<small class="text-muted mt-2 d-block">Propietarios</small>`;
-                        data.owners.forEach(o => {
                             html += `
-                                <a href="/owners?search=${o.name}"
+                                <a href="${section.url}?search=${searchValue}"
                                    class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   👤 ${o.name} ${o.last_name}
+                                   ${section.icon} ${text}
                                 </a>`;
                         });
-                    }
-
-                    if (data.users && data.users.length) {
-                        html += `<small class="text-muted mt-2 d-block">Usuarios</small>`;
-                        data.users.forEach(u => {
-                            html += `
-                                <a href="/users?search=${u.name}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   👤 ${u.name}
-                                </a>`;
-                        });
-                    }
-
-                    if (data.instances && data.instances.length) {
-                        html += `<small class="text-muted mt-2 d-block">Instancias</small>`;
-                        data.instances.forEach(i => {
-                            html += `
-                                <a href="/instances?search=${i.id}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   📦 ${i.id}
-                                </a>`;
-                        });
-                    }
-
-                    if (data.storages && data.storages.length) {
-                        html += `<small class="text-muted mt-2 d-block">Storage</small>`;
-                        data.storages.forEach(s => {
-                            html += `
-                                <a href="/storages?search=${s.id}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   💾 ${s.id}
-                                </a>`;
-                        });
-                    }
-
-                    if (data.type_applications && data.type_applications.length) {
-                        html += `<small class="text-muted mt-2 d-block">Tipos de App</small>`;
-                        data.type_applications.forEach(t => {
-                            html += `
-                                <a href="/type-applications?search=${t.id}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   ⚙️ ${t.id}
-                                </a>`;
-                        });
-                    }
+                    });
 
                     if (!html) {
                         html = `<div class="text-center text-muted">Sin resultados</div>`;
@@ -227,8 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     container.innerHTML = html;
                     resultsBox.classList.remove('d-none');
                 })
-                .catch(err => {
-                    console.error('Error en búsqueda:', err);
+                .catch(() => {
                     resultsBox.classList.add('d-none');
                 });
 
