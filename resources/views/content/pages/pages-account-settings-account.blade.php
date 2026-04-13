@@ -11,6 +11,9 @@
             <p class="mb-0 text-muted">
                 Bienvenido, <strong>{{ auth()->user()->name . ' ' . auth()->user()->last_name }}</strong>
             </p>
+            <p class="mb-0 text-muted">
+                Rol: <strong>{{ auth()->user()->getRoleNames()->first() ?? 'Sin rol' }}</strong>
+            </p>
         </div>
     </div>
 </div>
