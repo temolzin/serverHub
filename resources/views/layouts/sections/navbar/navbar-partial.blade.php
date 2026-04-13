@@ -20,9 +20,12 @@
 @endif
 <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
     <div class="navbar-nav align-items-center">
-        <div class="nav-item d-flex align-items-center">
+        <div class="nav-item d-flex align-items-center position-relative" style="width:300px;">
             <i class="icon-base bx bx-search icon-md"></i>
-            <input type="text" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="Search..." aria-label="Search...">
+            <input type="text" id="globalSearch" class="form-control border-0 shadow-none ps-1 ps-sm-2" placeholder="Buscar..." autocomplete="off">
+            <div id="searchResults" class="card shadow position-absolute w-100 mt-2 d-none" style="top:100%; z-index:999;">
+                <div class="card-body p-2" id="resultsContainer"></div>
+            </div>
         </div>
     </div>
     <ul class="navbar-nav flex-row align-items-center ms-auto">
@@ -71,7 +74,6 @@
                         </button>
                     </form>
                 </li>
-
             </ul>
         </li>
         @endauth
@@ -82,11 +84,160 @@
         @endguest
     </ul>
 </div>
+<style>
+    .hover-item:hover {
+        background: #f5f5f9;
+        cursor: pointer;
+    }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('globalSearch');
+    const resultsBox = document.getElementById('searchResults');
+    const container = document.getElementById('resultsContainer');
+
+    if (!input) return;
+
+    let timeout = null;
+
+    const sections = [
+        {
+            key: 'servers',
+            label: 'Servidores',
+            icon: '🖥',
+            url: '/servers',
+            getSearchValue: item => item.hostname_internal,
+            getText: item => item.hostname_internal
+        },
+        {
+            key: 'machines',
+            label: 'Máquinas',
+            icon: '☁',
+            url: '/gcp-machines',
+            getSearchValue: item => item.machine_name,
+            getText: item => item.machine_name
+        },
+        {
+            key: 'applications',
+            label: 'Apps',
+            icon: '📦',
+            url: '/applications',
+            getSearchValue: item => item.name,
+            getText: item => item.name
+        },
+        {
+            key: 'databases',
+            label: 'DB',
+            icon: '🗄',
+            url: '/databases',
+            getSearchValue: item => item.name,
+            getText: item => item.name
+        },
+        {
+            key: 'owners',
+            label: 'Propietarios',
+            icon: '👤',
+            url: '/owners',
+            getSearchValue: item => item.name,
+            getText: item => `${item.name} ${item.last_name}`
+        },
+        {
+            key: 'users',
+            label: 'Usuarios',
+            icon: '👤',
+            url: '/users',
+            getSearchValue: item => item.name,
+            getText: item => item.name
+        },
+        {
+            key: 'instances',
+            label: 'Instancias',
+            icon: '📦',
+            url: '/instances',
+            getSearchValue: item => item.id,
+            getText: item => item.id
+        },
+        {
+            key: 'storages',
+            label: 'Storage',
+            icon: '💾',
+            url: '/storages',
+            getSearchValue: item => item.id,
+            getText: item => item.id
+        },
+        {
+            key: 'type_applications',
+            label: 'Tipos de App',
+            icon: '⚙️',
+            url: '/type-applications',
+            getSearchValue: item => item.id,
+            getText: item => item.id
+        }
+    ];
+
+    input.addEventListener('keyup', function () {
+        clearTimeout(timeout);
+
+        let query = this.value;
+
+        if (query.length < 2) {
+            resultsBox.classList.add('d-none');
+            return;
+        }
+
+        timeout = setTimeout(() => {
+
+            fetch(`/global-search?q=${query}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    let html = '';
+
+                    sections.forEach((section, index) => {
+                        const items = data[section.key];
+
+                        if (!items || !items.length) return;
+
+                        html += `<small class="text-muted ${index > 0 ? 'mt-2 d-block' : ''}">
+                                    ${section.label}
+                                 </small>`;
+
+                        items.forEach(item => {
+                            const searchValue = encodeURIComponent(section.getSearchValue(item));
+                            const text = section.getText(item);
+
+                            html += `
+                                <a href="${section.url}?search=${searchValue}"
+                                   class="d-block p-1 hover-item text-decoration-none text-dark">
+                                   ${section.icon} ${text}
+                                </a>`;
+                        });
+                    });
+
+                    if (!html) {
+                        html = `<div class="text-center text-muted">Sin resultados</div>`;
+                    }
+
+                    container.innerHTML = html;
+                    resultsBox.classList.remove('d-none');
+                })
+                .catch(() => {
+                    resultsBox.classList.add('d-none');
+                });
+
+        }, 300);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!input.contains(e.target) && !resultsBox.contains(e.target)) {
+            resultsBox.classList.add('d-none');
+        }
+    });
+});
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-
         const trigger = document.querySelector('[data-bs-toggle="dropdown"]');
-
         if (trigger && typeof bootstrap !== 'undefined') {
             new bootstrap.Dropdown(trigger);
         }

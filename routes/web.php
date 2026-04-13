@@ -24,6 +24,7 @@ use App\Http\Controllers\PowerLogController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\pages\AccountSettingsAccount;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\GlobalSearchController;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -47,6 +48,8 @@ Route::post('/logout', function (Request $request) {
 })->name('logout');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/global-search', [GlobalSearchController::class, 'search'])
+        ->name('global.search');
     Route::put('/account-settings', [AccountSettingsAccount::class, 'update'])
         ->name('profile.update');
     Route::put('/profile/password', [AccountSettingsAccount::class, 'updatePassword'])->name('profile.password.update');
