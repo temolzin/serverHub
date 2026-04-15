@@ -80,11 +80,12 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Maquina</th>
+                                <th>On-premise o Maquina</th>
                                 <th>IP</th>
                                 <th>Sistema operativo</th>
                                 <th>Kernel</th>
                                 <th>Ultimo Parche</th>
+                                <th>Tipo</th>
                             </tr>
                         </thead>
                         <tbody id="patchedTable">
@@ -259,7 +260,6 @@
                     const formData  = new FormData(this);
                     const startDate = formData.get('start_date');
                     const endDate   = formData.get('end_date');
-                    updateExportLink(startDate, endDate);
                     fetch('{{ route('dashboard.filter') }}?' + new URLSearchParams(formData))
                         .then(res => res.json())
                         .then(data => {
@@ -267,10 +267,11 @@
                             const rows  = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
                             tbody.innerHTML = '';
                             if (rows.length === 0) {
-                                tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No se encontraron resultados</td></tr>`;
+                                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No se encontraron resultados</td></tr>`;
                                 disableExport();
                                 return;
                             }
+                            updateExportLink(startDate, endDate);
                             enableExport();
                             rows.forEach(machine => {
                                 tbody.innerHTML += `
@@ -280,6 +281,7 @@
                                         <td>${machine.operations_system}</td>
                                         <td>${machine.kernel_version}</td>
                                         <td>${machine.latest_security_patch}</td>
+                                        <td class="fw-semibold text-secondary">${machine.type}</td>
                                     </tr>`;
                             });
                         });

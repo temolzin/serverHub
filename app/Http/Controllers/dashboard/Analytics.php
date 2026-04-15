@@ -122,14 +122,50 @@ class Analytics extends Controller
                 'message' => 'Debes seleccionar al menos una fecha'
             ]);
         }
-        $query = GcpMachine::query();
+
+        $gcpQuery = GcpMachine::query();
+
+        $serverQuery = Server::query();
+
         if ($request->start_date && $request->end_date) {
-            $query->whereBetween('latest_security_patch', [
+            $gcpQuery->whereBetween('latest_security_patch', [
+                $request->start_date,
+                $request->end_date
+            ]);
+
+            $serverQuery->whereBetween('latest_security_patch', [
                 $request->start_date,
                 $request->end_date
             ]);
         }
-            $machines = $query->orderBy('latest_security_patch', 'desc')->get();
+
+        $gcpMachines = $gcpQuery->get()->map(function ($item) {
+            return [
+                'machine_name' => $item->machine_name,
+                'internal_ip' => $item->internal_ip,
+                'operations_system' => $item->operations_system,
+                'kernel_version' => $item->kernel_version,
+                'latest_security_patch' => $item->latest_security_patch,
+                'type' => 'GCP'
+            ];
+        });
+
+        $servers = $serverQuery->get()->map(function ($item) {
+            return [
+                'machine_name' => $item->hostname_internal,
+                'internal_ip' => $item->primary_ip_address ?? 'N/A',
+                'operations_system' => $item->os_according_to_the_vmware,
+                'kernel_version' => $item->os_version_internal ?? 'N/A', // aquí no hay kernel real, usamos versión
+                'latest_security_patch' => $item->latest_security_patch,
+                'type' => 'ON-PREMISE'
+            ];
+        });
+
+        $machines = $gcpMachines
+            ->merge($servers)
+            ->sortByDesc('latest_security_patch')
+            ->values();
+
         return response()->json($machines);
     }
 
