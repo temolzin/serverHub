@@ -115,7 +115,15 @@
                     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
                 }[char]));
                 const rows = Array.isArray(importSummary) && importSummary.length
-                    ? importSummary.map(item => `<li class="d-flex justify-content-between border-bottom py-1"><span>${escapeHtml(item.label ?? 'Tabla')}</span><strong>${Number(item.total) || 0}</strong></li>`).join('')
+                    ? importSummary.map(item => `
+                        <li class="border-bottom py-2">
+                            <div class="fw-semibold">${escapeHtml(item.label ?? 'Tabla')}</div>
+                            <div class="small text-muted">
+                                Total: <strong>${Number(item.total) || 0}</strong> |
+                                Actualizados: <strong>${Number(item.updated) || 0}</strong>
+                            </div>
+                        </li>
+                    `).join('')
                     : '';
                 Swal.fire({
                     icon: 'success',

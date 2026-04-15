@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\HasManualImportOverrides;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,7 @@ use App\Models\PowerLog;
 class Server extends Model
 {
     use HasFactory;
+    use HasManualImportOverrides;
     use SoftDeletes;
 
     public const POWERED_OFF_VALUES = [
@@ -49,6 +51,11 @@ class Server extends Model
         'swap_memory',
         'latest_security_patch',
         'comments',
+    ];
+
+    protected $casts = [
+        'manual_override_fields' => 'array',
+        'pending_manual_override_fields' => 'array',
     ];
 
     protected static function booted()

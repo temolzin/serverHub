@@ -62,15 +62,16 @@ class ApplianceController extends Controller
     {
         $payload = $request->all();
 
-        $payload['environment'] = $payload['environment'] ?? 'N/A';
-        $payload['ram_memory']  = $payload['ram_memory'] ?? 0;
-        $payload['swap_memory'] = $payload['swap_memory'] ?? 0;
-
         $payload['state'] = $this->normalizeState(
             $payload['state'] ?? ($off ? 'poweredOff' : 'poweredOn')
         );
 
         $payload['type_application_id'] = self::getApplianceTypeApplicationId();
+        if (!$server) {
+            $payload['environment'] = $payload['environment'] ?? 'N/A';
+            $payload['ram_memory'] = $payload['ram_memory'] ?? 0;
+            $payload['swap_memory'] = $payload['swap_memory'] ?? 0;
+        }
 
         $server = $server
             ? tap($server)->update($payload)

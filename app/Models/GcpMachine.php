@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\HasManualImportOverrides;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -10,6 +11,7 @@ use App\Models\PowerLog;
 
 class GcpMachine extends Model
 {
+    use HasManualImportOverrides;
     use SoftDeletes;
 
     public const POWERED_OFF_VALUES = [
@@ -50,6 +52,11 @@ class GcpMachine extends Model
         'swap_memory',
         'owner_id',
         'created_by'
+    ];
+
+    protected $casts = [
+        'manual_override_fields' => 'array',
+        'pending_manual_override_fields' => 'array',
     ];
 
     protected static function booted()

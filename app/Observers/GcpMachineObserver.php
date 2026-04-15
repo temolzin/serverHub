@@ -9,14 +9,24 @@ class GcpMachineObserver
 {
     public function updating(GcpMachine $machine)
     {
-        if (AuditLog::$suppressed) return;
+        if (AuditLog::$suppressed) {
+            return;
+        }
+
+        $dirty = collect($machine->getDirty())
+            ->except(['manual_override_fields', 'pending_manual_override_fields', 'updated_at'])
+            ->all();
+
+        $machine->mergeManualOverrideFields(array_keys($dirty));
+        $machine->mergePendingManualOverrideFields(array_keys($dirty));
+
         AuditLog::create([
             'alter_by' => auth()->id() ?? 1,
             'module' => 'gcp_machine',
             'action' => 'update',
             'record_id' => $machine->id,
             'before_data' => json_encode($machine->getOriginal()),
-            'current_data' => json_encode($machine->getDirty()),
+            'current_data' => json_encode($dirty),
         ]);
     }
 
