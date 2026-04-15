@@ -155,7 +155,7 @@ class Analytics extends Controller
                 'machine_name' => $item->hostname_internal,
                 'internal_ip' => $item->primary_ip_address ?? 'N/A',
                 'operations_system' => $item->os_according_to_the_vmware,
-                'kernel_version' => $item->os_version_internal ?? 'N/A', // aquí no hay kernel real, usamos versión
+                'kernel_version' => $item->os_version_internal ?? 'N/A',
                 'latest_security_patch' => $item->latest_security_patch,
                 'type' => 'ON-PREMISE'
             ];
