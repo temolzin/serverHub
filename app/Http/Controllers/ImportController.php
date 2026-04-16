@@ -18,6 +18,8 @@ class ImportController extends Controller
     private const FORCED_OFF_SHEETS = ['bajatultitlan', 'tuloff', 'qrooff'];
     private const APPLIANCE_SHEETS  = ['tulapliance', 'qroapliance'];
 
+    private array $processedServerIds = [];
+
     private function getValue(array $data, array $keys, $default = null)
     {
         foreach ($keys as $key) {
@@ -28,6 +30,29 @@ class ImportController extends Controller
         }
 
         return $default;
+    }
+    private function hasRealChanges(Server $server): bool
+    {
+        $normalize = fn($v) => (is_null($v) || $v === '' || $v === 'N/A') ? null : trim((string) $v);
+        $realFields = [];
+
+        foreach ($server->getDirty() as $field => $newValue) {
+            $oldValue = $server->getOriginal($field);
+            $isReal = $field === 'state'
+                ? $this->normalizeState((string) $newValue) !== $this->normalizeState((string) $oldValue)
+                : $normalize($newValue) !== $normalize($oldValue);
+            if ($isReal) $realFields[$field] = ['old' => $oldValue, 'new' => $newValue];
+        }
+
+        if (!empty($realFields)) {
+            \Illuminate\Support\Facades\Log::debug('hasRealChanges', [
+                'vm' => $server->vm_according_to_the_vmware,
+                'id' => $server->id,
+                'f'  => $realFields,
+            ]);
+        }
+
+        return !empty($realFields);
     }
 
     private function normalizeHeaders(array $header): array
@@ -177,6 +202,7 @@ class ImportController extends Controller
 
         [$sheets, $sheetNames] = $this->readWorkbook($request->file('file'));
 
+        $this->processedServerIds = [];
         $stats = $this->createStats(['servers_on', 'servers_off', 'gcp_machines', 'appliances_on', 'appliances_off']);
         AuditLog::$suppressed = true;
 
@@ -215,7 +241,7 @@ class ImportController extends Controller
 
         return $this->respondWithImportResult(
             $stats,
-            'No se importaron registros validos desde el Excel.'
+            'No se encontraron registros nuevos o actualizados en el Excel.'
         );
     }
 
@@ -266,27 +292,39 @@ class ImportController extends Controller
         $ramRaw  = collect($data)->first(fn($v, $k) => str_contains($k, 'memoria ram') && $v);
         $swapRaw = collect($data)->first(fn($v, $k) => str_contains($k, 'memoria swap') && $v);
 
-        $machine = GcpMachine::updateOrCreate(
-            ['internal_ip' => trim($internalIp)],
-            [
-                'project_name' => $this->getValue($data, ['nombre de proyecto'], 'N/A'),
-                'environment' => $this->getValue($data, ['entorno'], 'N/A'),
-                'machine_name' => $this->getValue($data, ['nombre de maquina'], 'N/A'),
-                'machine_internal_name' => $this->getValue($data, ['nombre de maquina interna'], 'N/A'),
-                'state' => $this->normalizeState(
-                    $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
-                ),
-                'operations_system' => $this->getValue($data, ['sistema operativo'], 'N/A'),
-                'kernel_version' => $this->getValue($data, ['version de kernel'], 'N/A'),
-                'alias_ip' => $aliases[0] ?? 'N/A',
-                'alias2_ip' => $aliases[1] ?? 'N/A',
-                'alias3_ip' => $aliases[2] ?? 'N/A',
-                'ram_memory' => max(0, (int) $ramRaw),
-                'swap_memory' => max(0, (int) $swapRaw),
-            ] + array_filter(['uuid' => $this->getValue($data, ['uuid'])])
-        );
+        $uuid       = $this->getValue($data, ['uuid']);
+        $matchKey   = $uuid ? ['uuid' => $uuid] : ['internal_ip' => trim($internalIp)];
 
-        return $machine->wasRecentlyCreated ? 'created' : 'updated';
+        $gcpPayload = [
+            'internal_ip'          => trim($internalIp),
+            'project_name'         => $this->getValue($data, ['nombre de proyecto'], 'N/A'),
+            'environment'          => $this->getValue($data, ['entorno'], 'N/A'),
+            'machine_name'         => $this->getValue($data, ['nombre de maquina'], 'N/A'),
+            'machine_internal_name' => $this->getValue($data, ['nombre de maquina interna'], 'N/A'),
+            'state'                => $this->normalizeState(
+                $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
+            ),
+            'operations_system'    => $this->getValue($data, ['sistema operativo'], 'N/A'),
+            'kernel_version'       => $this->getValue($data, ['version de kernel'], 'N/A'),
+            'alias_ip'             => $aliases[0] ?? 'N/A',
+            'alias2_ip'            => $aliases[1] ?? 'N/A',
+            'alias3_ip'            => $aliases[2] ?? 'N/A',
+            'ram_memory'           => max(0, (int) $ramRaw),
+            'swap_memory'          => max(0, (int) $swapRaw),
+        ];
+
+        if ($uuid) {
+            $gcpPayload['uuid'] = $uuid;
+        }
+
+        $machine = GcpMachine::firstOrCreate($matchKey, $gcpPayload);
+
+        if (!$machine->wasRecentlyCreated) {
+            $machine->fill($gcpPayload);
+            $machine->isDirty() ? $machine->save() : null;
+        }
+
+        return $machine->wasRecentlyCreated ? 'created' : ($machine->wasChanged() ? 'updated' : null);
     }
 
     private function importServerRow(array $data, bool $isAppliance = false): ?array
@@ -315,61 +353,84 @@ class ImportController extends Controller
         $typeApplicationId = $isAppliance
             ? ApplianceController::getApplianceTypeApplicationId()
             : 1;
-
-        $payload = [
-            'owner_id' => null,
-            'created_by' => Auth::id(),
-            'type_application_id' => $typeApplicationId,
-            'vm_according_to_the_vmware' => $vm ?: 'N/A',
-            'state' => $this->normalizeState(
-                $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
-            ),
-            'datacenter' => $this->getValue($data, ['datacenter'], 'N/A'),
-            'environment' => $this->getValue($data, ['enviroment', 'entorno'], 'N/A'),
+        $uuid = $this->getValue($data, ['uuid']);
+        $excelData = array_filter([
+            'uuid'                       => $uuid ?: null,
+            'vm_according_to_the_vmware' => $vm ?: null,
+            'primary_ip_address'         => $primaryIp ?: null,
+            'state'                      => $this->normalizeState(
+                                                $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
+                                            ),
+            'datacenter'                 => $this->getValue($data, ['datacenter']),
+            'environment'                => $this->getValue($data, ['environment', 'enviroment', 'entorno']),
             'os_according_to_the_vmware' => $this->getValue($data, [
-                'os according to the wmware',
-                'os according wmware',
-                'os according to the vmware tools',
-                'os according to the vmware'
-            ], 'N/A'),
-            'os_version_internal' => $this->getValue($data, [
-                'real os',
-                'real os internal',
-                'os according to the configuration file'
-            ], 'N/A'),
-            'hostname_internal' => $this->getValue($data, [
-                'hostname real',
-                'real hostname'
-            ], $vm ?: 'N/A'),
-            'ip_user' => $this->getValue($data, ['ip'], 'N/A'),
-            'ip_monitoring' => $this->getValue($data, ['monitoreo'], 'N/A'),
-            'dns_name' => $this->getValue($data, ['dns name'], 'N/A'),
-            'other_ips' => $otherIps !== '' ? $otherIps : 'N/A',
-            'latest_security_patch' => $this->normalizeLatestPatch(
-                $this->getValue($data, ['latest security patch'])
-            ),
-            'comments' => $this->getValue($data, ['comments', 'comentarios'], 'N/A'),
-            'ram_memory' => 0,
-            'swap_memory' => 0,
+                                                'os according to the wmware',
+                                                'os according wmware',
+                                                'os according to the vmware tools',
+                                                'os according to the vmware',
+                                            ]),
+            'os_version_internal'        => $this->getValue($data, [
+                                                'real os',
+                                                'real os internal',
+                                                'os according to the configuration file',
+                                            ]),
+            'hostname_internal'          => $this->getValue($data, ['hostname real', 'real hostname']),
+            'ip_user'                    => $this->getValue($data, ['ip']),
+            'ip_monitoring'              => $this->getValue($data, ['monitoreo']),
+            'dns_name'                   => $this->getValue($data, ['dns name']),
+            'other_ips'                  => $otherIps ?: null,
+            'latest_security_patch'      => $this->normalizeLatestPatch(
+                                                $this->getValue($data, ['latest security patch'])
+                                            ),
+            'comments'                   => $this->getValue($data, ['comments', 'comentarios']),
+        ], fn($v) => $v !== null);
+        $createOnly = [
+            'owner_id'                   => null,
+            'created_by'                 => Auth::id(),
+            'type_application_id'        => $typeApplicationId,
+            'vm_according_to_the_vmware' => $vm ?: 'N/A',
+            'hostname_internal'          => $vm ?: 'N/A',
+            'state'                      => 'poweredOn',
+            'datacenter'                 => 'N/A',
+            'environment'                => 'N/A',
+            'os_according_to_the_vmware' => 'N/A',
+            'os_version_internal'        => 'N/A',
+            'ip_user'                    => 'N/A',
+            'ip_monitoring'              => 'N/A',
+            'dns_name'                   => 'N/A',
+            'other_ips'                  => 'N/A',
+            'comments'                   => 'N/A',
+            'ram_memory'                 => 0,
+            'swap_memory'                => 0,
         ];
 
-        $payload += array_filter(['uuid' => $this->getValue($data, ['uuid'])]);
+        $server = collect([
+            fn() => $uuid      ? Server::withTrashed()->where('uuid', $uuid)->where('type_application_id', $typeApplicationId)->first()                     : null,
+            fn() => $primaryIp ? Server::withTrashed()->where('primary_ip_address', $primaryIp)->where('type_application_id', $typeApplicationId)->first()  : null,
+            fn() => $vm        ? Server::withTrashed()->where('vm_according_to_the_vmware', $vm)->where('type_application_id', $typeApplicationId)->first() : null,
+        ])->reduce(fn($found, $finder) => $found ?? $finder());
 
-        $server = $primaryIp
-            ? Server::withTrashed()->updateOrCreate(
-                ['primary_ip_address' => $primaryIp],
-                $payload
-            )
-            : Server::updateOrCreate(
-                ['vm_according_to_the_vmware' => $vm],
-                $payload
-            );
+        if ($server && in_array($server->id, $this->processedServerIds)) {
+            return [
+                'status' => null,
+                'state'  => $excelData['state'] ?? 'poweredOn',
+            ];
+        }
+
+        $server ??= Server::create($excelData + $createOnly);
+
+        $hasChanges = !$server->wasRecentlyCreated
+            && $server->fill($excelData)
+            && $this->hasRealChanges($server)
+            && $server->save();
+
+        $this->processedServerIds[] = $server->id;
 
         $server->trashed() && $server->restore();
 
         return [
-            'status' => $server->wasRecentlyCreated ? 'created' : 'updated',
-            'state'  => $payload['state'],
+            'status' => $server->wasRecentlyCreated ? 'created' : ($hasChanges ? 'updated' : null),
+            'state'  => $excelData['state'] ?? 'poweredOn',
         ];
     }
 
@@ -387,50 +448,73 @@ class ImportController extends Controller
             'primary ip address.1',
         ]);
 
-        $payload = [
-            'owner_id' => null,
-            'created_by' => Auth::id(),
-            'type_application_id' => 1,
-            'vm_according_to_the_vmware' => $vm,
-            'state' => 'poweredOff',
-            'environment' => $this->getValue($data, ['environment', 'entorno'], 'N/A'),
-            'datacenter' => $this->getValue($data, ['datacenter'], 'N/A'),
-            'hostname_internal' => $this->getValue(
-                $data,
-                ['hostname internal', 'hostname real', 'real hostname'],
-                $vm
-            ),
+
+        $uuid = $this->getValue($data, ['uuid']);
+
+        $excelData = array_filter([
+            'uuid'                       => $uuid ?: null,
+            'vm_according_to_the_vmware' => $vm ?: null,
+            'primary_ip_address'         => $primaryIp ?: null,
+            'state'                      => 'poweredOff',
+            'datacenter'                 => $this->getValue($data, ['datacenter']),
+            'environment'                => $this->getValue($data, ['environment', 'entorno']),
+            'hostname_internal'          => $this->getValue($data, ['hostname internal', 'hostname real', 'real hostname']),
             'os_according_to_the_vmware' => $this->getValue($data, [
-                'os according to the vmware tools',
-                'os according to the vmware',
-                'os according to the wmware',
-                'os according wmware',
-            ], 'N/A'),
-            'os_version_internal' => $this->getValue($data, [
-                'os according to the configuration file',
-                'os_version_internal',
-                'real os',
-                'real os internal',
-            ], 'N/A'),
-            'ram_memory' => 0,
-            'swap_memory' => 0,
+                                                'os according to the vmware tools',
+                                                'os according to the vmware',
+                                                'os according to the wmware',
+                                                'os according wmware',
+                                            ]),
+            'os_version_internal'        => $this->getValue($data, [
+                                                'os according to the configuration file',
+                                                'os_version_internal',
+                                                'real os',
+                                                'real os internal',
+                                            ]),
+        ], fn($v) => $v !== null);
+
+        $createOnly = [
+            'owner_id'                   => null,
+            'created_by'                 => Auth::id(),
+            'type_application_id'        => 1,
+            'vm_according_to_the_vmware' => $vm ?: 'N/A',
+            'hostname_internal'          => $vm ?: 'N/A',
+            'state'                      => 'poweredOff',
+            'datacenter'                 => 'N/A',
+            'environment'                => 'N/A',
+            'os_according_to_the_vmware' => 'N/A',
+            'os_version_internal'        => 'N/A',
+            'ip_user'                    => 'N/A',
+            'ip_monitoring'              => 'N/A',
+            'dns_name'                   => 'N/A',
+            'other_ips'                  => 'N/A',
+            'comments'                   => 'N/A',
+            'ram_memory'                 => 0,
+            'swap_memory'                => 0,
         ];
 
-        $payload += array_filter(['uuid' => $this->getValue($data, ['uuid'])]);
+        $server = collect([
+            fn() => $uuid      ? Server::withTrashed()->where('uuid', $uuid)->where('type_application_id', 1)->first()                     : null,
+            fn() => $primaryIp ? Server::withTrashed()->where('primary_ip_address', $primaryIp)->where('type_application_id', 1)->first()  : null,
+            fn() => $vm        ? Server::withTrashed()->where('vm_according_to_the_vmware', $vm)->where('type_application_id', 1)->first() : null,
+        ])->reduce(fn($found, $finder) => $found ?? $finder());
 
-        $server = $primaryIp
-            ? Server::withTrashed()->updateOrCreate(
-                ['primary_ip_address' => $primaryIp],
-                $payload
-            )
-            : Server::withTrashed()->updateOrCreate(
-                ['vm_according_to_the_vmware' => $vm],
-                $payload
-            );
+        if ($server && in_array($server->id, $this->processedServerIds)) {
+            return null;
+        }
+
+        $server ??= Server::create($excelData + $createOnly);
+
+        $hasChanges = !$server->wasRecentlyCreated
+            && $server->fill($excelData)
+            && $this->hasRealChanges($server)
+            && $server->save();
+
+        $this->processedServerIds[] = $server->id;
 
         $server->trashed() && $server->restore();
 
-        return $server->wasRecentlyCreated ? 'created' : 'updated';
+        return $server->wasRecentlyCreated ? 'created' : ($hasChanges ? 'updated' : null);
     }
 
     public function importPoweredOff(Request $request)
