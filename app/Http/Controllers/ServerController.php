@@ -15,7 +15,27 @@ class ServerController extends Controller
 {
     public function index(Request $request)
     {
-        return $this->renderIndex($request, false);
+        $servers = Server::with(['owner','applications','typeApplication','database'])
+            ->when($request->filled('id'), fn($q) => $q->where('id', $request->id))
+            ->when($request->filled('search'), function($q) use ($request) {
+                $q->where(function($sub) use ($request) {
+                    $sub->where('hostname_internal', 'like', "%{$request->search}%")
+                        ->orWhere('primary_ip_address', 'like', "%{$request->search}%");
+                });
+            })
+            ->where('state', '!=', 'poweredOff')
+            ->latest()
+            ->paginate(10);
+
+        $this->hydrateServerPresentationData(collect($servers->items()));
+
+        return view('servers.index', [
+            'servers' => $servers,
+            'databases' => Database::all(),
+            'applications' => Application::all(),
+            'owners' => Owner::all(),
+            'typeApplications' => TypeApplication::all(),
+        ]);
     }
 
     public function offIndex(Request $request)
@@ -45,7 +65,10 @@ class ServerController extends Controller
 
     private function persist(Request $request, bool $off = false, ?Server $server = null)
     {
-        $validated = $request->all();
+        $validated = $off
+            ? $this->validateOffServer($request, $server)
+            : $this->validateActiveServer($request, $server);
+
         $payload = $validated;
 
         $payload['state'] = $this->normalizeState(
