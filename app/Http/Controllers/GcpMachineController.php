@@ -166,22 +166,40 @@ class GcpMachineController extends Controller
             'creator'
         ]);
 
+        if ($request->filled('id')) {
+            $gcpMachines->where('id', $request->id);
+        }
+
+        if ($request->filled('search')) {
+            $gcpMachines->where(function($q) use ($request) {
+                $q->where('machine_name', 'like', "%{$request->search}%")
+                ->orWhere('internal_ip', 'like', "%{$request->search}%");
+            });
+        }
+
         $filterMethod = $off ? 'applyPoweredOffFilter' : 'applyPoweredOnFilter';
         $this->{$filterMethod}($gcpMachines);
 
         $gcpMachines = $gcpMachines
             ->latest('id')
-            ->get();
+            ->paginate(10);
 
-        $this->decorateMachinesForView($gcpMachines);
+        $this->decorateMachinesForView(collect($gcpMachines->items()));
 
         $owners = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
         $applications = Application::orderBy('name')->get();
         $databases = DatabaseModel::orderBy('name')->get();
+
         $view = $off ? 'gcp-machines-off' : 'gcp-machines';
 
-        return view("$view.index", compact('gcpMachines', 'owners', 'typeApplications', 'applications', 'databases'));
+        return view("$view.index", compact(
+            'gcpMachines',
+            'owners',
+            'typeApplications',
+            'applications',
+            'databases'
+        ));
     }
 
 
@@ -351,6 +369,10 @@ class GcpMachineController extends Controller
             );
             $machine->setAttribute('display_database_name', optional($machine->database)->name);
             $machine->setAttribute('display_state_label', $machine->stateLabel());
+            $machine->setAttribute(
+                'display_state_badge_class',
+                $machine->isPoweredOff() ? 'bg-label-danger' : 'bg-label-success'
+            );
             $machine->setAttribute('is_powered_off', $machine->isPoweredOff());
 
             return $machine;

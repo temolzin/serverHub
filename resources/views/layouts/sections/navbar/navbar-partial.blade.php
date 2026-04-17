@@ -207,10 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             const text = section.getText(item);
 
                             html += `
-                                <a href="${section.url}?search=${searchValue}"
-                                   class="d-block p-1 hover-item text-decoration-none text-dark">
-                                   ${section.icon} ${text}
-                                </a>`;
+                            <a href="${section.url}?id=${item.id}"
+                            class="d-block p-1 hover-item text-decoration-none text-dark">
+                            ${section.icon} ${text}
+                            </a>`;
                         });
                     });
 
