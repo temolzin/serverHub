@@ -127,16 +127,25 @@
                         </div>
                     </li>`).join('')
                     : '';
+                const swalContent = rows
+                    ?   {
+                            html: `
+                                <div class="text-start mb-3">
+                                    <p class="mb-2 fw-semibold">Resumen por tabla:</p>
+                                    <ul class="list-unstyled mb-0">${rows}</ul>
+                                </div>
+                                <p class="mb-0">${escapeHtml(successMessage)}</p>
+                            `,
+                        }
+                    :   {
+                            text: successMessage,
+                        };
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Listo',
                     confirmButtonText: 'Perfecto',
-                    ...(rows ? { html: `
-                    <div class="text-start mb-3">
-                        <p class="mb-2 fw-semibold">Resumen por tabla:</p>
-                        <ul class="list-unstyled mb-0">${rows}</ul>
-                    </div>
-                    <p class="mb-0">${escapeHtml(successMessage)}</p>` } : { text: successMessage })
+                    ...swalContent,
                 });
             @endif
 
