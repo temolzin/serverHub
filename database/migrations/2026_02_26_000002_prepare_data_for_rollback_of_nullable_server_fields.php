@@ -50,9 +50,14 @@ return new class extends Migration
             ->whereNull('os_according_to_the_vmware')
             ->update(['os_according_to_the_vmware' => 'N/A']);
 
+        DB::table('servers')
+            ->whereNull('owner_id')
+            ->update(['owner_id' => 1]);
+
         DB::table('gcp_machines')
             ->whereNull('owner_id')
             ->update(['owner_id' => 1]);
+
         Schema::table('servers', function (Blueprint $table) {
             $table->unsignedBigInteger('owner_id')->nullable(false)->change();
             $table->unsignedBigInteger('type_application_id')->nullable(false)->change();
