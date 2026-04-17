@@ -115,13 +115,28 @@
                     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
                 }[char]));
                 const rows = Array.isArray(importSummary) && importSummary.length
-                    ? importSummary.map(item => `<li class="border-bottom py-2"><div class="d-flex justify-content-between"><span>${escapeHtml(item.label ?? 'Tabla')}</span><strong>${Number(item.total) || 0} registros</strong></div><div class="d-flex gap-3 small"><span class="text-success">Nuevos: ${Number(item.created) || 0}</span><span class="text-primary">Actualizados: ${Number(item.updated) || 0}</span></div></li>`).join('')
+                    ? importSummary.map(item => `
+                    <li class="border-bottom py-2">
+                        <div class="d-flex justify-content-between">
+                            <span>${escapeHtml(item.label ?? 'Tabla')}</span>
+                            <strong>${Number(item.total) || 0} registros</strong>
+                        </div>
+                        <div class="d-flex gap-3 small">
+                            <span class="text-success">Nuevos: ${Number(item.created) || 0}</span>
+                            <span class="text-primary">Actualizados: ${Number(item.updated) || 0}</span>
+                        </div>
+                    </li>`).join('')
                     : '';
                 Swal.fire({
                     icon: 'success',
                     title: 'Listo',
                     confirmButtonText: 'Perfecto',
-                    ...(rows ? { html: `<div class="text-start mb-3"><p class="mb-2 fw-semibold">Resumen por tabla:</p><ul class="list-unstyled mb-0">${rows}</ul></div><p class="mb-0">${escapeHtml(successMessage)}</p>` } : { text: successMessage })
+                    ...(rows ? { html: `
+                    <div class="text-start mb-3">
+                        <p class="mb-2 fw-semibold">Resumen por tabla:</p>
+                        <ul class="list-unstyled mb-0">${rows}</ul>
+                    </div>
+                    <p class="mb-0">${escapeHtml(successMessage)}</p>` } : { text: successMessage })
                 });
             @endif
 

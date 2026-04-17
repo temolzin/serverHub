@@ -355,53 +355,53 @@ class ImportController extends Controller
             : 1;
         $uuid = $this->getValue($data, ['uuid']);
         $excelData = array_filter([
-            'uuid'                       => $uuid ?: null,
+            'uuid' => $uuid ?: null,
             'vm_according_to_the_vmware' => $vm ?: null,
-            'primary_ip_address'         => $primaryIp ?: null,
-            'state'                      => $this->normalizeState(
-                                                $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
-                                            ),
-            'datacenter'                 => $this->getValue($data, ['datacenter']),
-            'environment'                => $this->getValue($data, ['environment', 'enviroment', 'entorno']),
+            'primary_ip_address' => $primaryIp ?: null,
+            'state' => $this->normalizeState(
+                $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
+            ),
+            'datacenter' => $this->getValue($data, ['datacenter']),
+            'environment' => $this->getValue($data, ['environment', 'enviroment', 'entorno']),
             'os_according_to_the_vmware' => $this->getValue($data, [
-                                                'os according to the wmware',
-                                                'os according wmware',
-                                                'os according to the vmware tools',
-                                                'os according to the vmware',
-                                            ]),
-            'os_version_internal'        => $this->getValue($data, [
-                                                'real os',
-                                                'real os internal',
-                                                'os according to the configuration file',
-                                            ]),
-            'hostname_internal'          => $this->getValue($data, ['hostname real', 'real hostname']),
-            'ip_user'                    => $this->getValue($data, ['ip']),
-            'ip_monitoring'              => $this->getValue($data, ['monitoreo']),
-            'dns_name'                   => $this->getValue($data, ['dns name']),
-            'other_ips'                  => $otherIps ?: null,
-            'latest_security_patch'      => $this->normalizeLatestPatch(
-                                                $this->getValue($data, ['latest security patch'])
-                                            ),
-            'comments'                   => $this->getValue($data, ['comments', 'comentarios']),
+                'os according to the wmware',
+                'os according wmware',
+                'os according to the vmware tools',
+                'os according to the vmware',
+            ]),
+            'os_version_internal' => $this->getValue($data, [
+                'real os',
+                'real os internal',
+                'os according to the configuration file',
+            ]),
+            'hostname_internal' => $this->getValue($data, ['hostname real', 'real hostname']),
+            'ip_user' => $this->getValue($data, ['ip']),
+            'ip_monitoring' => $this->getValue($data, ['monitoreo']),
+            'dns_name' => $this->getValue($data, ['dns name']),
+            'other_ips' => $otherIps ?: null,
+            'latest_security_patch' => $this->normalizeLatestPatch(
+                $this->getValue($data, ['latest security patch'])
+            ),
+            'comments' => $this->getValue($data, ['comments', 'comentarios']),
         ], fn($v) => $v !== null);
         $createOnly = [
-            'owner_id'                   => null,
-            'created_by'                 => Auth::id(),
-            'type_application_id'        => $typeApplicationId,
+            'owner_id' => null,
+            'created_by' => Auth::id(),
+            'type_application_id' => $typeApplicationId,
             'vm_according_to_the_vmware' => $vm ?: 'N/A',
-            'hostname_internal'          => $vm ?: 'N/A',
-            'state'                      => 'poweredOn',
-            'datacenter'                 => 'N/A',
-            'environment'                => 'N/A',
+            'hostname_internal' => $vm ?: 'N/A',
+            'state' => 'poweredOn',
+            'datacenter' => 'N/A',
+            'environment' => 'N/A',
             'os_according_to_the_vmware' => 'N/A',
-            'os_version_internal'        => 'N/A',
-            'ip_user'                    => 'N/A',
-            'ip_monitoring'              => 'N/A',
-            'dns_name'                   => 'N/A',
-            'other_ips'                  => 'N/A',
-            'comments'                   => 'N/A',
-            'ram_memory'                 => 0,
-            'swap_memory'                => 0,
+            'os_version_internal' => 'N/A',
+            'ip_user' => 'N/A',
+            'ip_monitoring' => 'N/A',
+            'dns_name' => 'N/A',
+            'other_ips' => 'N/A',
+            'comments' => 'N/A',
+            'ram_memory' => 0,
+            'swap_memory' => 0,
         ];
 
         $server = collect([
@@ -448,49 +448,47 @@ class ImportController extends Controller
             'primary ip address.1',
         ]);
 
-
         $uuid = $this->getValue($data, ['uuid']);
-
         $excelData = array_filter([
-            'uuid'                       => $uuid ?: null,
+            'uuid' => $uuid ?: null,
             'vm_according_to_the_vmware' => $vm ?: null,
-            'primary_ip_address'         => $primaryIp ?: null,
-            'state'                      => 'poweredOff',
-            'datacenter'                 => $this->getValue($data, ['datacenter']),
-            'environment'                => $this->getValue($data, ['environment', 'entorno']),
-            'hostname_internal'          => $this->getValue($data, ['hostname internal', 'hostname real', 'real hostname']),
+            'primary_ip_address' => $primaryIp ?: null,
+            'state' => 'poweredOff',
+            'datacenter' => $this->getValue($data, ['datacenter']),
+            'environment' => $this->getValue($data, ['environment', 'entorno']),
+            'hostname_internal' => $this->getValue($data, ['hostname internal', 'hostname real', 'real hostname']),
             'os_according_to_the_vmware' => $this->getValue($data, [
-                                                'os according to the vmware tools',
-                                                'os according to the vmware',
-                                                'os according to the wmware',
-                                                'os according wmware',
-                                            ]),
-            'os_version_internal'        => $this->getValue($data, [
-                                                'os according to the configuration file',
-                                                'os_version_internal',
-                                                'real os',
-                                                'real os internal',
-                                            ]),
+                'os according to the vmware tools',
+                'os according to the vmware',
+                'os according to the wmware',
+                'os according wmware',
+            ]),
+            'os_version_internal' => $this->getValue($data, [
+                'os according to the configuration file',
+                'os_version_internal',
+                'real os',
+                'real os internal',
+            ]),
         ], fn($v) => $v !== null);
 
         $createOnly = [
-            'owner_id'                   => null,
-            'created_by'                 => Auth::id(),
-            'type_application_id'        => 1,
+            'owner_id' => null,
+            'created_by' => Auth::id(),
+            'type_application_id' => 1,
             'vm_according_to_the_vmware' => $vm ?: 'N/A',
-            'hostname_internal'          => $vm ?: 'N/A',
-            'state'                      => 'poweredOff',
-            'datacenter'                 => 'N/A',
-            'environment'                => 'N/A',
+            'hostname_internal' => $vm ?: 'N/A',
+            'state' => 'poweredOff',
+            'datacenter' => 'N/A',
+            'environment' => 'N/A',
             'os_according_to_the_vmware' => 'N/A',
-            'os_version_internal'        => 'N/A',
-            'ip_user'                    => 'N/A',
-            'ip_monitoring'              => 'N/A',
-            'dns_name'                   => 'N/A',
-            'other_ips'                  => 'N/A',
-            'comments'                   => 'N/A',
-            'ram_memory'                 => 0,
-            'swap_memory'                => 0,
+            'os_version_internal' => 'N/A',
+            'ip_user' => 'N/A',
+            'ip_monitoring' => 'N/A',
+            'dns_name' => 'N/A',
+            'other_ips' => 'N/A',
+            'comments' => 'N/A',
+            'ram_memory' => 0,
+            'swap_memory' => 0,
         ];
 
         $server = collect([

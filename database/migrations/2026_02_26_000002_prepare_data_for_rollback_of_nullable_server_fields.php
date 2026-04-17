@@ -57,6 +57,7 @@ return new class extends Migration
         DB::table('gcp_machines')
             ->whereNull('owner_id')
             ->update(['owner_id' => 1]);
+
         Schema::table('servers', function (Blueprint $table) {
             $table->unsignedBigInteger('owner_id')->nullable(false)->change();
             $table->unsignedBigInteger('type_application_id')->nullable(false)->change();
