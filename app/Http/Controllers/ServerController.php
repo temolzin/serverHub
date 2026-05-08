@@ -25,9 +25,9 @@ class ServerController extends Controller
             })
             ->where('state', '!=', 'poweredOff')
             ->latest()
-            ->paginate(10);
+            ->get();
 
-        $this->hydrateServerPresentationData(collect($servers->items()));
+        $this->hydrateServerPresentationData(collect($servers));
 
         return view('servers.index', [
             'servers' => $servers,
