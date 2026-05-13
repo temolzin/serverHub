@@ -182,9 +182,9 @@ class GcpMachineController extends Controller
 
         $gcpMachines = $gcpMachines
             ->latest('id')
-            ->paginate(10);
+            ->get();
 
-        $this->decorateMachinesForView(collect($gcpMachines->items()));
+        $this->decorateMachinesForView(collect($gcpMachines));
 
         $owners = Owner::orderBy('name')->get();
         $typeApplications = TypeApplication::orderBy('name_application')->get();
