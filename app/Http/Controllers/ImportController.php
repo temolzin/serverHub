@@ -286,6 +286,7 @@ class ImportController extends Controller
             ->filter(fn($v, $k) => preg_match('/^ip alias/i', $k) && $v)
             ->flatMap(fn($v) => preg_split('/\r\n|\r|\n/', $v))
             ->map('trim')
+            ->map(fn($alias) => $this->normalizeImportedAliasIp($alias, (string) $internalIp))
             ->filter()
             ->values();
 
@@ -305,10 +306,14 @@ class ImportController extends Controller
                 $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
             ),
             'operations_system'    => $this->getValue($data, ['sistema operativo'], 'N/A'),
+            'latest_security_patch' => $this->normalizeLatestPatch(
+                $this->getValue($data, ['latest security patch', 'ultimo parche de seguridad', 'último parche de seguridad'])
+            ),
             'kernel_version'       => $this->getValue($data, ['version de kernel'], 'N/A'),
             'alias_ip'             => $aliases[0] ?? 'N/A',
             'alias2_ip'            => $aliases[1] ?? 'N/A',
             'alias3_ip'            => $aliases[2] ?? 'N/A',
+            'other_ips'            => $this->getValue($data, ['other ips', 'otras ips'], 'N/A'),
             'ram_memory'           => max(0, (int) $ramRaw),
             'swap_memory'          => max(0, (int) $swapRaw),
         ];
@@ -325,6 +330,53 @@ class ImportController extends Controller
         }
 
         return $machine->wasRecentlyCreated ? 'created' : ($machine->wasChanged() ? 'updated' : null);
+    }
+
+    private function normalizeImportedAliasIp($value, string $internalIp): ?string
+    {
+        $alias = trim((string) $value);
+
+        if ($alias === '') {
+            return null;
+        }
+
+        if (!preg_match('/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?:\/(\d{1,2}))?$/', $alias, $matches)) {
+            return $alias;
+        }
+
+        $firstOctet = (int) $matches[1];
+        $octet2 = (int) $matches[2];
+        $octet3 = (int) $matches[3];
+        $octet4 = (int) $matches[4];
+        $mask = $matches[5] ?? null;
+
+        if (
+            $firstOctet > 255 ||
+            $octet2 > 255 ||
+            $octet3 > 255 ||
+            $octet4 > 255
+        ) {
+            return $alias;
+        }
+
+        if ($firstOctet === 0 && preg_match('/^(\d{1,3})\./', trim($internalIp), $internalMatches)) {
+            $candidate = (int) $internalMatches[1];
+            if ($candidate >= 1 && $candidate <= 255) {
+                $firstOctet = $candidate;
+            }
+        }
+
+        if ($mask !== null) {
+            if ($mask === '3') {
+                $mask = '32';
+            } elseif ((int) $mask > 32) {
+                return $alias;
+            }
+        }
+
+        $normalized = sprintf('%d.%d.%d.%d', $firstOctet, $octet2, $octet3, $octet4);
+
+        return $mask !== null ? $normalized . '/' . $mask : $normalized;
     }
 
     private function importServerRow(array $data, bool $isAppliance = false): ?array
