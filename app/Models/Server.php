@@ -48,6 +48,7 @@ class Server extends Model
         'ram_memory',
         'swap_memory',
         'latest_security_patch',
+        'creation_date',
         'comments',
     ];
 

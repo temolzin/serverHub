@@ -107,22 +107,26 @@
                             <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763"
                                 value="{{ filled($server->os_version_internal) ? $server->os_version_internal : 'N/A' }}" maxlength="50" required>
                         </div>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-12 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-desktop me-1 text-primary"></i>Hostname interno</label>
                             <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-app-01"
                                 value="{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>
-                            <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8192" value="{{ $server->ram_memory ?? 0 }}" required>
+                            <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (GB)</label>
+                            <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8" value="{{ $server->ram_memory ?? 0 }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (MB)</label>
-                            <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" value="{{ $server->swap_memory ?? 0 }}" required>
+                            <label class="form-label d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (GB)</label>
+                            <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4" value="{{ $server->swap_memory ?? 0 }}" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-calendar me-1 text-primary"></i>Último parche</label>
                             <input type="date" name="latest_security_patch" class="form-control" value="{{ $server->latest_security_patch }}">
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label d-block text-start"><i class="bx bx-calendar-star me-1 text-primary"></i>Fecha de creación de servidor</label>
+                            <input type="text" name="creation_date" class="form-control" value="{{ old('creation_date', $server->creation_date) }}" placeholder="Ej: 2024-10-15 / Octubre 2024">
                         </div>
                         <div class="col-md-12 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-list-ul me-1 text-primary"></i>Otras IPs</label>

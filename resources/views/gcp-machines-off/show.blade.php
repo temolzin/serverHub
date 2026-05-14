@@ -125,6 +125,12 @@
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold"><i class="bx bx-calendar-star me-1 text-primary"></i>Fecha de creación</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="{{ filled($machine->creation_date) ? $machine->creation_date : 'N/A' }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-4">
                         <label class="form-label fw-semibold"><i class="bx bx-list-ul me-1 text-primary"></i>Otras IPs</label>
                         <div class="input-group">
                             <textarea class="form-control" rows="2" disabled>{{ filled($machine->other_ips) ? $machine->other_ips : 'N/A' }}</textarea>
