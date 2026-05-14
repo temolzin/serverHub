@@ -60,6 +60,11 @@ return new class extends Migration
 
         Schema::table('servers', function (Blueprint $table) {
             $table->unsignedBigInteger('owner_id')->nullable(false)->change();
+            DB::table('servers')
+                ->whereNull('type_application_id')
+                ->update([
+                    'type_application_id' => 1
+                ]);
             $table->unsignedBigInteger('type_application_id')->nullable(false)->change();
             $table->string('datacenter')->nullable(false)->change();
             $table->string('hostname_internal')->nullable(false)->change();

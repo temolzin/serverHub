@@ -16,7 +16,7 @@ use PhpOffice\PhpSpreadsheet\Shared\Date as ExcelDate;
 class ImportController extends Controller
 {
     private const FORCED_OFF_SHEETS = ['bajatultitlan', 'tuloff', 'qrooff'];
-    private const APPLIANCE_SHEETS  = ['tulapliance', 'qroapliance'];
+    private const APPLIANCE_SHEETS  = ['tulapliance', 'qroapliance', 'aplianceompremise on', 'aplianceompremise off'];
 
     private array $processedServerIds = [];
 
@@ -316,6 +316,7 @@ class ImportController extends Controller
             'other_ips'            => $this->getValue($data, ['other ips', 'otras ips'], 'N/A'),
             'ram_memory'           => max(0, (int) $ramRaw),
             'swap_memory'          => max(0, (int) $swapRaw),
+            'created_by'           => Auth::id(),
         ];
 
         if ($uuid) {
@@ -384,7 +385,8 @@ class ImportController extends Controller
         $primaryIp = $this->getValue($data, [
             'primary ip address',
             'primary ip address ',
-            'primary ip address.1'
+            'primary ip address.1',
+            'ip primaria',
         ]);
 
         $vm = $this->getValue($data, ['vm']);
@@ -401,6 +403,9 @@ class ImportController extends Controller
             ->filter()
             ->unique()
             ->implode(', ');
+
+        $ramRaw  = collect($data)->first(fn($v, $k) => str_contains(strtolower($k), 'ram') && $v);
+        $swapRaw = collect($data)->first(fn($v, $k) => str_contains(strtolower($k), 'swap') && $v);
 
         $typeApplicationId = $isAppliance
             ? ApplianceController::getApplianceTypeApplicationId()
@@ -420,21 +425,26 @@ class ImportController extends Controller
                 'os according wmware',
                 'os according to the vmware tools',
                 'os according to the vmware',
+                'sistema operativo',
             ]),
             'os_version_internal' => $this->getValue($data, [
                 'real os',
                 'real os internal',
                 'os according to the configuration file',
+                'versión interna',
+                'version interna',
             ]),
-            'hostname_internal' => $this->getValue($data, ['hostname real', 'real hostname']),
-            'ip_user' => $this->getValue($data, ['ip']),
-            'ip_monitoring' => $this->getValue($data, ['monitoreo']),
-            'dns_name' => $this->getValue($data, ['dns name']),
-            'other_ips' => $otherIps ?: null,
+            'hostname_internal' => $this->getValue($data, ['hostname real', 'real hostname', 'hostname interno',]),
+            'ip_user' => $this->getValue($data, ['ip', 'IP usuario', 'ip usuario']),
+            'ip_monitoring' => $this->getValue($data, ['monitoreo', 'iP monitoreo', 'ip monitoreo']),
+            'dns_name' => $this->getValue($data, ['dns name', 'dns', ]),
+            'other_ips' => $otherIps ?: $this->getValue($data, ['other ips', 'otras ips']),
             'latest_security_patch' => $this->normalizeLatestPatch(
-                $this->getValue($data, ['latest security patch'])
+                $this->getValue($data, ['latest security patch', 'ultimo parche de seguridad', 'último parche de seguridad'])
             ),
             'comments' => $this->getValue($data, ['comments', 'comentarios']),
+            'ram_memory'  => $ramRaw !== null ? max(0, (int) $ramRaw) : null,
+            'swap_memory' => $swapRaw !== null ? max(0, (int) $swapRaw) : null,
         ], fn($v) => $v !== null);
         $createOnly = [
             'owner_id' => null,
@@ -498,6 +508,7 @@ class ImportController extends Controller
             'primary ip address',
             'primary ip address ',
             'primary ip address.1',
+            'ip primaria',
         ]);
 
         $uuid = $this->getValue($data, ['uuid']);
@@ -520,6 +531,7 @@ class ImportController extends Controller
                 'os_version_internal',
                 'real os',
                 'real os internal',
+                'versión os so interno'
             ]),
         ], fn($v) => $v !== null);
 
