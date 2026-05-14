@@ -531,7 +531,7 @@ class ImportController extends Controller
                 'os_version_internal',
                 'real os',
                 'real os internal',
-                'versión os so interno'
+                'versión so interno'
             ]),
         ], fn($v) => $v !== null);
 
