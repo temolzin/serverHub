@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\TypeApplication;
 use App\Models\Database as DatabaseModel;
+use Illuminate\Support\Facades\Auth;
 
 class GcpMachineController extends Controller
 {
@@ -70,7 +71,7 @@ class GcpMachineController extends Controller
         $gcp_machine->powerLogs()->create([
             'action' => 'off',
             'motive' => $request->motive,
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
 
         $this->syncLinkedDatabaseStatus(
@@ -107,7 +108,7 @@ class GcpMachineController extends Controller
         $previousDatabaseId = $gcpMachine?->database_id;
 
         if (!$gcpMachine) {
-            $payload['created_by'] = auth()->id();
+            $payload['created_by'] = Auth::id();
         }
 
         $machine = $gcpMachine
@@ -171,9 +172,9 @@ class GcpMachineController extends Controller
         }
 
         if ($request->filled('search')) {
-            $gcpMachines->where(function($q) use ($request) {
+            $gcpMachines->where(function ($q) use ($request) {
                 $q->where('machine_name', 'like', "%{$request->search}%")
-                ->orWhere('internal_ip', 'like', "%{$request->search}%");
+                    ->orWhere('internal_ip', 'like', "%{$request->search}%");
             });
         }
 
@@ -227,6 +228,7 @@ class GcpMachineController extends Controller
             'ram_memory' => ['required', 'integer', 'min:256', 'max:1048576'],
             'swap_memory' => ['required', 'integer', 'min:0', 'max:1048576'],
             'latest_security_patch' => 'nullable|date',
+            'creation_date' => 'nullable|string|max:255',
             'alias_ip' => 'nullable|string|max:255',
             'alias2_ip' => 'nullable|string|max:255',
             'alias3_ip' => 'nullable|string|max:255',
@@ -378,5 +380,4 @@ class GcpMachineController extends Controller
             return $machine;
         });
     }
-
 }

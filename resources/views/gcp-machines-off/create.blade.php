@@ -96,15 +96,17 @@
                             <label class="form-label"><i class="bx bx-shield-quarter me-1 text-primary"></i>Ultimo parche</label>
                             <input type="date" name="latest_security_patch" class="form-control">
                         </div>
-                        <div class="col-md-3 mb-4">
-                            <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
-                            <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8192" min="256" max="1048576" required>
-                            <small class="text-muted">Rango permitido: 256 MB - 1048576 MB</small>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label"><i class="bx bx-calendar-star me-1 text-primary"></i>Fecha de creación de GCP</label>
+                            <input type="text" name="creation_date" class="form-control" placeholder="Ej: 2024-10-15 / Octubre 2024">
                         </div>
-                        <div class="col-md-3 mb-4">
-                            <label class="form-label"><i class="bx bx-transfer me-1 text-primary"></i>Swap (MB) (obligatorio)</label>
-                            <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 2048" min="0" max="1048576" required>
-                            <small class="text-muted">Rango permitido: 0 MB - 1048576 MB</small>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (GB) (obligatorio)</label>
+                            <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8" required>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label"><i class="bx bx-transfer me-1 text-primary"></i>Swap (GB) (obligatorio)</label>
+                            <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 2" required>
                         </div>
                         <div class="col-md-12 mb-4">
                             <label class="form-label"><i class="bx bx-list-ul me-1 text-primary"></i>Otras IPs</label>

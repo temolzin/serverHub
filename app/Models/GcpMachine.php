@@ -48,6 +48,7 @@ class GcpMachine extends Model
         'kernel_version',
         'ram_memory',
         'swap_memory',
+        'creation_date',
         'owner_id',
         'created_by'
     ];
@@ -55,9 +56,9 @@ class GcpMachine extends Model
     protected static function booted()
     {
         static::creating(function ($machine) {
-        if (empty($machine->uuid)) {
-            $machine->uuid = (string) Str::uuid();
-        }
+            if (empty($machine->uuid)) {
+                $machine->uuid = (string) Str::uuid();
+            }
         });
     }
 

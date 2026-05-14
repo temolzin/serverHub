@@ -98,6 +98,37 @@ class ImportController extends Controller
         }
     }
 
+    private function parseExcelDateLike($value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        try {
+            if (is_numeric($value)) {
+                return ExcelDate::excelToDateTimeObject((float) $value)->format('Y-m-d H:i:s');
+            }
+
+            $v = trim((string) $value);
+            $v = preg_replace('/\ba\.?\s?m\.?\b/i', 'AM', $v);
+            $v = preg_replace('/\bp\.?\s?m\.?\b/i', 'PM', $v);
+
+            $formats = ['d/m/Y H:i:s A', 'd/m/Y H:i A', 'Y-m-d H:i:s', 'd/m/Y'];
+            foreach ($formats as $fmt) {
+                try {
+                    $dt = Carbon::createFromFormat($fmt, $v);
+                    return $dt->format('Y-m-d H:i:s');
+                } catch (\Throwable $e) {
+                    // try next
+                }
+            }
+
+            return Carbon::parse($v)->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
     private function buildData(array $headers, array $row): ?array
     {
         return count($headers) !== count($row)
@@ -306,6 +337,14 @@ class ImportController extends Controller
                 $this->getValue($data, ['state', 'powerstate', 'state / powerstate'])
             ),
             'operations_system'    => $this->getValue($data, ['sistema operativo'], 'N/A'),
+            'creation_date'        => $this->parseExcelDateLike($this->getValue($data, [
+                'creation date',
+                'server creation date',
+                'fecha de creacion',
+                'fecha de creación',
+                'fecha de creacion de servidor',
+                'fecha de creación de servidor',
+            ])),
             'latest_security_patch' => $this->normalizeLatestPatch(
                 $this->getValue($data, ['latest security patch', 'ultimo parche de seguridad', 'último parche de seguridad'])
             ),
@@ -437,11 +476,19 @@ class ImportController extends Controller
             'hostname_internal' => $this->getValue($data, ['hostname real', 'real hostname', 'hostname interno',]),
             'ip_user' => $this->getValue($data, ['ip', 'IP usuario', 'ip usuario']),
             'ip_monitoring' => $this->getValue($data, ['monitoreo', 'iP monitoreo', 'ip monitoreo']),
-            'dns_name' => $this->getValue($data, ['dns name', 'dns', ]),
+            'dns_name' => $this->getValue($data, ['dns name', 'dns',]),
             'other_ips' => $otherIps ?: $this->getValue($data, ['other ips', 'otras ips']),
             'latest_security_patch' => $this->normalizeLatestPatch(
                 $this->getValue($data, ['latest security patch', 'ultimo parche de seguridad', 'último parche de seguridad'])
             ),
+            'creation_date' => $this->parseExcelDateLike($this->getValue($data, [
+                'creation date',
+                'server creation date',
+                'fecha de creacion',
+                'fecha de creación',
+                'fecha de creacion de servidor',
+                'fecha de creación de servidor',
+            ])),
             'comments' => $this->getValue($data, ['comments', 'comentarios']),
             'ram_memory'  => $ramRaw !== null ? max(0, (int) $ramRaw) : null,
             'swap_memory' => $swapRaw !== null ? max(0, (int) $swapRaw) : null,
@@ -519,6 +566,14 @@ class ImportController extends Controller
             'state' => 'poweredOff',
             'datacenter' => $this->getValue($data, ['datacenter']),
             'environment' => $this->getValue($data, ['environment', 'entorno']),
+            'creation_date' => $this->parseExcelDateLike($this->getValue($data, [
+                'creation date',
+                'server creation date',
+                'fecha de creacion',
+                'fecha de creación',
+                'fecha de creacion de servidor',
+                'fecha de creación de servidor',
+            ])),
             'hostname_internal' => $this->getValue($data, ['hostname internal', 'hostname real', 'real hostname']),
             'os_according_to_the_vmware' => $this->getValue($data, [
                 'os according to the vmware tools',

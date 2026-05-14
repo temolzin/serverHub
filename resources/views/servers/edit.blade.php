@@ -98,23 +98,25 @@
                             <label class="form-label text-start w-100"><i class="bx bx-code-block me-1 text-primary"></i>Versión interna</label>
                             <input type="text" name="os_version_internal" class="form-control text-start" value="{{ old('os_version_internal', $server->os_version_internal) }}" maxlength="50" required>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label text-start w-100"><i class="bx bx-server me-1 text-primary"></i>Hostname interno</label>
                             <input type="text" name="hostname_internal" class="form-control text-start" value="{{ old('hostname_internal', $server->hostname_internal) }}" maxlength="50" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label text-start w-100"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>
-                            <input type="number" name="ram_memory" class="form-control text-start" value="{{ old('ram_memory', $server->ram_memory) }}" min="256" max="1048576" required>
-                            <small class="text-muted d-block text-start">Rango permitido: 256 MB - 1048576 MB</small>
+                            <label class="form-label text-start w-100"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (GB)</label>
+                            <input type="number" name="ram_memory" class="form-control text-start" value="{{ old('ram_memory', $server->ram_memory) }}" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label text-start w-100"><i class="bx bx-transfer me-1 text-primary"></i>Swap (MB)</label>
-                            <input type="number" name="swap_memory" class="form-control text-start" value="{{ old('swap_memory', $server->swap_memory) }}" min="0" max="1048576" required>
-                            <small class="text-muted d-block text-start">Rango permitido: 0 MB - 1048576 MB</small>
+                            <label class="form-label text-start w-100"><i class="bx bx-transfer me-1 text-primary"></i>Swap (GB)</label>
+                            <input type="number" name="swap_memory" class="form-control text-start" value="{{ old('swap_memory', $server->swap_memory) }}" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-start w-100"><i class="bx bx-shield-quarter me-1 text-primary"></i>Último parche</label>
                             <input type="date" name="latest_security_patch" class="form-control text-start" value="{{ old('latest_security_patch', $server->latest_security_patch) }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-start w-100"><i class="bx bx-calendar me-1 text-primary"></i>Fecha de creación de servidor</label>
+                            <input type="text" name="creation_date" class="form-control text-start" value="{{ old('creation_date', $server->creation_date) }}" placeholder="Ej: 2024-10-15 / Octubre 2024">
                         </div>
                         <div class="col-12">
                             <label class="form-label text-start w-100"><i class="bx bx-network-chart me-1 text-primary"></i>Otras IPs</label>

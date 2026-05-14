@@ -71,16 +71,20 @@
                         <input type="text" class="form-control" value="{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>
-                        <input type="text" class="form-control" value="{{ $server->ram_memory ?? 0 }} MB" disabled>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (GB)</label>
+                        <input type="text" class="form-control" value="{{ $server->ram_memory ?? 0 }} GB" disabled>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (MB)</label>
-                        <input type="text" class="form-control" value="{{ $server->swap_memory ?? 0 }} MB" disabled>
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (GB)</label>
+                        <input type="text" class="form-control" value="{{ $server->swap_memory ?? 0 }} GB" disabled>
                     </div>
                     <div class="col-md-12 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-calendar me-1 text-primary"></i>Último parche</label>
                         <input type="text" class="form-control" value="{{ filled($server->latest_security_patch) ? $server->latest_security_patch : 'N/A' }}" disabled>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold d-block text-start"><i class="bx bx-calendar-star me-1 text-primary"></i>Fecha de creación de servidor</label>
+                        <input type="text" class="form-control" value="{{ filled($server->creation_date) ? $server->creation_date : 'N/A' }}" disabled>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="form-label fw-semibold d-block text-start"><i class="bx bx-list-ul me-1 text-primary"></i>Otras IPs</label>

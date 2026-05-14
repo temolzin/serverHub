@@ -96,21 +96,25 @@
                             <label class="form-label d-block text-start"><i class="bx bx-code me-1 text-primary"></i>Versión interna (obligatorio)</label>
                             <input type="text" name="os_version_internal" class="form-control" placeholder="Ej: 10.0.17763" maxlength="50" required>
                         </div>
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-12 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-desktop me-1 text-primary"></i>Hostname interno (obligatorio)</label>
                             <input type="text" name="hostname_internal" class="form-control" placeholder="Ej: srv-prod-01" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB) (obligatorio)</label>
-                            <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 16384" required>
+                            <label class="form-label d-block text-start"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (GB) (obligatorio)</label>
+                            <input type="number" name="ram_memory" class="form-control" placeholder="Ej: 8" required>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label class="form-label d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (MB) (obligatorio)</label>
-                            <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4096" required>
+                            <label class="form-label d-block text-start"><i class="bx bx-data me-1 text-primary"></i>Swap (GB) (obligatorio)</label>
+                            <input type="number" name="swap_memory" class="form-control" placeholder="Ej: 4" required>
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-calendar me-1 text-primary"></i>Último parche</label>
                             <input type="date" name="latest_security_patch" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label d-block text-start"><i class="bx bx-calendar-star me-1 text-primary"></i>Fecha de creación de servidor</label>
+                            <input type="text" name="creation_date" class="form-control" placeholder="Ej: 2024-10-15 / Octubre 2024">
                         </div>
                         <div class="col-md-12 mb-4">
                             <label class="form-label d-block text-start"><i class="bx bx-list-ul me-1 text-primary"></i>Otras IPs</label>

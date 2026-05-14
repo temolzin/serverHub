@@ -9,6 +9,7 @@ use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Database;
+use Illuminate\Support\Facades\Auth;
 
 class ApplianceController extends Controller
 {
@@ -74,7 +75,7 @@ class ApplianceController extends Controller
 
         $server = $server
             ? tap($server)->update($payload)
-            : Server::create($payload + ['created_by' => auth()->id()]);
+            : Server::create($payload + ['created_by' => Auth::id()]);
 
         $this->syncApplications(
             $server,

@@ -9,16 +9,21 @@ use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Database;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class ServerController extends Controller
 {
     public function index(Request $request)
     {
-        $servers = Server::with(['owner','applications','typeApplication','database'])
+        $applianceType = TypeApplication::where('name_application', 'Apliance')->first();
+        $applianceTypeId = $applianceType?->id;
+
+        $servers = Server::with(['owner', 'applications', 'typeApplication', 'database'])
+            ->when($applianceTypeId, fn($q) => $q->where('type_application_id', '!=', $applianceTypeId))
             ->when($request->filled('id'), fn($q) => $q->where('id', $request->id))
-            ->when($request->filled('search'), function($q) use ($request) {
-                $q->where(function($sub) use ($request) {
+            ->when($request->filled('search'), function ($q) use ($request) {
+                $q->where(function ($sub) use ($request) {
                     $sub->where('hostname_internal', 'like', "%{$request->search}%")
                         ->orWhere('primary_ip_address', 'like', "%{$request->search}%");
                 });
@@ -77,7 +82,7 @@ class ServerController extends Controller
 
         $server = $server
             ? tap($server)->update($payload)
-            : Server::create($payload + ['created_by' => auth()->id()]);
+            : Server::create($payload + ['created_by' => Auth::id()]);
 
         $this->syncApplications(
             $server,
@@ -126,7 +131,7 @@ class ServerController extends Controller
         $server->powerLogs()->create([
             'action' => 'off',
             'motive' => $request->motive,
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
 
         optional($server->database)->update([
@@ -161,7 +166,7 @@ class ServerController extends Controller
             ->when($applianceTypeId, fn($q) => $q->where('type_application_id', '!=', $applianceTypeId));
 
         ($off ? fn($q) => $this->applyPoweredOffFilter($q)
-        : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+            : fn($q) => $this->applyPoweredOnFilter($q))($servers);
 
         $servers = $servers->latest()->get();
         $this->hydrateServerPresentationData($servers);
@@ -226,7 +231,10 @@ class ServerController extends Controller
             'datacenter' => 'required|string|max:50',
             'os_according_to_the_vmware' => 'required|string|max:50',
             'os_version_internal' => 'required|string|max:50',
-            'hostname_internal' => ['required', 'string', 'max:50',
+            'hostname_internal' => [
+                'required',
+                'string',
+                'max:50',
                 Rule::unique('servers')->ignore($server?->id)
             ],
             'ram_memory' => 'required|integer|min:512|max:262144',
@@ -236,6 +244,7 @@ class ServerController extends Controller
             'ip_monitoring' => 'nullable|ipv4',
             'other_ips' => 'nullable|string|max:255',
             'latest_security_patch' => 'nullable|date',
+            'creation_date' => 'nullable|string|max:255',
             'comments' => 'nullable|string|max:500',
         ]);
     }
@@ -292,5 +301,4 @@ class ServerController extends Controller
             $app->update(['server_id' => $server->id]);
         }
     }
-
 }
