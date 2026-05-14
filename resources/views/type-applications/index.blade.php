@@ -12,9 +12,6 @@
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createTypeApplicationModal">
                             <i class="bx bx-plus me-1"></i> Agregar tipo de aplicación
                         </button>
-                        <a href="{{ route('export', 'type-applications') }}" class="btn btn-primary text-center">
-                            Exportar Excel
-                        </a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -25,7 +22,7 @@
                                     <th>ID</th>
                                     <th>Tipo</th>
                                     <th>Nombre</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -23,7 +23,7 @@
                                     <th>Aplicación</th>
                                     <th>Sistema operativo</th>
                                     <th>Estado</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -14,7 +14,6 @@
                     <h5 class="mb-0">Servidores Activos</h5>
                     <div class="d-flex flex-column flex-sm-row gap-2">
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createServerModal"><i class="bx bx-plus me-1"></i> Agregar servidor</button>
-                        <a href="{{ route('export', 'servers') }}" class="btn btn-primary text-center">Exportar Excel</a>
                         <button class="btn btn-primary text-center" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">Subir Excel</button>
                     </div>
                 </div>
@@ -24,29 +23,27 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Aplicación</th>
-                                    <th>Hostname</th>
-                                    <th>Base de datos</th>
-                                    <th>Entorno</th>
-                                    <th>Estado</th>
-                                    <th>IP primaria</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th>VM</th>
+                                    <th>IP USUARIO</th>
+                                    <th>IP MONITOREO</th>
+                                    <th>ENTORNO</th>
+                                    <th>DATACENTER</th>
+                                    <th>HOSTNAME</th>
+                                    <th>OTRAS IPS</th>
+                                    <th class="text-end no-export">ACCIONES</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($servers as $server)
                                     <tr>
                                         <td>{{ $server->id }}</td>
-                                        <td>{{ filled($server->display_application_name) ? $server->display_application_name : 'N/A' }}</td>
-                                        <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
-                                        <td>{{ $server->database?->name ?? 'N/A' }}</td>
+                                        <td>{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}</td>
+                                        <td>{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}</td>
+                                        <td>{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}</td>
                                         <td>{{ strtoupper(filled($server->environment) ? $server->environment : 'N/A') }}</td>
-                                        <td>
-                                            <span class="badge {{ $server->display_state_badge_class }}">
-                                                {{ $server->display_state_label }}
-                                            </span>
-                                        </td>
-                                        <td>{{ filled($server->primary_ip_address) ? $server->primary_ip_address : 'N/A' }}</td>
+                                        <td>{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}</td>
+                                        <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
+                                        <td>{{ filled($server->other_ips) ? $server->other_ips : 'N/A' }}</td>
                                         <td class="text-end">
                                             <div class="dropdown">
                                                 <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

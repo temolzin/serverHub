@@ -10,7 +10,6 @@
                     <h5 class="mb-0">Máquinas GCP</h5>
                     <div class="d-flex flex-column flex-sm-row gap-2">
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createGcpMachineModal"><i class="bx bx-plus me-1"></i> Agregar máquina</button>
-                        <a href="{{ route('export', 'gcp-machines') }}" class="btn btn-primary text-center">Exportar Excel</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -24,7 +23,7 @@
                                     <th>Entorno</th>
                                     <th>Estado</th>
                                     <th>IP interna</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

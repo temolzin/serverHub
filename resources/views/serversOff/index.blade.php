@@ -19,10 +19,13 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>VM</th>
-                                    <th>Nombre DNS</th>
-                                    <th>SO segun VMware</th>
-                                    <th>Estado</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th>IP USUARIO</th>
+                                    <th>IP MONITOREO</th>
+                                    <th>ENTORNO</th>
+                                    <th>DATACENTER</th>
+                                    <th>HOSTNAME</th>
+                                    <th>OTRAS IPS</th>
+                                    <th class="text-end no-export">ACCIONES</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,13 +33,12 @@
                                     <tr>
                                         <td>{{ $server->id }}</td>
                                         <td>{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}</td>
-                                        <td>{{ filled($server->dns_name) ? $server->dns_name : 'N/A' }}</td>
-                                        <td>{{ filled($server->os_according_to_the_vmware) ? $server->os_according_to_the_vmware : 'N/A' }}</td>
-                                        <td>
-                                            <span class="badge {{ $server->display_state_badge_class }}">
-                                                {{ $server->display_state_label }}
-                                            </span>
-                                        </td>
+                                        <td>{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}</td>
+                                        <td>{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}</td>
+                                        <td>{{ strtoupper(filled($server->environment) ? $server->environment : 'N/A') }}</td>
+                                        <td>{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}</td>
+                                        <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
+                                        <td>{{ filled($server->other_ips) ? $server->other_ips : 'N/A' }}</td>
                                         <td class="text-end">
                                             <div class="dropdown">
                                                 <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
