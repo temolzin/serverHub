@@ -10,7 +10,6 @@
                     <h5 class="mb-0">Apliances Apagados</h5>
                     <div class="d-flex flex-column flex-sm-row gap-2">
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createApplianceOffModal"><i class="bx bx-plus me-1"></i> Agregar apliance apagado</button>
-                        <a href="{{ route('export', 'appliances') }}" class="btn btn-primary text-center">Exportar Excel</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -24,7 +23,7 @@
                                     <th>Datacenter</th>
                                     <th>Tipo de Aplicación</th>
                                     <th>Estado</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

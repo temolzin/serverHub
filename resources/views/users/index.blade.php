@@ -10,7 +10,6 @@
                     <h5 class="mb-0">Usuarios</h5>
                     <div class="d-flex flex-column flex-sm-row gap-2">
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createUserModal"><i class="bx bx-plus me-1"></i> Agregar Usuario</button>
-                        <a href="{{ route('export', 'users') }}" class="btn btn-primary text-center">Exportar Excel</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -22,7 +21,7 @@
                                     <th>Apellido</th>
                                     <th>Correo</th>
                                     <th>Rol</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

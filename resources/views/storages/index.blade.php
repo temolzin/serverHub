@@ -10,7 +10,6 @@
                     <h5 class="mb-0">Almacenamiento</h5>
                     <div class="d-flex flex-column flex-sm-row gap-2">
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createStorageModal"><i class="bx bx-plus me-1"></i> Agregar almacenamiento</button>
-                        <a href="{{ route('export', 'storages') }}" class="btn btn-primary text-center">Exportar Excel</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -23,7 +22,7 @@
                                     <th>IP interna</th>
                                     <th>Entorno</th>
                                     <th>Centro de datos</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

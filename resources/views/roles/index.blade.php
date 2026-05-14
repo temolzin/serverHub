@@ -12,9 +12,6 @@
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createRoleModal">
                             <i class="bx bx-plus me-1"></i> Agregar Rol
                         </button>
-                        <a href="#" class="btn btn-primary text-center">
-                            Exportar Excel
-                        </a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -24,7 +21,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Nombre</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -344,6 +344,8 @@ class ImportController extends Controller
                 'fecha de creación',
                 'fecha de creacion de servidor',
                 'fecha de creación de servidor',
+                'creacion de la maquina',
+                'creación de la maquina',
             ])),
             'latest_security_patch' => $this->normalizeLatestPatch(
                 $this->getValue($data, ['latest security patch', 'ultimo parche de seguridad', 'último parche de seguridad'])
@@ -472,6 +474,8 @@ class ImportController extends Controller
                 'os according to the configuration file',
                 'versión interna',
                 'version interna',
+                'version so interno',
+                'versión so interno',
             ]),
             'hostname_internal' => $this->getValue($data, ['hostname real', 'real hostname', 'hostname interno',]),
             'ip_user' => $this->getValue($data, ['ip', 'IP usuario', 'ip usuario']),
@@ -488,6 +492,8 @@ class ImportController extends Controller
                 'fecha de creación',
                 'fecha de creacion de servidor',
                 'fecha de creación de servidor',
+                'creacion de la maquina',
+                'creación de la maquina',
             ])),
             'comments' => $this->getValue($data, ['comments', 'comentarios']),
             'ram_memory'  => $ramRaw !== null ? max(0, (int) $ramRaw) : null,
@@ -573,6 +579,8 @@ class ImportController extends Controller
                 'fecha de creación',
                 'fecha de creacion de servidor',
                 'fecha de creación de servidor',
+                'creacion de la maquina',
+                'creación de la maquina',
             ])),
             'hostname_internal' => $this->getValue($data, ['hostname internal', 'hostname real', 'real hostname']),
             'os_according_to_the_vmware' => $this->getValue($data, [

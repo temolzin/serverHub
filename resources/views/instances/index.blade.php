@@ -10,7 +10,6 @@
                     <h5 class="mb-0">Instancias</h5>
                     <div class="d-flex flex-column flex-sm-row gap-2">
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createInstanceModal"><i class="bx bx-plus me-1"></i> Agregar Instancia</button>
-                        <a href="{{ route('export', 'instances') }}" class="btn btn-primary text-center">Exportar Excel</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -23,7 +22,7 @@
                                     <th>Memoria</th>
                                     <th>Versión</th>
                                     <th>Edición</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>

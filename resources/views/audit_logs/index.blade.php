@@ -30,7 +30,7 @@
                             <th>Acción</th>
                             <th>Registro</th>
                             <th>Fecha</th>
-                            <th class="text-center">Ver</th>
+                            <th class="text-center no-export">Ver</th>
                         </tr>
                     </thead>
                     <tbody>

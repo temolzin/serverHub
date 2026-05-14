@@ -10,7 +10,6 @@
                     <h5 class="mb-0">Propietarios</h5>
                     <div class="d-flex flex-column flex-sm-row gap-2">
                         <button class="btn btn-success text-center" data-bs-toggle="modal" data-bs-target="#createOwnerModal"><i class="bx bx-plus me-1"></i> Agregar propietario</button>
-                        <a href="{{ route('export', 'owners') }}" class="btn btn-primary text-center">Exportar Excel</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -22,7 +21,7 @@
                                 <th>Propietario</th>
                                 <th>Email</th>
                                 <th>Teléfono</th>
-                                <th class="text-end">Acciones</th>
+                                <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
