@@ -21,6 +21,7 @@
                                     <th>VM</th>
                                     <th>IP USUARIO</th>
                                     <th>IP MONITOREO</th>
+                                    <th>ESTADO</th>
                                     <th>ENTORNO</th>
                                     <th>DATACENTER</th>
                                     <th>HOSTNAME</th>
@@ -35,6 +36,7 @@
                                         <td>{{ filled($server->vm_according_to_the_vmware) ? $server->vm_according_to_the_vmware : 'N/A' }}</td>
                                         <td>{{ filled($server->ip_user) ? $server->ip_user : 'N/A' }}</td>
                                         <td>{{ filled($server->ip_monitoring) ? $server->ip_monitoring : 'N/A' }}</td>
+                                        <td><span class="badge {{ $server->display_state_badge_class }}">{{ $server->display_state_label }}</span></td>
                                         <td>{{ strtoupper(filled($server->environment) ? $server->environment : 'N/A') }}</td>
                                         <td>{{ filled($server->datacenter) ? $server->datacenter : 'N/A' }}</td>
                                         <td>{{ filled($server->hostname_internal) ? $server->hostname_internal : 'N/A' }}</td>
