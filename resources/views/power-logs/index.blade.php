@@ -37,7 +37,7 @@
                                     </span>
                                 </td>
                                 <td style="max-width: 250px; white-space: normal;">{{ $log->motive }}</td>
-                                <td>{{ $log->user->name ?? 'N/A' }}</td>
+                                <td>{{ $log->user->name ?? 'N/A' }} {{$log->user->last_name ?? 'N/A' }}</td>
                                 <td>{{ $log->created_at->format('d/m/Y h:i A') }}</td>
                             </tr>
                         @endforeach
