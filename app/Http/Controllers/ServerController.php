@@ -113,9 +113,27 @@ class ServerController extends Controller
             ->with('success', 'Servidor eliminado correctamente');
     }
 
-    public function powerOn(Server $server)
+    public function powerOn(Request $request, Server $server)
     {
-        return $this->changeState($server, 'poweredOn');
+        $request->validate([
+            'motive' => 'required|string|min:5'
+        ]);
+
+        $server->update([
+            'state' => 'poweredOn'
+        ]);
+
+        $server->powerLogs()->create([
+            'action' => 'on',
+            'motive' => $request->motive,
+            'created_by' => Auth::id(),
+        ]);
+
+        optional($server->database)->update([
+            'status' => 'active'
+        ]);
+
+        return back()->with('success', 'Servidor encendido correctamente');
     }
 
     public function powerOff(Request $request, Server $server)

@@ -41,10 +41,9 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showApplianceOffModal{{ $server->id }}"><i class="bx bx-show me-1"></i> Ver</button>
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editApplianceOffModal{{ $server->id }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
-                                                    <form action="{{ route('appliances.power-on', $server) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="dropdown-item text-success"><i class="bx bx-power-off me-1"></i> Encender</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#powerOnApplianceModal{{ $server->id }}">
+                                                        <i class="bx bx-power-off me-1"></i> Encender
+                                                    </button>
                                                     <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteApplianceOffModal{{ $server->id }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
                                                 </div>
                                             </div>
@@ -62,6 +61,7 @@
     @foreach ($servers as $server)
         @include('appliancesOff.show', ['server' => $server])
         @include('appliancesOff.edit', ['server' => $server, 'databases' => $databases, 'applications' => $applications])
+        @include('appliancesOff.power-on', ['server' => $server])
         @include('appliancesOff.delete', ['server' => $server])
     @endforeach
 

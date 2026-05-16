@@ -41,10 +41,9 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showGcpOffMachineModal{{ $machine->id }}"><i class="bx bx-show me-1"></i> Ver</button>
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editGcpOffMachineModal{{ $machine->id }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
-                                                    <form action="{{ route('gcp-machines.power-on', $machine) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="dropdown-item text-success"><i class="bx bx-power-off me-1"></i> Encender</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#powerOnGcpMachineModal{{ $machine->id }}">
+                                                        <i class="bx bx-power-off me-1"></i> Encender
+                                                    </button>
                                                     <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteGcpOffMachineModal{{ $machine->id }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
                                                 </div>
                                             </div>
@@ -62,6 +61,7 @@
     @foreach ($gcpMachines as $machine)
         @include('gcp-machines-off.show', ['machine' => $machine])
         @include('gcp-machines-off.edit', ['machine' => $machine])
+        @include('gcp-machines-off.power-on', ['machine' => $machine])
         @include('gcp-machines-off.delete', ['machine' => $machine])
     @endforeach
 

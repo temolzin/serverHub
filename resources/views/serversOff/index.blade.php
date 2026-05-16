@@ -45,10 +45,9 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showServerOffModal{{ $server->id }}"><i class="bx bx-show me-1"></i> Ver</button>
                                                     <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editServerOffModal{{ $server->id }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
-                                                    <form action="{{ route('servers.power-on', $server) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        <button type="submit" class="dropdown-item text-success"><i class="bx bx-power-off me-1"></i> Encender</button>
-                                                    </form>
+                                                    <button type="button" class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#powerOnServerModal{{ $server->id }}">
+                                                        <i class="bx bx-power-off me-1"></i> Encender
+                                                    </button>
                                                     <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteServerOffModal{{ $server->id }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
                                                 </div>
                                             </div>
@@ -66,6 +65,7 @@
     @foreach ($servers as $server)
         @include('serversOff.show', ['server' => $server])
         @include('serversOff.edit', ['server' => $server, 'databases' => $databases, 'applications' => $applications])
+        @include('serversOff.power-on', ['server' => $server])
         @include('serversOff.delete', ['server' => $server])
     @endforeach
 

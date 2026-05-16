@@ -53,9 +53,27 @@ class GcpMachineController extends Controller
         return $this->remove($request, $gcp_machine, true);
     }
 
-    public function powerOn(GcpMachine $gcp_machine)
+    public function powerOn(Request $request, GcpMachine $gcp_machine)
     {
-        return $this->changeState($gcp_machine, 'poweredOn');
+        $request->validate([
+            'motive' => 'required|string|min:5'
+        ]);
+
+        $gcp_machine->update([
+            'state' => 'poweredOn'
+        ]);
+
+        $gcp_machine->powerLogs()->create([
+            'action' => 'on',
+            'motive' => $request->motive,
+            'created_by' => Auth::id(),
+        ]);
+
+        $this->syncLinkedDatabaseStatus(
+            $gcp_machine->database_id ? (int) $gcp_machine->database_id : null
+        );
+
+        return back()->with('success', 'Maquina encendida correctamente');
     }
 
     public function powerOff(Request $request, GcpMachine $gcp_machine)
