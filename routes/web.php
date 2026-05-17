@@ -138,6 +138,10 @@ Route::middleware('auth')->group(function () {
             ->name('gcp-machines-off.update');
         Route::delete('/gcp-machines-off/{gcp_machine}', [GcpMachineController::class, 'offDestroy'])
             ->name('gcp-machines-off.destroy');
+        Route::get('/gcp-machines/{gcp_machine}/modal/{type}', [GcpMachineController::class, 'modal'])
+            ->name('gcp-machines.modal');
+        Route::get('/gcp-machines-off/{gcp_machine}/modal/{type}', [GcpMachineController::class, 'modalOff'])
+            ->name('gcp-machines-off.modal');
         Route::resource('gcp-machines', GcpMachineController::class)
             ->except(['create', 'edit', 'show']);
     });

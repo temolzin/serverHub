@@ -39,12 +39,12 @@
                                             <div class="dropdown">
                                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showGcpOffMachineModal{{ $machine->id }}"><i class="bx bx-show me-1"></i> Ver</button>
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editGcpOffMachineModal{{ $machine->id }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
-                                                    <button type="button" class="dropdown-item text-success" data-bs-toggle="modal" data-bs-target="#powerOnGcpMachineModal{{ $machine->id }}">
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('gcp-machines-off.modal', ['gcp_machine' => $machine->id, 'type' => 'show']) }}"><i class="bx bx-show me-1"></i> Ver</button>
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('gcp-machines-off.modal', ['gcp_machine' => $machine->id, 'type' => 'edit']) }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
+                                                    <button type="button" class="dropdown-item text-success btn-modal" data-url="{{ route('gcp-machines-off.modal', ['gcp_machine' => $machine->id, 'type' => 'power-on']) }}">
                                                         <i class="bx bx-power-off me-1"></i> Encender
                                                     </button>
-                                                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteGcpOffMachineModal{{ $machine->id }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
+                                                    <button type="button" class="dropdown-item text-danger btn-modal" data-url="{{ route('gcp-machines-off.modal', ['gcp_machine' => $machine->id, 'type' => 'delete']) }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -58,20 +58,45 @@
         </div>
     </div>
 
-    @foreach ($gcpMachines as $machine)
-        @include('gcp-machines-off.show', ['machine' => $machine])
-        @include('gcp-machines-off.edit', ['machine' => $machine])
-        @include('gcp-machines-off.power-on', ['machine' => $machine])
-        @include('gcp-machines-off.delete', ['machine' => $machine])
-    @endforeach
-
     @include('gcp-machines-off.create')
+
+    <div id="modalContainer"></div>
 @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-modal');
+                if (!btn) return;
+                
+                e.preventDefault();
+                const url = btn.dataset.url;
+                
+                fetch(url)
+                    .then(r => {
+                        if (!r.ok) throw new Error('Error loading modal');
+                        return r.text();
+                    })
+                    .then(html => {
+                        document.getElementById('modalContainer').innerHTML = html;
+                        const modalEl = document.getElementById('modalContainer').querySelector('.modal');
+                        if (modalEl) {
+                            $(modalEl).modal('show');
+                            
+                            if (url.includes('edit')) {
+                                initSearchableSelects(modalEl);
+                            }
+                            
+                            modalEl.addEventListener('hidden.bs.modal', function() {
+                                modalEl.remove();
+                            });
+                        }
+                    })
+                    .catch(err => console.error(err));
+            });
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -86,13 +111,17 @@
             @if ($errors->any())
                 const createModalEl = document.getElementById('createGcpOffMachineModal');
                 if (createModalEl) {
-                    bootstrap.Modal.getOrCreateInstance(createModalEl).show();
+                    $(createModalEl).modal('show');
                 }
             @endif
 
             function hydrateBootstrap() {
                 document.querySelectorAll('.dropdown-toggle')
-                .forEach(el => bootstrap.Dropdown.getOrCreateInstance(el));
+                .forEach(el => {
+                    if (typeof $ !== 'undefined' && typeof $.fn.dropdown !== 'undefined') {
+                        new bootstrap.Dropdown(el);
+                    }
+                });
             }
 
             function initSearchableSelects(scope = document) {
