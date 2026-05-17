@@ -35,18 +35,16 @@
                                                     <i class="bx bx-dots-vertical-rounded"></i>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <button class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#editRoleModal{{ $role->id }}">
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('roles.modal', ['role' => $role->id, 'type' => 'edit']) }}">
                                                         <i class="bx bx-edit-alt me-1"></i> Editar
-                                                    <button
-                                                        class="dropdown-item {{ $role->users->count() ? 'text-secondary' : 'text-danger' }}"
-                                                        {{ $role->users->count() ? 'disabled' : '' }}
-                                                        data-bs-toggle="{{ $role->users->count() ? '' : 'modal' }}"
-                                                        data-bs-target="{{ $role->users->count() ? '' : '#deleteRoleModal'.$role->id }}"
-                                                        title="{{ $role->users->count() ? 'No se puede eliminar porque está en uso' : 'Eliminar rol' }}">
-                                                        <i class="bx {{ $role->users->count() ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
-                                                        {{ $role->users->count() ? 'En uso' : 'Eliminar' }}
                                                     </button>
+                                                    @if(!$role->users->count())
+                                                        <button type="button" class="dropdown-item text-danger btn-modal" data-url="{{ route('roles.modal', ['role' => $role->id, 'type' => 'delete']) }}">
+                                                            <i class="bx bx-trash me-1"></i> Eliminar
+                                                        </button>
+                                                    @else
+                                                        <span class="dropdown-item text-secondary"><i class="bx bx-lock-alt me-1"></i> En uso</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>
@@ -59,15 +57,38 @@
             </div>
         </div>
     </div>
-    @foreach ($roles as $role)
-        @include('roles.edit', ['role' => $role])
-        @include('roles.delete', ['role' => $role])
-    @endforeach
     @include('roles.create')
+
+    <div id="modalContainer"></div>
 @endsection
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-modal');
+            if (!btn) return;
+            
+            e.preventDefault();
+            const url = btn.dataset.url;
+            
+            fetch(url)
+                .then(r => {
+                    if (!r.ok) throw new Error('Error loading modal');
+                    return r.text();
+                })
+                .then(html => {
+                    document.getElementById('modalContainer').innerHTML = html;
+                    const modalEl = document.getElementById('modalContainer').querySelector('.modal');
+                    if (modalEl) {
+                        $(modalEl).modal('show');
+                        
+                        modalEl.addEventListener('hidden.bs.modal', function() {
+                            modalEl.remove();
+                        });
+                    }
+                })
+                .catch(err => console.error(err));
+        });
         @if (session('success'))
             Swal.fire({
                 icon: 'success',

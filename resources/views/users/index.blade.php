@@ -35,8 +35,8 @@
                                             <div class="dropdown">
                                                 <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editUserModal{{ $user->id }}"><i class="bx bx-edit-alt me-1"></i>Editar</button>
-                                                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{ $user->id }}"><i class="bx bx-trash me-1"></i>Eliminar</button>
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('users.modal', ['user' => $user->id, 'type' => 'edit']) }}"><i class="bx bx-edit-alt me-1"></i>Editar</button>
+                                                    <button type="button" class="dropdown-item text-danger btn-modal" data-url="{{ route('users.modal', ['user' => $user->id, 'type' => 'delete']) }}"><i class="bx bx-trash me-1"></i>Eliminar</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -50,17 +50,40 @@
         </div>
     </div>
 
-    @foreach ($users as $user)
-        @include('users.edit', ['user' => $user])
-        @include('users.delete', ['user' => $user])
-    @endforeach
-
     @include('users.create')
+
+    <div id="modalContainer"></div>
 @endsection
 
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-modal');
+                if (!btn) return;
+                
+                e.preventDefault();
+                const url = btn.dataset.url;
+                
+                fetch(url)
+                    .then(r => {
+                        if (!r.ok) throw new Error('Error loading modal');
+                        return r.text();
+                    })
+                    .then(html => {
+                        document.getElementById('modalContainer').innerHTML = html;
+                        const modalEl = document.getElementById('modalContainer').querySelector('.modal');
+                        if (modalEl) {
+                            $(modalEl).modal('show');
+                            
+                            modalEl.addEventListener('hidden.bs.modal', function() {
+                                modalEl.remove();
+                            });
+                        }
+                    })
+                    .catch(err => console.error(err));
+            });
+
             @if (session('success'))
                 Swal.fire({
                 icon: 'success',

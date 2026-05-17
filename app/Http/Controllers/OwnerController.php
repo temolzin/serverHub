@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Owner;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class OwnerController extends Controller
@@ -16,8 +17,9 @@ class OwnerController extends Controller
         if ($exclude) {
             $query->where('id', '!=', $exclude);
         }
+
         return response()->json([
-            'exists' => $query->exists()
+            'exists' => $query->exists(),
         ]);
     }
 
@@ -44,12 +46,13 @@ class OwnerController extends Controller
                 'required',
                 'email',
                 'max:100',
-                'unique:owners,email'
+                'unique:owners,email',
             ],
-            'number_phone' => 'required|digits:10'
+            'number_phone' => 'required|digits:10',
         ]);
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         Owner::create($validated);
+
         return redirect()
             ->route('owners.index')
             ->with('success', 'Propietario creado correctamente');
@@ -69,11 +72,12 @@ class OwnerController extends Controller
                 'required',
                 'email',
                 'max:100',
-                Rule::unique('owners', 'email')->ignore($owner->id)
+                Rule::unique('owners', 'email')->ignore($owner->id),
             ],
-            'number_phone' => 'required|digits:10'
+            'number_phone' => 'required|digits:10',
         ]);
         $owner->update($validated);
+
         return redirect()
             ->route('owners.index')
             ->with('success', 'El propietario fue actualizado correctamente.');
@@ -87,8 +91,19 @@ class OwnerController extends Controller
     public function destroy(Owner $owner)
     {
         $owner->delete();
+
         return redirect()
             ->route('owners.index')
             ->with('success', 'Propietario eliminado correctamente');
+    }
+
+    public function modal(Owner $owner, string $type)
+    {
+        return match ($type) {
+            'show' => view('owners.show', compact('owner'))->render(),
+            'edit' => view('owners.edit', compact('owner'))->render(),
+            'delete' => view('owners.delete', compact('owner'))->render(),
+            default => response('Not found', 404),
+        };
     }
 }

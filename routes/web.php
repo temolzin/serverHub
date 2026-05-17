@@ -74,7 +74,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/export/{module}', [ExportController::class, 'export'])
         ->name('export');
     Route::middleware('permission:viewOwner')
-        ->resource('owners', OwnerController::class);
+        ->resource('owners', OwnerController::class)
+        ->except(['create', 'edit', 'show']);
+    Route::get('/owners/{owner}/modal/{type}', [OwnerController::class, 'modal'])
+        ->name('owners.modal');
     Route::middleware('permission:viewServer')->group(function () {
         Route::post('/servers/{server}/power-on', [ServerController::class, 'powerOn'])
             ->name('servers.power-on');
@@ -164,12 +167,18 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:viewStorage')
         ->resource('storages', StorageController::class);
     Route::middleware('permission:viewRole')->group(function () {
-        Route::resource('roles', RoleController::class);
+        Route::resource('roles', RoleController::class)
+            ->except(['create', 'edit', 'show']);
+        Route::get('/roles/{role}/modal/{type}', [RoleController::class, 'modal'])
+            ->name('roles.modal');
     });
 
     Route::middleware('role:Admin')->group(function () {
         Route::get('/users/{user}/permissions', [UserController::class, 'editPermissions'])
             ->name('users.permissions.edit');
-        Route::resource('users', UserController::class);
+        Route::resource('users', UserController::class)
+            ->except(['create', 'edit', 'show']);
+        Route::get('/users/{user}/modal/{type}', [UserController::class, 'modal'])
+            ->name('users.modal');
     });
 });
