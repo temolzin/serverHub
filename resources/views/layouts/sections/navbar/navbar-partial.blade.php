@@ -38,7 +38,7 @@
                data-bs-auto-close="outside"
                aria-expanded="false">
                 <div class="avatar avatar-online">
-                    <img src="{{ Auth::user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/photoDefault.jpeg') }}" class="w-px-40 h-auto rounded-circle" style="object-fit: cover;">
+                    <img src="{{ Auth::user()->getFirstMediaUrl('avatars') ?: asset('assets/img/avatars/photoDefault.jpeg') }}" class="w-px-40 h-20 w-30 rounded-circle" style="object-fit: cover;">
                 </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
