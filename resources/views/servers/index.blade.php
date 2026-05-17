@@ -89,6 +89,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <a href="{{ asset('layout/Layout.xlsx') }}" class="btn btn-outline-primary" download>
+                            Descargar plantilla
+                        </a>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success">Subir Excel</button>
                     </div>
