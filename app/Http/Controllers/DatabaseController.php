@@ -7,6 +7,7 @@ use App\Models\Instance;
 use App\Models\Owner;
 use App\Models\Server;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DatabaseController extends Controller
 {
@@ -39,7 +40,7 @@ class DatabaseController extends Controller
             'last_update' => 'nullable|date',
         ]);
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         Database::create($validated);
 
         return redirect()
@@ -61,7 +62,7 @@ class DatabaseController extends Controller
             'last_update' => 'nullable|date',
         ]);
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         $database->update($validated);
 
         return redirect()
