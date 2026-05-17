@@ -56,7 +56,7 @@
                                     <small class="text-muted">{{ $log->created_at->format('h:i A') }}</small>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-icon btn-purple" data-bs-toggle="modal" data-bs-target="#logModal{{ $log->id }}"><i class="bx bx-show"></i></button>
+                                    <button type="button" class="btn btn-sm btn-icon btn-purple btn-modal" data-url="{{ route('audit_logs.modal', ['audit_log' => $log->id, 'type' => 'show']) }}"><i class="bx bx-show"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -66,32 +66,37 @@
         </div>
     </div>
 
-    @foreach ($logs as $log)
-        <div class="modal fade" id="logModal{{ $log->id }}" tabindex="-1">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-purple"><i class="bx bx-detail"></i> Detalle del cambio</h5>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-danger-soft fw-bold">Antes</div>
-                                    <pre class="json-box json-before"> {{ $log->before_pretty }} </pre>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card shadow-sm">
-                                    <div class="card-header bg-success-soft fw-bold">Después</div>
-                                    <pre class="json-box json-after"> {{ $log->after_pretty }} </pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
+    <div id="modalContainer"></div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-modal');
+            if (!btn) return;
+            
+            e.preventDefault();
+            const url = btn.dataset.url;
+            
+            fetch(url)
+                .then(r => {
+                    if (!r.ok) throw new Error('Error loading modal');
+                    return r.text();
+                })
+                .then(html => {
+                    document.getElementById('modalContainer').innerHTML = html;
+                    const modalEl = document.getElementById('modalContainer').querySelector('.modal');
+                    if (modalEl) {
+                        $(modalEl).modal('show');
+                        
+                        modalEl.addEventListener('hidden.bs.modal', function() {
+                            modalEl.remove();
+                        });
+                    }
+                })
+                .catch(err => console.error(err));
+        });
+    });
+</script>
+@endpush

@@ -163,9 +163,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/databases/{database}/modal/{type}', [DatabaseController::class, 'modal'])
         ->name('databases.modal');
     Route::middleware('permission:viewInstance')
-        ->resource('instances', InstanceController::class);
+        ->resource('instances', InstanceController::class)
+        ->except(['create', 'edit', 'show']);
+    Route::get('/instances/{instance}/modal/{type}', [InstanceController::class, 'modal'])
+        ->name('instances.modal');
     Route::middleware('permission:viewStorage')
-        ->resource('storages', StorageController::class);
+        ->resource('storages', StorageController::class)
+        ->except(['create', 'edit', 'show']);
+    Route::get('/storages/{storage}/modal/{type}', [StorageController::class, 'modal'])
+        ->name('storages.modal');
+    Route::get('/audit-logs/{audit_log}/modal/{type}', [AuditLogController::class, 'modal'])
+        ->name('audit_logs.modal');
     Route::middleware('permission:viewRole')->group(function () {
         Route::resource('roles', RoleController::class)
             ->except(['create', 'edit', 'show']);
