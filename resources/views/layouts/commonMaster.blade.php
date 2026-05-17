@@ -26,7 +26,7 @@
   <meta name="robots" content="noindex, nofollow" />
   <meta name="csrf-token" content="{{ csrf_token() }}" />
   <link rel="canonical" href="{{ config('variables.productPage') ? config('variables.productPage') : '' }}" />
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/Prometheus.png') }}" />
   @include('layouts/sections/styles')
   @include('layouts/sections/scriptsIncludes')
 </head>
