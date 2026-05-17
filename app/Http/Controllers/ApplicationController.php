@@ -92,9 +92,9 @@ class ApplicationController extends Controller
         return match($type) {
             'show' => view('applications.show', compact('application'))->render(),
             'edit' => view('applications.edit', compact('application'))->with([
-                'servers' => \App\Models\Server::all(),
-                'owners' => \App\Models\Owner::all(),
-                'gcpMachines' => \App\Models\GcpMachine::all(),
+                'servers' => Server::all(),
+                'owners' => Owner::all(),
+                'gcpMachines' => GcpMachine::all(),
             ])->render(),
             'delete' => view('applications.delete', compact('application'))->render(),
             default => response('Not found', 404),
