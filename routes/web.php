@@ -113,6 +113,10 @@ Route::middleware('auth')->group(function () {
             ->name('appliances-off.update');
         Route::delete('/appliances-off/{server}', [ApplianceController::class, 'offDestroy'])
             ->name('appliances-off.destroy');
+        Route::get('/appliances/{server}/modal/{type}', [ApplianceController::class, 'modal'])
+            ->name('appliances.modal');
+        Route::get('/appliances-off/{server}/modal/{type}', [ApplianceController::class, 'modalOff'])
+            ->name('appliances-off.modal');
         Route::post('/appliances/import', [ImportController::class, 'import'])
             ->name('appliances.import');
         Route::resource('appliances', ApplianceController::class)
