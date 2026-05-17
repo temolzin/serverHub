@@ -1,0 +1,81 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('servers', function (Blueprint $table) {
+            $table->string('primary_ip_address', 255)->nullable()->change();
+        });
+    }
+
+    public function down(): void
+    {
+        DB::table('servers')
+            ->whereNull('primary_ip_address')
+            ->update([
+                'primary_ip_address' => ''
+            ]);
+
+        DB::table('servers')
+            ->whereRaw("LOWER(TRIM(state)) IN ('poweredoff','off','false','0')")
+            ->update(['state' => 0]);
+
+        DB::table('servers')
+            ->whereRaw("LOWER(TRIM(state)) IN ('poweredon','on','true','1')")
+            ->update(['state' => 1]);
+
+        DB::table('servers')
+            ->whereNull('state')
+            ->update(['state' => 1]);
+
+        DB::table('servers')
+            ->whereNull('datacenter')
+            ->update(['datacenter' => 'UNKNOWN']);
+
+        DB::table('servers')
+            ->whereNull('hostname_internal')
+            ->update(['hostname_internal' => 'N/A']);
+
+        DB::table('servers')
+            ->whereNull('os_version_internal')
+            ->update(['os_version_internal' => 'N/A']);
+
+        DB::table('servers')
+            ->whereNull('os_according_to_the_vmware')
+            ->update(['os_according_to_the_vmware' => 'N/A']);
+
+        DB::table('servers')
+            ->whereNull('owner_id')
+            ->update(['owner_id' => 1]);
+
+        DB::table('gcp_machines')
+            ->whereNull('owner_id')
+            ->update(['owner_id' => 1]);
+
+        Schema::table('servers', function (Blueprint $table) {
+            $table->unsignedBigInteger('owner_id')->nullable(false)->change();
+            DB::table('servers')
+                ->whereNull('type_application_id')
+                ->update([
+                    'type_application_id' => 1
+                ]);
+            $table->unsignedBigInteger('type_application_id')->nullable(false)->change();
+            $table->string('datacenter')->nullable(false)->change();
+            $table->string('hostname_internal')->nullable(false)->change();
+            $table->string('os_version_internal')->nullable(false)->change();
+            $table->string('os_according_to_the_vmware')->nullable(false)->change();
+            $table->boolean('state')->default(true)->change();
+            $table->string('primary_ip_address', 45)->nullable(false)->change();
+        });
+
+        Schema::table('gcp_machines', function (Blueprint $table) {
+            $table->unsignedBigInteger('owner_id')->nullable(false)->change();
+        });
+    }
+};
