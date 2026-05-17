@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Database;
 use App\Models\Owner;
 use App\Models\Server;
 use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use App\Models\Database;
 use Illuminate\Support\Facades\Auth;
 
 class ApplianceController extends Controller
@@ -21,6 +21,7 @@ class ApplianceController extends Controller
             ['name_application' => 'Apliance'],
             ['type_application' => 'Apliance']
         );
+
         return $type->id;
     }
 
@@ -64,7 +65,7 @@ class ApplianceController extends Controller
         $payload = $request->all();
 
         $payload['environment'] = $payload['environment'] ?? 'N/A';
-        $payload['ram_memory']  = $payload['ram_memory'] ?? 0;
+        $payload['ram_memory'] = $payload['ram_memory'] ?? 0;
         $payload['swap_memory'] = $payload['swap_memory'] ?? 0;
 
         $payload['state'] = $this->normalizeState(
@@ -109,11 +110,11 @@ class ApplianceController extends Controller
     public function powerOn(Request $request, Server $server)
     {
         $request->validate([
-            'motive' => 'required|string|min:5'
+            'motive' => 'required|string|min:5',
         ]);
 
         $server->update([
-            'state' => 'poweredOn'
+            'state' => 'poweredOn',
         ]);
 
         $server->powerLogs()->create([
@@ -123,7 +124,7 @@ class ApplianceController extends Controller
         ]);
 
         optional($server->database)->update([
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         return back()->with('success', 'Apliance encendido correctamente');
@@ -132,11 +133,11 @@ class ApplianceController extends Controller
     public function powerOff(Request $request, Server $server)
     {
         $request->validate([
-            'motive' => 'required|string|min:5'
+            'motive' => 'required|string|min:5',
         ]);
 
         $server->update([
-            'state' => 'poweredOff'
+            'state' => 'poweredOff',
         ]);
 
         $server->powerLogs()->create([
@@ -146,7 +147,7 @@ class ApplianceController extends Controller
         ]);
 
         optional($server->database)->update([
-            'status' => 'inactive'
+            'status' => 'inactive',
         ]);
 
         return back()->with('success', 'Apliance apagado correctamente');
@@ -157,7 +158,7 @@ class ApplianceController extends Controller
         $server->update(['state' => $state]);
 
         optional($server->database)->update([
-            'status' => $state === 'poweredOn' ? 'active' : 'inactive'
+            'status' => $state === 'poweredOn' ? 'active' : 'inactive',
         ]);
 
         return back()->with(
@@ -175,8 +176,8 @@ class ApplianceController extends Controller
         $servers = Server::with(['owner', 'typeApplication', 'database', 'creator', 'applications'])
             ->where('type_application_id', $applianceTypeId);
 
-        ($off ? fn($q) => $this->applyPoweredOffFilter($q)
-            : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+        ($off ? fn ($q) => $this->applyPoweredOffFilter($q)
+            : fn ($q) => $this->applyPoweredOnFilter($q))($servers);
 
         $servers = $servers->latest()->get();
         $this->hydrateServerPresentationData($servers);
@@ -201,7 +202,7 @@ class ApplianceController extends Controller
     {
         $servers->transform(function (Server $server) {
             $ownerFullName = trim(
-                (optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')
+                (optional($server->owner)->name ?? '').' '.(optional($server->owner)->last_name ?? '')
             );
 
             $isPoweredOff = $server->isPoweredOff();
@@ -223,7 +224,6 @@ class ApplianceController extends Controller
             return $server;
         });
     }
-
 
     private function normalizeState(?string $state, string $default = 'poweredOn'): string
     {
@@ -251,7 +251,7 @@ class ApplianceController extends Controller
         $applicationIds = array_values(array_unique(array_map('intval', $applicationIds)));
 
         $detachQuery = Application::where('server_id', $server->id);
-        if (!empty($applicationIds)) {
+        if (! empty($applicationIds)) {
             $detachQuery->whereNotIn('id', $applicationIds);
         }
         $detachQuery->update(['server_id' => null]);
@@ -261,5 +261,41 @@ class ApplianceController extends Controller
         }
 
         Application::whereIn('id', $applicationIds)->update(['server_id' => $server->id]);
+    }
+
+    public function modal(Server $server, string $type)
+    {
+        $this->hydrateServerPresentationData(collect([$server]));
+
+        return match ($type) {
+            'show' => view('appliances.show', compact('server'))->render(),
+            'edit' => view('appliances.edit', compact('server'))->with([
+                'databases' => Database::all(),
+                'applications' => Application::all(),
+                'owners' => Owner::all(),
+                'typeApplications' => TypeApplication::all(),
+            ])->render(),
+            'delete' => view('appliances.delete', compact('server'))->render(),
+            'power-off' => view('appliances.power-off', compact('server'))->render(),
+            default => response('Not found', 404),
+        };
+    }
+
+    public function modalOff(Server $server, string $type)
+    {
+        $this->hydrateServerPresentationData(collect([$server]));
+
+        return match ($type) {
+            'show' => view('appliancesOff.show', compact('server'))->render(),
+            'edit' => view('appliancesOff.edit', compact('server'))->with([
+                'databases' => Database::all(),
+                'applications' => Application::all(),
+                'owners' => Owner::all(),
+                'typeApplications' => TypeApplication::all(),
+            ])->render(),
+            'delete' => view('appliancesOff.delete', compact('server'))->render(),
+            'power-on' => view('appliancesOff.power-on', compact('server'))->render(),
+            default => response('Not found', 404),
+        };
     }
 }

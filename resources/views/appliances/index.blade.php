@@ -43,12 +43,12 @@
                                             <div class="dropdown">
                                                 <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showApplianceModal{{ $server->id }}"><i class="bx bx-show me-1"></i> Ver</button>
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editApplianceModal{{ $server->id }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
-                                                    <button type="button" class="dropdown-item text-warning" data-bs-toggle="modal" data-bs-target="#powerOffApplianceModal{{ $server->id }}">
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('appliances.modal', ['server' => $server->id, 'type' => 'show']) }}"><i class="bx bx-show me-1"></i> Ver</button>
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('appliances.modal', ['server' => $server->id, 'type' => 'edit']) }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
+                                                    <button type="button" class="dropdown-item text-warning btn-modal" data-url="{{ route('appliances.modal', ['server' => $server->id, 'type' => 'power-off']) }}">
                                                         <i class="bx bx-power-off me-1"></i> Apagar
                                                     </button>
-                                                    <button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteApplianceModal{{ $server->id }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
+                                                    <button type="button" class="dropdown-item text-danger btn-modal" data-url="{{ route('appliances.modal', ['server' => $server->id, 'type' => 'delete']) }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
                                                 </div>
                                             </div>
                                         </td>
@@ -62,20 +62,45 @@
         </div>
     </div>
 
-    @foreach ($servers as $server)
-        @include('appliances.show', ['server' => $server])
-        @include('appliances.edit', ['server' => $server, 'databases' => $databases, 'applications' => $applications])
-        @include('appliances.power-off', ['server' => $server])
-        @include('appliances.delete', ['server' => $server])
-    @endforeach
-
     @include('appliances.create')
+
+    <div id="modalContainer"></div>
 @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-modal');
+                if (!btn) return;
+                
+                e.preventDefault();
+                const url = btn.dataset.url;
+                
+                fetch(url)
+                    .then(r => {
+                        if (!r.ok) throw new Error('Error loading modal');
+                        return r.text();
+                    })
+                    .then(html => {
+                        document.getElementById('modalContainer').innerHTML = html;
+                        const modalEl = document.getElementById('modalContainer').querySelector('.modal');
+                        if (modalEl) {
+                            $(modalEl).modal('show');
+                            
+                            if (url.includes('edit')) {
+                                initSearchableSelects(modalEl);
+                            }
+                            
+                            modalEl.addEventListener('hidden.bs.modal', function() {
+                                modalEl.remove();
+                            });
+                        }
+                    })
+                    .catch(err => console.error(err));
+            });
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',

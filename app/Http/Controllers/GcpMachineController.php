@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
+use App\Models\Database as DatabaseModel;
 use App\Models\GcpMachine;
 use App\Models\Owner;
+use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use App\Models\Application;
-use App\Models\TypeApplication;
-use App\Models\Database as DatabaseModel;
 use Illuminate\Support\Facades\Auth;
 
 class GcpMachineController extends Controller
@@ -56,11 +56,11 @@ class GcpMachineController extends Controller
     public function powerOn(Request $request, GcpMachine $gcp_machine)
     {
         $request->validate([
-            'motive' => 'required|string|min:5'
+            'motive' => 'required|string|min:5',
         ]);
 
         $gcp_machine->update([
-            'state' => 'poweredOn'
+            'state' => 'poweredOn',
         ]);
 
         $gcp_machine->powerLogs()->create([
@@ -79,11 +79,11 @@ class GcpMachineController extends Controller
     public function powerOff(Request $request, GcpMachine $gcp_machine)
     {
         $request->validate([
-            'motive' => 'required|string|min:5'
+            'motive' => 'required|string|min:5',
         ]);
 
         $gcp_machine->update([
-            'state' => 'poweredOff'
+            'state' => 'poweredOff',
         ]);
 
         $gcp_machine->powerLogs()->create([
@@ -111,7 +111,7 @@ class GcpMachineController extends Controller
         }
 
         return response()->json([
-            'exists' => $query->exists()
+            'exists' => $query->exists(),
         ]);
     }
 
@@ -125,7 +125,7 @@ class GcpMachineController extends Controller
         );
         $previousDatabaseId = $gcpMachine?->database_id;
 
-        if (!$gcpMachine) {
+        if (! $gcpMachine) {
             $payload['created_by'] = Auth::id();
         }
 
@@ -182,7 +182,7 @@ class GcpMachineController extends Controller
             'typeApplication',
             'selectedApplication',
             'database',
-            'creator'
+            'creator',
         ]);
 
         if ($request->filled('id')) {
@@ -221,7 +221,6 @@ class GcpMachineController extends Controller
         ));
     }
 
-
     private function validateMachine(Request $request, bool $off = false): array
     {
         $request->merge([
@@ -243,8 +242,8 @@ class GcpMachineController extends Controller
             'machine_internal_name' => 'required|string|max:255',
             'operations_system' => 'required|string|max:255',
             'internal_ip' => 'required|string|max:255',
-            'ram_memory' => ['required', 'integer', 'min:256', 'max:1048576'],
-            'swap_memory' => ['required', 'integer', 'min:0', 'max:1048576'],
+            'ram_memory' => ['required', 'integer'],
+            'swap_memory' => ['required', 'integer'],
             'latest_security_patch' => 'nullable|date',
             'creation_date' => 'nullable|string|max:255',
             'alias_ip' => 'nullable|string|max:255',
@@ -336,7 +335,7 @@ class GcpMachineController extends Controller
 
         $detachQuery->update(['gcp_machine_id' => null]);
 
-        if (!$applicationId) {
+        if (! $applicationId) {
             return;
         }
 
@@ -349,7 +348,7 @@ class GcpMachineController extends Controller
 
     private function syncLinkedDatabaseStatus(?int $databaseId): void
     {
-        if (!$databaseId) {
+        if (! $databaseId) {
             return;
         }
 
@@ -360,7 +359,7 @@ class GcpMachineController extends Controller
         }
 
         $hasPoweredOnMachine = $states->contains(
-            fn($state) => $this->normalizeState($state) === 'poweredOn'
+            fn ($state) => $this->normalizeState($state) === 'poweredOn'
         );
 
         $database = DatabaseModel::find($databaseId);
@@ -375,7 +374,7 @@ class GcpMachineController extends Controller
     private function decorateMachinesForView($gcpMachines): void
     {
         $gcpMachines->transform(function (GcpMachine $machine) {
-            $ownerFullName = trim((optional($machine->owner)->name ?? '') . ' ' . (optional($machine->owner)->last_name ?? ''));
+            $ownerFullName = trim((optional($machine->owner)->name ?? '').' '.(optional($machine->owner)->last_name ?? ''));
             $relatedApplicationNames = $machine->applications->pluck('name')->filter()->implode(', ');
             $selectedApplicationName = optional($machine->selectedApplication)->name;
             $applicationType = optional($machine->typeApplication)->name_application
@@ -397,5 +396,41 @@ class GcpMachineController extends Controller
 
             return $machine;
         });
+    }
+
+    public function modal(GcpMachine $gcp_machine, string $type)
+    {
+        $this->decorateMachinesForView(collect([$gcp_machine]));
+
+        return match ($type) {
+            'show' => view('gcp-machines.show', ['machine' => $gcp_machine])->render(),
+            'edit' => view('gcp-machines.edit', ['machine' => $gcp_machine])->with([
+                'applications' => Application::all(),
+                'owners' => Owner::all(),
+                'typeApplications' => TypeApplication::all(),
+                'databases' => DatabaseModel::all(),
+            ])->render(),
+            'delete' => view('gcp-machines.delete', ['machine' => $gcp_machine])->render(),
+            'power-off' => view('gcp-machines.power-off', ['machine' => $gcp_machine])->render(),
+            default => response('Not found', 404),
+        };
+    }
+
+    public function modalOff(GcpMachine $gcp_machine, string $type)
+    {
+        $this->decorateMachinesForView(collect([$gcp_machine]));
+
+        return match ($type) {
+            'show' => view('gcp-machines-off.show', ['machine' => $gcp_machine])->render(),
+            'edit' => view('gcp-machines-off.edit', ['machine' => $gcp_machine])->with([
+                'applications' => Application::all(),
+                'owners' => Owner::all(),
+                'typeApplications' => TypeApplication::all(),
+                'databases' => DatabaseModel::all(),
+            ])->render(),
+            'delete' => view('gcp-machines-off.delete', ['machine' => $gcp_machine])->render(),
+            'power-on' => view('gcp-machines-off.power-on', ['machine' => $gcp_machine])->render(),
+            default => response('Not found', 404),
+        };
     }
 }
