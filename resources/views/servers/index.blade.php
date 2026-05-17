@@ -80,6 +80,7 @@
                     <h5 class="modal-title">Subir archivo Excel</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+                
                 <form action="{{ route('servers.import') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
@@ -89,6 +90,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <a href="{{ asset('layout/Layout.xlsx') }}" class="btn btn-outline-primary" download>
+                            Descargar plantilla
+                        </a>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success">Subir Excel</button>
                     </div>
