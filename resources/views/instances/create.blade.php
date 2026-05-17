@@ -25,10 +25,9 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">
-                            <i class="bx bx-memory-card me-1 text-primary"></i>Memoria (MB)
+                            <i class="bx bx-memory-card me-1 text-primary"></i>Memoria (GB)
                         </label>
-                        <input type="number" name="memory" class="form-control" min="1024" max="32768" placeholder="Ej: 8192" required>
-                        <small class="text-muted"> Rango permitido: 1024 MB - 32768 MB </small>
+                        <input type="number" name="memory" class="form-control" placeholder="Ej: 8" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">

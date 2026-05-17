@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StorageController extends Controller
@@ -11,8 +12,9 @@ class StorageController extends Controller
     public function index()
     {
         $storages = Storage::with('creator')
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
+
         return view('storages.index', compact('storages'));
     }
 
@@ -29,13 +31,13 @@ class StorageController extends Controller
                 'required',
                 'string',
                 'max:50',
-                'unique:storages,hostname'
+                'unique:storages,hostname',
             ],
 
             'data_ip' => [
                 'required',
                 'ip',
-                'unique:storages,data_ip'
+                'unique:storages,data_ip',
             ],
             'platform' => 'required|string|max:50',
             'os_name' => 'required|string|max:50',
@@ -46,7 +48,7 @@ class StorageController extends Controller
             'datacenter' => 'required|string|max:50',
         ]);
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
 
         Storage::create($validated);
 
@@ -68,13 +70,13 @@ class StorageController extends Controller
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('storages')->ignore($storage->id)
+                Rule::unique('storages')->ignore($storage->id),
             ],
 
             'data_ip' => [
                 'required',
                 'ip',
-                Rule::unique('storages','data_ip')->ignore($storage->id)
+                Rule::unique('storages', 'data_ip')->ignore($storage->id),
             ],
             'platform' => 'required|string|max:50',
             'os_name' => 'required|string|max:50',
@@ -95,8 +97,21 @@ class StorageController extends Controller
     public function destroy(Storage $storage)
     {
         $storage->delete();
+
         return redirect()
             ->route('storages.index')
             ->with('success', 'Almacenamiento eliminado correctamente');
+    }
+
+    public function modal(Storage $storage, string $type)
+    {
+        $storage->load('creator');
+
+        return match ($type) {
+            'show' => view('storages.show', compact('storage'))->render(),
+            'edit' => view('storages.edit', compact('storage'))->render(),
+            'delete' => view('storages.delete', compact('storage'))->render(),
+            default => response('Not found', 404),
+        };
     }
 }

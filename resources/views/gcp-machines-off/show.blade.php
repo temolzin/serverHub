@@ -107,13 +107,13 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label class="form-label fw-semibold"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (MB)</label>
+                        <label class="form-label fw-semibold"><i class="bx bx-memory-card me-1 text-primary"></i>RAM (GB)</label>
                         <div class="input-group">
                             <input type="text" class="form-control" value="{{ $machine->ram_memory ?? 0 }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label class="form-label fw-semibold"><i class="bx bx-transfer me-1 text-primary"></i>Swap (MB)</label>
+                        <label class="form-label fw-semibold"><i class="bx bx-transfer me-1 text-primary"></i>Swap (GB)</label>
                         <div class="input-group">
                             <input type="text" class="form-control" value="{{ $machine->swap_memory ?? 0 }}" disabled>
                         </div>

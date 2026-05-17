@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-md-12 mb-3">
                         <label class="form-label fw-semibold">
-                            <i class="bx bx-memory-card me-1 text-primary"></i>Memoria asignada (MB)
+                            <i class="bx bx-memory-card me-1 text-primary"></i>Memoria asignada (GB)
                         </label>
                         <input type="text" class="form-control" value="{{ $instance->memory ?? 'N/A' }}" disabled>
                     </div>

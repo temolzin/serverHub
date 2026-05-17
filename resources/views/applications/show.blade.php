@@ -32,8 +32,8 @@
                             <input type="text" class="form-control" value="{{ ucfirst($application->status) }}" disabled>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-memory-card text-primary"></i>Memoria asignada (MB)</label>
-                            <input type="text" class="form-control" value="{{ $application->assigned_memory ? $application->assigned_memory . ' MB' : '-' }}" disabled>
+                            <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-memory-card text-primary"></i>Memoria asignada (GB)</label>
+                            <input type="text" class="form-control" value="{{ $application->assigned_memory ? $application->assigned_memory . ' GB' : '-' }}" disabled>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold d-flex align-items-center gap-2"><i class="bx bx-category text-primary"></i>Tipo</label>

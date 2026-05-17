@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Instance;
 use App\Models\Server;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class InstanceController extends Controller
@@ -21,7 +21,6 @@ class InstanceController extends Controller
         return view('instances.index', compact('instances', 'servers'));
     }
 
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -34,13 +33,14 @@ class InstanceController extends Controller
                 Rule::unique('instances')
                     ->where(function ($query) use ($request) {
                         return $query->where('server_id', $request->server_id);
-                    })
+                    }),
             ],
             'edition' => 'nullable|string|max:50',
         ]);
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         Instance::create($validated);
+
         return redirect()
             ->route('instances.index')
             ->with('success', 'Instancia creada correctamente.');
@@ -59,7 +59,7 @@ class InstanceController extends Controller
                     ->where(function ($query) use ($request) {
                         return $query->where('server_id', $request->server_id);
                     })
-                    ->ignore($instance->id)
+                    ->ignore($instance->id),
             ],
             'edition' => 'nullable|string|max:50',
         ]);
@@ -78,5 +78,17 @@ class InstanceController extends Controller
         return redirect()
             ->route('instances.index')
             ->with('success', 'Instancia eliminada correctamente.');
+    }
+
+    public function modal(Instance $instance, string $type)
+    {
+        $instance->load('server');
+
+        return match ($type) {
+            'show' => view('instances.show', compact('instance'))->render(),
+            'edit' => view('instances.edit', ['instance' => $instance, 'servers' => Server::all()])->render(),
+            'delete' => view('instances.delete', compact('instance'))->render(),
+            default => response('Not found', 404),
+        };
     }
 }

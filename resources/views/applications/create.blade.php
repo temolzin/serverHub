@@ -76,9 +76,9 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label">
-                                <i class="bx bx-chip me-1 text-primary"></i>Memoria asignada (MB)
+                                <i class="bx bx-chip me-1 text-primary"></i>Memoria asignada (GB)
                             </label>
-                            <input type="number" name="assigned_memory" class="form-control" min="1024" max="32768" required placeholder="Ej: 2048" oninvalid="this.setCustomValidity('Ingresa un valor válido (mínimo 1024 MB)')" oninput="this.setCustomValidity('')">
+                            <input type="number" name="assigned_memory" class="form-control" required placeholder="Ej: 2048">
                         </div>
                         <div class="col-md-6 mb-4">
                             <label class="form-label">
