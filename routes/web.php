@@ -1,30 +1,30 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Http\Controllers\dashboard\Analytics;
-use App\Http\Controllers\authentications\LoginBasic;
-use App\Http\Controllers\authentications\RegisterBasic;
-use App\Http\Controllers\authentications\ForgotPasswordBasic;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\OwnerController;
-use App\Http\Controllers\GcpMachineController;
-use App\Http\Controllers\TypeApplicationController;
-use App\Http\Controllers\ServerController;
 use App\Http\Controllers\ApplianceController;
 use App\Http\Controllers\ApplicationController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ImportController;
-use App\Http\Controllers\DatabaseController;
-use App\Http\Controllers\InstanceController;
-use App\Http\Controllers\StorageController;
-use App\Http\Controllers\ExportController;
-use App\Http\Controllers\PowerLogController;
 use App\Http\Controllers\AuditLogController;
-use App\Http\Controllers\pages\AccountSettingsAccount;
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\authentications\ForgotPasswordBasic;
+use App\Http\Controllers\authentications\LoginBasic;
+use App\Http\Controllers\authentications\RegisterBasic;
+use App\Http\Controllers\dashboard\Analytics;
+use App\Http\Controllers\DatabaseController;
+use App\Http\Controllers\ExportController;
+use App\Http\Controllers\GcpMachineController;
 use App\Http\Controllers\GlobalSearchController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\InstanceController;
+use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\pages\AccountSettingsAccount;
+use App\Http\Controllers\PowerLogController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ServerController;
+use App\Http\Controllers\StorageController;
+use App\Http\Controllers\TypeApplicationController;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [LoginBasic::class, 'index'])->name('login');
 Route::post('/login', [LoginBasic::class, 'login'])->name('login.post');
@@ -44,6 +44,7 @@ Route::post('/logout', function (Request $request) {
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
+
     return redirect('/login');
 })->name('logout');
 
@@ -87,8 +88,12 @@ Route::middleware('auth')->group(function () {
             ->name('servers-off.update');
         Route::delete('/servers-off/{server}', [ServerController::class, 'offDestroy'])
             ->name('servers-off.destroy');
+        Route::get('/servers-off/{server}/modal/{type}', [ServerController::class, 'modalOff'])
+            ->name('servers-off.modal');
         Route::resource('servers', ServerController::class)
             ->except(['create', 'edit', 'show']);
+        Route::get('/servers/{server}/modal/{type}', [ServerController::class, 'modal'])
+            ->name('servers.modal');
         Route::post('/servers/import', [ImportController::class, 'import'])
             ->name('servers.import');
         Route::post('/servers-off/import', [ImportController::class, 'importPoweredOff'])

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Database;
 use App\Models\Owner;
 use App\Models\Server;
 use App\Models\TypeApplication;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use App\Models\Database;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
@@ -20,8 +20,8 @@ class ServerController extends Controller
         $applianceTypeId = $applianceType?->id;
 
         $servers = Server::with(['owner', 'applications', 'typeApplication', 'database'])
-            ->when($applianceTypeId, fn($q) => $q->where('type_application_id', '!=', $applianceTypeId))
-            ->when($request->filled('id'), fn($q) => $q->where('id', $request->id))
+            ->when($applianceTypeId, fn ($q) => $q->where('type_application_id', '!=', $applianceTypeId))
+            ->when($request->filled('id'), fn ($q) => $q->where('id', $request->id))
             ->when($request->filled('search'), function ($q) use ($request) {
                 $q->where(function ($sub) use ($request) {
                     $sub->where('hostname_internal', 'like', "%{$request->search}%")
@@ -116,11 +116,11 @@ class ServerController extends Controller
     public function powerOn(Request $request, Server $server)
     {
         $request->validate([
-            'motive' => 'required|string|min:5'
+            'motive' => 'required|string|min:5',
         ]);
 
         $server->update([
-            'state' => 'poweredOn'
+            'state' => 'poweredOn',
         ]);
 
         $server->powerLogs()->create([
@@ -130,7 +130,7 @@ class ServerController extends Controller
         ]);
 
         optional($server->database)->update([
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         return back()->with('success', 'Servidor encendido correctamente');
@@ -139,11 +139,11 @@ class ServerController extends Controller
     public function powerOff(Request $request, Server $server)
     {
         $request->validate([
-            'motive' => 'required|string|min:5'
+            'motive' => 'required|string|min:5',
         ]);
 
         $server->update([
-            'state' => 'poweredOff'
+            'state' => 'poweredOff',
         ]);
 
         $server->powerLogs()->create([
@@ -153,7 +153,7 @@ class ServerController extends Controller
         ]);
 
         optional($server->database)->update([
-            'status' => 'inactive'
+            'status' => 'inactive',
         ]);
 
         return back()->with('success', 'Servidor apagado correctamente');
@@ -164,7 +164,7 @@ class ServerController extends Controller
         $server->update(['state' => $state]);
 
         optional($server->database)->update([
-            'status' => $state === 'poweredOn' ? 'active' : 'inactive'
+            'status' => $state === 'poweredOn' ? 'active' : 'inactive',
         ]);
 
         return back()->with(
@@ -177,14 +177,14 @@ class ServerController extends Controller
 
     private function renderIndex(Request $request, bool $off = false)
     {
-        $applianceType = \App\Models\TypeApplication::where('name_application', 'Apliance')->first();
+        $applianceType = TypeApplication::where('name_application', 'Apliance')->first();
         $applianceTypeId = $applianceType?->id;
 
         $servers = Server::with(['owner', 'typeApplication', 'database', 'creator', 'applications'])
-            ->when($applianceTypeId, fn($q) => $q->where('type_application_id', '!=', $applianceTypeId));
+            ->when($applianceTypeId, fn ($q) => $q->where('type_application_id', '!=', $applianceTypeId));
 
-        ($off ? fn($q) => $this->applyPoweredOffFilter($q)
-            : fn($q) => $this->applyPoweredOnFilter($q))($servers);
+        ($off ? fn ($q) => $this->applyPoweredOffFilter($q)
+            : fn ($q) => $this->applyPoweredOnFilter($q))($servers);
 
         $servers = $servers->latest()->get();
         $this->hydrateServerPresentationData($servers);
@@ -209,7 +209,7 @@ class ServerController extends Controller
     {
         $servers->transform(function (Server $server) {
             $ownerFullName = trim(
-                (optional($server->owner)->name ?? '') . ' ' . (optional($server->owner)->last_name ?? '')
+                (optional($server->owner)->name ?? '').' '.(optional($server->owner)->last_name ?? '')
             );
 
             $isPoweredOff = $server->isPoweredOff();
@@ -231,11 +231,10 @@ class ServerController extends Controller
         });
     }
 
-
     private function validateActiveServer(Request $request, ?Server $server = null): array
     {
         $request->merge([
-            'state' => $this->normalizeState($request->state)
+            'state' => $this->normalizeState($request->state),
         ]);
 
         return $request->validate([
@@ -253,10 +252,10 @@ class ServerController extends Controller
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('servers')->ignore($server?->id)
+                Rule::unique('servers')->ignore($server?->id),
             ],
-            'ram_memory' => 'required|integer|min:512|max:262144',
-            'swap_memory' => 'required|integer|min:0|max:65536',
+            'ram_memory' => 'required|integer',
+            'swap_memory' => 'required|integer',
             'dns_name' => 'nullable|string|max:100',
             'ip_user' => 'nullable|ipv4',
             'ip_monitoring' => 'nullable|ipv4',
@@ -299,7 +298,7 @@ class ServerController extends Controller
 
         $detachQuery = Application::where('server_id', $server->id);
 
-        if (!empty($applicationIds)) {
+        if (! empty($applicationIds)) {
             $detachQuery->whereNotIn('id', $applicationIds);
         }
 
@@ -318,5 +317,41 @@ class ServerController extends Controller
         foreach ($apps as $app) {
             $app->update(['server_id' => $server->id]);
         }
+    }
+
+    public function modal(Server $server, string $type)
+    {
+        $this->hydrateServerPresentationData(collect([$server]));
+
+        return match ($type) {
+            'show' => view('servers.show', compact('server'))->render(),
+            'edit' => view('servers.edit', compact('server'))->with([
+                'databases' => Database::all(),
+                'applications' => Application::all(),
+                'owners' => Owner::all(),
+                'typeApplications' => TypeApplication::all(),
+            ])->render(),
+            'delete' => view('servers.delete', compact('server'))->render(),
+            'power-off' => view('servers.power-off', compact('server'))->render(),
+            default => response('Not found', 404),
+        };
+    }
+
+    public function modalOff(Server $server, string $type)
+    {
+        $this->hydrateServerPresentationData(collect([$server]));
+
+        return match ($type) {
+            'show' => view('serversOff.show', compact('server'))->render(),
+            'edit' => view('serversOff.edit', compact('server'))->with([
+                'databases' => Database::all(),
+                'applications' => Application::all(),
+                'owners' => Owner::all(),
+                'typeApplications' => TypeApplication::all(),
+            ])->render(),
+            'delete' => view('serversOff.delete', compact('server'))->render(),
+            'power-on' => view('serversOff.power-on', compact('server'))->render(),
+            default => response('Not found', 404),
+        };
     }
 }
