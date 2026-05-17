@@ -52,16 +52,13 @@
                                             <div class="dropdown">
                                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#showApplicationModal{{ $application->id }}"><i class="bx bx-show me-1"></i>Ver</button>
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editApplicationModal{{ $application->id }}"> <i class="bx bx-edit-alt me-1"></i> Editar</button>
-                                                    <button class="dropdown-item {{ $application->is_in_use ? 'text-secondary' : 'text-danger' }}"
-                                                        {{ $application->is_in_use ? 'disabled' : '' }}
-                                                        data-bs-toggle="{{ $application->is_in_use ? '' : 'modal' }}"
-                                                        data-bs-target="{{ $application->is_in_use ? '' : '#deleteApplicationModal'.$application->id }}"
-                                                        title="{{ $application->is_in_use ? 'No se puede eliminar porque está en uso' : 'Eliminar aplicación' }}">
-                                                        <i class="bx {{ $application->is_in_use ? 'bx-lock-alt' : 'bx-trash' }} me-1"></i>
-                                                        {{ $application->is_in_use ? 'En uso' : 'Eliminar' }}
-                                                    </button>
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('applications.modal', ['application' => $application->id, 'type' => 'show']) }}"><i class="bx bx-show me-1"></i>Ver</button>
+                                                    <button type="button" class="dropdown-item btn-modal" data-url="{{ route('applications.modal', ['application' => $application->id, 'type' => 'edit']) }}"><i class="bx bx-edit-alt me-1"></i> Editar</button>
+                                                    @if(!$application->is_in_use)
+                                                        <button type="button" class="dropdown-item text-danger btn-modal" data-url="{{ route('applications.modal', ['application' => $application->id, 'type' => 'delete']) }}"><i class="bx bx-trash me-1"></i> Eliminar</button>
+                                                    @else
+                                                        <span class="dropdown-item text-secondary"><i class="bx bx-lock-alt me-1"></i> En uso</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>
@@ -74,18 +71,45 @@
             </div>
         </div>
     </div>
-    @foreach ($applications as $application)
-        @include('applications.show', ['application' => $application])
-        @include('applications.edit', ['application' => $application])
-        @include('applications.delete', ['application' => $application])
-    @endforeach
     @include('applications.create')
+
+    <div id="modalContainer"></div>
 @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-modal');
+                if (!btn) return;
+                
+                e.preventDefault();
+                const url = btn.dataset.url;
+                
+                fetch(url)
+                    .then(r => {
+                        if (!r.ok) throw new Error('Error loading modal');
+                        return r.text();
+                    })
+                    .then(html => {
+                        document.getElementById('modalContainer').innerHTML = html;
+                        const modalEl = document.getElementById('modalContainer').querySelector('.modal');
+                        if (modalEl) {
+                            $(modalEl).modal('show');
+                            
+                            if (url.includes('edit')) {
+                                initTomSelectModal(modalEl);
+                            }
+                            
+                            modalEl.addEventListener('hidden.bs.modal', function() {
+                                modalEl.remove();
+                            });
+                        }
+                    })
+                    .catch(err => console.error(err));
+            });
+
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -108,6 +132,18 @@
                         </ul>`
                 });
             @endif
+
+            function initTomSelectModal(scope = document) {
+                scope.querySelectorAll('.ownerSelectEdit').forEach(el => {
+                    if (!el.tomselect) new TomSelect(el, {create: false});
+                });
+                scope.querySelectorAll('.serverSelectEdit').forEach(el => {
+                    if (!el.tomselect) new TomSelect(el, {create: false});
+                });
+                scope.querySelectorAll('.gcpMachineSelectEdit').forEach(el => {
+                    if (!el.tomselect) new TomSelect(el, {create: false});
+                });
+            }
 
             function initTomSelect() {
                 if (document.querySelector("#ownerSelect") && !document.querySelector("#ownerSelect").tomselect) {

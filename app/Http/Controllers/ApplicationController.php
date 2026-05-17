@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\GcpMachine;
 use App\Models\Owner;
 use App\Models\Server;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
@@ -18,6 +19,7 @@ class ApplicationController extends Controller
         $owners = Owner::orderBy('name')->get();
         $servers = Server::orderBy('hostname_internal')->get();
         $gcpMachines = GcpMachine::orderBy('machine_name')->get();
+
         return view('applications.index', compact('applications', 'owners', 'servers', 'gcpMachines'));
     }
 
@@ -40,7 +42,7 @@ class ApplicationController extends Controller
             'cron_jobs' => 'nullable|string|max:500',
         ]);
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         Application::create($validated);
 
         return redirect()
@@ -81,5 +83,21 @@ class ApplicationController extends Controller
         return redirect()
             ->route('applications.index')
             ->with('success', 'Aplicación eliminada con éxito');
+    }
+
+    public function modal(Application $application, string $type)
+    {
+        $application->load(['owner', 'server', 'gcpMachine', 'creator']);
+        
+        return match($type) {
+            'show' => view('applications.show', compact('application'))->render(),
+            'edit' => view('applications.edit', compact('application'))->with([
+                'servers' => \App\Models\Server::all(),
+                'owners' => \App\Models\Owner::all(),
+                'gcpMachines' => \App\Models\GcpMachine::all(),
+            ])->render(),
+            'delete' => view('applications.delete', compact('application'))->render(),
+            default => response('Not found', 404),
+        };
     }
 }

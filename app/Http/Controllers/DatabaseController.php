@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Database;
-use App\Models\Server;
 use App\Models\Instance;
 use App\Models\Owner;
+use App\Models\Server;
+use Illuminate\Http\Request;
 
 class DatabaseController extends Controller
 {
@@ -21,6 +21,7 @@ class DatabaseController extends Controller
             ->get();
         $instances = Instance::with('server')->get();
         $owners = Owner::orderBy('name')->get();
+
         return view('databases.index', compact('databases', 'servers', 'instances', 'owners'));
     }
 
@@ -75,5 +76,20 @@ class DatabaseController extends Controller
         return redirect()
             ->route('databases.index')
             ->with('success', 'Base de datos eliminada correctamente.');
+    }
+
+    public function modal(Database $database, string $type)
+    {
+        $database->load(['instance.server', 'owner', 'creator', 'servers']);
+
+        return match ($type) {
+            'show' => view('databases.show', compact('database'))->render(),
+            'edit' => view('databases.edit', compact('database'))->with([
+                'instances' => Instance::with('server')->get(),
+                'owners' => Owner::orderBy('name')->get(),
+            ])->render(),
+            'delete' => view('databases.delete', compact('database'))->render(),
+            default => response('Not found', 404),
+        };
     }
 }

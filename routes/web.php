@@ -124,7 +124,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('permission:viewTypeApplication')
-        ->resource('type-applications', TypeApplicationController::class);
+        ->resource('type-applications', TypeApplicationController::class)
+        ->except(['create', 'edit', 'show']);
+    Route::get('/type-applications/{type_application}/modal/{type}', [TypeApplicationController::class, 'modal'])
+        ->name('type-applications.modal');
     Route::middleware('permission:viewGcpMachine')->group(function () {
         Route::post('/gcp-machines/{gcp_machine}/power-on', [GcpMachineController::class, 'powerOn'])
             ->name('gcp-machines.power-on');
@@ -147,9 +150,15 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('permission:viewApplication')
-        ->resource('applications', ApplicationController::class);
+        ->resource('applications', ApplicationController::class)
+        ->except(['create', 'edit', 'show']);
+    Route::get('/applications/{application}/modal/{type}', [ApplicationController::class, 'modal'])
+        ->name('applications.modal');
     Route::middleware('permission:viewDatabase')
-        ->resource('databases', DatabaseController::class);
+        ->resource('databases', DatabaseController::class)
+        ->except(['create', 'edit', 'show']);
+    Route::get('/databases/{database}/modal/{type}', [DatabaseController::class, 'modal'])
+        ->name('databases.modal');
     Route::middleware('permission:viewInstance')
         ->resource('instances', InstanceController::class);
     Route::middleware('permission:viewStorage')
