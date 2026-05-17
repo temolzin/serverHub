@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -29,12 +29,12 @@ class RoleController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'permissions' => 'array'
+            'permissions' => 'array',
         ]);
 
         $role = Role::create([
             'name' => $request->name,
-            'guard_name' => 'web'
+            'guard_name' => 'web',
         ]);
 
         $role->syncPermissions($request->permissions ?? []);
@@ -67,11 +67,11 @@ class RoleController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'permissions' => 'array'
+            'permissions' => 'array',
         ]);
 
         $role->update([
-            'name' => $request->name
+            'name' => $request->name,
         ]);
 
         $role->syncPermissions($request->permissions ?? []);
@@ -89,5 +89,19 @@ class RoleController extends Controller
         $role->delete();
 
         return redirect()->back()->with('success', 'Rol eliminado correctamente.');
+    }
+
+    public function modal(Role $role, string $type)
+    {
+        $role->load('permissions');
+
+        return match ($type) {
+            'edit' => view('roles.edit', [
+                'role' => $role,
+                'permissions' => Permission::all(),
+            ])->render(),
+            'delete' => view('roles.delete', ['role' => $role])->render(),
+            default => response('Not found', 404),
+        };
     }
 }

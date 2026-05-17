@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -11,7 +12,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::with('roles')
-            ->where('id', '!=', auth()->id())
+            ->where('id', '!=', Auth::id())
             ->orderBy('name')
             ->get();
 
@@ -27,7 +28,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'role' => 'required'
+            'role' => 'required',
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
@@ -45,9 +46,9 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => 'nullable|min:6',
-            'role' => 'required'
+            'role' => 'required',
         ]);
 
         $data = [
@@ -56,7 +57,7 @@ class UserController extends Controller
             'email' => $validated['email'],
         ];
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $data['password'] = bcrypt($validated['password']);
         }
 
@@ -69,12 +70,23 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        if ($user->id === auth()->id()) {
+        if ($user->id === Auth::id()) {
             return back()->with('error', 'No puedes eliminar tu propio usuario.');
         }
 
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente.');
+    }
+
+    public function modal(User $user, string $type)
+    {
+        $user->load('roles');
+
+        return match ($type) {
+            'edit' => view('users.edit', ['user' => $user, 'roles' => Role::all()])->render(),
+            'delete' => view('users.delete', ['user' => $user])->render(),
+            default => response('Not found', 404),
+        };
     }
 }
