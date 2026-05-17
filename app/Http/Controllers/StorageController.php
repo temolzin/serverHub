@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class StorageController extends Controller
@@ -47,7 +48,7 @@ class StorageController extends Controller
             'datacenter' => 'required|string|max:50',
         ]);
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
 
         Storage::create($validated);
 

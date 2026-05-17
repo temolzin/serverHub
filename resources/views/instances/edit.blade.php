@@ -19,9 +19,8 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>Memoria (MB)</label>
-                        <input type="number" name="memory" class="form-control" placeholder="Ej: 8192" value="{{ $instance->memory }}" min="1024" max="32768" required>
-                        <small class="text-muted">Rango permitido: 1024 MB - 32768 MB</small>
+                        <label class="form-label"><i class="bx bx-memory-card me-1 text-primary"></i>Memoria (GB)</label>
+                        <input type="number" name="memory" class="form-control" placeholder="Ej: 8" value="{{ $instance->memory }}" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><i class="bx bx-code me-1 text-primary"></i>Versión</label>

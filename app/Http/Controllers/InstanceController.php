@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Instance;
 use App\Models\Server;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class InstanceController extends Controller
@@ -37,7 +38,7 @@ class InstanceController extends Controller
             'edition' => 'nullable|string|max:50',
         ]);
 
-        $validated['created_by'] = auth()->id();
+        $validated['created_by'] = Auth::id();
         Instance::create($validated);
 
         return redirect()

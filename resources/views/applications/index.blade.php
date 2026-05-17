@@ -24,7 +24,7 @@
                                     <th>Propietario</th>
                                     <th>Versión</th>
                                     <th>Estado</th>
-                                    <th>Memoria (MB)</th>
+                                    <th>Memoria (GB)</th>
                                     <th class="text-end no-export">Acciones</th>
                                 </tr>
                             </thead>
